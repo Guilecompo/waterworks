@@ -7,7 +7,7 @@
 
     const view_consumer  = () => {
     
-        var myUrl = "http://bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com/waterworks.github.com/consumer/get_payment_history.php";
+        var myUrl = "http://localhost/waterworks/consumer/get_payment_history.php";
         const formData = new FormData();
         formData.append("accId", sessionStorage.getItem("accountId"));
         console.log(sessionStorage.getItem("accountId"));
