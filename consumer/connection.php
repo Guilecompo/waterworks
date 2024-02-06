@@ -2,10 +2,10 @@
  header('Content-Type: application/json');
  header("Access-Control-Allow-Origin: *");
  
- $host = 'localhost';
- $dbusername = 'root';
- $dbpassword = '';
- $database = 'waterbilling';
+ $host = 'bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com';
+ $dbusername = 'ua8azikuxiwmatlo';
+ $dbpassword = 'XtnOur8GKarFSvRMnbOl';
+ $database = 'bsyzrflyvtz0qvuxpqgm';
 
   try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $dbusername, $dbpassword);
