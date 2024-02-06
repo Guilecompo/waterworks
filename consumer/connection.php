@@ -1,5 +1,6 @@
 <?php
  header('Content-Type: application/json');
+ header("Access-Control-Allow-Origin: *");
  
  $host = 'bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com';
  $dbusername = 'ua8azikuxiwmatlo';
