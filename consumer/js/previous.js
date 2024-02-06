@@ -6,7 +6,7 @@ const onLoad = () => {
 }
 
 const view_consumer  = () => {
-    var myUrl = "http://localhost/waterworks/consumer/consumer_billing_history.php";
+    var myUrl = "http://bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com/waterworks.github.com/consumer/consumer_billing_history.php";
     const formData = new FormData();
     formData.append("accId", sessionStorage.getItem("accountId"));
     console.log(sessionStorage.getItem("accountId"));

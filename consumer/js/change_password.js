@@ -16,7 +16,7 @@ const change = () => {
     if(password !== retype_password){
         alert('Password not match');
     } else {
-        var url = "http://localhost/waterworks/change_password.php";
+        var url = "http://bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com/waterworks.github.com/change_password.php";
       const formData = new FormData();
       formData.append("password", password);
       formData.append("email", sessionStorage.getItem("email"));

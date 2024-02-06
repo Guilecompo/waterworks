@@ -11,7 +11,7 @@ function onLoad() {
       console.log("Page loaded!");
       return;
     }
-    const Url = `http://localhost/waterworks/consumer/total.php`;
+    const Url = `http://bsyzrflyvtz0qvuxpqgm-mysql.services.clever-cloud.com/waterworks.github.com/consumer/total.php`;
     const formData = new FormData();
       formData.append("accountId", sessionStorage.getItem("accountId"));
       axios({
