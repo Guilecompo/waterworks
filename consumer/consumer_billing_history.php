@@ -12,7 +12,7 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
         d.zone_name, e.barangay_name,
-        f.municipality_name,
+        f.municipality_name, u.update_status_name, u.update_status_id,
         a.cubic_consumed,
         DATE_FORMAT(a.reading_date, '%M %d, %Y') AS reading_date,
         a.previous_meter,
@@ -27,6 +27,7 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
+    INNER JOIN update_status u ON a.billing_update_statusId  = u.update_status_id
     WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 1 ORDER BY billing_id DESC ");
 
     $stmt->bindParam(":accId", $accId);

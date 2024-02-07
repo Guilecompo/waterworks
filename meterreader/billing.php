@@ -112,6 +112,7 @@ try {
                 
 
                 $statusId = 1;
+                
 
                 $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
                 $stmtUpdate = $conn->prepare($sqlUpdate);
@@ -121,8 +122,9 @@ try {
                 if ($stmtUpdate->execute()) {
 
                     $updatedStatusId = 2;
+                    $paid_unpaid = 2;
 
-                    $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, penalty, total_bill, billing_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :present_meter, :bill_amount, :arrears, :penalty, :total_bill, :updatedStatusId)";
+                    $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, penalty, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :present_meter, :bill_amount, :arrears, :penalty, :total_bill, :updatedStatusId, :paid_unpaid)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(":consumerId", $consumerId);
                     $stmt->bindParam(":readerId", $readerId);
@@ -138,6 +140,7 @@ try {
                     $stmt->bindParam(":penalty", $penalty);
                     $stmt->bindParam(":total_bill", $new_total);
                     $stmt->bindParam(":updatedStatusId", $updatedStatusId);
+                    $stmt->bindParam(":paid_unpaid", $paid_unpaid);
 
                     $returnValue = 0;
                     $stmt->execute();
@@ -222,8 +225,9 @@ try {
             $prev_cubic_consumed = 0;
 
             $updatedStatusId = 2;
+            $paid_unpaid = 2;
 
-            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, penalty, total_bill, billing_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :penalty, :total_bill, :updatedStatusId)";
+            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, penalty, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :penalty, :total_bill, :updatedStatusId, :paid_unpaid)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":consumerId", $consumerId);
             $stmt->bindParam(":readerId", $readerId);
@@ -238,6 +242,7 @@ try {
             $stmt->bindParam(":penalty", $penalty);
             $stmt->bindParam(":total_bill", $new_total_bill);
             $stmt->bindParam(":updatedStatusId", $updatedStatusId);
+            $stmt->bindParam(":paid_unpaid", $paid_unpaid);
 
             $returnValue = 0;
             $stmt->execute();
