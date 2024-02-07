@@ -51,7 +51,7 @@ const view_consumer  = () => {
                             <td>${record.reading_date}</td>
                             <td>${record.total_bill}</td>
                             <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                            <td><button class="butts" onclick="bill_receipt(${record.billing_id})">View</button></td>
+                            <td><button class="butts" onclick="bill_receipt(${record.billing_id}, ${record.update_status_id})">View</button></td>
                         </tr>
                     `;
                 });
@@ -96,14 +96,16 @@ const view_consumer  = () => {
         alert(`ERROR OCCURRED! ${error}`);
     });
 };
-const bill_receipt  = (billing_id) => {
+const bill_receipt  = (billing_id, update_status_id) => {
     const modal = document.getElementById("myModal");
     const modalContent = document.getElementById("modalContent");
   
   
     var myUrl = "http://localhost/waterworks/consumer/consumer_billing_history1.php";
     const formData = new FormData();
+    formData.append("update_status_id", update_status_id);
     formData.append("billing_id", billing_id);
+    console.log("update_status_id  : ", update_status_id);
     console.log("billing_id  : ", billing_id);
   
     axios({

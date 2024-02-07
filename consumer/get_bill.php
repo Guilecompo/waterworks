@@ -12,7 +12,7 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
         d.zone_name, e.barangay_name,
-        f.municipality_name, g.update_status_name,
+        f.municipality_name, g.update_status_name, g.update_status_id,
         a.cubic_consumed,
         DATE_FORMAT(a.reading_date, '%M %d, %Y') AS reading_date,
         a.previous_meter,

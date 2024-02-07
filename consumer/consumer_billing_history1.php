@@ -5,6 +5,7 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 
 // Get the account ID sent from the client
+$update_status_id = $_POST['update_status_id'];
 $billing_id = $_POST['billing_id'];
 
 $stmt = $conn->prepare("SELECT
@@ -33,8 +34,9 @@ $stmt = $conn->prepare("SELECT
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
     INNER JOIN update_status u ON a.billing_update_statusId = u.update_status_id
-    WHERE a.billing_id = :billing_id ORDER BY billing_id DESC LIMIT 1");
+    WHERE a.billing_id = :billing_id AND u.update_status_id = :update_status_id ORDER BY billing_id DESC LIMIT 1");
 
+$stmt->bindParam(":update_status_id", $update_status_id);
 $stmt->bindParam(":billing_id", $billing_id);
 $stmt->execute();
 

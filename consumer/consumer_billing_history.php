@@ -20,15 +20,13 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         a.arrears,
         a.penalty,
         a.bill_amount,
-        a.total_bill,
-        u.update_status_name
+        a.total_bill
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    INNER JOIN update_status u ON a.billing_update_statusId = u.update_status_id
     WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 1 ORDER BY billing_id DESC ");
 
     $stmt->bindParam(":accId", $accId);
