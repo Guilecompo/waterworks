@@ -137,9 +137,8 @@ span a:hover{
 @media only screen and (max-width: 768px){
     .side-image{
         border-radius: 10px 10px 0 0;
-        height: 100px;
+        height: 150px;
         background-size: 50%;
-        padding: 100px;
     }
     header{
         margin-top: 20px;
