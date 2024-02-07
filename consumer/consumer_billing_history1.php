@@ -13,7 +13,7 @@ $stmt = $conn->prepare("SELECT
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
         d.zone_name, e.barangay_name,
-        f.municipality_name, g.update_status_name,
+        f.municipality_name,
         a.cubic_consumed,
         DATE_FORMAT(a.reading_date, '%m-%d') AS reading_date,
         DATE_FORMAT(a.due_date, '%m-%d') AS due_date,
@@ -24,14 +24,15 @@ $stmt = $conn->prepare("SELECT
         a.arrears,
         a.penalty,
         a.bill_amount,
-        a.total_bill
+        a.total_bill,
+        u.update_status_name
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    INNER JOIN update_status g ON a.billing_update_statusId  = g.update_status_id
+    INNER JOIN update_status u ON a.billing_update_statusId = u.update_status_id
     WHERE a.billing_id = :billing_id ORDER BY billing_id DESC LIMIT 1");
 
 $stmt->bindParam(":billing_id", $billing_id);
