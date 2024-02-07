@@ -2,9 +2,9 @@
  header('Content-Type: application/json');
  header("Access-Control-Allow-Origin: *");
  
- $host = 'localhost';
+ $host = 'sql6.freesqldatabase.com';
  $dbusername = 'sql6682408';
- $dbpassword = 'YES';
+ $dbpassword = 'U4WyJWDAnY';
  $database = 'sql6682408';
 
   try {

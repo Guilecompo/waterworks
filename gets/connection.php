@@ -3,9 +3,9 @@
  header("Access-Control-Allow-Origin: *");
  
  $host = 'localhost';
- $dbusername = 'sql6682408';
- $dbpassword = 'U4WyJWDAnY';
- $database = 'sql6682408';
+ $dbusername = 'root';
+ $dbpassword = '';
+ $database = 'waterbilling';
 
   try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $dbusername, $dbpassword);

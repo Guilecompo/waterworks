@@ -22,7 +22,7 @@ const getall = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total.php')
+  fetch('http://localhost/waterworks/admin/total.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -70,7 +70,7 @@ const getpoblacion = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total_poblacion.php')
+  fetch('http://localhost/waterworks/admin/total_poblacion.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -117,7 +117,7 @@ const getmolugan = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total_molugan.php')
+  fetch('http://localhost/waterworks/admin/total_molugan.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -173,7 +173,7 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://localhost/waterworks.github.com/admin/get_branch.php";
+  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
