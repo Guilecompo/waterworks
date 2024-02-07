@@ -4,7 +4,7 @@
  
  $host = 'localhost';
  $dbusername = 'sql6682408';
- $dbpassword = 'U4WyJWDAnY';
+ $dbpassword = 'YES';
  $database = 'sql6682408';
 
   try {
