@@ -188,7 +188,7 @@ const bill_receipt  = (billing_id) => {
                                                         <strong>${records[0].arrears}</strong>
                                                     </p>
                                                     <p>
-                                                        <strong>${records[0].update_status_name}</strong>
+                                                        <strong>${records[0].total_bill}</strong>
                                                     </p>
                                                     <p>
                                                         <strong>${records[0].update_status_name}</strong>
