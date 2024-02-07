@@ -1,5 +1,5 @@
 const login = async () => {
-    const url = "https://sql6.freesqldatabase.com/waterworks.github.com/login.php";
+    const url = "http://sql6.freesqldatabase.com/waterworks.github.com/login.php";
   
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
