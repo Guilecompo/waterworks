@@ -34,7 +34,7 @@ $stmt = $conn->prepare("SELECT
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
     INNER JOIN update_status u ON a.billing_update_statusId = u.update_status_id
-    WHERE a.billing_id = :billing_id AND u.update_status_id = :update_status_id ORDER BY billing_id DESC LIMIT 1");
+    WHERE a.billing_id = :billing_id AND a.billing_update_statusId = :update_status_id ORDER BY billing_id DESC LIMIT 1");
 
 $stmt->bindParam(":update_status_id", $update_status_id);
 $stmt->bindParam(":billing_id", $billing_id);
