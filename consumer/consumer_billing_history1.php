@@ -25,7 +25,7 @@ $stmt = $conn->prepare("SELECT
         a.penalty,
         a.bill_amount,
         a.total_bill,
-        u.update_status_name
+        u.update_status_name, a.billing_update_statusId
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id
