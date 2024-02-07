@@ -189,6 +189,9 @@ const bill_receipt  = (billing_id) => {
                                                     <p>
                                                         <strong>${records[0].total_bill}</strong>
                                                     </p>
+                                                    <p>
+                                                        <strong>${records[0].update_status_name}</strong>
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </tbody>
