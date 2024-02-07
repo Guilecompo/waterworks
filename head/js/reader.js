@@ -508,6 +508,15 @@ const add_assigned  = (user_id) => {
                               <div style="margin-top: 20px; ">
                                   <button class="prevBtn" onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
                               </div>
+                              <div class="row mt-4">
+                                <div class="col-sm-5">
+                                  <button type="button" class="btn btn-primary w-100"  onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
+                                </div>
+                                <div class="col-sm-2 my-1"></div>
+                                <div class="col-sm-5">
+                                  <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                                </div>
+                              </div>
                             </form>
                           </div>
                       </div>
