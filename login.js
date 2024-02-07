@@ -1,5 +1,5 @@
 const login = async () => {
-    const url = "http://sql6.freesqldatabase.com:3306/sql6682408/login.php";
+    const url = "http://sql6.freesqldatabase.com/login.php";
   
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
