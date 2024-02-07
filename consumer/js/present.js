@@ -119,6 +119,7 @@ const bill_receipt  = (billing_id) => {
                 var html = `<h2>No Records</h2>`;
             } else {
                 var records = response.data;
+                console.log("status name:",records[0].update_status_name);
   
                 html = `
                   <div class="wrapper">
