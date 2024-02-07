@@ -51,7 +51,7 @@ const view_consumer  = () => {
                             <td>${record.reading_date}</td>
                             <td>${record.total_bill}</td>
                             <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                            <td><button class="butts" onclick="bill_receipt(${record.billing_id}, ${record.update_status_id})">View</button></td>
+                            <td><button class="butts" onclick="bill_receipt(${record.billing_id} ${record.update_status_id})">View</button></td>
                         </tr>
                     `;
                 });
