@@ -5,7 +5,6 @@ let employees = [];
 const onLoad = () => {
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     displayEmployee();
-    getFileterPosition();
     // getFileterBranch();
   }; 
   const showNextPage = () => {
@@ -27,12 +26,10 @@ const onLoad = () => {
     const head = document.getElementById("head");
     const paginationNumbers = document.getElementById("paginationNumbers");
     const searchInput = document.getElementById("searchInput");
-    const filterPosition = document.getElementById("position");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     head.style.display = "block";
     paginationNumbers.style.display = "block";
-    filterPosition.style.display = "block";
     searchInput.style.display = "block";
     prevBtn.style.display = "block";
     nextBtn.style.display = "block";
