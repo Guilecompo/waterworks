@@ -8,6 +8,7 @@ function onLoad() {
                 // If authentication succeeds, continue loading the dashboard
                 console.log('Authentication successful');
                 // You can optionally load additional data or perform other actions here
+                loadDashboard();
             }
         })
         .catch(error => {
@@ -15,11 +16,13 @@ function onLoad() {
             // Handle errors, e.g., display an error message to the user
         });
   
+};
+function loadDashboard() {
+  // Your existing code to fetch and update dashboard data goes here
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
   getFileterBranch();
   getall();
-  
-};
+}
 const getall = () => {
   const total_employees = document.getElementById('totalEmployees');
 
