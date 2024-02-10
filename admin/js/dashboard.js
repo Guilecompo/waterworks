@@ -1,7 +1,5 @@
 function onLoad() {
-  function checkAuthentication() {
-    // Make an AJAX request to your PHP script for authentication
-    fetch('check_auth.php')
+  fetch('check_auth.php')
         .then(response => {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
@@ -16,7 +14,6 @@ function onLoad() {
             console.error('Error checking authentication:', error);
             // Handle errors, e.g., display an error message to the user
         });
-}
   
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
   getFileterBranch();
