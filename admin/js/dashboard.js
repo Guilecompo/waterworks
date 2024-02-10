@@ -1,6 +1,6 @@
 function onLoad() {
 
-  session_start();
+  
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
   getFileterBranch();
   getall();
