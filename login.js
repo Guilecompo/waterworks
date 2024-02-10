@@ -78,13 +78,7 @@ const login = async () => {
   }
 };
 
-window.onload = function() {
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
-  if (isLoggedIn) {
-      const dashboardURL = sessionStorage.getItem("dashboardURL");
-      window.location.href = dashboardURL;
-  }
-};
+
 
 const inputs = document.querySelectorAll(".input");
 
