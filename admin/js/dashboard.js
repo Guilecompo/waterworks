@@ -1,5 +1,5 @@
 function onLoad() {
-  fetch('check_auth.php')
+  fetch('/auth.php')
         .then(response => {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
