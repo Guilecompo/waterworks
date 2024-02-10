@@ -39,12 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $consumerInfo = $consumerResult[0];
         $userType = "Consumer";
 
+        // Set session variables upon successful login
+        $_SESSION['loggedIn'] = true;
+        $_SESSION['userType'] = $userType;
+        $_SESSION['userId'] = $consumerInfo['user_id'];
+
         // Build the response for consumers
         $response = array(
             "success" => true,
             "usertype" => $userType,
             "userDetails" => $consumerInfo,
-            "userId" => ($consumerInfo !== null) ? $consumerInfo['user_id'] : null,
+            "userId" => $consumerInfo['user_id'],
         );
     } else {
         // If the user is not a consumer, check for employee types
@@ -84,6 +89,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // User is an employee of the current position
                 $userInfo = $employeeResult[0];
                 $userType = $position;
+
+                // Set session variables upon successful login
+                $_SESSION['loggedIn'] = true;
+                $_SESSION['userType'] = $userType;
+                $_SESSION['userId'] = $userInfo['user_id'];
+
                 break; // Exit the loop when a match is found
             }
         }
@@ -94,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "success" => true,
                 "usertype" => $userType,
                 "userDetails" => $userInfo,
-                "userId" => ($userInfo !== null) ? $userInfo['user_id'] : null,
+                "userId" => $userInfo['user_id'],
             );
         } else {
             // User does not exist or credentials are incorrect
