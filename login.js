@@ -17,6 +17,8 @@ const login = async () => {
       if (response.data.success) {
         const { usertype, userDetails } = response.data;
 
+        sessionStorage.setItem("isLoggedIn", true);
+
         // Store user information in sessionStorage
         sessionStorage.setItem("fullname", userDetails.firstname + ' ' + userDetails.lastname);
         sessionStorage.setItem("phone_no", userDetails.phone_no);
@@ -73,6 +75,14 @@ const login = async () => {
     } catch (error) {
       alert("ERROR! - " + error.message);
     }
+  }
+};
+
+window.onload = function() {
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  if (isLoggedIn) {
+      const dashboardURL = sessionStorage.getItem("dashboardURL");
+      window.location.href = dashboardURL;
   }
 };
 
