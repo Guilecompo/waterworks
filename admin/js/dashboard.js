@@ -5,7 +5,7 @@ function onLoad() {
         .then(response => {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
-                window.location.replace('login.html');
+                window.location.replace('/');
             } else {
                 // If authentication succeeds, continue loading the dashboard
                 console.log('Authentication successful');
