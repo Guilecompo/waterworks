@@ -4,6 +4,7 @@ function onLoad() {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
                 window.location.replace('https://elsalvadorwaterworks.netlify.app/');
+                exit();
             } else {
                 // If authentication succeeds, continue loading the dashboard
                 console.log('Authentication successful');
