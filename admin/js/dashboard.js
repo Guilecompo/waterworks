@@ -3,8 +3,7 @@ function onLoad() {
         .then(response => {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
-                window.location.replace('https://elsalvadorwaterworks.netlify.app/');
-                exit();
+                window.location.replace('/');
             } else {
                 // If authentication succeeds, continue loading the dashboard
                 console.log('Authentication successful');
