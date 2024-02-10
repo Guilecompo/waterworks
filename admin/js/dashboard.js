@@ -1,9 +1,9 @@
 function onLoad() {
-  fetch('/auth.php')
+  fetch('/check-auth.php')
         .then(response => {
             if (!response.ok) {
                 // If authentication fails, redirect to login page
-                window.location.replace('/index.html');
+                window.location.replace('https://elsalvadorwaterworks.netlify.app/');
             } else {
                 // If authentication succeeds, continue loading the dashboard
                 console.log('Authentication successful');
