@@ -1,31 +1,12 @@
 let currentPage = 1;
 let employees = [];
 
-function onLoad() {
-  fetch('/check-auth.php')
-        .then(response => {
-            if (!response.ok) {
-                // If authentication fails, redirect to login page
-                window.location.replace('/');
-            } else {
-                // If authentication succeeds, continue loading the dashboard
-                console.log('Authentication successful');
-                // You can optionally load additional data or perform other actions here
-                loadDashboard();
-            }
-        })
-        .catch(error => {
-            console.error('Error checking authentication:', error);
-            // Handle errors, e.g., display an error message to the user
-        });
-  
-};
-function loadDashboard() {
-  // Your existing code to fetch and update dashboard data goes here
+
+const onLoad = () => {
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-  displayEmployee();
+    displayEmployee();
     getFileterBranch();
-}
+  }; 
   const showNextPage = () => {
     currentPage++;
     showEmployeePage(currentPage);
