@@ -28,11 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $PresConsumedTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS Prev_Total_Consumed FROM previous_billing WHERE branchId = :barangayId");
-        $stmt->bindParam(":barangayId", $barangayId);
-        $stmt->execute();
-        $PrevConsumedTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
-
         $stmt = $conn->prepare("SELECT SUM(pay_amount) AS Total_Pay FROM payment WHERE branchId = :barangayId");
         $stmt->bindParam(":barangayId", $barangayId);
         $stmt->execute();
@@ -44,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = [
             "Total_Consumers" => $CTotalresults['Total_Consumers'],
             "Total_Employees" => $ETotalresults['Total_Employees'],
-            "Total_Consumed" => $ConsumedTotal,
+            "Total_Consumed" => $PresConsumedTotalresults['Pres_Total_Consumed'],
             "Total_Pay" => $PayTotalresults['Total_Pay'],
         ];
 
