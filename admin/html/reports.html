@@ -128,8 +128,42 @@
                         </ul>
                     </div>
                 </nav>
-                <main class="content px-3 py-2">
-                    <div class="container-fluid row p-0 m-0">
+                <main class="content px-3 py-0">
+                    <div class="modal" tabindex="-1" id="myModal">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Alert</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
+                            </div>
+                            <div class="modal-body" id="modalContent"></div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="container-fluid">
+                        <div class="mt-4" id="head">
+                            <h4 style="text-align: center;">Admin Employee List</h4>
+                        </div>
+                        <div class="container-fluid mt-2">
+                            <div class="row">
+                                <div class="col-12 w-25 col-md-6 d-flex me-auto">
+                                    <select id="branch" class="form-select" aria-label="Default select example" style="min-width: fit-content;">
+                                        <option value="">Select Branch</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 w-25 col-md-6 d-flex ms-auto">
+                                    <input type="text" id="searchInput" oninput="filterEmployee()" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" style="min-width: fit-content;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-0 mt-3">
+                            <div class="card-body">
+                                <div class="mains" id="mainDiv"></div>
+                            </div>
+                        </div>
                         
                     </div>
                 </main>
