@@ -23,22 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->execute();
         $PresConsumedTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS Prev_Total_Consumed FROM previous_billing");
-        $stmt->execute();
-        $PrevConsumedTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         $stmt = $conn->prepare("SELECT SUM(pay_amount) AS Total_Pay FROM payment");
         $stmt->execute();
         $PayTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-
-        // Combine the results into a single JSON object
-        $ConsumedTotalresults[0]['Total_Consumed'] = $PresConsumedTotalresults[0]['Pres_Total_Consumed'] + $PrevConsumedTotalresults[0]['Prev_Total_Consumed'];
-
         $response = [
             "Total_Consumers" => $CTotalresults[0]['Total_Consumers'],
             "Total_Employees" => $ETotalresults[0]['Total_Employees'],
-            "Total_Consumed" => $ConsumedTotalresults[0]['Total_Consumed'],
+            "Total_Consumed" => $PresConsumedTotalresults[0]['Pres_Total_Consumed'],
             "Total_Pay" => $PayTotalresults[0]['Total_Pay'],
         ];
 
