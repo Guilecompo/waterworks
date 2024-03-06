@@ -24,7 +24,7 @@ const getall = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total.php')
+  fetch('http://localhost/waterworks/admin/total.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -72,7 +72,7 @@ const getpoblacion = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total_poblacion.php')
+  fetch('http://localhost/waterworks/admin/total_poblacion.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -119,7 +119,7 @@ const getmolugan = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://localhost/waterworks.github.com/admin/total_molugan.php')
+  fetch('http://localhost/waterworks/admin/total_molugan.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
@@ -175,48 +175,42 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  const myUrl = "http://localhost/waterworks.github.com/admin/get_branch.php";
+  var myUrl = "http://localhost/waterworks.github.com/admin/get_branch.php";
 
   axios({
-      url: myUrl,
-      method: "post",
+    url: myUrl,
+    method: "post",
   })
-  .then((response) => {
-      const positions = response.data;
+    .then((response) => {
+      var positions = response.data;
 
-      if (Array.isArray(positions)) {
-          let options = `<option value="employee">Select Branch</option>`;
-          positions.forEach((position) => {
-              options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
-          });
-          branchSelect.innerHTML = options;
+      var options = `<option value="employee">Select Branch</option>`;
+      positions.forEach((position) => {
+        options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
+      });
+      branchSelect.innerHTML = options;
 
-          // Event listener for position change
-          branchSelect.addEventListener("change", () => {
-              const selectedBranch = branchSelect.value;
-              // Call the appropriate display function based on the selected position
-              if (selectedBranch === "Poblacion") {
-                  getpoblacion();
-              } else if (selectedBranch === "Molugan") {
-                  getmolugan();
-              } else {
-                  getall();
-              }
-              // Add more conditions as needed for other positions
-          });
-      } else {
-          console.error("positions is not an array:", positions);
-      }
-  })
-  .catch((error) => {
-      console.error(`Error fetching branch data: ${error}`);
+      // Event listener for position change
+      branchSelect.addEventListener("change", () => {
+        const selectedBranch = branchSelect.value;
+        // Call the appropriate display function based on the selected position
+        if (selectedBranch === "Poblacion") {
+          getpoblacion();
+        }else if (selectedBranch === "Molugan") {
+          getmolugan();
+        } else{
+          getall();
+        }
+        // Add more conditions as needed for other positions
+      });
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 
-
 const displayActivity = () => {
-  var url = "http://localhost/waterworks.github.com/admin/activitylist.php";
+  var url = "http://localhost/waterworks/admin/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
