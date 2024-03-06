@@ -3,7 +3,7 @@
  header("Access-Control-Allow-Origin: *");
  
  $host = '	sql303.infinityfree.com';
- $dbusername = 'if0_36105237';
+ $dbusername = '185.27.134.138';
  $dbpassword = 'S2gyyhJcalFV4';
  $database = 'if0_36105237_waterbilling';
 
