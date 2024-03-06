@@ -3,26 +3,38 @@ let consumers = [];
 let isEditMode = false;
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
+    document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     displayConsumer();
     getFileterZones();
-  };
+};
 
-  const showNextPage = () => {
-    currentPage++;
-    showConsumerPage(currentPage);
+const showNextPage = () => {
+  const nextPage = currentPage + 1;
+  const start = (nextPage - 1) * 10;
+  const end = start + 10;
+  const activitiesOnNextPage = consumers.slice(start, end);
+
+  if (activitiesOnNextPage.length > 0) {
+      currentPage++;
+      showBarangayPage(currentPage);
+  } else {
+      alert("Next page is empty or has no content.");
+      // Optionally, you can choose to disable the button here
+      // For example, if you have a button element with id "nextButton":
+      // document.getElementById("nextButton").disabled = true;
+  }
 };
 
 const showPreviousPage = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showConsumerPage(currentPage);
-    } else {
-        alert("You are on the first page.");
-    }
+  if (currentPage > 1) {
+      currentPage--;
+      showBarangayPage(currentPage);
+  } else {
+      alert("You are on the first page.");
+  }
 };
-  
-  const displayConsumer = () => {
+
+const displayConsumer = () => {
     const head = document.getElementById("head");
     const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("filterZone");
@@ -36,36 +48,37 @@ const showPreviousPage = () => {
     prevBtn.style.display = "block";
     nextBtn.style.display = "block";
 
-      var url = "http://localhost/waterworks/head/get_consumers.php";
-      const formData = new FormData();
-      formData.append("accountId", sessionStorage.getItem("accountId"));
-      formData.append("branchId", sessionStorage.getItem("branchId"));
-      axios({
-          url: url,
-          method: "post",
-          data: formData
-      }).then(response => {
+    var url = "http://localhost/waterworks/head/get_consumers.php";
+    const formData = new FormData();
+    formData.append("accountId", sessionStorage.getItem("accountId"));
+    formData.append("branchId", sessionStorage.getItem("branchId"));
+    axios({
+        url: url,
+        method: "post",
+        data: formData
+    }).then(response => {
         console.log(response.data)
-          consumers = response.data;
-          if (!Array.isArray(consumers) || consumers.length === 0) {
+        consumers = response.data;
+        if (!Array.isArray(consumers) || consumers.length === 0) {
             errorTable();
-          } else {
+        } else {
             sortConsumersByName();
             showConsumerPage(currentPage);
-          }
-      }).catch(error => {
-          alert("ERROR! - " + error);
-      });
-  };
-  
-  const sortConsumersByName = () => {
-      consumers.sort((a, b) => {
-          const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-          const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-          return nameA.localeCompare(nameB);
-      });
-  };
-  const filterConsumer = () => {
+        }
+    }).catch(error => {
+        alert("ERROR! - " + error);
+    });
+};
+
+const sortConsumersByName = () => {
+    consumers.sort((a, b) => {
+        const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
+        const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
+        return nameA.localeCompare(nameB);
+    });
+};
+
+const filterConsumer = () => {
     const searchInput = document.getElementById("searchInput").value.toLowerCase();
     const filteredConsumers = consumers.filter((consumer) => {
         const fullName = (consumer.firstname + ' ' + consumer.lastname + ' ' + consumer.meter_no).toLowerCase();
@@ -78,17 +91,17 @@ const showFilteredConsumers = (filteredConsumers) => {
     currentPage = 1;
     showConsumerPage(currentPage, filteredConsumers);
 };
-  
-  const showConsumerPage = (page, consumersToDisplay = consumers) => {
-      var start = (page - 1) * 10;
-      var end = start + 10;
-      var displayedConsumers = consumersToDisplay.slice(start, end);
-      refreshTables(displayedConsumers);
-      showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-  };
 
-    const errorTable = () =>{
-        var html = `
+const showConsumerPage = (page, consumersToDisplay = consumers) => {
+    var start = (page - 1) * 10;
+    var end = start + 10;
+    var displayedConsumers = consumersToDisplay.slice(start, end);
+    refreshTables(displayedConsumers);
+    showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+};
+
+const errorTable = () => {
+    var html = `
         <table class="table">
           <thead>
             <tr>
@@ -100,11 +113,12 @@ const showFilteredConsumers = (filteredConsumers) => {
             </tr>
           </thead>
           </table>`;
-    
-          document.getElementById("mainDiv").innerHTML = html;
-      }
-      const refreshTables = (consumerList) => {
-        var html = `
+
+    document.getElementById("mainDiv").innerHTML = html;
+};
+
+const refreshTables = (consumerList) => {
+    var html = `
         <table class="table">
           <thead>
             <tr>
@@ -116,8 +130,8 @@ const showFilteredConsumers = (filteredConsumers) => {
           </thead>
           <tbody>
         `;
-        consumerList.forEach(consumer => {
-            html += `
+    consumerList.forEach(consumer => {
+        html += `
             <tr>
               <td>${consumer.firstname} ${consumer.lastname}</td>
               <td>${consumer.meter_no}</td>
@@ -127,120 +141,162 @@ const showFilteredConsumers = (filteredConsumers) => {
               </td>
             </tr>
             `;
-        });
-        html += `</tbody></table>`;
-        document.getElementById("mainDiv").innerHTML = html;
-    };
+    });
+    html += `</tbody></table>`;
+    document.getElementById("mainDiv").innerHTML = html;
+};
 
-      
-// ---------------------------------------------FOR view billing histry of consumer --------------------------
-const view_consumer  = (user_id) => {
-  const modal = document.getElementById("myModal");
-  const modalContent = document.getElementById("modalContent");
+const view_consumer = (user_id) => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    let html = ""; // Define html variable here
 
+    var myUrl = "http://localhost/waterworks/clerk/consumer_billing_history.php";
+    const formData = new FormData();
+    formData.append("accId", user_id);
+    console.log("Consumer ID : ", user_id);
 
-  var myUrl = "http://localhost/waterworks/clerk/consumer_billing_history.php";
-  const formData = new FormData();
-  formData.append("accId", user_id);
-  console.log("Consumer ID : ", user_id);
+    axios({
+        url: myUrl,
+        method: "post",
+        data: formData,
+    }).then((response) => {
+        try {
+            if (response.data.length === 0) {
+                // Display a message indicating there are no billing transactions yet.
+                html = `<h2>No Records</h2>`;
+            } else {
+                const records = response.data;
+                const itemsPerPage = 5;
+                const totalPages = Math.ceil(records.length / itemsPerPage);
 
-  axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
+                const renderPage = () => {
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    const endIndex = Math.min(startIndex + itemsPerPage, records.length);
+                    const currentPageRecords = records.slice(startIndex, endIndex);
 
-      try {
-        
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var records = response.data;
-              // Add a single "Connected Meter" heading
-              html = `
-              <div class="car-block text-center">
-                <i class="fas fa-user fa-3x mt-1"></i>
-                <h5 class="font-weight-bold mt-2">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname} </h5>
-                <p >${records[0].meter_no}</p>
-              </div>
+                    html = `
+            <div class="car-block text-center ">
+              <i class="fas fa-user fa-3x mt-1"></i>
+              <h5 class="font-weight-bold mt-2">${currentPageRecords[0].con_firstname} ${currentPageRecords[0].con_middlename} ${currentPageRecords[0].con_lastname} </h5>
+              <p >${currentPageRecords[0].meter_no}</p>
+            </div>
+            <table class="tab table" style="font-size: small;">
+              <thead>
+                <tr>
+                  <th scope="col">Reading Date</th>
+                  <th scope="col">Cubic Consumed</th>
+                  <th scope="col">Bill Amount</th>
+                  <th scope="col">Arrears</th>
+                  <th scope="col">Total Bill</th>
+                  <th scope="col">Reader Name</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+
+                    currentPageRecords.forEach((record) => {
+                        html += `
+                <tr>
+                  <td>${record.reading_date}</td>
+                  <td>${record.cubic_consumed}</td>
+                  <td>${record.bill_amount}</td>
+                  <td>${record.arrears}</td>
+                  <td>${record.total_bill}</td>
+                  <td >${record.emp_firstname} ${record.emp_lastname}</td>
+                </tr>
               `;
+                    });
+
+                    html += `</tbody></table><br/><br/>`;
+                };
+
+                const renderPagination = () => {
+                  let paginationHtml = `
+                      <div class="pagination d-flex justify-content-center mt-2" id="paginationNumbers">
+                          <button class="prev-next-btn" onclick="prevPage(${user_id})">Prev</button>
+                  `;
               
-              html += 
-                `
-                <table class="tab table">
-                <thead>
-                    <tr>
-                        <th scope="col">Reading Date</th>
-                        <th scope="col">Cubic Consumed</th>
-                        <th scope="col">Bill Amount</th>
-                        <th scope="col">Arrears</th>
-                        <th scope="col">Total Bill</th>
-                        <th scope="col">Reader Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                `;
-                
-                records.forEach((record) => {
-                    html += 
-                    `
-                        <tr>
-                            <td>${record.reading_date}</td>
-                            <td>${record.cubic_consumed}</td>
-                            <td>${record.bill_amount}</td>
-                            <td>${record.arrears}</td>
-                            <td>${record.total_bill}</td>
-                            <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                        </tr>
-                    `;
-                });
+                  for (let i = 1; i <= totalPages; i++) {
+                      if (i === currentPage) {
+                          paginationHtml += `<span class="pag page-btn active" onclick="goToPage(${i}, ${user_id})">${i}</span>`;
+                      } else {
+                          paginationHtml += `<span class="pag page-btn" onclick="goToPage(${i}, ${user_id})">${i}</span>`;
+                      }
+                  }
+              
+                  paginationHtml += `
+                      <button class="prev-next-btn" onclick="nextPage(${user_id})">Next</button>
+                      </div>
+                  `;
+                  
+                  html += paginationHtml;
+              };
               
 
-              html += `</tbody></table><br/><br/>`;
-          }
-      } catch (error) {
-          // Handle any errors here
-          html = `<h2>No Other Connected Meter</h2>`;
-          html = `
-          <div class="car-block text-center">
-            <i class="fas fa-user fa-3x mt-1"></i>
-            <h5 class="font-weight-bold mt-2"></h5>
-            <p </p>
-          </div>
-          `;
-              
-          html += 
-          `
-          <table class="tab table">
+                renderPage();
+                renderPagination();
+            }
+        } catch (error) {
+            // Handle any errors here
+            html = `<h2>No Other Connected Meter</h2>`;
+            html += `
+        <div class="car-block text-center">
+          <i class="fas fa-user fa-3x mt-1"></i>
+          <h5 class="font-weight-bold mt-2"></h5>
+          <p </p>
+        </div>
+      `;
+            html += `
+        <table class="tab table">
           <thead>
-                    <tr>
-                        <th scope="col">Reading Date</th>
-                        <th scope="col">Cubic Consumed</th>
-                        <th scope="col">Bill Amount</th>
-                        <th scope="col">Arrears</th>
-                        <th scope="col">Total Bill</th>
-                        <th scope="col">Reader Name</th>
-                    </tr>
-                </thead>
+            <tr>
+              <th scope="col">Reading Date</th>
+              <th scope="col">Cubic Consumed</th>
+              <th scope="col">Bill Amount</th>
+              <th scope="col">Arrears</th>
+              <th scope="col">Total Bill</th>
+              <th scope="col">Reader Name</th>
+            </tr>
+          </thead>
           <tbody>
-          <tr>
+            <tr>
               <td>NO RECORDS</td>
               <td>NO RECORDS</td>
               <td>NO RECORDS</td>
               <td>NO RECORDS</td>
               <td>NO RECORDS</td>
               <td>NO RECORDS</td>
-          </tr>
-          `;
-          html += `</tbody></table><br/><br/>`;
-      }
+            </tr>
+          </tbody>
+        </table><br/><br/>
+      `;
+        }
 
-      modalContent.innerHTML = html;
-      modal.style.display = "block";
-  }).catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-  });
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
+    }).catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const nextPage = (user_id) => {
+    currentPage++;
+    view_consumer(user_id);
+};
+
+const prevPage = (user_id) => {
+  if (currentPage > 1) {
+      currentPage--;
+      view_consumer(user_id);
+  } else {
+      alert("You are on the first page.");
+  }
+};
+
+const goToPage = (page, user_id) => {
+    currentPage = page;
+    view_consumer(user_id);
 };
 
 const showPaginationNumbers = (currentPage, totalPages) => {

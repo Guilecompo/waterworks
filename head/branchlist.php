@@ -6,10 +6,12 @@ header("Access-Control-Allow-Origin: *");
 
  include 'connection.php';
 session_start();
+
+$barangayId = $_POST['barangayId'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Prepare and execute the SQL query
-        $barangayId = $_POST['barangayId'];
         $stmt = $conn->prepare("SELECT
         a.branch_id,
         a.branch_name,
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
 
         $stmt->bindParam(":barangayId", $barangayId);
-        $stmt->execute();
+       $stmt->execute();
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

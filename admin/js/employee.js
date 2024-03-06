@@ -7,6 +7,7 @@ const onLoad = () => {
     displayEmployee();
     getFileterBranch();
   }; 
+  
   const showNextPage = () => {
     currentPage++;
     showEmployeePage(currentPage);
@@ -625,5 +626,4 @@ const closeModal = () => {
     prevBtn.style.display = "block";
     nextBtn.style.display = "block";
 
-  window.location.reload();
 };

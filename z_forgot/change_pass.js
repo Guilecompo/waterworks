@@ -5,10 +5,11 @@ const change = () => {
     const Cpassword = document.getElementById("Cpassword").value;
     
     if (password === '' || Cpassword === '' ) {
-      alert('Fill in both fields');
+      failed_modal();
+      return;
     }
     if(password !== Cpassword){
-        alert('Password not match');
+      failed_modal2();
     } else {
         var url = "http://localhost/waterworks/z_forgot/change_pass.php";
       const formData = new FormData();
@@ -22,15 +23,87 @@ const change = () => {
       }).then(response => {
         var returnValue = response.data;
         if (returnValue === 0 ) {
-          alert("Failed to change or Fill password again");
+          failed_modal();
+          // alert("Failed to change or Fill password again");
         //   verify1();
         } else {
           // Store user information in sessionStorage
-          alert("Successfully Change ");
-          window.location.href = "../"; // Redirect to the customer page
+          success_modal();
         }
       }).catch(error => {
-        alert("ERROR! - " + error);
+        // error_modal();
+        failed_modal();
+        console.log(error);
       })
     }
   }
+
+  const success_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    var html = `
+        <h5 class="modal-title " style="color: limegreen; text-align:center;">Change Password Successfully</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+
+    // Function to close modal and redirect
+    const closeModalAndRedirect = () => {
+        modal.style.display = "none";
+        window.location.href = "/waterworks/";
+    };
+
+    // Event listener to handle modal closing
+    modal.addEventListener('click', () => {
+        closeModalAndRedirect();
+    });
+
+    // Close modal and redirect after 10 seconds
+    setTimeout(closeModalAndRedirect, 10000);
+};
+const failed_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+var html = `
+      <h5 class="modal-title " style="color: red; text-align:center;">Fill in both fields</h5>
+  `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+
+};
+  const failed_modal1 = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+  var html = `
+        <h5 class="modal-title " style="color: red; text-align:center;">Failed to change </h5>
+    `;
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+  
+  };
+  const failed_modal2 = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+  var html = `
+        <h5 class="modal-title " style="color: red; text-align:center;">Password not match </h5>
+    `;
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+  
+  };
+  const error_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+  var html = `
+        <h5 class="modal-title " style="color: red; text-align:center;">Unknown error occurred !</h5>
+    `;
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+  
+  };
+  const closeModal = () => {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+    window.location.reload();
+    };
+  

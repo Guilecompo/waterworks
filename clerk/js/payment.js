@@ -186,11 +186,11 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         </div>
                                         <hr class="badge-primary mt-0">
                                         <div class="row">
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <p style="text-decoration: underline; font-size: small;">Address</p>
                                                 <h6 class="text-muted">${employee[0].zone_name}, ${employee[0].barangay_name}, ${employee[0].municipality_name}</h6>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <p style="text-decoration: underline; font-size: small;">Phone Number</p>
                                                 <h6 class="text-muted" >${employee[0].phone_no}</h6>
                                             </div>

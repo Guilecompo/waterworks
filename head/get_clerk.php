@@ -11,12 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Prepare and execute the SQL query
         $branchId = $_POST['branchId'];
         $stmt = $conn->prepare("SELECT 
-                a.user_id, a.branchId,
-                a.firstname, a.middlename,
-                a.lastname, a.phone_no,
-                a.email, a.provinceName, a.municipalityName, a.barangayName,
-                a.username,
-                a.password, g.position_name,
+                a.*, g.position_name,
                 h.branch_name, i.user_status
             FROM
                 user_employee a

@@ -32,10 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(":barangayId", $barangayId);
         $stmt->execute();
         $PayTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Combine the results into a single JSON object
-        $ConsumedTotal = $PresConsumedTotalresults['Pres_Total_Consumed'] + $PrevConsumedTotalresults['Prev_Total_Consumed'];
-
         $response = [
             "Total_Consumers" => $CTotalresults['Total_Consumers'],
             "Total_Employees" => $ETotalresults['Total_Employees'],

@@ -41,7 +41,6 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
   const add_branch = () => {
         var html = `
@@ -111,6 +110,7 @@ const closeModal = () => {
         formData.append("barangayId", barangayId);
         formData.append("zoneId", zoneId);
         formData.append("phone_no", phone_no);
+        formData.append("employee_Id", sessionStorage.getItem("accountId"));
       
         axios({
           url: myUrl,
@@ -122,6 +122,7 @@ const closeModal = () => {
             if (response.data.status === 1) {
               success_modal();
               console.log("success save");
+              displayBranch();
               //window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -237,20 +238,6 @@ const closeModal = () => {
             });
         };
 // ------------------------------FOR TABLE--------------------------------------------------------------
-const showNextPage = () => {
-  currentPage++;
-  showBranchPage(currentPage);
-  };
-  
-  const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showBranchPage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
-  };
-
 
 const displayBranch = () => {
   var url = "http://localhost/waterworks/admin/branchlist.php";
@@ -286,7 +273,31 @@ const displayBranch = () => {
     return nameA.localeCompare(nameB);
   });
   };
+  const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = branches.slice(start, end);
   
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showBranchPage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+        // Optionally, you can choose to disable the button here
+        // For example, if you have a button element with id "nextButton":
+        // document.getElementById("nextButton").disabled = true;
+    }
+  };
+  
+  const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showBranchPage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
+  };
   const showBranchPage = (page, branchesToDisplay = branches) => {
   var start = (page - 1) * 10;
   var end = start + 10;
@@ -464,6 +475,7 @@ const submit_edit_branch = (event, branch_id) => {
   formData.append("zoneId", zoneId);
   formData.append("edit_branch", edited_branch);
   formData.append("edit_phone_no", edit_phone_no);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   axios({
     url: myUrl,
@@ -476,8 +488,10 @@ const submit_edit_branch = (event, branch_id) => {
       if (response.data.status === 1) {
         success_update_modal();
         console.log("success update");
+        displayBranch();
         //window.location.href = "./addconsumer.html";
       } else if (response.data.status === 0) {
+        console.log(response.data);
         // alert("Username or phone number already exists!");
         failed_update_modal();
       } else {

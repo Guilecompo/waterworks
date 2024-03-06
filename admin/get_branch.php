@@ -2,7 +2,7 @@
   header("Access-Control-Allow-Origin:*");
   include 'connection.php';
 
-  $sql = "SELECT * FROM branch ORDER BY branch_name";
+  $sql = "SELECT * FROM branch ORDER BY branch_id";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   

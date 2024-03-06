@@ -16,6 +16,7 @@ const onLoad = () => {
       `;
         modalContent.innerHTML = html;
         modal.style.display = "block";
+
     
 };
 
@@ -42,7 +43,7 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
+  
   };
   const add_barangay = () => {
         var html = `
@@ -85,6 +86,7 @@ const closeModal = () => {
         const formData = new FormData();
         formData.append("municipalityId", municipalityId);
         formData.append("add_barangay", add_barangay);
+        formData.append("employee_Id", sessionStorage.getItem("accountId"));
       
         axios({
           url: myUrl,
@@ -96,6 +98,7 @@ const closeModal = () => {
             if (response.data.status === 1) {
               success_modal();
               console.log("success save");
+              displayBarangay();
               //window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -134,20 +137,6 @@ const closeModal = () => {
           });
         };
 // ---------------------------------------------FOR TABLE-----------------------------------------------------
-const showNextPage = () => {
-    currentPage++;
-    showBarangayPage(currentPage);
-    };
-    
-    const showPreviousPage = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      showBarangayPage(currentPage);
-    } else {
-      alert("You are on the first page.");
-    }
-    };
-  
 
   const displayBarangay = () => {
     var url = "http://localhost/waterworks/admin/barangaylist.php";
@@ -183,7 +172,31 @@ const showNextPage = () => {
       return nameA.localeCompare(nameB);
     });
     };
+    const showNextPage = () => {
+      const nextPage = currentPage + 1;
+      const start = (nextPage - 1) * 10;
+      const end = start + 10;
+      const activitiesOnNextPage = barangays.slice(start, end);
     
+      if (activitiesOnNextPage.length > 0) {
+          currentPage++;
+          showBarangayPage(currentPage);
+      } else {
+          alert("Next page is empty or has no content.");
+          // Optionally, you can choose to disable the button here
+          // For example, if you have a button element with id "nextButton":
+          // document.getElementById("nextButton").disabled = true;
+      }
+    };
+    
+    const showPreviousPage = () => {
+      if (currentPage > 1) {
+          currentPage--;
+          showBarangayPage(currentPage);
+      } else {
+          alert("You are on the first page.");
+      }
+    };
     const showBarangayPage = (page, barangaysToDisplay = barangays) => {
     var start = (page - 1) * 10;
     var end = start + 10;
@@ -327,6 +340,7 @@ const submit_edit_barangay = (event, barangay_id) => {
   formData.append("barangay_id", barangay_id);
   formData.append("municipalityId", municipalityId);
   formData.append("add_barangay", add_barangay);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   axios({
     url: myUrl,
@@ -339,9 +353,11 @@ const submit_edit_barangay = (event, barangay_id) => {
       if (response.data.status === 1) {
         success_update_modal();
         console.log("success update");
+        displayBarangay();
         //window.location.href = "./addconsumer.html";
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
+        console.log(response.data);
         failed_update_modal();
       } else {
         // alert("Unknown error occurred.");

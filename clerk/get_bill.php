@@ -15,11 +15,10 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
     d.zone_name, e.barangay_name,
     f.municipality_name,
     a.cubic_consumed,
-    a.reading_date,
+    DATE_FORMAT(a.reading_date, '%m-%d-%y') AS reading_date,
     a.previous_meter,
     a.present_meter,
     a.arrears,
-    a.penalty,
     a.total_bill
 FROM billing a
 INNER JOIN user_employee b ON a.readerId = b.user_id

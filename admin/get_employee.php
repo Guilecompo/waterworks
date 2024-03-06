@@ -10,19 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Prepare and execute the SQL query
         $stmt = $conn->prepare("SELECT 
-                a.user_id, a.branchId,
-                a.firstname, a.middlename,
-                a.lastname, a.phone_no,
-                a.email, a.provinceName, a.municipalityName, a.barangayName,
-                a.username,
-                a.password, g.position_name,
+                a.*, g.position_name,
                 h.branch_name, i.user_status
             FROM
                 user_employee a
                 INNER JOIN position g ON a.positionId = g.position_id
                 INNER JOIN branch h ON a.branchId = h.branch_id
                 INNER JOIN user_status i ON a.statusId = i.status_id
-        WHERE g.position_name NOT IN ('admin')
+        WHERE g.position_name NOT IN ('Admin')
         ");
 
        $stmt->execute();

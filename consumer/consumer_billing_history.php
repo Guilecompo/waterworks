@@ -18,7 +18,6 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         a.previous_meter,
         a.present_meter,
         a.arrears,
-        a.penalty,
         a.bill_amount,
         a.total_bill
     FROM billing a

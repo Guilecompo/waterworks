@@ -11,11 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Prepare and execute the SQL query
         $stmt = $conn->prepare("SELECT 
         b.property_name,
-        a.minimum_rate,
-        a.second_rate,
-        a.third_rate,
-        a.last_rate,
-        a.update_date
+        a.*
         FROM property_rate a 
         INNER JOIN property b ON a.property_Id = b.property_id
         ");

@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme="dark">
     <head>
-        
-        <title>Admin Employee List</title>
+        <title>Master List</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
@@ -18,8 +17,9 @@
             crossorigin="anonymous"
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
+        <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/waterworks/style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.js"></script>
     </head>
 
@@ -32,7 +32,7 @@
                         <a href="#">Waterworks</a>
                     </div>
                     <ul class="sidebar-nav">
-                        <li class="sidebar-header">
+                        <li class="sidebar-header ">
                             Admin Elements
                         </li>
                         <li class="sidebar-item">
@@ -41,11 +41,23 @@
                                 Dashboard
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="./employeelist.html" class="sidebar-link active mt-3">
-                                <i class="fa-solid fa-file-lines pe-2"></i>
-                                Employee List
+                        <li class="sidebar-item mt-3">
+                            <a href="#" class="sidebar-link collapsed" data-bs-target="#employees" data-bs-toggle="collapse"
+                                aria-expanded="false"><i class="fa-solid fa-user pe-2"></i>
+                                Employees
                             </a>
+                            <ul id="employees" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                                
+                                <li class="sidebar-item">
+                                    <a href="./clerklist.html" class=" sidebar-link">Clerk List</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./headlist.html" class=" sidebar-link">Head List</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./readerlist.html" class=" sidebar-link">Meter Reader List</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item">
                             <a href="./consumerlist.html" class="sidebar-link mt-3">
@@ -67,7 +79,7 @@
                                 aria-expanded="false"><i class="fa-solid fa-user pe-2"></i>
                                 Master List
                             </a>
-                            <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <ul id="auth" class="sidebar-dropdown " data-bs-parent="#sidebar">
                                 
                                 <li class="sidebar-item">
                                     <a href="./addbarangay.html" class="sidebar-link">Add Barangay</a>
@@ -76,13 +88,16 @@
                                     <a href="./addzone.html" class="sidebar-link">Add Zone</a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="./addemployee.html" class="sidebar-link">Add Employee</a>
+                                    <a href="./addemployee.html"  class="sidebar-link">Add Employee</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a href="./addconsumer.html" class="sidebar-link">Add Consumer</a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="./addposition.html" class="sidebar-link">Add Positon</a>
+                                    <a href="#" class="active sidebar-link">Add Consumer Type</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./addposition.html" class=" sidebar-link">Add Positon</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a href="./addrate.html" class="sidebar-link">Add New Rate</a>
@@ -121,14 +136,14 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="./profile.html">Profile</a></li>
                                     <li><a class="dropdown-item" href="./change_password.html">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/waterworks/">Logout</a></li>
                                 </ul>
                             </li>
                            
                         </ul>
                     </div>
                 </nav>
-                <main class="content px-3 py-0">
+                <main class="content px-3 py-2">
                     <div class="modal" tabindex="-1" id="myModal">
                         <div class="modal-dialog">
                           <div class="modal-content">
@@ -143,40 +158,33 @@
                           </div>
                         </div>
                       </div>
-                    <div class="container-fluid">
-                        <div class="mt-4" id="head">
-                            <h4 style="text-align: center;">Admin Employee List</h4>
-                        </div>
-                        <div class="container-fluid mt-2">
-                            <div class="row">
-                                <div class="col-12 w-25 col-md-6 d-flex me-auto">
-                                    <select id="branch" class="form-select" aria-label="Default select example" style="min-width: fit-content;">
-                                        <option value="">Select Branch</option>
-                                    </select>
+                      <div class="container-fluid row">
+                        <div class="col-md-8" >
+                            <div class="container-fluid col">
+                                <div class="col-md-12">
+                                    <div class="mainDiv" id="mainDiv"></div>
                                 </div>
-                                <div class="col-12 w-25 col-md-6 d-flex ms-auto">
-                                    <input type="text" id="searchInput" oninput="filterEmployee()" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" style="min-width: fit-content;">
+                                <div class="col-md-12 mt-4">
+                                    <div id="mainDivider"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card border-0 mt-3">
-                            <div class="card-body">
-                                <div class="mains" id="mainDiv"></div>
-                            </div>
+                        <div class="col-md-4" >
+                            <div class="mb-1 mt-3">
+                                <h4 style="text-align: center; ">Consumer Type List</h4>
+                            </div> 
+                            <div class="mainDivs mt-2" id="mainDivs" style="font-size: medium;"></div>
+                            <div class="col-12 w-100 d-block mt-2">
+                                <div id="pagination" class="pagination d-flex justify-content-center">
+                                    <button id="prevBtn" onclick="showPreviousPage()">Previous</button>
+                                    <div id="paginationNumbers"></div>
+                                    <button id="nextBtn" onclick="showNextPage()">Next</button>
+                                </div>
+                            </div>  
                         </div>
                         
                     </div>
                 </main>
-                <footer>
-                    <div class="col-12 w-100 mb-3 d-block">
-                        <div id="pagination" class="pagination d-flex justify-content-center mt-1">
-                            <button id="prevBtn" onclick="showPreviousPage()">Previous</button>
-                            <div id="paginationNumbers"></div>
-                            <button id="nextBtn" onclick="showNextPage()">Next</button>
-                        </div>
-                    </div>
-                </footer>
-                
         
             </div>
         </div>
@@ -185,15 +193,13 @@
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
             crossorigin="anonymous"
         ></script>
-
+        
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"
         ></script>
-        
-        <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-        <script src="/script.js"></script>
-        <script src="../js/employee.js"></script>
+        <script src="/waterworks/script.js"></script>
+        <script src="../js/addconsumertype.js"></script>
     </body>
 </html>

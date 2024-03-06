@@ -1,8 +1,10 @@
+let currentPage = 1;
+let activities = [];
 function onLoad() {
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
+  displayActivity();
   getFileterBranch();
   getall();
-  
 };
 const getall = () => {
   const total_employees = document.getElementById('totalEmployees');
@@ -206,3 +208,130 @@ const getFileterBranch = () => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
+
+const displayActivity = () => {
+  var url = "http://localhost/waterworks/admin/activitylist.php";
+  
+  const formData = new FormData();
+    formData.append("accountId", sessionStorage.getItem("accountId"));
+  
+  axios({
+    url: url,
+    method: "post",
+    data: formData
+  })
+    .then((response) => {
+      activities = response.data;
+      console.log(activities);
+  
+      if (!Array.isArray(activities) || activities.length === 0) {
+        errorTable();
+      } else {
+        showActivityPage(currentPage);
+      }
+    })
+    .catch((error) => {
+      alert("ERRORSA! - " + error);
+    });  
+  };
+  const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = activities.slice(start, end);
+
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showActivityPage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+        // Optionally, you can choose to disable the button here
+        // For example, if you have a button element with id "nextButton":
+        // document.getElementById("nextButton").disabled = true;
+    }
+};
+
+const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showActivityPage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
+};
+
+const showActivityPage = (page, activitiesToDisplay = activities) => {
+    var start = (page - 1) * 10;
+    var end = start + 10;
+    var displayedActivities = activitiesToDisplay.slice(start, end);
+    refreshTable(displayedActivities);
+    showPaginationNumbers(page, Math.ceil(activitiesToDisplay.length / 10));
+};
+
+const showPaginationNumbers = (currentPage, totalPages) => {
+    const paginationNumbersDiv = document.getElementById("paginationNumbers");
+    let paginationNumbersHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
+        } else {
+            paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
+        }
+    }
+
+    paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+
+  const errorTable = () => {
+    const mainDiv = document.getElementById("mainDivs");
+    if (mainDiv) {
+        var html = `
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">In</th>
+                </tr>
+            </thead>
+        </table>`;
+        mainDiv.innerHTML = html;
+    } else {
+        console.error("Element with id 'mainDivs' not found.");
+    }
+}
+
+const refreshTable = (activityList) => {
+    const mainDiv = document.getElementById("mainDivs");
+    if (mainDiv) {
+        var html = `
+        <table class="table mb-0 mt-0">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">In</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+        activityList.forEach((activity) => {
+            html += `
+            <tr>
+                <td>${activity.firstname}  ${activity.lastname}</td>
+                <td>${activity.activity_type}</td>
+                <td>${activity.table_name}</td>
+            </tr>
+            `;
+        });
+        
+        html += `</tbody></table>`;
+        
+        mainDiv.innerHTML = html;
+    } else {
+        console.error("Element with id 'mainDivs' not found.");
+    }
+};
+

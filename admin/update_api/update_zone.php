@@ -13,6 +13,8 @@ error_log(print_r($_POST, true)); // Log the received POST data
 
 $edited_zone = $_POST['edited_zone'];
 $barangayId = $_POST['barangayId'];
+$date_added = date("Y-m-d");
+$employee_Id = $_POST['employee_Id'];
 
 try {
     // Check if barangay_name already exists
@@ -34,9 +36,23 @@ try {
         $stmt->bindParam(":zone_id", $_POST['zone_id'], PDO::PARAM_INT);
         $stmt->bindParam(":edited_zone", $_POST['edited_zone'], PDO::PARAM_STR);
         $stmt->bindParam(":barangayId", $_POST['barangayId'], PDO::PARAM_INT);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            $activity_type = "Edit";
+            $table_name = "Zone";
+            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
-        echo json_encode(array("status" => 1, "message" => "Zone Successfully Updated!"));
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+            $stmt1->bindParam(":date_added", $date_added);
+            $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            echo json_encode(array("status" => 1, "message" => "Zone Successfully Updated & Added to Activity Log!"));
+        } else {
+            echo json_encode(array("status" => 0, "message" => "Failed to Updated Zone"));
+        }
 
     } else {
         echo json_encode(array("status" => 0, "message" => "Duplicate entry for zone_name"));

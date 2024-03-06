@@ -11,16 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Prepare and execute the SQL query
         $user_id = $_POST['user_id'];
         $stmt = $conn->prepare("SELECT 
-                a.user_id, a.branchId,
-                a.firstname, a.middlename,
-                a.lastname, a.phone_no,
-                a.email, a.provinceName, a.municipalityName, a.barangayName,
-                a.username,
-                a.password, g.position_name,
-                h.branch_id, i.status_id,
+                a.*, g.position_name,
+                h.branch_id, i.status_id, f.suffix_id, f.suffix_name,
                 h.branch_name, i.user_status
             FROM
                 user_employee a
+                INNER JOIN suffix f ON a.suffixId = f.suffix_id
                 INNER JOIN position g ON a.positionId = g.position_id
                 INNER JOIN branch h ON a.branchId = h.branch_id
                 INNER JOIN user_status i ON a.statusId = i.status_id

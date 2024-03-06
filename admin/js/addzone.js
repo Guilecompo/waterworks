@@ -41,7 +41,6 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
   const add_zones = () => {
         var html = `
@@ -90,6 +89,7 @@ const closeModal = () => {
         const formData = new FormData();
         formData.append("barangayId", barangayId);
         formData.append("add_zone", add_zone);
+        formData.append("employee_Id", sessionStorage.getItem("accountId"));
             
         axios({
           url: myUrl,
@@ -101,6 +101,7 @@ const closeModal = () => {
             if (response.data.status === 1) {
               success_modal();
               console.log("success save");
+              displayZones();
               //window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -126,7 +127,7 @@ const closeModal = () => {
           .then((response) => {
             var municipalities = response.data;
             console.log("success municipality");
-        
+            
             var options = ``;
             municipalities.forEach((municipality) => {
               options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
@@ -173,19 +174,6 @@ const closeModal = () => {
               });
             };
 // ------------------------------FOR TABLE--------------------------------------------------------------
-const showNextPage = () => {
-  currentPage++;
-  showZonePage(currentPage);
-  };
-  
-  const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showZonePage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
-  };
 
 
 const displayZones = () => {
@@ -223,7 +211,31 @@ const displayZones = () => {
       return aNumber - bNumber;
     });
   };
+  const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = zones.slice(start, end);
   
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showZonePage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+        // Optionally, you can choose to disable the button here
+        // For example, if you have a button element with id "nextButton":
+        // document.getElementById("nextButton").disabled = true;
+    }
+  };
+  
+  const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showZonePage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
+  };
   const showZonePage = (page, zonesToDisplay = zones) => {
   var start = (page - 1) * 10;
   var end = start + 10;
@@ -379,6 +391,7 @@ const submit_edit_zone = (event, zone_id) => {
   formData.append("municipalityId", municipalityId);
   formData.append("barangayId", barangayId);
   formData.append("edited_zone", edited_zone);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   axios({
     url: myUrl,
@@ -391,10 +404,12 @@ const submit_edit_zone = (event, zone_id) => {
       if (response.data.status === 1) {
         success_update_modal();
         console.log("success update");
+        displayZones();
         //window.location.href = "./addconsumer.html";
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
         failed_update_modal();
+        console.log(response.data);
       } else {
         // alert("Unknown error occurred.");
         error_modal();

@@ -10,24 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $barangayId = $_POST['barangayId'];
 
         // Check if 'readerId' exists in the 'assign' table
-        $stmt = $conn->prepare("SELECT emp_Id, zone_Id FROM assign WHERE emp_Id = :readerId");
+        $stmt = $conn->prepare("SELECT * FROM assign WHERE emp_Id = :readerId");
         $stmt->bindParam(":readerId", $readerId);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($rows) {
-            // Fetch data based on 'barangayId' and 'zone_Id'
+            // Fetch all zones associated with the reader ID and barangay ID
+            $zoneIds = array_column($rows, 'zone_Id');
+
+            // Fetch data based on 'barangayId' and 'zone_Id' from the list of zone IDs
             $sql = "SELECT a.zone_id, a.zone_name, b.barangay_name
                     FROM address_zone a
                     INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
-                    WHERE a.barangayId = :barangayId AND a.zone_id = :zoneId
+                    WHERE a.barangayId = :barangayId AND a.zone_id IN (".implode(',', $zoneIds).")
                     ORDER BY zone_name";
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":barangayId", $barangayId);
-
-            // Assuming you want to use the first row from the previous query result
-            $stmt->bindParam(":zoneId", $rows[0]['zone_Id']);
             $stmt->execute();
 
             $returnValue = $stmt->rowCount() > 0 ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];

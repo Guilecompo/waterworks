@@ -38,8 +38,17 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
+  const clearForm = () => {
+    document.getElementById("firstname").value = "";
+    document.getElementById("middlename").value = "";
+    document.getElementById("lastname").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("email_add").value = "";
+    document.getElementById("provinceName").value = "";
+    document.getElementById("municipalityName").value = "";
+    document.getElementById("barangayName").value = "";
+};
   const add_employee = () => {
         var html = `
         
@@ -62,16 +71,16 @@ const closeModal = () => {
                   <input type="text" class="form-control" id="lastname" required>
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label">Suffix</label>
+                    <select id="suffix" class="form-select"></select>
+                  </div>
+                <div class="col-md-4">
                     <label class="form-label">Phone</label>
                     <input type="text" class="form-control" id="phone" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Email</label>
                     <input type="email" class="form-control" id="email_add" >
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" required>
                 </div>
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4">
@@ -87,11 +96,11 @@ const closeModal = () => {
                     <input type="text" class="form-control" id="barangayName" required>
                 </div>
                 <label class="form-label mb-0 underline-label mt-4">Workspace</label>
-                    <div class="col-md-3 me-3">
+                    <div class="col-md-4 ">
                         <label class="form-label">Branch</label>
                         <select id="branch" class="form-select"></select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label">Position</label>
                         <select id="position" class="form-select"></select>
                     </div>                     
@@ -103,7 +112,7 @@ const closeModal = () => {
         `;
         document.getElementById("mainDiv").innerHTML = html;
         
-        // getSuffix();
+        getSuffix();
         // getMunicipality();
         getBranch();
         getPosition();
@@ -113,6 +122,7 @@ const closeModal = () => {
         const firstname = document.getElementById("firstname").value;
         const middlename = document.getElementById("middlename").value;
         const lastname = document.getElementById("lastname").value;
+        const suffixId = document.getElementById("suffix").value;
         const phone = document.getElementById("phone").value;
   
         const provinceName = document.getElementById("provinceName").value;
@@ -120,7 +130,6 @@ const closeModal = () => {
         const barangayName = document.getElementById("barangayName").value;
   
         const email_add = document.getElementById("email_add").value;
-        const username = document.getElementById("username").value;
         const branchId = document.getElementById("branch").value;
         const positionId = document.getElementById("position").value;
       
@@ -133,7 +142,7 @@ const closeModal = () => {
           provinceName === '' ||
           municipalityName === '' ||
           barangayName === '' ||
-          username === '' ||
+          suffixId === '' ||
           branchId === '' ||
           positionId === ''
         ) {
@@ -141,7 +150,7 @@ const closeModal = () => {
           return;
         }
       
-        const myUrl = "http://localhost/waterworks/admin/add_employees.php";
+        const myUrl = "http://localhost/waterworks/head/add_employees.php";
         const formData = new FormData();
         formData.append("firstname", firstname);
         formData.append("middlename", middlename);
@@ -151,9 +160,10 @@ const closeModal = () => {
         formData.append("provinceNames", provinceName);
         formData.append("municipalityNames", municipalityName);
         formData.append("barangayNames", barangayName);
-        formData.append("username", username);
+        formData.append("suffixId", suffixId);
         formData.append("branchId", branchId);
         formData.append("positionId", positionId);
+        formData.append("employee_Id", sessionStorage.getItem("accountId"));
       
         axios({
           url: myUrl,
@@ -164,6 +174,8 @@ const closeModal = () => {
             console.log(response);
             if (response.data.status === 1) {
               success_modal();
+              // window.location.reload();
+              clearForm();
               // window.location.href = "./addemployee.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -178,19 +190,39 @@ const closeModal = () => {
             alert(`ERROR OCCURRED! ${error}`);
           });
       };
+      const getSuffix = () => {
+        const propertySelect = document.getElementById("suffix");
+        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
       
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            alert(`ERROR OCCURRED! ${error}`);
+          });
+      };
 
       const getBranch = () => {
         const propertySelect = document.getElementById("branch");
         var myUrl = "http://localhost/waterworks/head/get_branch.php";
         const formData = new FormData();
         formData.append("branchId", sessionStorage.getItem("branchId"));
-    
-        axios({
-          url: myUrl,
-          method: "post",
-          data: formData
-        })
+        
+          axios({
+            url: myUrl,
+            method: "post",
+            data: formData,
+          })
           .then((response) => {
             var properties = response.data;
       

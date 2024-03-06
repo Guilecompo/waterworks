@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", function () {
     const sidebarToggle = document.querySelector("#sidebar-toggle");
     sidebarToggle.addEventListener("click", function () {
@@ -22,55 +20,47 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.setAttribute('data-bs-theme', newTheme);
 
         // Update styles for the sidebar (adjust according to your needs)
+        const card = document.querySelector("#card");
         const sidebar = document.querySelector("#sidebar");
         const sidebarLogo = document.querySelector(".sidebar-logo");
         const sidebarHeader = document.querySelector(".sidebar-header");
         const sidebarLinks = document.querySelectorAll(".sidebar-link");
 
-        // Dynamically set background color and border based on the theme
-        if (newTheme === 'dark') {
-            sidebar.style.backgroundColor = '#212529';
-            sidebar.style.backgroundColor = '#212529';  // Dark theme background color
-            sidebar.style.borderRight = 'none';  // No border in dark mode
-            sidebarLogo.style.color = '#fff';  // Light text color
-            sidebarHeader.style.color = '#adb5bd';  // Light text color
+        // Check if elements exist before accessing their properties
+        if (card) {
+            card.style.backgroundColor = newTheme === 'dark' ? '#212529' : 'ced4da';
+        }
 
-            // Change text color for each sidebar link in dark mode
-            sidebarLinks.forEach(link => {
-                link.style.color = '#e9ecef';
-            });
+        if (sidebar) {
+            sidebar.style.backgroundColor = newTheme === 'dark' ? '#212529' : '#212529';
+        }
 
-            // Reset styles for all links in dark mode
-            sidebarLinks.forEach(link => {
-                link.style.backgroundColor = '';  // Reset background color
-            });
+        if (sidebarLogo) {
+            sidebarLogo.style.color = newTheme === 'dark' ? '#fff' : '#000';
+        }
 
-            // Apply styles for active text color in dark mode
-            const activeLink = document.querySelector(".sidebar-link.active");
-            if (activeLink) {
-                activeLink.style.color = 'black';
-            }
-        } else {
-            sidebar.style.backgroundColor = '#ced4da';  // Light theme background color
-            sidebar.style.borderRight = '1px solid #212529';  // Border in light mode
-            sidebarLogo.style.color = '#000';  // Dark text color
-            sidebarHeader.style.color = '#000';  // Dark text color
+        if (sidebarHeader) {
+            sidebarHeader.style.color = newTheme === 'dark' ? '#adb5bd' : '#adb5bd';
+        }
+        if (sidebarToggle) {
+            sidebarToggle.style.color = newTheme === 'dark' ? '#fff' : '#fff';
+        }
+        
 
-            // Change text color for each sidebar link in light mode
-            sidebarLinks.forEach(link => {
-                link.style.color = '#000';
-            });
+        // Dynamically set text color for each sidebar link based on the theme
+        sidebarLinks.forEach(link => {
+            link.style.color = newTheme === 'dark' ? '#e9ecef' : '#e9ecef';
+        });
 
-            // Reset styles for all links in light mode
-            sidebarLinks.forEach(link => {
-                link.style.backgroundColor = '';  // Reset background color
-            });
+        // Reset styles for all links
+        sidebarLinks.forEach(link => {
+            link.style.backgroundColor = '';
+        });
 
-            // Apply styles for active text color in light mode
-            const activeLink = document.querySelector(".sidebar-link.active");
-            if (activeLink) {
-                activeLink.style.color = 'black';
-            }
+        // Apply styles for active text color
+        const activeLink = document.querySelector(".sidebar-link.active");
+        if (activeLink) {
+            activeLink.style.color = 'black';
         }
     }
 
@@ -89,6 +79,4 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isLight()) {
         toggleRootClass();
     }
-
-   
 });

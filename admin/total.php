@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->execute();
         $PayTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
+
         $response = [
             "Total_Consumers" => $CTotalresults[0]['Total_Consumers'],
             "Total_Employees" => $ETotalresults[0]['Total_Employees'],

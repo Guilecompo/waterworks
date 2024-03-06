@@ -41,7 +41,6 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
   const add_property = () => {
         var html = `
@@ -77,6 +76,7 @@ const closeModal = () => {
       const myUrl = "http://localhost/waterworks/admin/add_property.php";
       const formData = new FormData();
       formData.append("add_property", add_property);
+      formData.append("employee_Id", sessionStorage.getItem("accountId"));
             
         axios({
           url: myUrl,
@@ -88,6 +88,7 @@ const closeModal = () => {
             if (response.data.status === 1) {
               success_modal();
               console.log("success save");
+              displayProperty();
               //window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -103,20 +104,6 @@ const closeModal = () => {
           });
       };
 // ------------------------------FOR TABLE--------------------------------------------------------------
-const showNextPage = () => {
-  currentPage++;
-  showPropertyPage(currentPage);
-  };
-  
-  const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showPropertyPage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
-  };
-
 
 const displayProperty = () => {
   var url = "http://localhost/waterworks/admin/propertylist.php";
@@ -152,7 +139,31 @@ const displayProperty = () => {
     return nameA.localeCompare(nameB);
   });
   };
+  const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = properties.slice(start, end);
   
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showPropertyPage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+        // Optionally, you can choose to disable the button here
+        // For example, if you have a button element with id "nextButton":
+        // document.getElementById("nextButton").disabled = true;
+    }
+  };
+  
+  const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showPropertyPage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
+  };
   const showPropertyPage = (page, propertiesToDisplay = properties) => {
   var start = (page - 1) * 10;
   var end = start + 10;
@@ -282,6 +293,7 @@ const submit_edit_property = (event, property_id) => {
   const formData = new FormData();
   formData.append("property_id", property_id);
   formData.append("add_property", add_property);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   axios({
     url: myUrl,
@@ -294,6 +306,7 @@ const submit_edit_property = (event, property_id) => {
       if (response.data.status === 1) {
         success_update_modal();
         console.log("success update");
+        displayProperty();
         //window.location.href = "./addconsumer.html";
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
@@ -301,7 +314,7 @@ const submit_edit_property = (event, property_id) => {
       } else {
         // alert("Unknown error occurred.");
         error_modal();
-        console.log(response);
+        console.log(response.data);
       }
     })
     .catch((error) => {

@@ -7,19 +7,6 @@ const onLoad = () => {
   displayReaderEmployee();
     // getFileterBranch();
   }; 
-  const showNextPage = () => {
-    currentPage++;
-    showEmployeePage(currentPage);
-    };
-    
-    const showPreviousPage = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      showEmployeePage(currentPage);
-    } else {
-      alert("You are on the first page.");
-    }
-    };
 
 const displayReaderEmployee = () => {
   const head = document.getElementById("head");
@@ -81,7 +68,31 @@ const displayReaderEmployee = () => {
     showReaderEmployeePage(currentPage, filteredEmployees);
     };
   
+    const showNextPage = () => {
+      const nextPage = currentPage + 1;
+      const start = (nextPage - 1) * 10;
+      const end = start + 10;
+      const activitiesOnNextPage = employees.slice(start, end);
   
+      if (activitiesOnNextPage.length > 0) {
+          currentPage++;
+          showReaderEmployeePage(currentPage);
+      } else {
+          alert("Next page is empty or has no content.");
+          // Optionally, you can choose to disable the button here
+          // For example, if you have a button element with id "nextButton":
+          // document.getElementById("nextButton").disabled = true;
+      }
+  };
+  
+  const showPreviousPage = () => {
+      if (currentPage > 1) {
+          currentPage--;
+          showReaderEmployeePage(currentPage);
+      } else {
+          alert("You are on the first page.");
+      }
+  };
   const showReaderEmployeePage = (page, employeesToDisplay = employees) => {
   var start = (page - 1) * 10;
   var end = start + 10;
@@ -173,78 +184,81 @@ const displayReaderEmployee = () => {
                 var employee = response.data;
                 console.log("Emplloyees : ",employee);
                 var html = `
-                  <div class=" row  mt-1">
-                    <div class="col-md-1 mt-3">
-                      <button class="clear" onclick="displayReaderEmployee()">Back</button>
-                    </div>
-                    <div class="col-md-11 mt-3">
-                      <h4 style="text-align: center;">Edit Employee</h4>
-                    </div>
-                  </div>
-                  <div class="container-fluid mt-3">
-                      <form class="row g-3">
-                          <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
-                          <div class="col-md-4 mt-3" >
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstname" value="${employee[0].firstname}" required>
+                        <div class=" row  mt-1">
+                          <div class="col-md-1 mt-3">
+                            <button class="clear" onclick="displayClerkEmployee()">Back</button>
                           </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Middle Name</label>
-                              <input type="text" class="form-control" id="middlename" value="${employee[0].middlename}" required>
-                            </div>
-                          <div class="col-md-4 mt-3">
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastname" value="${employee[0].lastname}" required>
+                          <div class="col-md-11 mt-3">
+                            <h4 style="text-align: center;">Edit Employee</h4>
                           </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Phone</label>
-                              <input type="text" class="form-control" id="phone" value="${employee[0].phone_no}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Email</label>
-                              <input type="email" class="form-control" id="email_add" value="${employee[0].email}" required >
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Username</label>
-                              <input type="text" class="form-control" id="username" value="${employee[0].username}" required>
-                          </div>
-                          <label class="form-label mt-4 mb-0 underline-label">Address</label>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Province</label>
-                              <input type="text" class="form-control" id="provinceName" value="${employee[0].provinceName}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Municipality</label>
-                              <input type="text" class="form-control" id="municipalityName" value="${employee[0].municipalityName}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Barangay</label>
-                              <input type="text" class="form-control" id="barangayName" value="${employee[0].barangayName}" required>
-                          </div>
-                          <label class="form-label  mb-0 underline-label mt-4">Workspace</label>
-                              <div class="col-md-3 me-3 mt-3">
-                                  <label class="form-label">Branch</label>
-                                  <select id="edit_branch" class="form-select">
-                                    <option value="${employee[0].branch_id}" selected>${employee[0].branch_name}</option>
+                        </div>
+                        <div class="container-fluid mt-3">
+                            <form class="row g-3">
+                                <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
+                                <div class="col-md-4 mt-3" >
+                                  <label class="form-label">First Name</label>
+                                  <input type="text" class="form-control" id="firstname" value="${employee[0].firstname}" required>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Middle Name</label>
+                                    <input type="text" class="form-control" id="middlename" value="${employee[0].middlename}" required>
+                                  </div>
+                                <div class="col-md-4 mt-3">
+                                  <label class="form-label">Last Name</label>
+                                  <input type="text" class="form-control" id="lastname" value="${employee[0].lastname}" required>
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="form-label">Suffix</label>
+                                  <select id="suffix" class="form-select">
+                                      <option value="${employee[0].suffix_id}" selected>${employee[0].suffix_name}</option>
                                   </select>
-                              </div>
-                              <div class="col-md-3 mt-3">
-                                  <label class="form-label">Position</label>
-                                  <select id="position" class="form-select">
-                                    <option value="${employee[0].position_id}" selected>${employee[0].position_name}</option>
-                                  </select>
-                              </div>                     
-                          <div class="col-12 mt-4">
-                                <button class="btn btn-primary" onclick="submit_edit_employee(event, ${employee[0].user_id})">Submit Edit</button>
-                            </div>
-                        </form>
-                  </div>
-                  `;
-                document.getElementById("mainDiv").innerHTML = html;
-  
-              getBranch();
-              getPositions();
-            }
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" id="phone" value="${employee[0].phone_no}" required>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email_add" value="${employee[0].email}" required >
+                                </div>
+                                <label class="form-label mt-4 mb-0 underline-label">Address</label>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Province</label>
+                                    <input type="text" class="form-control" id="provinceName" value="${employee[0].provinceName}" required>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Municipality</label>
+                                    <input type="text" class="form-control" id="municipalityName" value="${employee[0].municipalityName}" required>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label">Barangay</label>
+                                    <input type="text" class="form-control" id="barangayName" value="${employee[0].barangayName}" required>
+                                </div>
+                                <label class="form-label  mb-0 underline-label mt-4">Workspace</label>
+                                    <div class="col-md-3 me-3 mt-3">
+                                        <label class="form-label">Branch</label>
+                                        <select id="branch" class="form-select">
+                                          <option value="${employee[0].branch_id}" selected>${employee[0].branch_name}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <label class="form-label">Position</label>
+                                        <select id="position" class="form-select">
+                                            <option value="${employee[0].position_id}" selected>${employee[0].position_name}</option>
+                                        </select>
+                                    </div>                     
+                                <div class="col-12 mt-4">
+                                      <button class="btn btn-primary" onclick="submit_edit_employee(event, ${employee[0].user_id})">Submit Edit</button>
+                                  </div>
+                              </form>
+                        </div>
+                        `;
+                      document.getElementById("mainDiv").innerHTML = html;
+        
+                    getSuffix();
+                    getBranch();
+                    getPosition();
+                  }
         } catch (error) {
           var html = `<h2>NO RECORD</h2>`;
         }
@@ -259,6 +273,7 @@ const displayReaderEmployee = () => {
       const firstname = document.getElementById("firstname").value;
       const middlename = document.getElementById("middlename").value;
       const lastname = document.getElementById("lastname").value;
+      const suffixId = document.getElementById("suffix").value;
       const phone = document.getElementById("phone").value;
   
       const provinceName = document.getElementById("provinceName").value;
@@ -266,8 +281,7 @@ const displayReaderEmployee = () => {
       const barangayName = document.getElementById("barangayName").value;
   
       const email_add = document.getElementById("email_add").value;
-      const username = document.getElementById("username").value;
-      const branchId = document.getElementById("edit_branch").value;
+      const branchId = document.getElementById("branch").value;
       const positionId = document.getElementById("position").value;
     
       if (
@@ -279,7 +293,7 @@ const displayReaderEmployee = () => {
         provinceName === '' ||
         municipalityName === '' ||
         barangayName === '' ||
-        username === '' ||
+        suffixId === '' ||
         branchId === '' ||
         positionId === ''
       ) {
@@ -287,7 +301,7 @@ const displayReaderEmployee = () => {
         return;
       }
     
-      const myUrl = "http://localhost/waterworks/head/update_api/update_employee.php";
+      const myUrl = "http://localhost/waterworks/admin/update_api/update_employee.php";
       const formData = new FormData();
       formData.append("user_id", user_id);
       formData.append("firstname", firstname);
@@ -298,10 +312,11 @@ const displayReaderEmployee = () => {
       formData.append("provinceNames", provinceName);
       formData.append("municipalityNames", municipalityName);
       formData.append("barangayNames", barangayName);
-      formData.append("username", username);
+      formData.append("suffixId", suffixId);
       formData.append("branchId", branchId);
       formData.append("positionId", positionId);
-      console.log(user_id, firstname, middlename, lastname, phone, email_add, provinceName, municipalityName, barangayName,username,branchId, positionId);
+      formData.append("employee_Id", sessionStorage.getItem("accountId"));
+      console.log(user_id, firstname, middlename, lastname, suffixId, phone, email_add, provinceName, municipalityName, barangayName,branchId, positionId);
     
       axios({
         url: myUrl,
@@ -315,9 +330,11 @@ const displayReaderEmployee = () => {
           if (response.data.status === 1) {
             success_update_modal();
             console.log("success update");
+            window.location.reload();
           } else if (response.data.status === 0) {
             // alert("Username or phone number already exists!");
             failed_update_modal();
+            console.log(response.data);
           } else {
             // alert("Unknown error occurred.");
             error_modal();
@@ -457,7 +474,7 @@ const add_assigned  = (user_id) => {
   const modal = document.getElementById("myModal");
       const modalContent = document.getElementById("modalContent");
   
-      var myUrl = "http://localhost/waterworks/head/get_readers.php";
+      var myUrl = "http://localhost/waterworks/gets/get_readers.php";
       const formData = new FormData();
       formData.append("accId", user_id);
       console.log("USER ID : ",user_id);
@@ -500,22 +517,13 @@ const add_assigned  = (user_id) => {
                                       <option value="">Select Barangay</option>
                                   </select>
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-12">
                                   <label class="form-label">Zone Assign</label><br>
                                   <div id="selectBoxesContainer" ></div>
                               </div>
       
                               <div style="margin-top: 20px; ">
-                                  <button class="prevBtn" onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
-                              </div>
-                              <div class="row mt-4">
-                                <div class="col-sm-5">
-                                  <button type="button" class="btn btn-primary w-100"  onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
-                                </div>
-                                <div class="col-sm-2 my-1"></div>
-                                <div class="col-sm-5">
-                                  <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
-                                </div>
+                                  <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
                               </div>
                             </form>
                           </div>
@@ -567,12 +575,13 @@ const submit_assigned = (event,user_id, branchId) => {
       zoneIds.push(zoneId);
   }
 
-  const myUrl = "http://localhost/waterworks/head/add_assigned.php";
+  const myUrl = "http://localhost/waterworks/gets/add_assigned.php";
   const formData = new FormData();
   formData.append("municipalityId", municipalityId);
   formData.append("barangayId", barangayId);
   formData.append("accId", user_id);
   formData.append("branchId", branchId);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   console.log(municipalityId);
   console.log(barangayId);
@@ -608,34 +617,105 @@ const submit_assigned = (event,user_id, branchId) => {
     alert(`ERROR OCCURRED! ${error.message}`);
   });
 };
+const getSuffix = () => {
+  const suffixSelect = document.getElementById("suffix");
+  var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var suffixes = response.data;
+
+      var options = ``;
+      suffixes.forEach((property) => {
+        options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
+      });
+      suffixSelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const getBranch = () => {
+  const propertySelect = document.getElementById("branch");
+  var myUrl = "http://localhost/waterworks/head/get_branch.php";
+  const formData = new FormData();
+  formData.append("branchId", sessionStorage.getItem("branchId"));
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log(error);
+    });
+};
+const getPosition = () => {
+  const positionSelect = document.getElementById("position");
+  var myUrl = "http://localhost/waterworks/head/get_position.php";
+  
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var positions = response.data;
+  
+      var options = ``;
+      positions.forEach((position) => {
+        options += `<option value="${position.position_id}">${position.position_name}</option>`;
+      });
+      positionSelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+  };
 //---------------------------ADD ASSIGNED END--------------------------------------
 
 function generateSelectBoxes() {
   var numZones = document.getElementById("numZones").value;
   var selectBoxesContainer = document.getElementById("selectBoxesContainer");
-  selectBoxesContainer.innerHTML = ""; // Clear previous content
+  selectBoxesContainer.innerHTML = "";
+
+  var row;
 
   for (let i = 0; i < numZones; i++) {
-      var zoneDiv = document.createElement("div");
-      zoneDiv.id = "zoneDiv" + i;
+      if (i % 2 === 0) {
+          row = document.createElement("div");
+          row.className = "row";
+          selectBoxesContainer.appendChild(row);
+      }
 
-      var selectZone = document.createElement("select");
-      selectZone.id = "zone" + i;
-      selectZone.innerHTML = '<option value="">Select Zone</option>';
-
-      // Append the select element to the zoneDiv
-      zoneDiv.appendChild(selectZone);
-
-      // Append the zoneDiv to the selectBoxesContainer
-      selectBoxesContainer.appendChild(zoneDiv);
-
-      // Add a line break for better spacing
-      selectBoxesContainer.appendChild(document.createElement("br"));
+      var colDiv = document.createElement("div");
+      colDiv.className = "col-md-6";
+      colDiv.innerHTML = `
+          <div id="zoneDiv${i}">
+              <select id="zone${i}" class="form-select">
+                  <option value="">Select Zone</option>
+              </select>
+          </div>
+          <br>
+      `;
+      
+      row.appendChild(colDiv);
   }
 
-  // Call getZones to populate all dropdowns with data
   getZones();
 }
+
 const getZones = () => {
   const selectedBarangayId = document.getElementById("barangay").value;
 
@@ -646,7 +726,7 @@ const getZones = () => {
       return;
   }
 
-  const zoneUrl = "http://localhost/waterworks/head/get_zone.php";
+  const zoneUrl = "http://localhost/waterworks/gets/get_zones.php";
 
   const formData = new FormData();
   formData.append("barangayId", selectedBarangayId);

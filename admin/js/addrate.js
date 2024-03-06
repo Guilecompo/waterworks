@@ -41,7 +41,6 @@ var html = `
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
   const add_rate = () => {
         var html = `
@@ -69,7 +68,7 @@ const closeModal = () => {
                     <input type="text" class="form-control" id="third_rate" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">30 above +Rate</label>
+                    <label class="form-label">31 and above +Rate</label>
                     <input type="text" class="form-control" id="last_rate" required>
                 </div>
                                 
@@ -107,6 +106,7 @@ const closeModal = () => {
       formData.append("second_rate", second_rate);
       formData.append("third_rate", third_rate);
       formData.append("last_rate", last_rate);
+      formData.append("employee_Id", sessionStorage.getItem("accountId"));
       
         axios({
           url: myUrl,
@@ -117,6 +117,7 @@ const closeModal = () => {
             console.log(response);
             if (response.data.status === 1) {
               success_modal();
+              displayRate();
             //   window.location.href = "./addrate.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -153,20 +154,6 @@ const closeModal = () => {
           });
       };
 // ------------------------------FOR TABLE--------------------------------------------------------------
-const showNextPage = () => {
-  currentPage++;
-  showRatePage(currentPage);
-  };
-  
-  const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showRatePage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
-  };
-
 
 const displayRate = () => {
   var url = "http://localhost/waterworks/admin/ratelist.php";
@@ -202,7 +189,31 @@ const displayRate = () => {
     return nameA.localeCompare(nameB);
   });
   };
+  const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = rates.slice(start, end);
   
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showRatePage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+        // Optionally, you can choose to disable the button here
+        // For example, if you have a button element with id "nextButton":
+        // document.getElementById("nextButton").disabled = true;
+    }
+  };
+  
+  const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showRatePage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
+  };
   const showRatePage = (page, ratesToDisplay = rates) => {
   var start = (page - 1) * 10;
   var end = start + 10;
@@ -221,7 +232,7 @@ const displayRate = () => {
             <th scope="col" >Minimum</th>
             <th scope="col" >11 - 20</th>
             <th scope="col" >21 - 30</th>
-            <th scope="col" >30 above</th>
+            <th scope="col" >31 & above</th>
           </tr>
         </thead>
         </table>`;
@@ -237,7 +248,7 @@ const displayRate = () => {
             <th scope="col" >Minimum</th>
             <th scope="col" >11 - 20</th>
             <th scope="col" >21 - 30</th>
-            <th scope="col" >30 above</th>
+            <th scope="col" >31 & above</th>
           </tr>
         </thead>
         <tbody>

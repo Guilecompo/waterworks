@@ -15,9 +15,11 @@ $stmt = $conn->prepare("SELECT
     d.zone_name, e.barangay_name,
     f.municipality_name, a.meter_no,
     a.password, g.position_name,
-    h.branch_name, i.user_status
+    h.branch_name, i.user_status,
+    b.suffix_id, b.suffix_name
 FROM
     user_consumer a
+INNER JOIN suffix b ON a.suffixId = b.suffix_id
 INNER JOIN property c ON a.propertyId = c.property_id
 INNER JOIN address_zone d ON a.addressId = d.zone_id
 INNER JOIN address_barangay e ON d.barangayId = e.barangay_id

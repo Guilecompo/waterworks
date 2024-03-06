@@ -12,6 +12,9 @@ include("connection.php");
 // 2. get the data passed from the client
 $email = $_POST['email'];
 
+// Initialize returnValue to 0
+$returnValue = 0;
+
 // 3. Define SQL statement for user_consumer
 $sqlConsumer = "SELECT * FROM user_consumer ";
 $sqlConsumer .= "WHERE email = :email";
@@ -21,7 +24,6 @@ $stmtConsumer = $conn->prepare($sqlConsumer);
 $stmtConsumer->bindParam(":email", $email);
 
 // 5. execute the command for user_consumer
-$returnValue = 0;
 $stmtConsumer->execute();
 
 if ($stmtConsumer->rowCount() > 0) {
@@ -121,8 +123,6 @@ if ($stmtConsumer->rowCount() > 0) {
         } else {
             $returnValue = array("success" => false, "error" => "Failed to update the verification code for user_employee");
         }
-    } else {
-        $returnValue = array("success" => false, "error" => "Email not found in user_consumer and user_employee");
     }
 }
 

@@ -8,19 +8,6 @@ const onLoad = () => {
     getFileterBranch();
   };
 
-  const showNextPage = () => {
-    currentPage++;
-    showConsumerPage(currentPage);
-};
-
-const showPreviousPage = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showConsumerPage(currentPage);
-    } else {
-        alert("You are on the first page.");
-    }
-};
   
   const displayConsumer = () => {
     const head = document.getElementById("head");
@@ -78,7 +65,31 @@ const showFilteredConsumers = (filteredConsumers) => {
     currentPage = 1;
     showConsumerPage(currentPage, filteredConsumers);
 };
-  
+const showNextPage = () => {
+  const nextPage = currentPage + 1;
+  const start = (nextPage - 1) * 10;
+  const end = start + 10;
+  const activitiesOnNextPage = consumers.slice(start, end);
+
+  if (activitiesOnNextPage.length > 0) {
+      currentPage++;
+      showConsumerPage(currentPage);
+  } else {
+      alert("Next page is empty or has no content.");
+      // Optionally, you can choose to disable the button here
+      // For example, if you have a button element with id "nextButton":
+      // document.getElementById("nextButton").disabled = true;
+  }
+};
+
+const showPreviousPage = () => {
+  if (currentPage > 1) {
+      currentPage--;
+      showConsumerPage(currentPage);
+  } else {
+      alert("You are on the first page.");
+  }
+};
   const showConsumerPage = (page, consumersToDisplay = consumers) => {
       var start = (page - 1) * 10;
       var end = start + 10;
@@ -93,7 +104,6 @@ const showFilteredConsumers = (filteredConsumers) => {
           <thead>
             <tr>
                 <th scope="col">Full Name</th>
-                <th scope="col">Phone No</th>
                 <th scope="col">Meter No</th>
                 <th scope="col">Branch</th>
                 <th scope="col">Action</th>
@@ -311,88 +321,98 @@ const edit = (user_id) => {
               var consumer = response.data;
               console.log("Consumer : ",consumer[0].user_id);
               
-                var html = `
-                  <div class=" row  mt-1">
-                    <div class="col-md-1 mt-3">
-                      <button class="clear" onclick="displayConsumer()">Back</button>
-                    </div>
-                    <div class="col-md-11 mt-3">
-                      <h4 style="text-align: center;">Edit Consumer</h4>
-                    </div>
-                  </div>
-                  <div class="container-fluid mt-3">
-                      <form class="row g-3">
-                          <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">First Name</label>
-                              <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Middle Name</label>
-                              <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Last Name</label>
-                              <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Phone</label>
-                              <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Email</label>
-                              <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" required>
-                          </div>
-                          <label class="form-label mt-3 mb-0 underline-label">Address</label>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Municipality</label>
-                              <select id="municipality" class="form-select" onchange="getBarangay()">
-                                <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Barangay</label>
-                              <select id="barangay" class="form-select" onchange="getZone()">
-                              <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Zone</label>
-                              <select id="zoneId" class="form-select" >
-                                <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
-                              </select>
-                          </div>
-                          <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
-                          <div class="col-md-3 mt-3">
-                              <label class="form-label">Branch</label>
-                              <select id="edit_branch" class="form-select">
-                                <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-3 mt-3">
-                              <label class="form-label">Property Type</label>
-                              <select id="properties" class="form-select">
-                                <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
-                              </select>
-                          </div> 
-                          <div class="col-md-6 mt-3">
-                              <label class="form-label">Meter Number</label>
-                              <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
-                          </div>                    
-                          <div class="col-12 mt-4">
-                              <button type="submit" class="btn btn-primary" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
-                          </div>
-                      </form>
-                  </div>
-                                    
-                  `;
-        
-              document.getElementById("mainDiv").innerHTML = html;
-
-              getBranches();
-              getProperties();
-              getMunicipality();
-          }
+              var html = `
+              <div class=" row  mt-1">
+                <div class="col-md-1 mt-3">
+                  <button class="clear" onclick="displayConsumer()">Back</button>
+                </div>
+                <div class="col-md-11 mt-3">
+                  <h4 style="text-align: center;">Edit Consumer</h4>
+                </div>
+              </div>
+              <div class="container-fluid mt-3">
+                  <form class="row g-3">
+                      <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">First Name</label>
+                          <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Middle Name</label>
+                          <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Last Name</label>
+                          <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" required>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="form-label">Suffix</label>
+                        <select id="suffix" class="form-select">
+                            <option value="${consumer[0].suffix_id}" selected>${consumer[0].suffix_name}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Phone</label>
+                          <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Email</label>
+                          <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" required>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label">Address</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Municipality</label>
+                          <select id="municipality" class="form-select" onchange="getBarangay()">
+                            <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Barangay</label>
+                          <select id="barangay" class="form-select" onchange="getZone()">
+                          <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Zone</label>
+                          <select id="zoneId" class="form-select" >
+                            <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
+                          </select>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Branch</label>
+                          <select id="edit_branch" class="form-select">
+                            <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Property Type</label>
+                          <select id="properties" class="form-select">
+                            <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
+                          </select>
+                      </div> 
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Meter Number</label>
+                          <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
+                      </div>           
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">House Number</label>
+                          <input type="number" class="form-control" id="house_no" value="${consumer[0].house_no}" required>
+                      </div>                   
+                      <div class="col-12 mt-4">
+                          <button type="submit" class="btn btn-primary" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
+                      </div>
+                  </form>
+              </div>
+                                
+              `;
+    
+          document.getElementById("mainDiv").innerHTML = html;
+          getMunicipality();
+          getSuffix();
+          getBranches();
+          getProperty();
+      }
       } catch (error) {
         var html = `<h2>NO RECORD</h2>`;
       }
@@ -402,90 +422,144 @@ const edit = (user_id) => {
   });
 }
 const submit_edit_consumer = (event, user_id) => {
-      event.preventDefault();
-        const firstname = document.getElementById("firstname").value;
-        const middlename = document.getElementById("middlename").value;
-        const lastname = document.getElementById("lastname").value;
+  event.preventDefault();
+    const firstname = document.getElementById("firstname").value;
+    const middlename = document.getElementById("middlename").value;
+    const lastname = document.getElementById("lastname").value;
 
-        const phone = document.getElementById("phone").value;
-        const email_add = document.getElementById("email_add").value;
-        const propertyId = document.getElementById("properties").value;
+    const phone = document.getElementById("phone").value;
+    const email_add = document.getElementById("email_add").value;
+    const propertyId = document.getElementById("properties").value;
 
-        const municipalityId = document.getElementById("municipality").value;
-        const barangayId = document.getElementById("barangay").value;
-        const zoneId = document.getElementById("zoneId").value;
+    const municipalityId = document.getElementById("municipality").value;
+    const barangayId = document.getElementById("barangay").value;
+    const zoneId = document.getElementById("zoneId").value;
 
-        const branchId = document.getElementById("edit_branch").value;
-        const meter_no = document.getElementById("meter_no").value;
-    
-      if (
-        firstname === '' ||
-        middlename === '' ||
-        lastname === '' ||
-        phone === '' ||
-        email_add === '' ||
-        propertyId === '' ||
-        municipalityId === '' ||
-        barangayId === '' ||
-        zoneId === '' ||
-        branchId === '' ||
-        meter_no === '' 
-      ) {
-        alert('Fill in all fields');
-        return;
-      }
-    
-      const myUrl = "http://localhost/waterworks/head/update_api/update_consumer.php";
-      const formData = new FormData();
-      formData.append("userid", user_id);
-      formData.append("firstname", firstname);
-      formData.append("middlename", middlename);
-      formData.append("lastname", lastname);
-      formData.append("phone", phone);
-      formData.append("email_add", email_add);
-      formData.append("propertyId", propertyId);
-      formData.append("municipalityId", municipalityId);
-      formData.append("barangayId", barangayId);
-      formData.append("zoneId", zoneId);
-      formData.append("branchId", branchId);
-      formData.append("meter_no", meter_no);
-      console.log(user_id, 
-        firstname, 
-        middlename, 
-        lastname, 
-        phone, 
-        email_add, 
-        municipalityId, 
-        barangayId, 
-        zoneId, 
-        meter_no, 
-        branchId, 
-        propertyId);
+    const branchId = document.getElementById("edit_branch").value;
+    const meter_no = document.getElementById("meter_no").value;
+    const house_no = document.getElementById("house_no").value;
+
+  if (
+    firstname === '' ||
+    middlename === '' ||
+    lastname === '' ||
+    phone === '' ||
+    email_add === '' ||
+    propertyId === '' ||
+    municipalityId === '' ||
+    barangayId === '' ||
+    zoneId === '' ||
+    branchId === '' ||
+    meter_no === '' ||
+    house_no === '' 
+  ) {
+    alert('Fill in all fields');
+    return;
+  }
+
+  const myUrl = "http://localhost/waterworks/admin/update_api/update_consumer.php";
+  const formData = new FormData();
+  formData.append("userid", user_id);
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("phone", phone);
+  formData.append("email_add", email_add);
+  formData.append("propertyId", propertyId);
+  formData.append("municipalityId", municipalityId);
+  formData.append("barangayId", barangayId);
+  formData.append("zoneId", zoneId);
+  formData.append("branchId", branchId);
+  formData.append("meter_no", meter_no);
+  formData.append("house_no", house_no);
+  console.log(user_id, 
+    firstname, 
+    middlename, 
+    lastname, 
+    phone, 
+    email_add, 
+    municipalityId, 
+    barangayId, 
+    zoneId, 
+    house_no,
+    meter_no, 
+    branchId, 
+    propertyId
+    );
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 1) {
+          success_update_modal();
+          console.log("success update");
+        } else if (response.data.status === 0) {
+          // alert("Username or phone number already exists!");
+          failed_update_modal();
+          console.log(response);
+        } else {
+          // alert("Unknown error occurred.");
+          error_modal();
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
+  const updateBillStatus = () => {
+    const myUrl = "http://localhost/waterworks/head/update_api/update_billstatus.php";
+    const formData = new FormData();
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 1) {
+          success_update_modal();
+          console.log("success update");
+        } else if (response.data.status === 0) {
+          // alert("Username or phone number already exists!");
+          failed_update_modal();
+        } else {
+          // alert("Unknown error occurred.");
+          error_modal();
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
+      const getSuffix = () => {
+        const propertySelect = document.getElementById("suffix");
+        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
       
         axios({
           url: myUrl,
           method: "post",
-          data: formData,
         })
           .then((response) => {
-            console.log(response);
-            if (response.data.status === 1) {
-              success_update_modal();
-              console.log("success update");
-            } else if (response.data.status === 0) {
-              // alert("Username or phone number already exists!");
-              failed_update_modal();
-            } else {
-              // alert("Unknown error occurred.");
-              error_modal();
-              console.log(response);
-            }
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
           })
           .catch((error) => {
             alert(`ERROR OCCURRED! ${error}`);
           });
       };
-  const getProperties = () => {
+  const getProperty = () => {
     const propertySelect = document.getElementById("properties");
     var myUrl = "http://localhost/waterworks/gets/get_property.php";
   
@@ -613,9 +687,7 @@ const submit_edit_consumer = (event, user_id) => {
         document.getElementById("mainDiv").innerHTML = html;
     };
 
-
-
-    const getMunicipality = () => {
+const getMunicipality = () => {
       const municipalitySelect = document.getElementById("municipality");
       var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
       
@@ -647,8 +719,9 @@ const submit_edit_consumer = (event, user_id) => {
       const formData = new FormData();
       
       // Use selectedMunicipalityId directly
-      formData.append("barangayId", sessionStorage.getItem("barangayId"));
       formData.append("municipalityId", selectedMunicipalityId);
+      formData.append("barangayId", sessionStorage.getItem("branchId"));
+      console.log(sessionStorage.getItem("branchId"));
       
       axios({
         url: barangayUrl,
@@ -659,6 +732,7 @@ const submit_edit_consumer = (event, user_id) => {
           const barangaySelect = document.getElementById("barangay");
           const barangays = response.data;
           console.log("success barangay");
+          console.log(response.data);
           // Clear existing options
           barangaySelect.innerHTML = ``;
       
@@ -679,7 +753,7 @@ const submit_edit_consumer = (event, user_id) => {
       const getZone = () => {
         const selectedBarangayId = document.getElementById("barangay").value;
       
-        const zoneUrl = `http://localhost/waterworks/gets/get_zone.php`;
+        const zoneUrl = `http://localhost/waterworks/gets/get_zones.php`;
         const formData = new FormData();
       
         // Use selectedMunicipalityId directly
@@ -689,10 +763,9 @@ const submit_edit_consumer = (event, user_id) => {
           method: "post",
           data: formData
         }).then((response) => {
-          console.log("success zone");
           const zoneSelect = document.getElementById("zoneId");
           const zones = response.data;
-      
+          console.log("success zone");
           console.log("Zones data from server:", zones);
       
           // Clear existing options
@@ -777,7 +850,6 @@ const submit_edit_consumer = (event, user_id) => {
         prevBtn.style.display = "block";
         nextBtn.style.display = "block";
       
-        window.location.reload();
       };
 // ------------------------------------------------- CHANGE METER START --------------------------------------------------
       const change = (user_id) => {
@@ -989,6 +1061,7 @@ const submit_add = (user_id) =>{
     const formData = new FormData();
     formData.append("consumerId", user_id);
     formData.append("new_meters", new_meters);
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
   axios({
     url:myUrl,
@@ -996,16 +1069,18 @@ const submit_add = (user_id) =>{
     data:formData
   }).then(response => {
     console.log(response.data);
-    if (response.data.status === 'duplicate') {
-      // alert("Meter Number Already Exist");
-      try_update_modal();
-    } else if (response.data.status !== 'error') {
-      // alert("New Meter Number Successfully Saved!");
-      // window.location.href = "./consumer_list.html";
+    if (response.data.status === 1) {
       success_update_modal();
-    } else {
-      // alert("Record NOT Saved!");
+      displayConsumer();
+      // window.location.href = "./addconsumer.html";
+    } else if (response.data.status === 0) {
+      // alert("Username or phone number already exists!");
+      console.log(response);
       failed_update_modal();
+    } else {
+      // alert("Unknown error occurred.");
+      error_modal();
+      console.log(response);
     }
   }).catch(error =>{
     // alert(`ERROR OCCUREDS! ${error}`);
@@ -1058,7 +1133,7 @@ const more = (user_id) => {
                   html += 
                   `
                       <tr>
-                          <td>${record.firstname} ${record.lastname}</td>
+                          <td>${record.firstname} ${record.lastname} #${record.connected_number}</td>
                           <td>${record.phone_no}</td>
                           <td>${record.meter_no}</td>
                           <td>
@@ -1321,6 +1396,7 @@ const submit_connected_update = (event, user_id) => {
   };
 
 // -------------------------------------------------EDIT CONNECTED METER END ---------------------------------------------------
+
 // -------------------------------------------------VIEW START ---------------------------------------------------
 const information = (user_id) => {
   const modal = document.getElementById("myModal");

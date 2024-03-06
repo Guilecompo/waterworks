@@ -31,7 +31,7 @@ const displayConsumer = () => {
         console.log(response.data);
         consumers = response.data;
         
-        sortConsumersByName();
+        // sortConsumersByName();
         showConsumerPage(currentPage);
         
     }).catch(error => {
@@ -41,12 +41,34 @@ const displayConsumer = () => {
     });
 };
 
-const sortConsumersByName = () => {
-    consumers.sort((a, b) => {
-        const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-        const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-        return nameA.localeCompare(nameB);
-    });
+// const sortConsumersByName = () => {
+//     consumers.sort((a, b) => {
+//         const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
+//         const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
+//         return nameA.localeCompare(nameB);
+//     });
+// };
+const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = consumers.slice(start, end);
+
+    if (activitiesOnNextPage.length > 0) {
+        currentPage++;
+        showConsumerPage(currentPage);
+    } else {
+        alert("Next page is empty or has no content.");
+    }
+};
+
+const showPreviousPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showConsumerPage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
 };
 
 const showConsumerPage = (page, consumersToDisplay = consumers) => {
@@ -56,20 +78,6 @@ const showConsumerPage = (page, consumersToDisplay = consumers) => {
     refreshTables(displayedConsumers);
     showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
 };
-  
-const showNextPage = () => {
-    currentPage++;
-    showConsumerPage(currentPage);
-  };
-  
-  const showPreviousPage = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showConsumerPage(currentPage);
-    } else {
-        alert("You are on the first page.");
-    }
-  };
   
 const refreshTables = (employeeList) => {
     var html = `
@@ -86,7 +94,7 @@ const refreshTables = (employeeList) => {
     employeeList.forEach(employee => {
         html += `
         <tr>
-            <td>${employee.firstname} ${employee.lastname}</td>
+            <td>${employee.firstname} ${employee.lastname} ${employee.connected_number !== 0 ? '#' + employee.connected_number : ''}</td>
             <td>${employee.meter_no}</td>
             <td>
             <button class="butts" onclick="view(${employee.user_id})">Bill</button>
@@ -132,11 +140,11 @@ const view = (user_id) => {
                                         </div>
                                         <hr class="badge-primary mt-0">
                                         <div class="row">
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <p style="text-decoration: underline; font-size: small;">Address</p>
                                                 <h6 class="text-muted">${employee[0].zone_name}, ${employee[0].barangay_name}, ${employee[0].municipality_name}</h6>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <p style="text-decoration: underline; font-size: small;">Phone Number</p>
                                                 <h6 class="text-muted" >${employee[0].phone_no}</h6>
                                             </div>
@@ -146,9 +154,11 @@ const view = (user_id) => {
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
                                             <div class="col-sm-12">
+                                                <p style="font-size: medium;">Previous Meter Consumed :  ${employee[0].total_cubic_consumed}</p>
+                                            </div>
+                                            <div class="col-sm-12">
                                                 <label for="cubic_consumed">Meter Consumed</label>
                                                 <input type="number" class="form-control " id="cubic_consumed" style="height: 30px;" placeholder="Meter Consumed" >
-                                                
                                             </div>
                                         </div>
                                         <div class="row mt-4">
@@ -237,6 +247,7 @@ const showPaginationNumbers = (currentPage, totalPages) => {
                 failed_update_modal(response.data.errorCode);
             } else {
               console.log(response.data);
+              displayConsumer();
               bill_receipt(user_id);
             }
         }).catch(error => {
@@ -245,45 +256,50 @@ const showPaginationNumbers = (currentPage, totalPages) => {
     }
 }
 
-  const getFilterZones = () => {
+const getFilterZones = () => {
     const positionSelect = document.getElementById("filterZones");
-    const barangayName = sessionStorage.getItem("branchId");
     const myUrl = "http://localhost/waterworks/meterreader/get_zones_filter.php";
     const formData = new FormData();
-    formData.append("barangayId", barangayName);
+    formData.append("barangayId", sessionStorage.getItem("barangayId"));
     formData.append("readerId", sessionStorage.getItem("accountId"));
-  
+
     axios({
-      url: myUrl,
-      method: "post",
-      data: formData
+        url: myUrl,
+        method: "post",
+        data: formData
     })
-      .then((response) => {
+    .then((response) => {
         const positions = response.data;
-  
-        let options = `<option value="all">Select Zone</option>`;
-        positions.forEach((position) => {
-          options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
-        });
-        positionSelect.innerHTML = options;
-  
-        // Event listener for position change
-        positionSelect.addEventListener("change", () => {
-          selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
-          // Call the appropriate display function based on the selected position
-          if (selectedZone === "all") {
-            displayConsumer();
-          } else {
-            displayConsumerByZone();
-          }
-          // Add more conditions as needed for other positions
-        });
-      })
-      .catch((error) => {
+        console.log(positions);
+
+        if (positions && positions.length > 0) {
+            let options = `<option value="all">Select Zone</option>`;
+            positions.forEach((position) => {
+                options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
+            });
+            positionSelect.innerHTML = options;
+
+            // Event listener for position change
+            positionSelect.addEventListener("change", () => {
+                selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
+                // Call the appropriate display function based on the selected position
+                if (selectedZone === "all") {
+                    displayConsumer();
+                } else {
+                    displayConsumerByZone(selectedZone); // Pass selectedZone to the function
+                }
+                // Add more conditions as needed for other positions
+            });
+        } else {
+            positionSelect.innerHTML = '<option value="all">No Zones Available</option>';
+        }
+    })
+    .catch((error) => {
         alert(`ERROR OCCURRED! ${error}`);
         console.log(error); 
-      });
-  };
+    });
+};
+
 
   const displayConsumerByZone = () => {
     const url = "http://localhost/waterworks/meterreader/get_consumers_filter.php";
@@ -299,20 +315,20 @@ const showPaginationNumbers = (currentPage, totalPages) => {
     }).then(response => {
       console.log(response.data);
       consumers = response.data;
-      sortConsumersByNameByZone();
+    //   sortConsumersByNameByZone();
       showConsumerPageByZone(currentPage);
     }).catch(error => {
       alert("ERROR! - " + error);
     });
   };
   
-  const sortConsumersByNameByZone = () => {
-    consumers.sort((a, b) => {
-        const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-        const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-        return nameA.localeCompare(nameB);
-    });
-  };
+//   const sortConsumersByNameByZone = () => {
+//     consumers.sort((a, b) => {
+//         const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
+//         const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
+//         return nameA.localeCompare(nameB);
+//     });
+//   };
   
   const showConsumerPageByZone = (page, consumersToDisplay = consumers) => {
     var start = (page - 1) * 10;
@@ -324,7 +340,7 @@ const showPaginationNumbers = (currentPage, totalPages) => {
 
   const refreshTablesByZone = (employeeList) => {
     var html = `
-    <table>
+    <table class="table mb-0 mt-0">
     <thead>
         <tr>
         <th>Full Name</th>
@@ -434,30 +450,29 @@ const bill_receipt  = (user_id) => {
               var records = response.data;
 
               html = `
-                <div class="wrapper">
+                <div class="wrap wrapper ms-0 ">
                   <div class="container mt-0 ">
                       <div class="row ">
                               <div class="row ">
                                   <div class="text-center ">
-                                      <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
+                                      <h5 class="w-100">EL SALVADOR CITY WATERWORKS</h5>
                                   </div>
-                                  <div class="col-sm-12 mt-3">
-                                      <div class="row ">
-                                          <div class="col-md-6 ">
-                                              <p style="text-decoration: underline; font-size: small">NAME</p>
-                                              <h6 class="text-muted mt-0">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</h6>
-                                          </div>
-                                  
-                                          <div class="col-md-6  text-md-end">
-                                              <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
-                                              <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
-                                          </div>
-                                      </div>
-                                  
-                                      <div class="mt-1">
-                                          <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                          <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
-                                      </div>
+                                  <div class="col-sm-12 mt-3 ms-0 mb-0">
+                                        <div class="inform mt-1 ">
+                                            <div class="col-sm-12">
+                                                    <p class="par mb-1">NAME : ${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</p>
+                                            </div>
+                                        </div>
+                                        <div class="inform mt-1 ">
+                                            <div class="col-sm-12">
+                                                <p class="par mb-1">ACCOUNT NUMBER : ${records[0].meter_no}</p>
+                                            </div>
+                                        </div>
+                                        <div class="inform mt-1 ">
+                                            <div class="col-sm-12">
+                                            <p class="par mb-1">ADDRESS : ${records[0].zone_name}, ${records[0].barangay_name}, ${records[0].municipality_name}</p>
+                                            </div>
+                                        </div>
                                   </div>
                                   
                               </div>
@@ -470,63 +485,66 @@ const bill_receipt  = (user_id) => {
                                               <th class="text-center">Previous</th>
                                               <th class="text-center">Present</th>
                                               <th class="text-center">Consumed</th>
-                                              <th class="text-center">Amount</th>
                                           </tr>
                                       </thead>
                                       <tbody>
                                           <tr>
-                                              <td class="col-md-3 text-center">${records[0].previous_meter}</td>
-                                              <td class="col-md-3 text-center">${records[0].present_meter}</td>
-                                              <td class="col-md-3 text-center">${records[0].cubic_consumed}</td>
-                                              <td class="col-md-3 text-center">${records[0].bill_amount}</td>
+                                              <td class="la col-md-4 text-center">${records[0].previous_meter}</td>
+                                              <td class="la col-md-4 text-center">${records[0].present_meter}</td>
+                                              <td class="la col-md-4 text-center">${records[0].cubic_consumed}</td>
                                           </tr>
                                       </tbody>
                                   </table>
-                                  <table class="tabb1 table table-hover table-fixed">
+                                  <table class="tabb1 table table-hover mt-0 mb-0">
                                       <tbody>
                                           <tr>
                                               <td class="col-md-5 text-start border-0 ">
-                                                  <p>
-                                                      <strong style="font-size: small">ARREARS </strong>
+                                                    <p class="par mt-0">
+                                                        AMOUNT
                                                   </p>
-                                                  <p>
-                                                      <strong style="font-size: small">AMOUNT UNTIL DUE DATE </strong>
+                                                  <p class="par mt-0">
+                                                        ARREARS
+                                                  </p>
+                                                  <p class="par mt-0">
+                                                        AMOUNT UNTIL DUE 
                                                   </p>
                                               </td>
                                               <td class="col-md-1 border-0"></td>
                                               <td class="col-md-3 border-0"></td>
                                               <td class="col-md-3 text-center border-0">
-                                                  <p>
-                                                      <strong>${records[0].arrears}</strong>
+                                                  <p class="par mt-0">
+                                                        ${records[0].bill_amount}
                                                   </p>
-                                                  <p>
-                                                      <strong>${records[0].total_bill}</strong>
+                                                  <p class="par mt-0">
+                                                        ${records[0].arrears}
+                                                  </p>
+                                                  <p class="par mt-0">
+                                                        ${records[0].total_bill}
                                                   </p>
                                               </td>
                                           </tr>
                                       </tbody>
                                   </table>                                                     
-                                  <table class="tabb2 table table-bordered table-hover">
+                                  <table class="tabb2 table table-bordered table-hover mt-0 mb-0">
                                       <thead>
                                           <tr>
                                               <th class="text-center">Reading Date</th>
                                               <th class="text-center">Due Date</th>
-                                              <th class="text-center">FOR THE MONTH OF</th>
+                                              <th class="text-center">MONTH OF</th>
                                           </tr>
                                       </thead>
                                       <tbody>
                                           <tr>
-                                              <td class="col-md-4 text-center">${records[0].reading_date}</td>
-                                              <td class="col-md-4 text-center">${records[0].due_date}</td>
-                                              <td class="col-md-4 text-center">${records[0].formatted_reading_date2}</td>
+                                              <td class="las col-md-4 text-center">${records[0].reading_date}</td>
+                                              <td class="las col-md-4 text-center">${records[0].due_date}</td>
+                                              <td class="las col-md-4 text-center">${records[0].formatted_reading_date2}</td>
                                           </tr>
                                       </tbody>
                                   </table>
                               </div>
                               <div class="row mt-1">
                                   <div class="col-sm-12">
-                                     <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="success_update_modal()">Close</button>
-                                   </div>
+                                    <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
                               </div>
                       </div>
                   </div>
@@ -535,108 +553,11 @@ const bill_receipt  = (user_id) => {
 
               
           }
+          modalContent.innerHTML = html;
       } catch (error) {
           // Handle any errors here
           console.log(error);
-          html = `
-                <div class="wrapper">
-                  <div class="container mt-0 ">
-                      <div class="row ">
-                              <div class="row ">
-                                  <div class="text-center ">
-                                      <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
-                                  </div>
-                                  <div class="col-sm-12 mt-3">
-                                      <div class="row ">
-                                          <div class="col-md-6">
-                                              <p style="text-decoration: underline; font-size: small">NAME</p>
-                                              <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                          </div>
-                                  
-                                          <div class="col-md-6  text-md-end">
-                                              <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
-                                              <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                          </div>
-                                      </div>
-                                  
-                                      <div class="mt-1">
-                                          <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                          <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                      </div>
-                                  </div>
-                                  
-                              </div>
-                              <div class="row">
-                                  
-                                  </span>
-                                  <table class="tab table table-bordered table-hover">
-                                      <thead>
-                                          <tr>
-                                              <th class="text-center">Previous</th>
-                                              <th class="text-center">Present</th>
-                                              <th class="text-center">Consumed</th>
-                                              <th class="text-center">Amount</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr>
-                                              <td class="col-md-3 text-center">NO RECORDS</td>
-                                              <td class="col-md-3 text-center">NO RECORDS</td>
-                                              <td class="col-md-3 text-center">NO RECORDS</td>
-                                              <td class="col-md-3 text-center">NO RECORDS</td>
-                                          </tr>
-                                      </tbody>
-                                  </table>
-                                  <table class="tabb1 table table-hover table-fixed">
-                                      <tbody>
-                                          <tr>
-                                              <td class="col-md-3 text-start border-0 ">
-                                                  <p >
-                                                      <strong>Arrears: </strong>
-                                                  </p>
-                                                  <p>
-                                                      <strong >Total Amount: </strong>
-                                                  </p>
-                                              </td>
-                                              <td class="col-md-3 border-0"></td>
-                                              <td class="col-md-3 border-0"></td>
-                                              <td class="col-md-3 text-center border-0">
-                                                  <p>
-                                                      <strong>NO RECORDS</strong>
-                                                  </p>
-                                                  <p>
-                                                      <strong>NO RECORDS</strong>
-                                                  </p>
-                                              </td>
-                                          </tr>
-                                      </tbody>
-                                  </table>                                                     
-                                  <table class="tabb2 table table-bordered table-hover">
-                                      <thead>
-                                          <tr>
-                                              <th class="text-center">Reading Date</th>
-                                              <th class="text-center">Due Date</th>
-                                              <th class="text-center">FOR THE MONTH OF</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr>
-                                              <td class="col-md-4 text-center">NO RECORDS</td>
-                                              <td class="col-md-4 text-center">NO RECORDS</td>
-                                              <td class="col-md-4 text-center">NO RECORDS</td>
-                                          </tr>
-                                      </tbody>
-                                  </table>
-                              </div>
-                              <div class="row mt-1">
-                                  <div class="col-sm-12">
-                                     <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="failed_update_modal()">Close</button>
-                                   </div>
-                              </div>
-                      </div>
-                  </div>
-              </div>
-              `;
+         
       }
 
       modalContent.innerHTML = html;
@@ -645,3 +566,15 @@ const bill_receipt  = (user_id) => {
       alert(`ERROR OCCURRED! ${error}`);
   });
 };
+
+
+const printModalContent = () => {
+    window.print();
+    
+};
+
+
+
+
+
+

@@ -13,6 +13,8 @@ error_log(print_r($_POST, true)); // Log the received POST data
 
 $municipalityId = $_POST['municipalityId'];
 $add_barangay = $_POST['add_barangay'];
+$date_added = date("Y-m-d");
+$employee_Id = $_POST['employee_Id'];
 
 try {
     // Check if barangay_name already exists
@@ -33,9 +35,23 @@ try {
         $stmt->bindParam(":barangay_id", $_POST['barangay_id'], PDO::PARAM_INT);
         $stmt->bindParam(":add_barangay", $_POST['add_barangay'], PDO::PARAM_STR);
         $stmt->bindParam(":municipalityId", $municipalityId, PDO::PARAM_INT);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            $activity_type = "Edit";
+            $table_name = "Barangay";
+            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
-        echo json_encode(array("status" => 1, "message" => "Barangay Successfully Updated!"));
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+            $stmt1->bindParam(":date_added", $date_added);
+            $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            echo json_encode(array("status" => 1, "message" => "Barangay Successfully Updated & Added to Activity Log!"));
+        } else {
+            echo json_encode(array("status" => 0, "message" => "Failed to Updated Barangay"));
+        }
 
     } else {
         echo json_encode(array("status" => 0, "message" => "Duplicate entry for barangay_name"));

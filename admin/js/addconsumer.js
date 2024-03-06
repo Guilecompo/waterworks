@@ -32,13 +32,11 @@ var html = `
   `;
     modalContent.innerHTML = html;
     modal.style.display = "block";
-    window.location.reload();
 
 };
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
-  window.location.reload();
   };
   const add_consumer = () => {
         var html = `
@@ -60,6 +58,10 @@ const closeModal = () => {
                     <label class="form-label">Last Name</label>
                     <input type="text" class="form-control" id="lastname" required>
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label">Suffix</label>
+                    <select id="suffix" class="form-select"></select>
+                  </div>
                 <div class="col-md-4">
                     <label class="form-label">Phone</label>
                     <input type="text" class="form-control" id="phone" required>
@@ -86,18 +88,26 @@ const closeModal = () => {
                     </select>
                 </div>
                 <label class="form-label mb-0 underline-label mt-4">Register Account</label>
-                <div class="col-md-3 ">
+                <div class="col-md-4 ">
                     <label class="form-label">Branch</label>
                     <select id="branch" class="form-select"></select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Property Type</label>
                     <select id="property" class="form-select"></select>
-                </div> 
-                <div class="col-md-6">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Consumer Type</label>
+                    <select id="consumer" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
                     <label class="form-label">Meter Number</label>
                     <input type="text" class="form-control" id="meter_no" required>
-                </div>                    
+                </div>   
+                <div class="col-md-4">
+                    <label class="form-label">House Number</label>
+                    <input type="number" class="form-control" id="house_no" required>
+                </div>
                 <div class="col-12 mt-5">
                     <button type="submit" class="btn btn-primary" onclick="submit_consumer(event)">Submit form</button>
                 </div>
@@ -106,8 +116,9 @@ const closeModal = () => {
                           
         `;
         document.getElementById("mainDiv").innerHTML = html;
-        
+        getSuffix();
         getBranch();
+        getConsumerType();
         getProperty();
         getMunicipality();
     };
@@ -116,6 +127,8 @@ const closeModal = () => {
         const firstname = document.getElementById("firstname").value;
         const middlename = document.getElementById("middlename").value;
         const lastname = document.getElementById("lastname").value;
+        const suffixId = document.getElementById("suffix").value;
+
         const phone = document.getElementById("phone").value;
         const email_add = document.getElementById("email_add").value;
         const propertyId = document.getElementById("property").value;
@@ -123,12 +136,16 @@ const closeModal = () => {
         const barangayId = document.getElementById("barangay").value;
         const zoneId = document.getElementById("zone").value;
         const branchId = document.getElementById("branch").value;
+
+        const consumer = document.getElementById("consumer").value;
         const meter_no = document.getElementById("meter_no").value;
+        const house_no = document.getElementById("house_no").value;
     
       if (
         firstname === '' ||
         middlename === '' ||
         lastname === '' ||
+        suffixId === '' ||
         phone === '' ||
         email_add === '' ||
         propertyId === '' ||
@@ -136,17 +153,20 @@ const closeModal = () => {
         barangayId === '' ||
         zoneId === '' ||
         branchId === '' ||
-        meter_no === '' 
+        consumer === '' ||
+        meter_no === '' ||
+        house_no === ''
       ) {
         alert('Fill in all fields');
         return;
       }
     
-      const myUrl = "http://localhost/waterbilling/admin/add_consumer.php";
+      const myUrl = "http://localhost/waterworks/admin/add_consumer.php";
       const formData = new FormData();
       formData.append("firstname", firstname);
       formData.append("middlename", middlename);
       formData.append("lastname", lastname);
+      formData.append("suffixId", suffixId);
       formData.append("phone", phone);
       formData.append("email_add", email_add);
       formData.append("propertyId", propertyId);
@@ -154,7 +174,10 @@ const closeModal = () => {
       formData.append("barangayId", barangayId);
       formData.append("zoneId", zoneId);
       formData.append("branchId", branchId);
+      formData.append("consumer", consumer);
       formData.append("meter_no", meter_no);
+      formData.append("house_no", house_no);
+      formData.append("employee_Id", sessionStorage.getItem("accountId"));
       
         axios({
           url: myUrl,
@@ -165,6 +188,7 @@ const closeModal = () => {
             console.log(response);
             if (response.data.status === 1) {
               success_modal();
+              add_consumer();
               // window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
@@ -174,6 +198,28 @@ const closeModal = () => {
               error_modal();
               console.log(response);
             }
+          })
+          .catch((error) => {
+            alert(`ERROR OCCURRED! ${error}`);
+            console.log(error);
+          });
+      };
+      const getConsumerType = () => {
+        const propertySelect = document.getElementById("consumer");
+        var myUrl = "http://localhost/waterworks/gets/get_consumertype.php";
+      
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.consumertype_id }">${property.consumertype}</option>`;
+            });
+            propertySelect.innerHTML = options;
           })
           .catch((error) => {
             alert(`ERROR OCCURRED! ${error}`);
@@ -193,6 +239,27 @@ const closeModal = () => {
             var options = ``;
             properties.forEach((property) => {
               options += `<option value="${property.property_id}">${property.property_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            alert(`ERROR OCCURRED! ${error}`);
+          });
+      };
+      const getSuffix = () => {
+        const propertySelect = document.getElementById("suffix");
+        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+      
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
             });
             propertySelect.innerHTML = options;
           })

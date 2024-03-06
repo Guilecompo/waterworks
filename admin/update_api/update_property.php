@@ -12,6 +12,8 @@ include '../connection.php';
 error_log(print_r($_POST, true)); // Log the received POST data
 
 $add_property = $_POST['add_property'];
+$date_added = date("Y-m-d");
+$employee_Id = $_POST['employee_Id'];
 
 try {
     // Check if barangay_name already exists
@@ -30,9 +32,23 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":property_id", $_POST['property_id'], PDO::PARAM_INT);
         $stmt->bindParam(":add_property", $_POST['add_property'], PDO::PARAM_STR);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            $activity_type = "Edit";
+            $table_name = "Property";
+            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
-        echo json_encode(array("status" => 1, "message" => "Property Successfully Updated!"));
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+            $stmt1->bindParam(":date_added", $date_added);
+            $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            echo json_encode(array("status" => 1, "message" => "Property Successfully Updated & Added to Activity Log!"));
+        } else {
+            echo json_encode(array("status" => 0, "message" => "Failed to Updated Property"));
+        }
 
     } else {
         echo json_encode(array("status" => 0, "message" => "Duplicate entry for property_name"));

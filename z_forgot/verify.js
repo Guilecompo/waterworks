@@ -17,7 +17,7 @@ const verify = () => {
       }).then(response => {
         var returnValue = response.data;
         if (returnValue === 0 ) {
-          alert("Invalid email / Email not registered");
+          failed_modal();
         //   verify1();
         } else {
             var returnValue = response.data;
@@ -27,7 +27,34 @@ const verify = () => {
           window.location.href = "change_pass.html"; // Redirect to the customer page
         }
       }).catch(error => {
-        alert("ERROR! - " + error);
+        error_modal();
+        console.log(error);
       })
     }
   }
+  const failed_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+  var html = `
+        <h5 class="modal-title " style="color: red; text-align:center;">Invalid code</h5>
+    `;
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+  
+  };
+  const error_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+  var html = `
+        <h5 class="modal-title " style="color: red; text-align:center;">Unknown error occurred !</h5>
+    `;
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+  
+  };
+  const closeModal = () => {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+    window.location.reload();
+    };
+  

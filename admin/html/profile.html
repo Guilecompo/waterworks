@@ -18,7 +18,7 @@
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/waterworks/style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -41,11 +41,23 @@
                                 Dashboard
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="./employeelist.html" class="sidebar-link mt-3">
-                                <i class="fa-solid fa-file-lines pe-2"></i>
-                                Employee List
+                        <li class="sidebar-item mt-3">
+                            <a href="#" class="sidebar-link collapsed" data-bs-target="#employees" data-bs-toggle="collapse"
+                                aria-expanded="false"><i class="fa-solid fa-user pe-2"></i>
+                                Employees
                             </a>
+                            <ul id="employees" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                                
+                                <li class="sidebar-item">
+                                    <a href="./clerklist.html" class=" sidebar-link">Clerk List</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./headlist.html" class=" sidebar-link">Head List</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./readerlist.html" class=" sidebar-link">Meter Reader List</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item">
                             <a href="./consumerlist.html" class="sidebar-link mt-3">
@@ -80,6 +92,9 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a href="./addconsumer.html" class="sidebar-link">Add Consumer</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="./addconsumertype.html" class=" sidebar-link">Add Consumer Type</a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a href="./addposition.html" class="sidebar-link">Add Positon</a>
@@ -121,7 +136,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item active" href="./profile.html">Profile</a></li>
                                     <li><a class="dropdown-item" href="./change_password.html">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/waterworks/">Logout</a></li>
                                 </ul>
                             </li>
                            
@@ -194,7 +209,7 @@
             crossorigin="anonymous"
         ></script>
         <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-        <script src="/script.js"></script>
+        <script src="/waterworks/script.js"></script>
         <script src="../js/profile.js"></script>
 
     </body>

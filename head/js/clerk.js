@@ -7,19 +7,6 @@ const onLoad = () => {
   displayClerkEmployee();
     // getFileterBranch();
   }; 
-  const showNextPage = () => {
-    currentPage++;
-    showEmployeePage(currentPage);
-    };
-    
-    const showPreviousPage = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      showEmployeePage(currentPage);
-    } else {
-      alert("You are on the first page.");
-    }
-    };
     const displayClerkEmployee = () => {
         const head = document.getElementById("head");
         const paginationNumbers = document.getElementById("paginationNumbers");
@@ -80,7 +67,28 @@ const onLoad = () => {
           showClerkEmployeePage(currentPage, filteredEmployees);
           };
         
+          const showNextPage = () => {
+            const nextPage = currentPage + 1;
+            const start = (nextPage - 1) * 10;
+            const end = start + 10;
+            const activitiesOnNextPage = employees.slice(start, end);
         
+            if (activitiesOnNextPage.length > 0) {
+                currentPage++;
+                showClerkEmployeePage(currentPage);
+            } else {
+                alert("Next page is empty or has no content.");
+            }
+        };
+        
+        const showPreviousPage = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                showClerkEmployeePage(currentPage);
+            } else {
+                alert("You are on the first page.");
+            }
+        };
         const showClerkEmployeePage = (page, employeesToDisplay = employees) => {
         var start = (page - 1) * 10;
         var end = start + 10;
@@ -193,6 +201,12 @@ const onLoad = () => {
                                   <label class="form-label">Last Name</label>
                                   <input type="text" class="form-control" id="lastname" value="${employee[0].lastname}" required>
                                 </div>
+                                <div class="col-md-4">
+                                  <label class="form-label">Suffix</label>
+                                  <select id="suffix" class="form-select">
+                                      <option value="${employee[0].suffix_id}" selected>${employee[0].suffix_name}</option>
+                                  </select>
+                                </div>
                                 <div class="col-md-4 mt-3">
                                     <label class="form-label">Phone</label>
                                     <input type="text" class="form-control" id="phone" value="${employee[0].phone_no}" required>
@@ -200,10 +214,6 @@ const onLoad = () => {
                                 <div class="col-md-4 mt-3">
                                     <label class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email_add" value="${employee[0].email}" required >
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username" value="${employee[0].username}" required>
                                 </div>
                                 <label class="form-label mt-4 mb-0 underline-label">Address</label>
                                 <div class="col-md-4 mt-3">
@@ -221,7 +231,7 @@ const onLoad = () => {
                                 <label class="form-label  mb-0 underline-label mt-4">Workspace</label>
                                     <div class="col-md-3 me-3 mt-3">
                                         <label class="form-label">Branch</label>
-                                        <select id="edit_branch" class="form-select">
+                                        <select id="branch" class="form-select">
                                           <option value="${employee[0].branch_id}" selected>${employee[0].branch_name}</option>
                                         </select>
                                     </div>
@@ -239,8 +249,9 @@ const onLoad = () => {
                         `;
                       document.getElementById("mainDiv").innerHTML = html;
         
+                    getSuffix();
                     getBranch();
-                    getPositions();
+                    getPosition();
                   }
               } catch (error) {
                 var html = `<h2>NO RECORD</h2>`;
@@ -256,6 +267,7 @@ const submit_edit_employee = (event, user_id) => {
     const firstname = document.getElementById("firstname").value;
     const middlename = document.getElementById("middlename").value;
     const lastname = document.getElementById("lastname").value;
+    const suffixId = document.getElementById("suffix").value;
     const phone = document.getElementById("phone").value;
 
     const provinceName = document.getElementById("provinceName").value;
@@ -263,8 +275,7 @@ const submit_edit_employee = (event, user_id) => {
     const barangayName = document.getElementById("barangayName").value;
 
     const email_add = document.getElementById("email_add").value;
-    const username = document.getElementById("username").value;
-    const branchId = document.getElementById("edit_branch").value;
+    const branchId = document.getElementById("branch").value;
     const positionId = document.getElementById("position").value;
   
     if (
@@ -276,7 +287,7 @@ const submit_edit_employee = (event, user_id) => {
       provinceName === '' ||
       municipalityName === '' ||
       barangayName === '' ||
-      username === '' ||
+      suffixId === '' ||
       branchId === '' ||
       positionId === ''
     ) {
@@ -284,7 +295,7 @@ const submit_edit_employee = (event, user_id) => {
       return;
     }
   
-    const myUrl = "http://localhost/waterworks/head/update_api/update_employee.php";
+    const myUrl = "http://localhost/waterworks/admin/update_api/update_employee.php";
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("firstname", firstname);
@@ -295,10 +306,11 @@ const submit_edit_employee = (event, user_id) => {
     formData.append("provinceNames", provinceName);
     formData.append("municipalityNames", municipalityName);
     formData.append("barangayNames", barangayName);
-    formData.append("username", username);
+    formData.append("suffixId", suffixId);
     formData.append("branchId", branchId);
     formData.append("positionId", positionId);
-    console.log(user_id, firstname, middlename, lastname, phone, email_add, provinceName, municipalityName, barangayName,username,branchId, positionId);
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
+    console.log(user_id, firstname, middlename, lastname, suffixId, phone, email_add, provinceName, municipalityName, barangayName,branchId, positionId);
   
     axios({
       url: myUrl,
@@ -312,9 +324,11 @@ const submit_edit_employee = (event, user_id) => {
         if (response.data.status === 1) {
           success_update_modal();
           console.log("success update");
+          window.location.reload();
         } else if (response.data.status === 0) {
           // alert("Username or phone number already exists!");
           failed_update_modal();
+          console.log(response.data);
         } else {
           // alert("Unknown error occurred.");
           error_modal();
@@ -394,3 +408,70 @@ const closeModal = () => {
     prevBtn.style.display = "block";
     nextBtn.style.display = "block";
 };
+
+const getSuffix = () => {
+  const suffixSelect = document.getElementById("suffix");
+  var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var suffixes = response.data;
+
+      var options = ``;
+      suffixes.forEach((property) => {
+        options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
+      });
+      suffixSelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const getBranch = () => {
+  const propertySelect = document.getElementById("branch");
+  var myUrl = "http://localhost/waterworks/head/get_branch.php";
+  const formData = new FormData();
+  formData.append("branchId", sessionStorage.getItem("branchId"));
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log(error);
+    });
+};
+const getPosition = () => {
+  const positionSelect = document.getElementById("position");
+  var myUrl = "http://localhost/waterworks/head/get_position.php";
+  
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var positions = response.data;
+  
+      var options = ``;
+      positions.forEach((position) => {
+        options += `<option value="${position.position_id}">${position.position_name}</option>`;
+      });
+      positionSelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+  };

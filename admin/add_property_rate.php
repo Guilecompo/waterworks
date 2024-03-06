@@ -7,11 +7,13 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $update_date = date('Y-m-d H:i:s');
+    $date_added = date("Y-m-d");
+    $employee_Id = $_POST['employee_Id'];
+    $rate_statusId = 1;
 
 
-    $sql = "INSERT INTO property_rate (property_Id, minimum_rate, second_rate, third_rate, last_rate, update_date) ";
-    $sql .= "VALUES (:propertyId, :minimum_rate, :second_rate, :third_rate, :last_rate, :updated_date)";
+    $sql = "INSERT INTO property_rate (property_Id, minimum_rate, second_rate, third_rate, last_rate, date_added, employee_Id, rate_statusId) ";
+    $sql .= "VALUES (:propertyId, :minimum_rate, :second_rate, :third_rate, :last_rate, :date_added, :employee_Id, :rate_statusId)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
@@ -19,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(":second_rate", $_POST['second_rate'], PDO::PARAM_INT);
     $stmt->bindParam(":third_rate", $_POST['third_rate'], PDO::PARAM_INT);
     $stmt->bindParam(":last_rate", $_POST['last_rate'], PDO::PARAM_INT);
-    $stmt->bindParam(":updated_date", $update_date);
+    $stmt->bindParam(":rate_statusId", $rate_statusId, PDO::PARAM_INT);
+    $stmt->bindParam(":date_added", $date_added);
+    $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
 
     // Execute the prepared statement
     $returnValue = 0;
@@ -27,9 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->rowCount() > 0) {
         $returnValue = 1;
-    }
+        $activity_type = "Add";
+        $table_name = "Rate";
+        $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+        $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
-    echo json_encode(['status' => $returnValue, 'message' => 'Record saved successfully']);
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+        $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+        $stmt1->bindParam(":date_added", $date_added);
+        $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+        $stmt1->execute();
+
+        echo json_encode(array("status" => $returnValue, "message" => "Rate Successfully Added & Added to Activity Log!"));
+    }else {
+        echo json_encode(array("status" => 0, "message" => "Failed to add Rate"));
+    }
 
 }
 ?>

@@ -1,5 +1,4 @@
 <?php
-// header("Access-Control-Allow-Origin:*");
 // 1. establish connection to the database
 include("connection.php");
 
@@ -36,7 +35,8 @@ if ($stmtConsumer->rowCount() > 0) {
     if ($stmtEmployee->rowCount() > 0) {
         $returnValueConsumer = $stmtEmployee->fetch(PDO::FETCH_ASSOC);
     } else {
-        $returnValueConsumer = array("error" => "Code not found in user_consumer and user_employee");
+        // Code not found in both user_consumer and user_employee
+        $returnValueConsumer = 0;
     }
 }
 

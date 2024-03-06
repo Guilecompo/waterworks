@@ -91,7 +91,6 @@ th, td {
     font-size: 1.15rem;
     font-weight: 600;
 }
-
 .sidebar-nav {
     flex-grow: 1;
     list-style: none;
@@ -101,6 +100,7 @@ th, td {
 }
 
 .sidebar-header {
+    color: #adb5bd;
     text-decoration: underline; 
     font-size:medium;
     padding: 1.5rem 1.5rem .375rem;
@@ -213,6 +213,10 @@ a.sidebar-link {
 #sidebar.collapsed {
     margin-left: -264px;
 }
+.navbar, .nav-item a{
+    background-color: #212529;
+    color: white;
+}
 
 /* Footer and Nav */
 
@@ -224,6 +228,10 @@ a.sidebar-link {
 
     #sidebar.collapsed {
         margin-left: 0;
+    }
+    #navi, .nav-item a{
+        background-color: #212529;
+        color: white;
     }
 
     .navbar,
@@ -338,17 +346,17 @@ html[data-bs-theme="light"] .theme-toggle .fa-sun{
     margin-top: 20px;
     /* margin-left: 120px; */
     }
-    #paginationNumbers {
+    #paginationNumbers , .pag{
         display: flex;
         align-items: center;
         
       }
-      .pagination{
+      .pagination, .pag{
       align-items: end;
       justify-content: end;
       }
       
-      #paginationNumbers span {
+      #paginationNumbers span , .pag span{
         display: inline-block;
         padding: 0 10px ;
         margin: 0 2px;
@@ -360,10 +368,12 @@ html[data-bs-theme="light"] .theme-toggle .fa-sun{
         font-size: 16px;
       }
       
-      #paginationNumbers span.active {
+      #paginationNumbers span.active, .pag span.active{
         background-color: #7acee3;
       }
       
-      #paginationNumbers span:hover {
+      #paginationNumbers span:hover, .pag span:hover {
         background-color: #359bc1;
       }
+    
+    

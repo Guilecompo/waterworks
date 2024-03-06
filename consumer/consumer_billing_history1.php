@@ -23,7 +23,6 @@ $stmt = $conn->prepare("SELECT
         a.previous_meter,
         a.present_meter,
         a.arrears,
-        a.penalty,
         a.bill_amount,
         a.total_bill,
         u.update_status_name, a.billing_update_statusId

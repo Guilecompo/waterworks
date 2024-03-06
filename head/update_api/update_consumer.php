@@ -19,6 +19,7 @@ try {
         addressId = :addressId,
         propertyId = :propertyId,
         email = :email_add,
+        house_no = :house_no,
         meter_no = :meter_no,
         branchId = :branchId
         WHERE user_id = :user_id";
@@ -32,6 +33,7 @@ try {
     $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
     $stmt->bindParam(":addressId", $_POST['zoneId'], PDO::PARAM_INT);
     $stmt->bindParam(":meter_no", $_POST['meter_no'], PDO::PARAM_STR);
+    $stmt->bindParam(":house_no", $_POST['house_no'], PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $_POST['branchId'], PDO::PARAM_INT);
     $stmt->bindParam(":user_id", $_POST['userid'], PDO::PARAM_INT);
     $stmt->execute();
