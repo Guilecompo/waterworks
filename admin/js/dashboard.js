@@ -175,49 +175,45 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://localhost/waterworks.github.com/admin/get_branch.php";
+  const myUrl = "http://localhost/waterworks/admin/get_branch.php";
 
   axios({
-    url: myUrl,
-    method: "post",
+      url: myUrl,
+      method: "post",
   })
   .then((response) => {
-    try {
-      var positions = response.data;
-  
-      // Check if positions is an array
-      if (!Array.isArray(positions)) {
-        throw new TypeError('Response data is not an array');
+      const positions = response.data;
+
+      if (Array.isArray(positions)) {
+          let options = `<option value="employee">Select Branch</option>`;
+          positions.forEach((position) => {
+              options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
+          });
+          branchSelect.innerHTML = options;
+
+          // Event listener for position change
+          branchSelect.addEventListener("change", () => {
+              const selectedBranch = branchSelect.value;
+              // Call the appropriate display function based on the selected position
+              if (selectedBranch === "Poblacion") {
+                  getpoblacion();
+              } else if (selectedBranch === "Molugan") {
+                  getmolugan();
+              } else {
+                  getall();
+              }
+              // Add more conditions as needed for other positions
+          });
+      } else {
+          console.error("positions is not an array:", positions);
       }
-  
-      var options = `<option value="employee">Select Branch</option>`;
-      positions.forEach((position) => {
-        options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
-      });
-      branchSelect.innerHTML = options;
-  
-      // Event listener for position change
-      branchSelect.addEventListener("change", () => {
-        const selectedBranch = branchSelect.value;
-        // Call the appropriate display function based on the selected position
-        if (selectedBranch === "Poblacion") {
-          getpoblacion();
-        } else if (selectedBranch === "Molugan") {
-          getmolugan();
-        } else {
-          getall();
-        }
-        // Add more conditions as needed for other positions
-      });
-    } catch (error) {
-      console.error('Error processing response data:', error);
-    }
   })
   .catch((error) => {
-    console.error('Error fetching data:', error);
+      console.error(`Error fetching branch data: ${error}`);
+      alert(`ERROR OCCURRED! ${error}`);
   });
-  
 };
+
 
 const displayActivity = () => {
   var url = "http://localhost/waterworks.github.com/admin/activitylist.php";
