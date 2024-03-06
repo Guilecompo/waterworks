@@ -24,7 +24,7 @@ const getall = () => {
 
 
   // Fetch data from your PHP script
-  fetch('http://128.199.232.132/waterworks.github.com/admin/total.php')
+  fetch('http://localhost/waterworks.github.com/admin/total.php')
     .then(response => response.json())
     .then(data => {
       if (data && data.Total_Consumers !== undefined 
