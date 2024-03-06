@@ -175,7 +175,7 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  const myUrl = "http://elsalvadorwaterworks.netlify.app/waterworks/admin/get_branch.php";
+  const myUrl = "http://localhost/waterworks.github.com/admin/get_branch.php";
 
   axios({
       url: myUrl,
