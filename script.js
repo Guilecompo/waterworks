@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Dynamically set background color and border based on the theme
         if (newTheme === 'dark') {
+            sidebar.style.backgroundColor = '#212529';
             sidebar.style.backgroundColor = '#212529';  // Dark theme background color
             sidebar.style.borderRight = 'none';  // No border in dark mode
             sidebarLogo.style.color = '#fff';  // Light text color
