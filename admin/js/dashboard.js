@@ -175,7 +175,7 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  const myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  const myUrl = "http://elsalvadorwaterworks.netlify.app/waterworks/admin/get_branch.php";
 
   axios({
       url: myUrl,
@@ -216,7 +216,7 @@ const getFileterBranch = () => {
 
 
 const displayActivity = () => {
-  var url = "http://elsalvadorwaterworks.netlify.app/waterworks.github.com/admin/activitylist.php";
+  var url = "http://localhost/waterworks.github.com/admin/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
