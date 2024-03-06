@@ -182,38 +182,41 @@ const getFileterBranch = () => {
     method: "post",
   })
   .then((response) => {
-    var positions = response.data;
+    try {
+      var positions = response.data;
   
-    // Check if positions is an array
-    if (Array.isArray(positions)) {
+      // Check if positions is an array
+      if (!Array.isArray(positions)) {
+        throw new TypeError('Response data is not an array');
+      }
+  
       var options = `<option value="employee">Select Branch</option>`;
       positions.forEach((position) => {
         options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
       });
       branchSelect.innerHTML = options;
-    } else {
-      // Handle non-array response appropriately
-      console.error('Response data is not an array:', positions);
+  
+      // Event listener for position change
+      branchSelect.addEventListener("change", () => {
+        const selectedBranch = branchSelect.value;
+        // Call the appropriate display function based on the selected position
+        if (selectedBranch === "Poblacion") {
+          getpoblacion();
+        } else if (selectedBranch === "Molugan") {
+          getmolugan();
+        } else {
+          getall();
+        }
+        // Add more conditions as needed for other positions
+      });
+    } catch (error) {
+      console.error('Error processing response data:', error);
     }
-  
-    // Event listener for position change
-    branchSelect.addEventListener("change", () => {
-      const selectedBranch = branchSelect.value;
-      // Call the appropriate display function based on the selected position
-      if (selectedBranch === "Poblacion") {
-        getpoblacion();
-      } else if (selectedBranch === "Molugan") {
-        getmolugan();
-      } else {
-        getall();
-      }
-      // Add more conditions as needed for other positions
-    });
   })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
   
-    .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-    });
 };
 
 const displayActivity = () => {
