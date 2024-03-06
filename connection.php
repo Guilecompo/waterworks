@@ -2,10 +2,10 @@
  header('Content-Type: application/json');
  header("Access-Control-Allow-Origin: *");
  
- $host = '185.27.134.138';
- $dbusername = 'if0_36105237';
- $dbpassword = 'S2gyyhJcalFV4';
- $database = 'if0_36105237_waterbilling';
+ $host = '128.199.232.132';
+ $dbusername = 'waterworks';
+ $dbpassword = 'Waterworks2024!';
+ $database = 'waterbilling';
 
   try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $dbusername, $dbpassword);
