@@ -1,5 +1,5 @@
 const login = async () => {
-    const url = "http://home/vol15_6/infinityfree.com/if0_36105237/waterworks/login.php";
+    const url = "http://185.27.134.138/waterworks/login.php";
   
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
