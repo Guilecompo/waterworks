@@ -216,7 +216,7 @@ const getFileterBranch = () => {
 
 
 const displayActivity = () => {
-  var url = "http://localhost/waterworks.github.com/admin/activitylist.php";
+  var url = "http://elsalvadorwaterworks.netlify.app/waterworks.github.com/admin/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
