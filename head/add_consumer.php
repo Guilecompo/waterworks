@@ -16,9 +16,11 @@ $email_add = $_POST['email_add'];
 $date_added = date("Y-m-d");
 $employee_Id = $_POST['employee_Id'];
 $login_statusId = 2;
-
+$connected_parentId = 0;
+$connected_number = 0;
 $billing_status = 2;
-
+$code = "";
+$total_cubic_consumed = 0;
 
 
 // Query to check for duplicate username or phone number
@@ -37,23 +39,28 @@ if ($result['count'] > 0) {
     $password = md5('waterworks');
     $position = '5';
     // 3. Define SQL statement for insertion
-    $sql = "INSERT INTO user_consumer (firstname, middlename, lastname, suffixId, phone_no, addressId, propertyId, email, house_no, meter_no, password, positionId, consumertypeId, branchId, statusId, login_statusId, date_added, employee_Id, billing_status) ";
-    $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :addressId, :propertyId, :email_add, :house_no, :meter_no, :password, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
+    $sql = "INSERT INTO user_consumer (firstname, middlename, lastname, suffixId, connected_parentId, connected_number, phone_no, addressId, propertyId, email, code, house_no, meter_no, password, total_cubic_consumed, positionId, consumertypeId, branchId, statusId, login_statusId, date_added, employee_Id, billing_status) ";
+    $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :connected_parentId, :connected_number, :phone_no, :addressId, :propertyId, :email_add, :code, :house_no, :meter_no, :password, :total_cubic_consumed, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":firstname", $_POST['firstname'], PDO::PARAM_STR);
     $stmt->bindParam(":middlename", $_POST['middlename'], PDO::PARAM_STR);
     $stmt->bindParam(":lastname", $_POST['lastname'], PDO::PARAM_STR);
     $stmt->bindParam(":suffixId", $_POST['suffixId'], PDO::PARAM_INT);
+    $stmt->bindParam(":connected_parentId", $connected_parentId, PDO::PARAM_INT);
+    $stmt->bindParam(":connected_number", $connected_number, PDO::PARAM_INT);
 
     $stmt->bindParam(":phone_no", $_POST['phone'], PDO::PARAM_STR);
     $stmt->bindParam(":email_add", $_POST['email_add'], PDO::PARAM_STR);
+    $stmt->bindParam(":code", $code, PDO::PARAM_STR);
     $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
     $stmt->bindParam(":addressId", $_POST['zoneId'], PDO::PARAM_INT);
+
     $stmt->bindParam(":house_no", $_POST['house_no'], PDO::PARAM_INT);
     $stmt->bindParam(":meter_no", $_POST['meter_no'], PDO::PARAM_STR);
     $stmt->bindParam(":password", $password, PDO::PARAM_STR);
 
+    $stmt->bindParam(":total_cubic_consumed", $total_cubic_consumed, PDO::PARAM_INT);
     $stmt->bindParam(":positionId", $position, PDO::PARAM_INT);
     $stmt->bindParam(":consumertypeId", $_POST['consumer'], PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);

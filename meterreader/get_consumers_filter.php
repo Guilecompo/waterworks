@@ -4,6 +4,17 @@ header("Access-Control-Allow-Origin: *");
 
 include 'connection.php';
 session_start();
+
+// Get the current day of the week (1 for Monday, 7 for Sunday)
+$dayOfWeek = date('N');
+
+// Check if it's Saturday (6) or Sunday (7)
+
+// if ($dayOfWeek >= 6) {
+//     echo json_encode(["error" => "No work on weekends!"]);
+//     exit; // Stop further execution
+// }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $branchId = $_POST['branchId'];
@@ -27,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INNER JOIN branch h ON a.branchId = h.branch_id 
         INNER JOIN user_status i ON a.statusId = i.status_id
         WHERE a.branchId = :branchId AND d.zone_name = :zoneName
-        --   WHERE a.user_id = :accId
-          ");
+        ");
         $stmt->bindParam(":branchId", $branchId);
         $stmt->bindParam(":zoneName", $zoneName);
         $stmt->execute();

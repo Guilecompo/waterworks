@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "success" => true,
             "usertype" => $userType,
             "userDetails" => $consumerInfo,
-            "userId" => ($consumerInfo !== null) ? $consumerInfo['user_id'] : null,
+            "userId" => $consumerInfo['user_id'], // No need for null check here
         );
             
         // Set session variable indicating user is logged in
-        $_SESSION['accountId'] = ($consumerInfo !== null) ? $consumerInfo['user_id'] : null;
+        $_SESSION['accountId'] = $consumerInfo['user_id'];
     } else {
         // If the user is not a consumer, check for employee types
 
@@ -63,17 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($positionResult as $position) {
             $stmt = $conn->prepare("SELECT 
                 a.*, g.position_name,
-                h.*,
-                i.user_status, j.barangayId
+                h.*, 
+                i.user_status, 
+                address_zone.barangayId AS barangayIds
             FROM
                 user_employee a
                 INNER JOIN position g ON a.positionId = g.position_id
                 INNER JOIN branch h ON a.branchId = h.branch_id
                 INNER JOIN user_status i ON a.statusId = i.status_id
-                INNER JOIN address_zone j ON h.locationId = j.zone_id
-                
-            WHERE a.email = ? AND a.password = ? AND g.position_name = ?");
+                INNER JOIN address_zone ON h.locationId = address_zone.zone_id
 
+            WHERE a.email = ? AND a.password = ? AND g.position_name = ?");
             // Assuming you are using plain text passwords (not recommended)
             $stmt->execute([$username, md5($password), $position]);
 
@@ -93,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "success" => true,
                 "usertype" => $userType,
                 "userDetails" => $userInfo,
-                "userId" => ($userInfo !== null) ? $userInfo['user_id'] : null,
+                "userId" => $userInfo['user_id'], // No need for null check here
             );
             
             // Set session variable indicating user is logged in
-            $_SESSION['accountId'] = ($userInfo !== null) ? $userInfo['user_id'] : null;
+            $_SESSION['accountId'] = $userInfo['user_id'];
             
         } else {
             // Check for consumers in user_consumer_branch table
@@ -132,17 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "success" => true,
                     "usertype" => $userType,
                     "userDetails" => $consumerBranchInfo,
-                    "userId" => ($consumerBranchInfo !== null) ? $consumerBranchInfo['user_id'] : null,
+                    "userId" => $consumerBranchInfo['user_id'], // No need for null check here
                 );
                     
                 // Set session variable indicating user is logged in
-                $_SESSION['accountId'] = ($consumerBranchInfo !== null) ? $consumerBranchInfo['user_id'] : null;
+                $_SESSION['accountId'] = $consumerBranchInfo['user_id'];
             } else {
                 // User does not exist or credentials are incorrect
                 $response = array("success" => false, "message" => "Invalid username or password");
                 
                 // Ensure accountId session variable is empty on failed login
-                // $_SESSION['accountId'] = 0;
+                $_SESSION['accountId'] = ""; // Change this to null to clear session
+                
             }
         }
     }

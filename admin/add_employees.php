@@ -19,6 +19,7 @@
     $date_added = date("Y-m-d");
     $employee_Id = $_POST['employee_Id'];
     $login_statusId = 2;
+    $code = "";
 
     try {
         // Query to check for duplicate username or phone number
@@ -35,8 +36,9 @@
             // 3. Define SQL statement for insertion
             $password = md5('waterworks');
 
-            $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
-            $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
+            $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
+
+            $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":firstname", $_POST['firstname'], PDO::PARAM_STR);
@@ -50,6 +52,7 @@
 
 
             $stmt->bindParam(":email_add", $_POST['email_add'], PDO::PARAM_STR); 
+            $stmt->bindParam(":code", $code, PDO::PARAM_STR);
             $stmt->bindParam(":suffixId", $_POST['suffixId'], PDO::PARAM_INT);
             $stmt->bindParam(":password", $password, PDO::PARAM_STR);
             $stmt->bindParam(":positionId", $_POST['positionId'], PDO::PARAM_INT);

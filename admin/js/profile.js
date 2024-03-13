@@ -1,36 +1,41 @@
 const onLoad = () => {
-    document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-    document.getElementById("Name").innerText = sessionStorage.getItem("fullname");
-    document.getElementById("Position").innerText = sessionStorage.getItem("positionName");
-    document.getElementById("Email").innerText = sessionStorage.getItem("email");
-    document.getElementById("Phone").innerText = sessionStorage.getItem("phone_no");
-    document.getElementById("Address").innerText = sessionStorage.getItem("address");
-    document.getElementById("Username").innerText = sessionStorage.getItem("usernames");
-    document.getElementById("Branch").innerText = sessionStorage.getItem("branchName");
-    }; 
+  document.getElementById("ngalan").innerText =
+    sessionStorage.getItem("fullname");
+  document.getElementById("Name").innerText =
+    sessionStorage.getItem("fullname");
+  document.getElementById("Position").innerText =
+    sessionStorage.getItem("positionName");
+  document.getElementById("Email").innerText = sessionStorage.getItem("email");
+  document.getElementById("Phone").innerText =
+    sessionStorage.getItem("phone_no");
+  document.getElementById("Address").innerText =
+    sessionStorage.getItem("address");
+  document.getElementById("Username").innerText =
+    sessionStorage.getItem("usernames");
+  document.getElementById("Branch").innerText =
+    sessionStorage.getItem("branchName");
+};
 
-    const profile = (barangay_id) => {
+const profile = (barangay_id) => {
+  var myUrl = "http://localhost/waterworks/admin/getbarangay.php";
+  const formData = new FormData();
+  formData.append("barangay_id", barangay_id);
 
-        
-
-        var myUrl = "http://localhost/waterworks/admin/getbarangay.php";
-        const formData = new FormData();
-        formData.append("barangay_id", barangay_id);
-
-        axios({
-            url: myUrl,
-            method: "post",
-            data: formData,
-        }).then((response) => {
-          console.log(response.data);
-            try {
-                if (response.data.length === 0) {
-                    // Display a message indicating there are no billing transactions yet.
-                    var html = `<h2>No Records</h2>`;
-                } else {
-                    var barangay = response.data;
-                    console.log("Barangay : ",barangay);
-                    var html = `
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      try {
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var barangay = response.data;
+          console.log("Barangay : ", barangay);
+          var html = `
                       <div class=" row  mt-3">
                         <div class="col-md-1">
                           <button class="clear" onclick="add_barangay()">Back</button>
@@ -58,14 +63,13 @@ const onLoad = () => {
                             </form>
                         </div>  
                     `;
-                    document.getElementById("mainDiv").innerHTML = html;
-        
-                }
-            } catch (error) {
-              var html = `<h2>NO RECORD</h2>`;
-            }
-
-          }).catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
-        });
-}
+          document.getElementById("mainDiv").innerHTML = html;
+        }
+      } catch (error) {
+        var html = `<h2>NO RECORD</h2>`;
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};

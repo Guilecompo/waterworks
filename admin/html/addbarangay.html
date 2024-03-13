@@ -1,207 +1,257 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-    <head>
-        <title>Master List</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+  <head>
+    <title>Master List</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-        />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
-        <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="../style.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.js"></script>
-    </head>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" />
+    <script
+      src="https://kit.fontawesome.com/ae360af17e.js"
+      crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous" />
+    <link rel="stylesheet" href="/waterworks/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.js"></script>
+  </head>
 
-    <body onload="onLoad()">
-        <div class="wrapper">
-            <aside id="sidebar" class="js-sidebar">
-                <!-- Content For Sidebar -->
-                <div class="h-100">
-                    <div class="sidebar-logo">
-                        <a href="#">Waterworks</a>
-                    </div>
-                    <ul class="sidebar-nav">
-                        <li class="sidebar-header ">
-                            Admin Elements
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="./dashboard.html" class="sidebar-link mt-3">
-                                <i class="fa-solid fa-list pe-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="sidebar-item mt-3">
-                            <a href="#" class="sidebar-link collapsed" data-bs-target="#employees" data-bs-toggle="collapse"
-                                aria-expanded="false"><i class="fa-solid fa-user pe-2"></i>
-                                Employees
-                            </a>
-                            <ul id="employees" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                                
-                                <li class="sidebar-item">
-                                    <a href="./clerklist.html" class=" sidebar-link">Clerk List</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./headlist.html" class=" sidebar-link">Head List</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./readerlist.html" class=" sidebar-link">Meter Reader List</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="./consumerlist.html" class="sidebar-link mt-3">
-                                <i class="fa-solid fa-file-lines pe-2"></i>
-                                Consumers List
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="./reports.html" class="sidebar-link mt-3">
-                                <i class="fa-solid fa-file-lines pe-2"></i>
-                                Reports
-                            </a>
-                        </li>
-                        <li class="sidebar-header ">
-                            Masterlist Menu
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link " data-bs-target="#auth" data-bs-toggle="collapse"
-                                aria-expanded="false"><i class="fa-solid fa-user pe-2"></i>
-                                Master List
-                            </a>
-                            <ul id="auth" class="sidebar-dropdown  " data-bs-parent="#sidebar">
-                                
-                                <li class="sidebar-item">
-                                    <a href="#" class="active sidebar-link">Add Barangay</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addzone.html" class="sidebar-link">Add Zone</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addemployee.html"  class="sidebar-link">Add Employee</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addconsumer.html" class="sidebar-link">Add Consumer</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addconsumertype.html" class=" sidebar-link">Add Consumer Type</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addposition.html" class="sidebar-link">Add Positon</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addrate.html" class="sidebar-link">Add New Rate</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addproperty.html" class="sidebar-link">Add Property Type</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="./addbranch.html" class="sidebar-link">Add Branch</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-            <div class="main">
-                <nav class="navbar navbar-expand px-3 border-bottom">
-                    <button class="btn" id="sidebar-toggle" type="button">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse navbar">
-                        <ul class="navbar-nav">
-                            <li class="nav-item mt-2">
-                                <a href="#" class="theme-toggle fs-6 m-2">
-                                    <i class="fa-regular fa-sun" ></i>
-                                    <i class="fa-regular fa-moon  "></i>
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle second-text fw-bold " href="#" id="navbarDropdown"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user me-2"></i>
-                                    <!-- User Name Who Login -->
-                                    <span id="ngalan"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="./profile.html">Profile</a></li>
-                                    <li><a class="dropdown-item" href="./change_password.html">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="/waterworks/">Logout</a></li>
-                                </ul>
-                            </li>
-                           
-                        </ul>
-                    </div>
-                </nav>
-                <main class="content px-3 py-2">
-                    <div class="modal" tabindex="-1" id="myModal">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title">Alert</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
-                            </div>
-                            <div class="modal-body" id="modalContent"></div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="container-fluid row">
-                        <div class="col-md-8 mt-5" >
-                            <div class="container-fluid col mt-5">
-                                <div class="col-md-12 mt-5">
-                                    <div class="mainDiv mt-5" id="mainDiv"></div>
-                                </div>
-                                <div class="col-md-12 mt-4">
-                                    <div id="mainDivider"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4" >
-                            <div class="mb-1 mt-3">
-                                <h4 style="text-align: center; ">Barangay List</h4>
-                            </div>
-
-                            <div class="mainDivs mt-2" id="mainDivs" style="font-size: medium;"></div>
-
-                            <div class="col-12 w-100 d-block mt-2">
-                                <div id="pagination" class="pagination d-flex justify-content-center">
-                                    <button id="prevBtn" onclick="showPreviousPage()">Previous</button>
-                                    <div id="paginationNumbers"></div>
-                                    <button id="nextBtn" onclick="showNextPage()">Next</button>
-                                </div>
-                            </div>  
-                        </div>
-                        
-                    </div>
-                </main>
-        
-            </div>
+  <body onload="onLoad()">
+    <div class="wrapper">
+      <aside id="sidebar" class="js-sidebar">
+        <!-- Content For Sidebar -->
+        <div class="h-100">
+          <div class="sidebar-logo">
+            <a href="#">Waterworks</a>
+          </div>
+          <ul class="sidebar-nav">
+            <li class="sidebar-header">Admin Elements</li>
+            <li class="sidebar-item">
+              <a href="./dashboard.html" class="sidebar-link mt-3">
+                <i class="fa-solid fa-list pe-2"></i>
+                Dashboard
+              </a>
+            </li>
+            <li class="sidebar-item mt-3">
+              <a
+                href="#"
+                class="sidebar-link collapsed"
+                data-bs-target="#employees"
+                data-bs-toggle="collapse"
+                aria-expanded="false"
+                ><i class="fa-solid fa-user pe-2"></i>
+                Employees
+              </a>
+              <ul
+                id="employees"
+                class="sidebar-dropdown list-unstyled collapse"
+                data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                  <a href="./clerklist.html" class="sidebar-link">Clerk List</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="./headlist.html" class="sidebar-link">Head List</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="./readerlist.html" class="sidebar-link"
+                    >Meter Reader List</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="sidebar-item">
+              <a href="./consumerlist.html" class="sidebar-link mt-3">
+                <i class="fa-solid fa-file-lines pe-2"></i>
+                Consumers List
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="./reports.html" class="sidebar-link mt-3">
+                <i class="fa-solid fa-file-lines pe-2"></i>
+                Reports
+              </a>
+            </li>
+            <li class="sidebar-header">Masterlist Menu</li>
+            <li class="sidebar-item">
+              <a
+                href="#"
+                class="sidebar-link"
+                data-bs-target="#auth"
+                data-bs-toggle="collapse"
+                aria-expanded="false"
+                ><i class="fa-solid fa-user pe-2"></i>
+                Master List
+              </a>
+              <ul id="auth" class="sidebar-dropdown" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                  <a href="#" class="active sidebar-link">Add Barangay</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addzone.html" class="sidebar-link">Add Zone</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addemployee.html" class="sidebar-link"
+                    >Add Employee</a
+                  >
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addconsumer.html" class="sidebar-link"
+                    >Add Consumer</a
+                  >
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addconsumertype.html" class="sidebar-link"
+                    >Add Consumer Type</a
+                  >
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addposition.html" class="sidebar-link"
+                    >Add Positon</a
+                  >
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addrate.html" class="sidebar-link">Add New Rate</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addproperty.html" class="sidebar-link"
+                    >Add Property Type</a
+                  >
+                </li>
+                <li class="sidebar-item">
+                  <a href="./addbranch.html" class="sidebar-link">Add Branch</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
-        <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"
-        ></script>
-        
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"
-        ></script>
-        <script src="/waterworks/script.js"></script>
-        <script src="../js/addbarangay.js"></script>
-    </body>
+      </aside>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <button
+            style="color: white"
+            class="btn"
+            id="sidebar-toggle"
+            type="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse navbar">
+            <ul class="navbar-nav">
+              <li class="nav-item mt-2">
+                <a href="#" class="theme-toggle fs-6 m-2">
+                  <i class="fa-regular fa-sun"></i>
+                  <i class="fa-regular fa-moon"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle second-text fw-bold"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="fas fa-user me-2"></i>
+                  <!-- User Name Who Login -->
+                  <span id="ngalan"></span>
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item" href="./profile.html">Profile</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="./change_password.html"
+                      >Change Password</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="/waterworks/">Logout</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="modal" tabindex="-1" id="myModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Alert</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onclick="closeModal()"></button>
+                </div>
+                <div class="modal-body" id="modalContent"></div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    onclick="closeModal()">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid row">
+            <div class="col-md-8 mt-5">
+              <div class="container-fluid col mt-5">
+                <div class="col-md-12 mt-5">
+                  <div class="mainDiv mt-5" id="mainDiv"></div>
+                </div>
+                <div class="col-md-12 mt-4">
+                  <div id="mainDivider"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-5">
+              <div class="mb-1 mt-5">
+                <h4 style="text-align: center">Barangay List</h4>
+              </div>
+
+              <div
+                class="mainDivs mt-3"
+                id="mainDivs"
+                style="font-size: medium"></div>
+
+                <div class="col-12 d-flex justify-content-center mt-2 mb-3">
+                  <div class="pagination-container">
+                    <div id="paginationNumbers" class="pagination-numbers"></div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"></script>
+    <script src="/waterworks/script.js"></script>
+    <script src="../js/addbarangay.js"></script>
+  </body>
 </html>

@@ -18,7 +18,7 @@ const failed_modal = () => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 var html = `
-      <h5 class="modal-title " style="color: red; text-align:center;">Meter Number or Phone Number already exists !</h5>
+      <h5 class="modal-title " style="color: red; text-align:center;">Meter Number or Phone Number or Email already exists !</h5>
   `;
     modalContent.innerHTML = html;
     modal.style.display = "block";
@@ -68,22 +68,23 @@ const closeModal = () => {
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email_add" >
+                    <input type="email" class="form-control" id="email_add" required>
                 </div>
+
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4 ">
                     <label class="form-label">Municipality</label>
-                    <select id="municipality" class="form-select" onchange="getBarangay()"></select>
+                    <select id="municipality" class="form-select" onchange="getBarangay()" ></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Barangay</label>
-                    <select id="barangay" class="form-select" onchange="getZone()">
+                    <select id="barangay" class="form-select" onchange="getZone()" required>
                         <option value="">Select Barangay</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Zone</label>
-                    <select id="zone" class="form-select" >
+                    <select id="zone" class="form-select" required>
                         <option value="">Select Zone</option>
                     </select>
                 </div>
@@ -140,25 +141,54 @@ const closeModal = () => {
         const consumer = document.getElementById("consumer").value;
         const meter_no = document.getElementById("meter_no").value;
         const house_no = document.getElementById("house_no").value;
-    
-      if (
-        firstname === '' ||
-        middlename === '' ||
-        lastname === '' ||
-        suffixId === '' ||
-        phone === '' ||
-        email_add === '' ||
-        propertyId === '' ||
-        municipalityId === '' ||
-        barangayId === '' ||
-        zoneId === '' ||
-        branchId === '' ||
-        consumer === '' ||
-        meter_no === '' ||
-        house_no === ''
-      ) {
-        alert('Fill in all fields');
-        return;
+        console.log(
+          firstname,
+          middlename,
+          lastname,
+          suffixId,
+          phone,
+          email_add,
+          propertyId,
+          municipalityId,
+          barangayId,
+          zoneId,
+          branchId,
+          consumer,
+          meter_no,
+          house_no
+        );
+        const inputs = [
+          { id: "firstname", element: document.getElementById("firstname") },
+          { id: "middlename", element: document.getElementById("middlename") },
+          { id: "lastname", element: document.getElementById("lastname") },
+          { id: "suffix", element: document.getElementById("suffix") },
+          { id: "phone", element: document.getElementById("phone") },
+          { id: "email_add", element: document.getElementById("email_add") },
+          { id: "property", element: document.getElementById("property") },
+          { id: "municipality", element: document.getElementById("municipality") },
+          { id: "barangay", element: document.getElementById("barangay") },
+          { id: "zone", element: document.getElementById("zone") },
+          { id: "branch", element: document.getElementById("branch") },
+          { id: "consumer", element: document.getElementById("consumer") },
+          { id: "meter_no", element: document.getElementById("meter_no") },
+          { id: "house_no", element: document.getElementById("house_no") }
+      ];
+  
+      console.log(inputs); // Log the inputs array
+  
+      // Check validity of each input
+      inputs.forEach(input => {
+          if (!input.element.validity.valid) {
+              input.element.classList.add('invalid');
+          } else {
+              input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+          }
+      });
+  
+      // If any input is invalid, prevent form submission
+      if (document.querySelector('.invalid')) {
+          alert('Fill in all fields correctly');
+          return;
       }
     
       const myUrl = "http://localhost/waterworks/admin/add_consumer.php";
@@ -269,12 +299,16 @@ const closeModal = () => {
       };
 
       const getBranch = () => {
+        // const barangayId = document.getElementById("barangay").value;
         const propertySelect = document.getElementById("branch");
         var myUrl = "http://localhost/waterworks/admin/get_branch.php";
-      
+        // const formData = new FormData();
+        // formData.append("barangayId", barangayId);
+        //   console.log(barangaySelect);
         axios({
           url: myUrl,
           method: "post",
+          // data: formData
         })
           .then((response) => {
             var properties = response.data;

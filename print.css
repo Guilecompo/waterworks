@@ -1,79 +1,155 @@
-
 @media print {
-    #modalContent {
-        background-color: white;
-        width: 100%;
-        height: 3276mm;
-        color: #000;
-        margin-left: 0;
-        padding-left: 0;
-    }
-    .inform{
-        display: flex;
-    }
-    .wrapper ,#modalContent{
-        margin-left: 0;
-        padding-left: 0;
-        width: 100%;
-    }
-    .tabb1 .par {
-        margin-top: 0;
-    }
-    .par{
-        color: #000;
-        font-size: 7.5px;
-        font-weight: bold;
-    }
-    h5 {
-        color: #000;
-        font-size: 10px;
-        font-weight: bold;
-    }
-    
-    h6 {
-        color: #000;
-        font-size: 8.2px;
-    }
-    .tab{
-        border-color: #000;
-        font-size: 7px;
-        color: #000;
-        width: 100%;
-        
-    }
-    .tabb1{
-        border-color: #000;
-        font-size: 7.4px;
-        color: #000;
-        width: 100%;
-    }
-    .tabb2{
-        border-color: #000;
-        font-size: 6.5px;
-        color: #000;
-        width: 100%;
-    }
-    .la{
-        color: #000;
-        font-size: 6.5px;
-        font-weight: bold;
-        margin-top: 0;
-    }
-    .las{
-        color: #000;
-        font-size: 6.5px;
-        font-weight: bold;
-    }
-    .tab, .tabb1, .tabb2 {
-        border-color: #000;
-        margin-top: 0;
-    }
-    .tab th, .tab td , .tabb1 th, .tabb1 strong, .tabb2 th, .tabb2 td {
-        color: #000;
-        background-color: white;
-    }
-    
-    .btn, footer {
-        display: none; /* Hide buttons and footer */
-    }
+  .text-center,
+  .col-sm-12 {
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  h5,
+  h6,
+  p {
+    page-break-inside: avoid; /* Avoid breaking within elements */
+  }
+  .mt-4,
+  .mt-3 {
+    margin-top: 30mm; /* Adjust as needed */
+  }
+  #modalContent {
+    background-color: white;
+    width: 100%;
+    color: #000;
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .cont {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+  }
+  .inform {
+    display: flex;
+  }
+  .wrapper {
+    margin-right: 150px;
+    padding-right: 120px;
+    width: 100%;
+  }
+  .tabb1 .par {
+    margin-top: 0;
+    text-transform: capitalize;
+  }
+  .row {
+    width: 155px;
+  }
+
+  .par {
+    color: #000;
+    font-size: 7.2px;
+    font-weight: bold;
+    text-transform: lowercase;
+  }
+  .pres {
+    color: #000;
+    font-size: 6.5px;
+    font-weight: bold;
+    text-transform: lowercase;
+  }
+  .press {
+    color: #000;
+    font-size: 5.7px;
+    font-weight: bold;
+  }
+  .presss {
+    color: #000;
+    font-size: 5.8px;
+    font-weight: bold;
+  }
+  .pressss{
+    color: #000;
+    font-size: 5.5px;
+    font-weight: bold;
+  }
+  /* Apply text-transform to the first letter only */
+  .par::first-letter,
+  .pres::first-letter {
+    text-transform: uppercase;
+  }
+  .pars {
+    border: 1px solid black;
+    width: 145px;
+  }
+  .fullname {
+    font-size: 10px;
+    font-weight: bold;
+  }
+  .conte {
+    color: #000;
+    font-size: 6px;
+    font-weight: bold;
+    justify-content: space-between;
+  }
+  .contepar {
+    color: #000;
+    font-size: 6px;
+    font-weight: bold;
+  }
+  h5 {
+    color: #000;
+    font-size: 9px;
+    font-weight: bold;
+  }
+
+  h6 {
+    color: #000;
+    font-size: 8.2px;
+    font-weight: bold;
+  }
+  .tab {
+    border-color: #000;
+    font-size: 7px;
+    color: #000;
+    width: 100%;
+  }
+  .tabb1 {
+    border-color: #000;
+    font-size: 7.4px;
+    color: #000;
+    width: 100%;
+  }
+  .tabb2 {
+    border-color: #000;
+    font-size: 6.5px;
+    color: #000;
+    width: 100%;
+  }
+  .la {
+    color: #000;
+    font-size: 6.5px;
+    font-weight: bold;
+    margin-top: 0;
+  }
+  .las {
+    color: #000;
+    font-size: 6.5px;
+    font-weight: bold;
+  }
+  .tab,
+  .tabb1,
+  .tabb2 {
+    border-color: #000;
+    margin-top: 0;
+  }
+  .tab th,
+  .tab td,
+  .tabb1 th,
+  .tabb1 strong,
+  .tabb2 th,
+  .tabb2 td {
+    color: #000;
+    background-color: white;
+  }
+
+  .btn,
+  footer {
+    display: none; /* Hide buttons and footer */
+  }
 }

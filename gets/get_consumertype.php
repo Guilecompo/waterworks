@@ -2,7 +2,7 @@
   header("Access-Control-Allow-Origin:*");
   include 'connection.php';
 
-  $sql = "SELECT * FROM consumer_type ORDER BY consumertype";
+  $sql = "SELECT * FROM consumer_type WHERE consumertype NOT IN ('Senior')ORDER BY consumertype";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   

@@ -8,18 +8,30 @@ const onLoad = () => {
     getFileterZones();
   };
 
-  const showNextPage = () => {
-    currentPage++;
-    showConsumerPage(currentPage);
-};
+const showNextPage = () => {
+    const nextPage = currentPage + 1;
+    const start = (nextPage - 1) * 10;
+    const end = start + 10;
+    const activitiesOnNextPage = consumers.slice(start, end);
+  
+    if (activitiesOnNextPage.length > 0) {
+      currentPage++;
+      showConsumerPage(currentPage);
+    } else {
+      alert("Next page is empty or has no content.");
+      // Optionally, you can choose to disable the button here
+      // For example, if you have a button element with id "nextButton":
+      // document.getElementById("nextButton").disabled = true;
+    }
+  };
 
 const showPreviousPage = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showConsumerPage(currentPage);
-    } else {
-        alert("You are on the first page.");
-    }
+  if (currentPage > 1) {
+    currentPage--;
+    showConsumerPage(currentPage);
+  } else {
+    alert("You are on the first page.");
+  }
 };
   
   const displayConsumer = () => {
@@ -27,16 +39,12 @@ const showPreviousPage = () => {
     const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("filterZone");
     const searchInput = document.getElementById("searchInput");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
     head.style.display = "block";
     paginationNumbers.style.display = "block";
     branchSelect.style.display = "block";
     searchInput.style.display = "block";
-    prevBtn.style.display = "block";
-    nextBtn.style.display = "block";
 
-      var url = "http://localhost/waterworks/head/get_consumers.php";
+      var url = "http://localhost/waterworks/clerk/get_consumers.php";
       const formData = new FormData();
       formData.append("accountId", sessionStorage.getItem("accountId"));
       formData.append("branchId", sessionStorage.getItem("branchId"));
@@ -84,7 +92,43 @@ const showFilteredConsumers = (filteredConsumers) => {
       var end = start + 10;
       var displayedConsumers = consumersToDisplay.slice(start, end);
       refreshTables(displayedConsumers);
-      showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+      showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
+  };
+  const showPaginationNumbersReader = (currentPage, totalPages) => {
+    const paginationNumbersDiv = document.getElementById("paginationNumbers");
+    let paginationNumbersHTML = "";
+  
+    const pagesToShow = 5; // Number of pages to display
+  
+    // Calculate start and end page numbers to display
+    let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+  
+    // Adjust start and end page numbers if they are at the edges
+    if (endPage - startPage + 1 < pagesToShow) {
+      startPage = Math.max(1, endPage - pagesToShow + 1);
+    }
+  
+    // Previous button
+    paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+  
+    // Generate page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      if (i === currentPage) {
+        paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
+      } else {
+        paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
+      }
+    }
+  
+    // Next button
+    paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+  
+    paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+  };
+  
+  const goToPageConsumer = (pageNumber) => {
+    showConsumerPage(pageNumber);
   };
 
     const errorTable = () =>{
@@ -119,7 +163,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         consumerList.forEach(consumer => {
             html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname}</td>
+              <td>${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
               <td>${consumer.meter_no}</td>
               <td>${consumer.branch_name}</td>
               <td>
@@ -259,70 +303,50 @@ const showFilteredConsumers = (filteredConsumers) => {
           });
         };
         const submit_payment = (user_id) => {
-          const amount = document.getElementById("amount").value; 
-          
-      
-          if (amount === '') {
-              alert('Fill in all fields');
-              return;
-          } else {
-              const myUrl = "http://localhost/waterworks/clerk/payment.php";
-              const formData = new FormData();
-              formData.append("consumerId", user_id);
-              formData.append("amount", amount);
-              formData.append("emp_Id", sessionStorage.getItem("accountId"));
-              formData.append("branchId", sessionStorage.getItem("branchId"));
-              console.log("consumer ID : ", user_id);
-              console.log("consumer amount : ", amount);
-              console.log("clerk ID : ", sessionStorage.getItem("accountId"));
-              console.log("branch ID : ", sessionStorage.getItem("branchId"));
-      
-              axios({
-                url: myUrl,
-                method: "post",
-                data: formData
-            }).then(response => {
-                // Check if the response contains an error message
-                if (response.data && response.data.error) {
-                    // Handle the error message
-                    if (response.data.error === 'Invalid Input amount') {
-                        // alert('Invalid Input amount');
-                        failed_update_modal(response.data.error);
-                        // or do other actions based on the error
-                    } else {
-                        // Display the error message in the failed_update_modal function
-                        failed_update_modal(response.data.error);
-                    }
-                } else {
-                    // Process the successful response data
-                    payment_receipt(user_id);
-                    // success_update_modal();
-                    // console.log(response.data);
-                }
-            }).catch(error => {
-                // Handle the request failure
-                console.error('Request failed:', error);
-                error_modal();
-            });
-            
-            
-          }
-      }
-        const showPaginationNumbers = (currentPage, totalPages) => {
-          const paginationNumbersDiv = document.getElementById("paginationNumbers");
-          let paginationNumbersHTML = "";
-          
-          for (let i = 1; i <= totalPages; i++) {
-            if (i === currentPage) {
-              paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
+            const amount = document.getElementById("amount").value;
+        
+            if (amount === '') {
+                alert('Fill in all fields');
+                return;
             } else {
-              paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
+                const myUrl = "http://localhost/waterworks/clerk/payment.php";
+                const formData = new FormData();
+                formData.append("consumerId", user_id);
+                formData.append("amount", amount);
+                formData.append("emp_Id", sessionStorage.getItem("accountId"));
+                formData.append("branchId", sessionStorage.getItem("branchId"));
+        
+                console.log("consumer ID : ", user_id);
+                console.log("consumer amount : ", amount);
+                console.log("clerk ID : ", sessionStorage.getItem("accountId"));
+                console.log("branch ID : ", sessionStorage.getItem("branchId"));
+        
+                axios({
+                    url: myUrl,
+                    method: "post",
+                    data: formData
+                }).then(response => {
+                    // Check if the response contains an error message
+                    if (response.data && response.data.error) {
+                        // Handle the error message
+                        if (response.data.error === 'Invalid Input amount') {
+                            failed_update_modal(response.data.error);
+                        } else {
+                            failed_update_modal(response.data.error);
+                        }
+                    } else {
+                        // Process the successful response data
+                        console.log(response.data);
+                        payment_receipt(user_id); // Pass user_id to payment_receipt function
+                    }
+                }).catch(error => {
+                    // Handle the request failure
+                    console.error('Request failed:', error);
+                    error_modal();
+                });
             }
-          }
-          
-          paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-          };
-
+        }
+        
           const getFileterZones = () => {
             const positionSelect = document.getElementById("filterZone");
             const barangayName = sessionStorage.getItem("branchId");
@@ -473,44 +497,43 @@ const showFilteredConsumers = (filteredConsumers) => {
         const paginationNumbers = document.getElementById("paginationNumbers");
         const branchSelect = document.getElementById("filterZone");
         const searchInput = document.getElementById("searchInput");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
         const close_butt = document.getElementById("close_butt");
         close_butt.style.display = "flex";
         head.style.display = "block";
         paginationNumbers.style.display = "block";
         branchSelect.style.display = "block";
         searchInput.style.display = "block";
-        prevBtn.style.display = "block";
-        nextBtn.style.display = "block";
       
       };
 
 
-      const payment_receipt  = (user_id) => {
+      const payment_receipt = (user_id) => {
         const modal = document.getElementById("myModal");
         const modalContent = document.getElementById("modalContent");
-      
-      
+    
         var myUrl = "http://localhost/waterworks/clerk/get_payment_receipt.php";
         const formData = new FormData();
         formData.append("accId", user_id);
         console.log("Consumer ID : ", user_id);
-      
+    
         axios({
             url: myUrl,
             method: "post",
             data: formData,
         }).then((response) => {
-      
             try {
-              
-                if (response.data.length === 0) {
+                console.log(response.data);
+                var html = '';
+    
+                if (response.data.error) {
+                    // Display error message
+                    html = `<h2>${response.data.error}</h2>`;
+                } else if (response.data.length === 0) {
                     // Display a message indicating there are no billing transactions yet.
-                    var html = `<h2>No Records</h2>`;
+                    html = `<h2>No Records</h2>`;
                 } else {
                     var records = response.data;
-      
+                    // Accessing properties only if records array is not empty
                     html = `
                       <div class="wrapper">
                         <div class="container mt-0 ">
@@ -594,98 +617,32 @@ const showFilteredConsumers = (filteredConsumers) => {
                     </div>
                     `;
       
-                    
                 }
             } catch (error) {
-                // Handle any errors here
-                console.log(error);
+                // Handle any other errors
+                console.error(error);
                 html = `
-                      <div class="wrapper">
-                        <div class="container mt-0 ">
-                            <div class="row ">
-                                    <div class="row ">
-                                        <div class="text-center ">
-                                            <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
-                                        </div>
-                                        <div class="col-sm-12 mt-3 p-3 border">
-                                            <div class="row ">
-                                                <div class="col-md-6">
-                                                    <p style="text-decoration: underline; font-size: small">NAME</p>
-                                                    <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                                </div>
-                                        
-                                                <div class="col-md-6  text-md-end">
-                                                    <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
-                                                    <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                                </div>
-                                            </div>
-                                        
-                                            <div class="mt-1">
-                                                <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                                <h6 class="text-muted mt-0">NO RECORDS</h6>
-                                            </div>
-                                        </div>
-                                        
+                    <div class="wrapper">
+                        <div class="container mt-0">
+                            <div class="row">
+                                <div class="text-center">
+                                    <h5 class="pe-4" style="color:red;">FAILED!</h5>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-sm-12">
+                                        <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="failed_update_modal()">Close</button>
                                     </div>
-                                    <div class="row">
-                                        
-                                        </span>
-                                        
-                                        <table class="tab1 table table-hover table-fixed ">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="col-md-3 text-start border-0">
-                                                        <p>
-                                                            <strong></strong>
-                                                        </p>
-                                                        <p>
-                                                            <strong>Amount Paid: </strong>
-                                                        </p>
-                                                    </td>
-                                                    <td class="col-md-3 border-0"></td>
-                                                    <td class="col-md-3 border-0"></td>
-                                                    <td class="col-md-3 text-center border-0">
-                                                        <p>
-                                                            <strong></strong>
-                                                        </p>
-                                                        <p>
-                                                            <strong>NO RECORDS</strong>
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>                                                       
-                                        <table class=" table p-3 border">
-                                          <thead>
-                                              <tr>
-                                                  <th class="text-center border-0">Date</th>
-                                                  <th class="text-center border-0"></th>
-                                                  <th class="text-center border-0">ISSUED BY</th>
-                                              </tr>
-                                          </thead>
-                                          <tbody>
-                                              <tr>
-                                                  <td class="col-md-4 text-center border-0">NO RECORDS</td>
-                                                  <td class="col-md-4 text-center border-0"></td>
-                                                  <td class="col-md-4 text-center border-0">NO RECORDS</td>
-                                              </tr>
-                                          </tbody>
-                                      </table>
-                                    </div>
-                                    <div class="row mt-1">
-                                        <div class="col-sm-12">
-                                           <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="failed_update_modal()">Close</button>
-                                         </div>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    `;
+                `;
             }
-      
+    
             modalContent.innerHTML = html;
             modal.style.display = "block";
         }).catch((error) => {
             alert(`ERROR OCCURRED! ${error}`);
         });
-      };
+    };
+    

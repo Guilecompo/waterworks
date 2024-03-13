@@ -39,16 +39,12 @@ const displayConsumer = () => {
     const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("filterZone");
     const searchInput = document.getElementById("searchInput");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
     head.style.display = "block";
     paginationNumbers.style.display = "block";
     branchSelect.style.display = "block";
     searchInput.style.display = "block";
-    prevBtn.style.display = "block";
-    nextBtn.style.display = "block";
 
-    var url = "http://localhost/waterworks/head/get_consumers.php";
+    var url = "http://localhost/waterworks/clerk/get_consumers.php";
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
     formData.append("branchId", sessionStorage.getItem("branchId"));
@@ -97,7 +93,43 @@ const showConsumerPage = (page, consumersToDisplay = consumers) => {
     var end = start + 10;
     var displayedConsumers = consumersToDisplay.slice(start, end);
     refreshTables(displayedConsumers);
-    showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+    showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
+};
+const showPaginationNumbersReader = (currentPage, totalPages) => {
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
+
+  const pagesToShow = 5; // Number of pages to display
+
+  // Calculate start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  // Adjust start and end page numbers if they are at the edges
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  // Previous button
+  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+
+  // Generate page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
+    }
+  }
+
+  // Next button
+  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+const goToPageConsumer = (pageNumber) => {
+  showConsumerPage(pageNumber);
 };
 
 const errorTable = () => {
@@ -133,7 +165,7 @@ const refreshTables = (consumerList) => {
     consumerList.forEach(consumer => {
         html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname}</td>
+              <td>${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
               <td>${consumer.meter_no}</td>
               <td>${consumer.branch_name}</td>
               <td>
@@ -161,6 +193,7 @@ const view_consumer = (user_id) => {
         method: "post",
         data: formData,
     }).then((response) => {
+      
         try {
             if (response.data.length === 0) {
                 // Display a message indicating there are no billing transactions yet.
@@ -171,45 +204,78 @@ const view_consumer = (user_id) => {
                 const totalPages = Math.ceil(records.length / itemsPerPage);
 
                 const renderPage = () => {
-                    const startIndex = (currentPage - 1) * itemsPerPage;
-                    const endIndex = Math.min(startIndex + itemsPerPage, records.length);
-                    const currentPageRecords = records.slice(startIndex, endIndex);
-
-                    html = `
-            <div class="car-block text-center ">
-              <i class="fas fa-user fa-3x mt-1"></i>
-              <h5 class="font-weight-bold mt-2">${currentPageRecords[0].con_firstname} ${currentPageRecords[0].con_middlename} ${currentPageRecords[0].con_lastname} </h5>
-              <p >${currentPageRecords[0].meter_no}</p>
-            </div>
-            <table class="tab table" style="font-size: small;">
-              <thead>
-                <tr>
-                  <th scope="col">Reading Date</th>
-                  <th scope="col">Cubic Consumed</th>
-                  <th scope="col">Bill Amount</th>
-                  <th scope="col">Arrears</th>
-                  <th scope="col">Total Bill</th>
-                  <th scope="col">Reader Name</th>
-                </tr>
-              </thead>
-              <tbody>
-          `;
-
-                    currentPageRecords.forEach((record) => {
-                        html += `
-                <tr>
-                  <td>${record.reading_date}</td>
-                  <td>${record.cubic_consumed}</td>
-                  <td>${record.bill_amount}</td>
-                  <td>${record.arrears}</td>
-                  <td>${record.total_bill}</td>
-                  <td >${record.emp_firstname} ${record.emp_lastname}</td>
-                </tr>
-              `;
-                    });
-
-                    html += `</tbody></table><br/><br/>`;
-                };
+                  if (!Array.isArray(records) || records.length === 0) {
+                      // Handle case where records is not an array or is empty
+                      html = `<h2 class="text-center">No Records</h2>`;
+                      html += `<div class="car-block text-center ">
+                        <i class="fas fa-user fa-3x mt-1"></i>
+                        <h5 class="font-weight-bold mt-2"></h5>
+                        <p </p>
+                      </div>
+                      <table class="tab table ">
+                        <thead>
+                          <tr>
+                            <th scope="col">Reading Date</th>
+                            <th scope="col">Cubic Consumed</th>
+                            <th scope="col">Bill Amount</th>
+                            <th scope="col">Arrears</th>
+                            <th scope="col">Total Bill</th>
+                            <th scope="col">Reader Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>NO RECORDS</td>
+                            <td>NO RECORDS</td>
+                            <td>NO RECORDS</td>
+                            <td>NO RECORDS</td>
+                            <td>NO RECORDS</td>
+                            <td>NO RECORDS</td>
+                          </tr>
+                        </tbody>
+                      </table><br/><br/>`;
+                  } else {
+                      const startIndex = (currentPage - 1) * itemsPerPage;
+                      const endIndex = Math.min(startIndex + itemsPerPage, records.length);
+                      const currentPageRecords = records.slice(startIndex, endIndex);
+              
+                      html = `
+                          <div class="car-block text-center ">
+                            <i class="fas fa-user fa-3x mt-1"></i>
+                            <h5 class="font-weight-bold mt-2">${currentPageRecords[0].con_firstname} ${currentPageRecords[0].con_middlename} ${currentPageRecords[0].con_lastname} </h5>
+                            <p >${currentPageRecords[0].meter_no}</p>
+                          </div>
+                          <table class="tab table" style="font-size: small;">
+                            <thead>
+                              <tr>
+                                <th scope="col">Reading Date</th>
+                                <th scope="col">Cubic Consumed</th>
+                                <th scope="col">Bill Amount</th>
+                                <th scope="col">Arrears</th>
+                                <th scope="col">Total Bill</th>
+                                <th scope="col">Reader Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                      `;
+              
+                      currentPageRecords.forEach((record) => {
+                          html += `
+                              <tr>
+                                <td>${record.reading_date}</td>
+                                <td>${record.cubic_consumed}</td>
+                                <td>${record.bill_amount}</td>
+                                <td>${record.arrears}</td>
+                                <td>${record.total_bill}</td>
+                                <td>${record.emp_firstname} ${record.emp_lastname}</td>
+                              </tr>
+                          `;
+                      });
+              
+                      html += `</tbody></table><br/><br/>`;
+                  }
+              };
+              
 
                 const renderPagination = () => {
                   let paginationHtml = `
@@ -239,16 +305,17 @@ const view_consumer = (user_id) => {
             }
         } catch (error) {
             // Handle any errors here
-            html = `<h2>No Other Connected Meter</h2>`;
+            console.log(error);
+            html = `<h2 class="text-center">No Billing History Yet</h2>`;
             html += `
-        <div class="car-block text-center">
+        <div class="car-block text-center ">
           <i class="fas fa-user fa-3x mt-1"></i>
           <h5 class="font-weight-bold mt-2"></h5>
           <p </p>
         </div>
       `;
             html += `
-        <table class="tab table">
+        <table class="tab table ">
           <thead>
             <tr>
               <th scope="col">Reading Date</th>
@@ -280,15 +347,28 @@ const view_consumer = (user_id) => {
     });
 };
 
-const nextPage = (user_id) => {
-    currentPage++;
-    view_consumer(user_id);
+
+const nextPage = () => {
+  const nextPage = currentPage + 1;
+  const start = (nextPage - 1) * 10;
+  const end = start + 10;
+  const activitiesOnNextPage = consumers.slice(start, end);
+
+  if (activitiesOnNextPage.length > 0) {
+      currentPage++;
+      showBarangayPage(currentPage);
+  } else {
+      alert("Next page is empty or has no content.");
+      // Optionally, you can choose to disable the button here
+      // For example, if you have a button element with id "nextButton":
+      // document.getElementById("nextButton").disabled = true;
+  }
 };
 
-const prevPage = (user_id) => {
+const prevPage = () => {
   if (currentPage > 1) {
       currentPage--;
-      view_consumer(user_id);
+      showBarangayPage(currentPage);
   } else {
       alert("You are on the first page.");
   }
@@ -299,34 +379,16 @@ const goToPage = (page, user_id) => {
     view_consumer(user_id);
 };
 
-const showPaginationNumbers = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-  
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-    }
-  }
-  
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-  };
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
   head.style.display = "none";
   paginationNumbers.style.display = "none";
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
 
   var myUrl = "http://localhost/waterworks/head/getconsumer.php";
   const formData = new FormData();
@@ -817,13 +879,9 @@ const submit_edit_consumer = (event, user_id) => {
         const paginationNumbers = document.getElementById("paginationNumbers");
         const branchSelect = document.getElementById("filterZone");
         const searchInput = document.getElementById("searchInput");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
         head.style.display = "block";
         paginationNumbers.style.display = "block";
         branchSelect.style.display = "block";
         searchInput.style.display = "block";
-        prevBtn.style.display = "block";
-        nextBtn.style.display = "block";
       
       };

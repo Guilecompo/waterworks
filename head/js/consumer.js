@@ -128,7 +128,7 @@ const showPreviousPage = () => {
         consumerList.forEach(consumer => {
             html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname}</td>
+              <td>${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
               <td>${consumer.meter_no}</td>
               <td class="tabe-th">
                 <button   onclick="edit(${consumer.user_id})">Edit</button>
@@ -1191,16 +1191,12 @@ const connected_edit = (user_id) => {
   const paginationNumbers = document.getElementById("paginationNumbers");
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
   const myModal = document.getElementById("myModal");
   myModal.style.display = "none";
   head.style.display = "none";
   paginationNumbers.style.display = "none";
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
 
   var myUrl = "http://localhost/waterworks/head/get_connected_consumers.php";
   const formData = new FormData();

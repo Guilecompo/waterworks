@@ -58,7 +58,7 @@
                                 Reports
                             </a>
                         </li>
-                        <li class="sidebar-header ">
+                        <!-- <li class="sidebar-header ">
                             Masterlist Menu
                         </li>
                         <li class="sidebar-item">
@@ -68,7 +68,7 @@
                             </a>
                             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             </ul>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </aside>
@@ -95,7 +95,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="./profile.html">Profile</a></li>
                                     <li><a class="dropdown-item" href="./change_password.html">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="/">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/waterworks/">Logout</a></li>
                                 </ul>
                             </li>
                            
@@ -132,22 +132,20 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="col-12 w-100  d-block">
-                                <div id="pagination" class="pagination d-flex justify-content-center mt-2">
-                                    <button id="prevBtn" onclick="showPreviousPage()">Previous</button>
-                                    <div id="paginationNumbers"></div>
-                                    <button id="nextBtn" onclick="showNextPage()">Next</button>
-                                </div>
-                            </div>
                         <div class="card border-0 mt-2">
                             <div class="card-body">
                                 <div class="mains" id="mainDiv"></div>
                             </div>
                         </div>
-                        
                     </div>
                 </main>
-        
+                <footer>
+                    <div class="col-12 d-flex justify-content-center mt-2 mb-3">
+                      <div class="pagination-container">
+                        <div id="paginationNumbers" class="pagination-numbers"></div>
+                      </div>
+                    </div>
+                  </footer>
             </div>
         </div>
         <script

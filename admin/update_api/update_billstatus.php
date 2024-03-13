@@ -19,8 +19,8 @@ try {
     $stmtUpdates = $conn->prepare($sqlUpdates);
     $stmtUpdates->bindParam(':statusId', $statusId, PDO::PARAM_INT);
     if ($stmtUpdates->execute()) {
-        $activity_type = "Update All";
-        $table_name = "Consumer Bill Status";
+        $activity_type = "Reset";
+        $table_name = "Bill Status";
         $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
         $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 

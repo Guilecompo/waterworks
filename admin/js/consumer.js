@@ -3,65 +3,72 @@ let consumers = [];
 let isEditMode = false;
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-    displayConsumer();
-    getFileterBranch();
-  };
-  
-  const displayConsumer = () => {
-    const head = document.getElementById("head");
-    const paginationNumbers = document.getElementById("paginationNumbers");
-    const branchSelect = document.getElementById("branch");
-    const searchInput = document.getElementById("searchInput");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    head.style.display = "block";
-    paginationNumbers.style.display = "block";
-    branchSelect.style.display = "block";
-    searchInput.style.display = "block";
-    prevBtn.style.display = "block";
-    nextBtn.style.display = "block";
+  document.getElementById("ngalan").innerText =
+    sessionStorage.getItem("fullname");
+  displayConsumer();
+  getFileterBranch();
+};
 
-      var url = "http://localhost/waterworks/admin/get_consumers.php";
-      const formData = new FormData();
-      formData.append("accountId", sessionStorage.getItem("accountId"));
-      axios({
-          url: url,
-          method: "post",
-          data: formData
-      }).then(response => {
-        console.log(response.data)
-          consumers = response.data;
-          if (!Array.isArray(consumers) || consumers.length === 0) {
-            errorTable();
-          } else {
-            sortConsumersByName();
-            showConsumerPage(currentPage);
-          }
-      }).catch(error => {
-          alert("ERROR! - " + error);
-      });
-  };
-  
-  const sortConsumersByName = () => {
-      consumers.sort((a, b) => {
-          const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-          const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-          return nameA.localeCompare(nameB);
-      });
-  };
-  const filterConsumer = () => {
-    const searchInput = document.getElementById("searchInput").value.toLowerCase();
-    const filteredConsumers = consumers.filter((consumer) => {
-        const fullName = (consumer.firstname + ' ' + consumer.lastname + ' ' + consumer.meter_no).toLowerCase();
-        return fullName.includes(searchInput);
+const displayConsumer = () => {
+  const head = document.getElementById("head");
+  const paginationNumbers = document.getElementById("paginationNumbers");
+  const branchSelect = document.getElementById("branch");
+  const searchInput = document.getElementById("searchInput");
+  head.style.display = "block";
+  paginationNumbers.style.display = "block";
+  branchSelect.style.display = "block";
+  searchInput.style.display = "block";
+
+  var url = "http://localhost/waterworks/admin/get_consumers.php";
+  const formData = new FormData();
+  formData.append("accountId", sessionStorage.getItem("accountId"));
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      consumers = response.data;
+      if (!Array.isArray(consumers) || consumers.length === 0) {
+        errorTable();
+      } else {
+        sortConsumersByName();
+        showConsumerPage(currentPage);
+      }
+    })
+    .catch((error) => {
+      alert("ERROR! - " + error);
     });
-    showFilteredConsumers(filteredConsumers);
+};
+
+const sortConsumersByName = () => {
+  consumers.sort((a, b) => {
+    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
+    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
+    return nameA.localeCompare(nameB);
+  });
+};
+const filterConsumer = () => {
+  const searchInput = document
+    .getElementById("searchInput")
+    .value.toLowerCase();
+  const filteredConsumers = consumers.filter((consumer) => {
+    const fullName = (
+      consumer.firstname +
+      " " +
+      consumer.lastname +
+      " " +
+      consumer.meter_no
+    ).toLowerCase();
+    return fullName.includes(searchInput);
+  });
+  showFilteredConsumers(filteredConsumers);
 };
 
 const showFilteredConsumers = (filteredConsumers) => {
-    currentPage = 1;
-    showConsumerPage(currentPage, filteredConsumers);
+  currentPage = 1;
+  showConsumerPage(currentPage, filteredConsumers);
 };
 const showNextPage = () => {
   const nextPage = currentPage + 1;
@@ -70,34 +77,34 @@ const showNextPage = () => {
   const activitiesOnNextPage = consumers.slice(start, end);
 
   if (activitiesOnNextPage.length > 0) {
-      currentPage++;
-      showConsumerPage(currentPage);
+    currentPage++;
+    showConsumerPage(currentPage);
   } else {
-      alert("Next page is empty or has no content.");
-      // Optionally, you can choose to disable the button here
-      // For example, if you have a button element with id "nextButton":
-      // document.getElementById("nextButton").disabled = true;
+    alert("Next page is empty or has no content.");
+    // Optionally, you can choose to disable the button here
+    // For example, if you have a button element with id "nextButton":
+    // document.getElementById("nextButton").disabled = true;
   }
 };
 
 const showPreviousPage = () => {
   if (currentPage > 1) {
-      currentPage--;
-      showConsumerPage(currentPage);
+    currentPage--;
+    showConsumerPage(currentPage);
   } else {
-      alert("You are on the first page.");
+    alert("You are on the first page.");
   }
 };
-  const showConsumerPage = (page, consumersToDisplay = consumers) => {
-      var start = (page - 1) * 10;
-      var end = start + 10;
-      var displayedConsumers = consumersToDisplay.slice(start, end);
-      refreshTables(displayedConsumers);
-      showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-  };
+const showConsumerPage = (page, consumersToDisplay = consumers) => {
+  var start = (page - 1) * 10;
+  var end = start + 10;
+  var displayedConsumers = consumersToDisplay.slice(start, end);
+  refreshTables(displayedConsumers);
+  showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
+};
 
-    const errorTable = () =>{
-        var html = `
+const errorTable = () => {
+  var html = `
         <table class="table">
           <thead>
             <tr>
@@ -107,11 +114,11 @@ const showPreviousPage = () => {
             </tr>
           </thead>
           </table>`;
-    
-          document.getElementById("mainDiv").innerHTML = html;
-      }
-      const refreshTables = (consumerList) => {
-        var html = `
+
+  document.getElementById("mainDiv").innerHTML = html;
+};
+const refreshTables = (consumerList) => {
+  var html = `
         <table class="table">
           <thead>
             <tr>
@@ -122,8 +129,8 @@ const showPreviousPage = () => {
           </thead>
           <tbody>
         `;
-        consumerList.forEach(consumer => {
-          html += `
+  consumerList.forEach((consumer) => {
+    html += `
             <tr>
               <td>${consumer.firstname} ${consumer.lastname} </td>
               <td>${consumer.meter_no}</td>
@@ -149,98 +156,122 @@ const showPreviousPage = () => {
               </td>
             </tr>
             `;
-        });
-        html += `</tbody></table>`;
-        document.getElementById("mainDiv").innerHTML = html;
-    };
+  });
+  html += `</tbody></table>`;
+  document.getElementById("mainDiv").innerHTML = html;
+};
 
-      const showPaginationNumbers = (currentPage, totalPages) => {
-        const paginationNumbersDiv = document.getElementById("paginationNumbers");
-        let paginationNumbersHTML = "";
-        
-        for (let i = 1; i <= totalPages; i++) {
-          if (i === currentPage) {
-            paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-          } else {
-            paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-          }
+const showPaginationNumbersReader = (currentPage, totalPages) => {
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
+
+  const pagesToShow = 5; // Number of pages to display
+
+  // Calculate start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  // Adjust start and end page numbers if they are at the edges
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  // Previous button
+  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+
+  // Generate page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
+    }
+  }
+
+  // Next button
+  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+const goToPageConsumer = (pageNumber) => {
+  showConsumerPage(pageNumber);
+};
+
+const getFileterBranch = () => {
+  const branchSelect = document.getElementById("branch");
+  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var positions = response.data;
+
+      var options = `<option value="employee">Select Branch</option>`;
+      positions.forEach((position) => {
+        options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
+      });
+      branchSelect.innerHTML = options;
+
+      // Event listener for position change
+      branchSelect.addEventListener("change", () => {
+        const selectedBranch = branchSelect.value;
+        // Call the appropriate display function based on the selected position
+        if (selectedBranch === "Poblacion") {
+          displayConsumerPoblacion();
+        } else if (selectedBranch === "Molugan") {
+          displayConsumerMulogan();
+        } else {
+          displayConsumer();
         }
-        
-        paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-        };
-
-    const getFileterBranch = () => {
-          const branchSelect = document.getElementById("branch");
-          var myUrl = "http://localhost/waterworks/admin/get_branch.php";
-        
-          axios({
-            url: myUrl,
-            method: "post",
-          })
-            .then((response) => {
-              var positions = response.data;
-        
-              var options = `<option value="employee">Select Branch</option>`;
-              positions.forEach((position) => {
-                options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
-              });
-              branchSelect.innerHTML = options;
-        
-              // Event listener for position change
-              branchSelect.addEventListener("change", () => {
-                const selectedBranch = branchSelect.value;
-                // Call the appropriate display function based on the selected position
-                if (selectedBranch === "Poblacion") {
-                  displayConsumerPoblacion();
-                }else if (selectedBranch === "Molugan") {
-                  displayConsumerMulogan();
-                } else{
-                  displayConsumer();
-                }
-                // Add more conditions as needed for other positions
-              });
-            })
-            .catch((error) => {
-              alert(`ERROR OCCURRED! ${error}`);
-            });
-        };
+        // Add more conditions as needed for other positions
+      });
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
 // ----------------------------------FILTER POBLACION------------------------------------------------
-  const displayConsumerPoblacion = () => {
-          var url = "http://localhost/waterworks/admin/get_consumers_poblacion.php";
-          const formData = new FormData();
-          formData.append("accountId", sessionStorage.getItem("accountId"));
-          axios({
-              url: url,
-              method: "post",
-              data: formData
-          }).then(response => {
-            console.log(response.data)
-              consumers = response.data;
-              sortConsumersPoblacionByName();
-              showConsumerPoblacionPage(currentPage);
-          }).catch(error => {
-              alert("ERROR! - " + error);
-          });
-      };
+const displayConsumerPoblacion = () => {
+  var url = "http://localhost/waterworks/admin/get_consumers_poblacion.php";
+  const formData = new FormData();
+  formData.append("accountId", sessionStorage.getItem("accountId"));
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      consumers = response.data;
+      sortConsumersPoblacionByName();
+      showConsumerPoblacionPage(currentPage);
+    })
+    .catch((error) => {
+      alert("ERROR! - " + error);
+    });
+};
 
-      const sortConsumersPoblacionByName = () => {
-          consumers.sort((a, b) => {
-              const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-              const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-              return nameA.localeCompare(nameB);
-          });
-      };
-      
-      const showConsumerPoblacionPage = (page, consumersToDisplay = consumers) => {
-          var start = (page - 1) * 10;
-          var end = start + 10;
-          var displayedConsumers = consumersToDisplay.slice(start, end);
-          PoblacionrefreshTables(displayedConsumers);
-          showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-      };
-      
-      const PoblacionrefreshTables = (consumerList) => {
-        var html = `
+const sortConsumersPoblacionByName = () => {
+  consumers.sort((a, b) => {
+    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
+    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
+    return nameA.localeCompare(nameB);
+  });
+};
+
+const showConsumerPoblacionPage = (page, consumersToDisplay = consumers) => {
+  var start = (page - 1) * 10;
+  var end = start + 10;
+  var displayedConsumers = consumersToDisplay.slice(start, end);
+  PoblacionrefreshTables(displayedConsumers);
+  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+};
+
+const PoblacionrefreshTables = (consumerList) => {
+  var html = `
         <table class="table">
           <thead>
             <tr>
@@ -252,8 +283,8 @@ const showPreviousPage = () => {
           </thead>
           <tbody>
         `;
-        consumerList.forEach(consumer => {
-            html += `
+  consumerList.forEach((consumer) => {
+    html += `
             <tr>
               <td>${consumer.firstname} ${consumer.lastname}</td>
               <td>${consumer.meter_no}</td>
@@ -263,44 +294,41 @@ const showPreviousPage = () => {
               </td>
             </tr>
             `;
-          });
-          html += `</tbody></table>`;
-          document.getElementById("mainDiv").innerHTML = html;
-      };
+  });
+  html += `</tbody></table>`;
+  document.getElementById("mainDiv").innerHTML = html;
+};
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
   head.style.display = "none";
   paginationNumbers.style.display = "none";
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
 
   var myUrl = "http://localhost/waterworks/admin/getconsumer.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-    console.log(response.data);
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var consumer = response.data;
-              console.log("Consumer : ",consumer[0].user_id);
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var consumer = response.data;
+          console.log("Consumer : ", consumer[0].user_id);
 
-              var html = `
+          var html = `
               <div class=" row  mt-1">
                 <div class="col-md-1 mt-3">
                   <button class="clear" onclick="displayConsumer()">Back</button>
@@ -385,239 +413,245 @@ const edit = (user_id) => {
               </div>
                                 
               `;
-    
+
           document.getElementById("mainDiv").innerHTML = html;
           getSuffix();
           getBranch();
           getProperty();
           getMunicipality();
-      }
+        }
       } catch (error) {
         var html = `<h2>NO RECORD</h2>`;
       }
-
-    }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
-  });
-}
+    });
+};
 const submit_edit_consumer = (event, user_id) => {
-      event.preventDefault();
-        const firstname = document.getElementById("firstname").value;
-        const middlename = document.getElementById("middlename").value;
-        const lastname = document.getElementById("lastname").value;
+  event.preventDefault();
+  const firstname = document.getElementById("firstname").value;
+  const middlename = document.getElementById("middlename").value;
+  const lastname = document.getElementById("lastname").value;
 
-        const phone = document.getElementById("phone").value;
-        const email_add = document.getElementById("email_add").value;
-        const propertyId = document.getElementById("property").value;
+  const phone = document.getElementById("phone").value;
+  const email_add = document.getElementById("email_add").value;
+  const propertyId = document.getElementById("property").value;
 
-        const municipalityId = document.getElementById("municipality").value;
-        const barangayId = document.getElementById("barangay").value;
-        const zoneId = document.getElementById("zoneId").value;
+  const municipalityId = document.getElementById("municipality").value;
+  const barangayId = document.getElementById("barangay").value;
+  const zoneId = document.getElementById("zoneId").value;
 
-        const branchId = document.getElementById("edit_branch").value;
-        const meter_no = document.getElementById("meter_no").value;
-        const house_no = document.getElementById("house_no").value;
+  const branchId = document.getElementById("edit_branch").value;
+  const meter_no = document.getElementById("meter_no").value;
+  const house_no = document.getElementById("house_no").value;
 
-      if (
-        firstname === '' ||
-        middlename === '' ||
-        lastname === '' ||
-        phone === '' ||
-        email_add === '' ||
-        propertyId === '' ||
-        municipalityId === '' ||
-        barangayId === '' ||
-        zoneId === '' ||
-        branchId === '' ||
-        meter_no === '' ||
-        house_no === ''
-      ) {
-        alert('Fill in all fields');
-        return;
+  if (
+    firstname === "" ||
+    middlename === "" ||
+    lastname === "" ||
+    phone === "" ||
+    email_add === "" ||
+    propertyId === "" ||
+    municipalityId === "" ||
+    barangayId === "" ||
+    zoneId === "" ||
+    branchId === "" ||
+    meter_no === "" ||
+    house_no === ""
+  ) {
+    alert("Fill in all fields");
+    return;
+  }
+
+  const myUrl =
+    "http://localhost/waterworks/admin/update_api/update_consumer.php";
+  const formData = new FormData();
+  formData.append("userid", user_id);
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("phone", phone);
+  formData.append("email_add", email_add);
+  formData.append("propertyId", propertyId);
+  formData.append("municipalityId", municipalityId);
+  formData.append("barangayId", barangayId);
+  formData.append("zoneId", zoneId);
+  formData.append("branchId", branchId);
+  formData.append("meter_no", meter_no);
+  formData.append("house_no", house_no);
+  console.log(
+    user_id,
+    firstname,
+    middlename,
+    lastname,
+    phone,
+    email_add,
+    municipalityId,
+    barangayId,
+    zoneId,
+    house_no,
+    meter_no,
+    branchId,
+    propertyId
+  );
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.data.status === 1) {
+        success_update_modal();
+        console.log("success update");
+      } else if (response.data.status === 0) {
+        // alert("Username or phone number already exists!");
+        failed_update_modal();
+        console.log(response);
+      } else {
+        // alert("Unknown error occurred.");
+        error_modal();
+        console.log(response);
       }
-    
-      const myUrl = "http://localhost/waterworks/admin/update_api/update_consumer.php";
-      const formData = new FormData();
-      formData.append("userid", user_id);
-      formData.append("firstname", firstname);
-      formData.append("middlename", middlename);
-      formData.append("lastname", lastname);
-      formData.append("phone", phone);
-      formData.append("email_add", email_add);
-      formData.append("propertyId", propertyId);
-      formData.append("municipalityId", municipalityId);
-      formData.append("barangayId", barangayId);
-      formData.append("zoneId", zoneId);
-      formData.append("branchId", branchId);
-      formData.append("meter_no", meter_no);
-      formData.append("house_no", house_no);
-      console.log(user_id, 
-        firstname, 
-        middlename, 
-        lastname, 
-        phone, 
-        email_add, 
-        municipalityId, 
-        barangayId, 
-        zoneId, 
-        house_no,
-        meter_no, 
-        branchId, 
-        propertyId);
-      
-        axios({
-          url: myUrl,
-          method: "post",
-          data: formData,
-        })
-          .then((response) => {
-            console.log(response);
-            if (response.data.status === 1) {
-              success_update_modal();
-              console.log("success update");
-            } else if (response.data.status === 0) {
-              // alert("Username or phone number already exists!");
-              failed_update_modal();
-              console.log(response);
-            } else {
-              // alert("Unknown error occurred.");
-              error_modal();
-              console.log(response);
-            }
-          })
-          .catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
-          });
-      };
-      const updateBillStatus = () => {
-        const myUrl = "http://localhost/waterworks/admin/update_api/update_billstatus.php";
-        const formData = new FormData();
-        formData.append("employee_Id", sessionStorage.getItem("accountId"));
-        axios({
-          url: myUrl,
-          method: "post",
-          data: formData,
-        })
-          .then((response) => {
-            console.log(response);
-            if (response.data.status === 1) {
-              success_update_modal();
-              console.log("success update");
-            } else if (response.data.status === 0) {
-              // alert("Username or phone number already exists!");
-              failed_update_modal();
-            } else {
-              // alert("Unknown error occurred.");
-              error_modal();
-              console.log(response);
-            }
-          })
-          .catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
-          });
-      };
-      const getSuffix = () => {
-        const propertySelect = document.getElementById("suffix");
-        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
-      
-        axios({
-          url: myUrl,
-          method: "post",
-        })
-          .then((response) => {
-            var properties = response.data;
-      
-            var options = ``;
-            properties.forEach((property) => {
-              options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
-            });
-            propertySelect.innerHTML = options;
-          })
-          .catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
-          });
-      };
-  const getProperty = () => {
-    const propertySelect = document.getElementById("property");
-    var myUrl = "http://localhost/waterworks/gets/get_property.php";
-  
-    axios({
-      url: myUrl,
-      method: "post",
     })
-      .then((response) => {
-        var properties = response.data;
-  
-        var options = ``;
-        properties.forEach((property) => {
-          options += `<option value="${property.property_id}">${property.property_name}</option>`;
-        });
-        propertySelect.innerHTML = options;
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-      });
-  };
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const updateBillStatus = () => {
+  const myUrl =
+    "http://localhost/waterworks/admin/update_api/update_billstatus.php";
+  const formData = new FormData();
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.data.status === 1) {
+        success_update_modal();
+        console.log("success update");
+      } else if (response.data.status === 0) {
+        // alert("Username or phone number already exists!");
+        failed_update_modal();
+      } else {
+        // alert("Unknown error occurred.");
+        error_modal();
+        console.log(response);
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const getSuffix = () => {
+  const propertySelect = document.getElementById("suffix");
+  var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
 
-  const getBranch = () => {
-    const propertySelect = document.getElementById("edit_branch");
-    var myUrl = "http://localhost/waterworks/admin/get_branch.php";
-  
-    axios({
-      url: myUrl,
-      method: "post",
-    })
-      .then((response) => {
-        var properties = response.data;
-  
-        var options = ``;
-        properties.forEach((property) => {
-          options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
-        });
-        propertySelect.innerHTML = options;
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
       });
-  };
-  
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const getProperty = () => {
+  const propertySelect = document.getElementById("property");
+  var myUrl = "http://localhost/waterworks/gets/get_property.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.property_id}">${property.property_name}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const getBranch = () => {
+  const propertySelect = document.getElementById("edit_branch");
+  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
 // ----------------------------------FILTER MOLUGAN------------------------------------------------
-      const displayConsumerMulogan = () => {
-        var url = "http://localhost/waterworks/admin/get_consumers_mulogan.php";
-        const formData = new FormData();
-        formData.append("accountId", sessionStorage.getItem("accountId"));
-        axios({
-            url: url,
-            method: "post",
-            data: formData
-        }).then(response => {
-          console.log(response.data)
-            consumers = response.data;
-            sortConsumersMuloganByName();
-            showConsumerMuloganPage(currentPage);
-        }).catch(error => {
-            alert("ERROR! - " + error);
-        });
-    };
-    
-    const sortConsumersMuloganByName = () => {
-        consumers.sort((a, b) => {
-            const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-            const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-            return nameA.localeCompare(nameB);
-        });
-    };
-    
-    const showConsumerMuloganPage = (page, consumersToDisplay = consumers) => {
-        var start = (page - 1) * 10;
-        var end = start + 10;
-        var displayedConsumers = consumersToDisplay.slice(start, end);
-        MuloganrefreshTables(displayedConsumers);
-        showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-    };
-    
-    const MuloganrefreshTables = (consumerList) => {
-      var html = `
+const displayConsumerMulogan = () => {
+  var url = "http://localhost/waterworks/admin/get_consumers_mulogan.php";
+  const formData = new FormData();
+  formData.append("accountId", sessionStorage.getItem("accountId"));
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      consumers = response.data;
+      sortConsumersMuloganByName();
+      showConsumerMuloganPage(currentPage);
+    })
+    .catch((error) => {
+      alert("ERROR! - " + error);
+    });
+};
+
+const sortConsumersMuloganByName = () => {
+  consumers.sort((a, b) => {
+    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
+    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
+    return nameA.localeCompare(nameB);
+  });
+};
+
+const showConsumerMuloganPage = (page, consumersToDisplay = consumers) => {
+  var start = (page - 1) * 10;
+  var end = start + 10;
+  var displayedConsumers = consumersToDisplay.slice(start, end);
+  MuloganrefreshTables(displayedConsumers);
+  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+};
+
+const MuloganrefreshTables = (consumerList) => {
+  var html = `
       <table class="table">
         <thead>
           <tr>
@@ -629,8 +663,8 @@ const submit_edit_consumer = (event, user_id) => {
         </thead>
         <tbody>
       `;
-      consumerList.forEach(consumer => {
-          html += `
+  consumerList.forEach((consumer) => {
+    html += `
           <tr>
             <td>${consumer.firstname} ${consumer.lastname}</td>
             <td>${consumer.meter_no}</td>
@@ -640,196 +674,183 @@ const submit_edit_consumer = (event, user_id) => {
             </td>
           </tr>
           `;
-        });
-        html += `</tbody></table>`;
-        document.getElementById("mainDiv").innerHTML = html;
-    };
+  });
+  html += `</tbody></table>`;
+  document.getElementById("mainDiv").innerHTML = html;
+};
 
+const getMunicipality = () => {
+  const municipalitySelect = document.getElementById("municipality");
+  var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
 
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var municipalities = response.data;
+      console.log("success municipality");
 
-    const getMunicipality = () => {
-      const municipalitySelect = document.getElementById("municipality");
-      var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
-      
-      axios({
-        url: myUrl,
-        method: "post",
-      })
-        .then((response) => {
-          var municipalities = response.data;
-          console.log("success municipality");
-      
-          var options = `<option value="${municipalities[0].municipality_id}" selected>${municipalities[0].municipality_name}</option>`;
-          municipalities.forEach((municipality) => {
-            options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
-          });
-          municipalitySelect.innerHTML = options;
-      
-           getBarangay();
-        })
-        .catch((error) => {
-          alert(`ERROR OCCURRED! ${error}`);
-        });
-      };
-      
-      const getBarangay = () => {
-      const selectedMunicipalityId = document.getElementById("municipality").value;
-      
-      const barangayUrl = `http://localhost/waterworks/gets/get_barangay.php`;
-      const formData = new FormData();
-      
-      // Use selectedMunicipalityId directly
-      formData.append("municipalityId", selectedMunicipalityId);
-      
-      axios({
-        url: barangayUrl,
-        method: "post",
-        data: formData
-      })
-        .then((response) => {
-          const barangaySelect = document.getElementById("barangay");
-          const barangays = response.data;
-          console.log("success barangay");
-          // Clear existing options
-          barangaySelect.innerHTML = ``;
-      
-          // Populate options for barangays
-          barangays.forEach((barangay) => {
-            const option = document.createElement("option");
-            option.value = barangay.barangay_id;
-            option.textContent = barangay.barangay_name;
-            barangaySelect.appendChild(option);
-          });
-          getZone();
-        })
-        .catch((error) => {
-          alert(`ERROR OCCURRED while fetching barangays! ${error}`);
-        });
-      };
-      
-      
-      const getZone = () => {
-        const selectedBarangayId = document.getElementById("barangay").value;
-      
-        const zoneUrl = `http://localhost/waterworks/gets/get_zone.php`;
-        const formData = new FormData();
-      
-        // Use selectedMunicipalityId directly
-        formData.append("barangayId", selectedBarangayId);
-        axios({
-          url: zoneUrl,
-          method: "post",
-          data: formData
-        }).then((response) => {
-          const zoneSelect = document.getElementById("zoneId");
-          const zones = response.data;
-          console.log("success zone");
-          console.log("Zones data from server:", zones);
-      
-          // Clear existing options
-          zoneSelect.innerHTML = `<option value="${zones[0].zone_id}" selected>${zones[0].zone_name}</option>`;
-      
-          // Sort zones numerically
-          zones.sort((a, b) => {
-              const aNumber = parseInt(a.zone_name.match(/\d+/)[0]);
-              const bNumber = parseInt(b.zone_name.match(/\d+/)[0]);
-              return aNumber - bNumber;
-          });
-      
-          // Populate options for zones
-          zones.forEach((zone) => {
-              const option = document.createElement("option");
-              option.value = zone.zone_id;
-              option.textContent = zone.zone_name;
-              zoneSelect.appendChild(option);
-          });
-      })
-      .catch((error) => {
-          alert(`ERROR OCCURRED while fetching zones! ${error}`);
+      var options = `<option value="${municipalities[0].municipality_id}" selected>${municipalities[0].municipality_name}</option>`;
+      municipalities.forEach((municipality) => {
+        options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
       });
-      
-      };
+      municipalitySelect.innerHTML = options;
 
-      const success_update_modal = () => {
-        const modal = document.getElementById("myModal");
-        const modalContent = document.getElementById("modalContent");
-      var html = `
+      getBarangay();
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const getBarangay = () => {
+  const selectedMunicipalityId = document.getElementById("municipality").value;
+
+  const barangayUrl = `http://localhost/waterworks/gets/get_barangay.php`;
+  const formData = new FormData();
+
+  // Use selectedMunicipalityId directly
+  formData.append("municipalityId", selectedMunicipalityId);
+
+  axios({
+    url: barangayUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      const barangaySelect = document.getElementById("barangay");
+      const barangays = response.data;
+      console.log("success barangay");
+      // Clear existing options
+      barangaySelect.innerHTML = ``;
+
+      // Populate options for barangays
+      barangays.forEach((barangay) => {
+        const option = document.createElement("option");
+        option.value = barangay.barangay_id;
+        option.textContent = barangay.barangay_name;
+        barangaySelect.appendChild(option);
+      });
+      getZone();
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED while fetching barangays! ${error}`);
+    });
+};
+
+const getZone = () => {
+  const selectedBarangayId = document.getElementById("barangay").value;
+
+  const zoneUrl = `http://localhost/waterworks/gets/get_zone.php`;
+  const formData = new FormData();
+
+  // Use selectedMunicipalityId directly
+  formData.append("barangayId", selectedBarangayId);
+  axios({
+    url: zoneUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      const zoneSelect = document.getElementById("zoneId");
+      const zones = response.data;
+      console.log("success zone");
+      console.log("Zones data from server:", zones);
+
+      // Clear existing options
+      zoneSelect.innerHTML = `<option value="${zones[0].zone_id}" selected>${zones[0].zone_name}</option>`;
+
+      // Sort zones numerically
+      zones.sort((a, b) => {
+        const aNumber = parseInt(a.zone_name.match(/\d+/)[0]);
+        const bNumber = parseInt(b.zone_name.match(/\d+/)[0]);
+        return aNumber - bNumber;
+      });
+
+      // Populate options for zones
+      zones.forEach((zone) => {
+        const option = document.createElement("option");
+        option.value = zone.zone_id;
+        option.textContent = zone.zone_name;
+        zoneSelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED while fetching zones! ${error}`);
+    });
+};
+
+const success_update_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
             <h5 class="modal-title " style="color: limegreen; text-align:center;">Success</h5>
         `;
-          modalContent.innerHTML = html;
-          modal.style.display = "block";
-      
-      };
-      
-      const failed_update_modal = () => {
-      const modal = document.getElementById("myModal");
-      const modalContent = document.getElementById("modalContent");
-      var html = `
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
+const failed_update_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
         <h5 class="modal-title " style="color: red; text-align:center;">Duplicate !</h5>
       `;
-      modalContent.innerHTML = html;
-      modal.style.display = "block";
-      
-      };
-      const error_modal = () => {
-        const modal = document.getElementById("myModal");
-        const modalContent = document.getElementById("modalContent");
-      var html = `
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+const error_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
             <h5 class="modal-title " style="color: red; text-align:center;">Unknown error occurred !</h5>
         `;
-          modalContent.innerHTML = html;
-          modal.style.display = "block";
-      
-      };
-      const closeModal = () => {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "none";
-      
-        const head = document.getElementById("head");
-        const paginationNumbers = document.getElementById("paginationNumbers");
-        const branchSelect = document.getElementById("branch");
-        const searchInput = document.getElementById("searchInput");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        head.style.display = "block";
-        paginationNumbers.style.display = "block";
-        branchSelect.style.display = "block";
-        searchInput.style.display = "block";
-        prevBtn.style.display = "block";
-        nextBtn.style.display = "block";
-      
-      };
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+const closeModal = () => {
+  const modal = document.getElementById("myModal");
+  modal.style.display = "none";
 
+  const head = document.getElementById("head");
+  const paginationNumbers = document.getElementById("paginationNumbers");
+  const branchSelect = document.getElementById("branch");
+  const searchInput = document.getElementById("searchInput");
+  head.style.display = "block";
+  paginationNumbers.style.display = "block";
+  branchSelect.style.display = "block";
+  searchInput.style.display = "block";
+};
 
-      // -------------------------------------------------VIEW START ---------------------------------------------------
+// -------------------------------------------------VIEW START ---------------------------------------------------
 const information = (user_id) => {
   console.log("USER ID :", user_id);
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
-  
 
   var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       console.log(response.data);
-      
+
       try {
-        
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var employee = response.data;
-              const close_butt = document.getElementById("close_butt");
-              close_butt.style.display = "none";
-              
-              var html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var employee = response.data;
+          const close_butt = document.getElementById("close_butt");
+          close_butt.style.display = "none";
+
+          var html = `
                   <div class="mt-1 text-center">
                       <i class="fas fa-user fa-5x mt-0"></i>
                   </div>
@@ -898,20 +919,19 @@ const information = (user_id) => {
                   </div>
                                     
                   `;
-          }
+        }
       } catch (error) {
-          // Handle any errors here
-          var html = `<h2>NO RECORD</h2>`;
-          console.log(error);
+        // Handle any errors here
+        var html = `<h2>NO RECORD</h2>`;
+        console.log(error);
       }
-      
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-      
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 const newBill = (user_id) => {
   const modal = document.getElementById("myModal");
@@ -922,19 +942,19 @@ const newBill = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h6>No Records</h6>`;
-          } else {
-              var records = response.data;
-              console.log(records);
-              html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h6>No Records</h6>`;
+        } else {
+          var records = response.data;
+          console.log(records);
+          html = `
                   <div class="wrapper mb-0">
                     <div class="container mt-0 mb-0">
                         <div class="row ">
@@ -1016,17 +1036,18 @@ const newBill = (user_id) => {
                     </div>
                 </div>
                 `;
-          }
+        }
       } catch (error) {
-          // Handle any errors here
-          html = `<h4 class="text-center ">Don't Have Current Bill</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">Don't Have Current Bill</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 
 const billingHis = (user_id) => {
@@ -1038,20 +1059,20 @@ const billingHis = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h6>No Records</h6>`;
-          } else {
-              var records = response.data;
-              
-              // Add a single "Connected Meter" heading
-              html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h6>No Records</h6>`;
+        } else {
+          var records = response.data;
+
+          // Add a single "Connected Meter" heading
+          html = `
                 <div class="text-center ">
                   <h4 class="mb-3" style="text-align:center;">Bill History</h4>
                   <hr class="badge-primary mt-3 mb-4">
@@ -1063,9 +1084,8 @@ const billingHis = (user_id) => {
                   <p class="text-muted" >${records[0].meter_no}</p>
                 </div>
               `;
-              
-              html += 
-              `
+
+          html += `
                   <table class=" table ">
                       <thead>
                         <tr>
@@ -1077,10 +1097,9 @@ const billingHis = (user_id) => {
                       </thead>
                       <tbody>
               `;
-              
-              records.forEach((record) => {
-                  html += 
-                    `
+
+          records.forEach((record) => {
+            html += `
                     <tr>
                       <td>${record.reading_date}</td>
                       <td>${record.total_bill}</td>
@@ -1088,25 +1107,25 @@ const billingHis = (user_id) => {
                       <td><button class="butts" onclick="bill_receipt(${record.billing_id})">View</button></td>
                     </tr>
                   `;
-              });
+          });
 
-              html += `</tbody></table><br/><br/>`;
-          }
+          html += `</tbody></table><br/><br/>`;
+        }
       } catch (error) {
-          // Handle any errors here
-          html = `<h4 class="text-center ">Don't Have Billing History</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">Don't Have Billing History</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
-const bill_receipt  = (billing_id) => {
+const bill_receipt = (billing_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
-
 
   var myUrl = "http://localhost/waterworks/gets/consumer_billing_history1.php";
   const formData = new FormData();
@@ -1114,20 +1133,19 @@ const bill_receipt  = (billing_id) => {
   console.log("billing_id  : ", billing_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-        
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var records = response.data;
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var records = response.data;
 
-              html = `
+          html = `
                 <div class="wrapper">
                   <div class="container mt-0 ">
                       <div class="row ">
@@ -1221,19 +1239,18 @@ const bill_receipt  = (billing_id) => {
                   </div>
               </div>
               `;
-
-              
-          }
+        }
       } catch (error) {
-          // Handle any errors here
-          html = `<h4 class="text-center ">${error}</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">${error}</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 
 const paymentHis = (user_id) => {
@@ -1245,20 +1262,20 @@ const paymentHis = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h6>No Records</h6>`;
-          } else {
-              var records = response.data;
-              
-              // Add a single "Connected Meter" heading
-              html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h6>No Records</h6>`;
+        } else {
+          var records = response.data;
+
+          // Add a single "Connected Meter" heading
+          html = `
                 <div class="text-center ">
                   <h4 class="mb-3" style="text-align:center;">Bill History</h4>
                   <hr class="badge-primary mt-3 mb-4">
@@ -1270,9 +1287,8 @@ const paymentHis = (user_id) => {
                   <p class="text-muted" >${records[0].meter_no}</p>
                 </div>
               `;
-              
-              html += 
-                    `
+
+          html += `
                     <table class=" table">
                         <thead>
                             <tr>
@@ -1284,10 +1300,9 @@ const paymentHis = (user_id) => {
                         </thead>
                     <tbody>
                     `;
-                    
-                    records.forEach((record) => {
-                        html += 
-                        `
+
+          records.forEach((record) => {
+            html += `
                             <tr>
                                 <td>${record.pay_date}</td>
                                 <td>${record.pay_amount}</td>
@@ -1295,49 +1310,47 @@ const paymentHis = (user_id) => {
                                 <td><button class="butts" onclick="payment_receipt(${record.pay_id})">View</button></td>
                             </tr>
                         `;
-                    });
-                    
-    
-                    html += `</tbody></table><br/><br/>`;
-          }
+          });
+
+          html += `</tbody></table><br/><br/>`;
+        }
       } catch (error) {
-          // Handle any errors here
-          html = `<h4 class="text-center ">Don't Have Payment History</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">Don't Have Payment History</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 
-const payment_receipt  = (pay_id) => {
+const payment_receipt = (pay_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-
   var myUrl = "http://localhost/waterworks/gets/get_payment_receipt.php";
-  
+
   const formData = new FormData();
   formData.append("pay_id", pay_id);
   console.log("pay_id : ", pay_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-        
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var records = response.data;
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var records = response.data;
 
-              html = `
+          html = `
                 <div class="wrapper">
                   <div class="container mt-0 ">
                       <div class="row ">
@@ -1414,49 +1427,47 @@ const payment_receipt  = (pay_id) => {
                   </div>
               </div>
               `;
-
-              
-          }
+        }
       } catch (error) {
-          // Handle any errors here
-          html = `<h4 class="text-center ">${error}</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">${error}</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 // -------------------------------------------------VIEW END ---------------------------------------------------
 
 // ------------------------------------------------- CHANGE METER START --------------------------------------------------
-      const change = (user_id) => {
-        const modal = document.getElementById("myModal");
-        const modalContent = document.getElementById("modalContent");
-        
-    
-        var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
-        const formData = new FormData();
-        formData.append("accId", user_id);
-    
-        axios({
-            url: myUrl,
-            method: "post",
-            data: formData,
-        }).then((response) => {
-            console.log(response.data);
-            
-            try {
-              
-                if (response.data.length === 0) {
-                    // Display a message indicating there are no billing transactions yet.
-                    var html = `<h2>No Records</h2>`;
-                } else {
-                    var employee = response.data;
-                    const close_butt = document.getElementById("close_butt");
-                    close_butt.style.display = "none";
-                    var html = `
+const change = (user_id) => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+
+  var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
+  const formData = new FormData();
+  formData.append("accId", user_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+
+      try {
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var employee = response.data;
+          const close_butt = document.getElementById("close_butt");
+          close_butt.style.display = "none";
+          var html = `
                       <div class="container-fluid" >
                                 <div class="col-md-12">
                                     <div class="row z-depth-3 ">
@@ -1503,52 +1514,52 @@ const payment_receipt  = (pay_id) => {
                                 </div>
                         </div>
                     `;
-                }
-            } catch (error) {
-                // Handle any errors here
-                var html = `<h2>NO RECORD</h2>`;
-            }
-            
-    
-            modalContent.innerHTML = html;
-            modal.style.display = "block";
-            
-        }).catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
-        });
-    };
-    const submit_change = (user_id) =>{
-      const new_meters = document.getElementById("new_meter_no").value;
-      if (new_meters === '' ) {
-        alert('Fill in all fields');
-        return;
-      } else {
-        const myUrl = "http://localhost/waterworks/admin/change_meter.php";
-        const formData = new FormData();
-        formData.append("consumerId", user_id);
-        formData.append("new_meters", new_meters);
-    
-      axios({
-        url:myUrl,
-        method:"post",
-        data:formData
-      }).then(response => {
+        }
+      } catch (error) {
+        // Handle any errors here
+        var html = `<h2>NO RECORD</h2>`;
+      }
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+const submit_change = (user_id) => {
+  const new_meters = document.getElementById("new_meter_no").value;
+  if (new_meters === "") {
+    alert("Fill in all fields");
+    return;
+  } else {
+    const myUrl = "http://localhost/waterworks/admin/change_meter.php";
+    const formData = new FormData();
+    formData.append("consumerId", user_id);
+    formData.append("new_meters", new_meters);
+
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
         console.log(response.data);
-        if(response.data !== 1){
+        if (response.data !== 1) {
           // alert("Record Successfully Saved!");
           // window.location.href = "./consumer_list.html";
           success_update_modal();
-        }else{
+        } else {
           // alert("Record NOT Saved!");
           failed_update_modal();
         }
-      }).catch(error =>{
+      })
+      .catch((error) => {
         // alert(`ERROR OCCUREDS! ${error}`);
         error_modal();
       });
-    
-      }
-      }
+  }
+};
 // ------------------------------------------------- CHANGE METER END --------------------------------------------------
 
 // ------------------------------------------------- ADD CONNECTED METER START --------------------------------------------------
@@ -1561,20 +1572,21 @@ const add = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       console.log(response.data);
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var employee = response.data;
-              const close_butt = document.getElementById("close_butt");
-              close_butt.style.display = "none";
-              var html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var employee = response.data;
+          const close_butt = document.getElementById("close_butt");
+          close_butt.style.display = "none";
+          var html = `
                       <div class="container-fluid" >
                                 <div class="col-md-12">
                                     <div class="row z-depth-3 ">
@@ -1618,22 +1630,23 @@ const add = (user_id) => {
                                 </div>
                         </div>
                     `;
-          }
+        }
       } catch (error) {
-          // Handle any errors here
-          var html = `<h2>NO RECORD</h2>`;
+        // Handle any errors here
+        var html = `<h2>NO RECORD</h2>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
-const submit_add = (user_id) =>{
+const submit_add = (user_id) => {
   const new_meters = document.getElementById("new_meter_no").value;
-  if (new_meters === '' ) {
-    alert('Fill in all fields');
+  if (new_meters === "") {
+    alert("Fill in all fields");
     return;
   } else {
     const myUrl = "http://localhost/waterworks/admin/add_related.php";
@@ -1642,33 +1655,34 @@ const submit_add = (user_id) =>{
     formData.append("new_meters", new_meters);
     formData.append("employee_Id", sessionStorage.getItem("accountId"));
 
-  axios({
-    url:myUrl,
-    method:"post",
-    data:formData
-  }).then(response => {
-    console.log(response.data);
-    if (response.data.status === 1) {
-      success_update_modal();
-      displayConsumer();
-      // window.location.href = "./addconsumer.html";
-    } else if (response.data.status === 0) {
-      // alert("Username or phone number already exists!");
-      console.log(response);
-      failed_update_modal();
-    } else {
-      // alert("Unknown error occurred.");
-      error_modal();
-      console.log(response);
-    }
-  }).catch(error =>{
-    // alert(`ERROR OCCUREDS! ${error}`);
-    error_modal();
-    console.log(error);
-  });
-
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status === 1) {
+          success_update_modal();
+          displayConsumer();
+          // window.location.href = "./addconsumer.html";
+        } else if (response.data.status === 0) {
+          // alert("Username or phone number already exists!");
+          console.log(response);
+          failed_update_modal();
+        } else {
+          // alert("Unknown error occurred.");
+          error_modal();
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        // alert(`ERROR OCCUREDS! ${error}`);
+        error_modal();
+        console.log(error);
+      });
   }
-}
+};
 // ------------------------------------------------- ADD CONNECTED METER END --------------------------------------------------
 
 // ------------------------------------------------- VIEW CONNECTED METER START --------------------------------------------------
@@ -1681,23 +1695,22 @@ const more = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h6>No Records</h6>`;
-          } else {
-              var records = response.data;
-              console.log(records);
-              // Add a single "Connected Meter" heading
-              html = `<h4 class="mb-3" style="text-align:center;">Connected Meter</h4>`;
-              
-              html += 
-              `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h6>No Records</h6>`;
+        } else {
+          var records = response.data;
+          console.log(records);
+          // Add a single "Connected Meter" heading
+          html = `<h4 class="mb-3" style="text-align:center;">Connected Meter</h4>`;
+
+          html += `
                   <table class=" table ">
                       <thead>
                           <tr>
@@ -1709,10 +1722,9 @@ const more = (user_id) => {
                       </thead>
                       <tbody>
               `;
-              
-              records.forEach((record) => {
-                  html += 
-                  `
+
+          records.forEach((record) => {
+            html += `
                       <tr>
                           <td>${record.firstname} ${record.lastname} #${record.connected_number}</td>
                           <td>${record.phone_no}</td>
@@ -1722,17 +1734,16 @@ const more = (user_id) => {
                           </td>
                       </tr>
                   `;
-              });
+          });
 
-              html += `</tbody></table><br/><br/>`;
-          }
+          html += `</tbody></table><br/><br/>`;
+        }
       } catch (error) {
-          // Handle any errors here
-          console.log(error);
-          html = `<h4 class="mb-3" style="text-align:center;">No Other Connected Meter</h4>`;
-              
-              html += 
-              `
+        // Handle any errors here
+        console.log(error);
+        html = `<h4 class="mb-3" style="text-align:center;">No Other Connected Meter</h4>`;
+
+        html += `
                   <table class=" table ">
                       <thead>
                           <tr>
@@ -1754,14 +1765,15 @@ const more = (user_id) => {
                           </td>
                       </tr>
               `;
-              html += `</tbody></table><br/><br/>`;
+        html += `</tbody></table><br/><br/>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
 
 // ------------------------------------------------- VIEW CONNECTED METER END --------------------------------------------------
@@ -1789,20 +1801,21 @@ const connected_edit = (user_id) => {
   formData.append("accId", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-    console.log(response.data);
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var consumer = response.data;
-              console.log("Consumer : ",consumer[0].user_id);
-              
-                var html = `
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var consumer = response.data;
+          console.log("Consumer : ", consumer[0].user_id);
+
+          var html = `
                   <div class=" row  mt-1">
                     <div class="col-md-1 mt-3">
                       <button class="clear" onclick="displayConsumer()">Back</button>
@@ -1877,56 +1890,57 @@ const connected_edit = (user_id) => {
                   </div>
                                     
                   `;
-        
-              document.getElementById("mainDiv").innerHTML = html;
 
-              getBranches();
-              getProperties();
-              getMunicipality();
-          }
+          document.getElementById("mainDiv").innerHTML = html;
+
+          getBranches();
+          getProperties();
+          getMunicipality();
+        }
       } catch (error) {
         var html = `<h2>NO RECORD</h2>`;
       }
-
-    }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
-  });
-}
+    });
+};
 const submit_connected_update = (event, user_id) => {
   event.preventDefault();
-    const firstname = document.getElementById("firstname").value;
-    const middlename = document.getElementById("middlename").value;
-    const lastname = document.getElementById("lastname").value;
+  const firstname = document.getElementById("firstname").value;
+  const middlename = document.getElementById("middlename").value;
+  const lastname = document.getElementById("lastname").value;
 
-    const phone = document.getElementById("phone").value;
-    const email_add = document.getElementById("email_add").value;
-    const propertyId = document.getElementById("properties").value;
+  const phone = document.getElementById("phone").value;
+  const email_add = document.getElementById("email_add").value;
+  const propertyId = document.getElementById("properties").value;
 
-    const municipalityId1 = document.getElementById("municipality").value;
-    const barangayId1 = document.getElementById("barangay").value;
-    const zone_Id = document.getElementById("zoneId").value;
+  const municipalityId1 = document.getElementById("municipality").value;
+  const barangayId1 = document.getElementById("barangay").value;
+  const zone_Id = document.getElementById("zoneId").value;
 
-    const branchId = document.getElementById("edit_branch").value;
-    const meter_no = document.getElementById("meter_no").value;
+  const branchId = document.getElementById("edit_branch").value;
+  const meter_no = document.getElementById("meter_no").value;
 
   if (
-    firstname === '' ||
-    middlename === '' ||
-    lastname === '' ||
-    phone === '' ||
-    email_add === '' ||
-    propertyId === '' ||
-    municipalityId1 === '' ||
-    barangayId1 === '' ||
-    zone_Id === '' ||
-    branchId === '' ||
-    meter_no === '' 
+    firstname === "" ||
+    middlename === "" ||
+    lastname === "" ||
+    phone === "" ||
+    email_add === "" ||
+    propertyId === "" ||
+    municipalityId1 === "" ||
+    barangayId1 === "" ||
+    zone_Id === "" ||
+    branchId === "" ||
+    meter_no === ""
   ) {
-    alert('Fill in all fields');
+    alert("Fill in all fields");
     return;
   }
 
-  const myUrl = "http://localhost/waterworks/admin/update_api/update_connected_consumer.php";
+  const myUrl =
+    "http://localhost/waterworks/admin/update_api/update_connected_consumer.php";
   const formData = new FormData();
   formData.append("userid", user_id);
   formData.append("firstname", firstname);
@@ -1940,42 +1954,44 @@ const submit_connected_update = (event, user_id) => {
   formData.append("zone_Id", zone_Id);
   formData.append("branchId", branchId);
   formData.append("meter_no", meter_no);
-  console.log(user_id, 
-    firstname, 
-    middlename, 
-    lastname, 
-    phone, 
-    email_add, 
-    municipalityId1, 
-    barangayId1, 
-    zone_Id, 
-    meter_no, 
-    branchId, 
-    propertyId);
-  
-    axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-    })
-      .then((response) => {
+  console.log(
+    user_id,
+    firstname,
+    middlename,
+    lastname,
+    phone,
+    email_add,
+    municipalityId1,
+    barangayId1,
+    zone_Id,
+    meter_no,
+    branchId,
+    propertyId
+  );
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.data.status === 1) {
+        success_update_modal();
+        console.log("success update");
+      } else if (response.data.status === 0) {
+        // alert("Username or phone number already exists!");
+        failed_update_modal();
+      } else {
+        // alert("Unknown error occurred.");
+        error_modal();
         console.log(response);
-        if (response.data.status === 1) {
-          success_update_modal();
-          console.log("success update");
-        } else if (response.data.status === 0) {
-          // alert("Username or phone number already exists!");
-          failed_update_modal();
-        } else {
-          // alert("Unknown error occurred.");
-          error_modal();
-          console.log(response);
-        }
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-      });
-  };
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
 
 // -------------------------------------------------EDIT CONNECTED METER END ---------------------------------------------------
 
@@ -1988,7 +2004,7 @@ const getBranches = () => {
   axios({
     url: myUrl,
     method: "post",
-    data: formData
+    data: formData,
   })
     .then((response) => {
       var branches = response.data;
@@ -2026,4 +2042,3 @@ const getProperties = () => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
-

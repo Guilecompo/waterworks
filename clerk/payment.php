@@ -12,7 +12,7 @@ error_log(print_r($_POST, true)); // Log the received POST data
 $consumerId = $_POST['consumerId'];
 $emp_Id = $_POST['emp_Id'];
 $amount = $_POST['amount'];
-$pay_date = date('Y-m-d H:i:s');
+$pay_date = date('Y-m-d ');
 
 $branchId = $_POST['branchId'];
 
@@ -23,25 +23,42 @@ try {
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":consumerId", $consumerId);
     $stmt->execute();
-    $past_arrears = $stmt->fetchColumn();
 
-    $new_arrears = $past_arrears - $amount;
+    if ($stmt->rowCount() > 0) {
+        // Rows are returned, fetch the column
+        $past_arrears = $stmt->fetchColumn();
+        if ($past_arrears !== null && $past_arrears !== false) {
+            // Only subtract if $past_arrears has a valid value
+            $new_arrears = $past_arrears - $amount;
+            
+            // Check if the result is less than 0
+            if ($new_arrears < 0) {
+                $new_arrears = 0; // Set to 0 if negative
+            }
+        } else {
+            // No rows are returned or arrears is null, set $new_arrears to 0
+            $new_arrears = 0;
+        }
+    } else {
+        // No rows are returned, set $new_arrears to 0
+        $new_arrears = 0;
+    }
+    
 
-    $sql = "SELECT total_bill FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":consumerId", $consumerId);
-    $stmt->execute();
-    $past_total_bill = $stmt->fetchColumn();
+
+    $sql1 = "SELECT total_bill FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bindParam(":consumerId", $consumerId);
+    $stmt1->execute();
+    $past_total_bill = $stmt1->fetchColumn();
 
     $updated_bill = $past_total_bill - $amount;
 
     
     
-        if ($amount <= 0) {
+         if ($amount < 1 || $amount > $past_total_bill) {
             echo json_encode(['error' => 'Invalid Input amount']);
-        } elseif ($amount > $past_total_bill) {
-            echo json_encode(['error' => 'Invalid Input amount']);
-        }else if($amount == $past_total_bill ){
+         }else if($amount == $past_total_bill ){
 
             echo "Debug: Amount = $amount, Past Total Bill = $past_total_bill";
 
@@ -55,14 +72,27 @@ try {
             $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
     
             if ($row) {
+
+                $sqlSelect = "SELECT * FROM payment ORDER BY pay_id DESC LIMIT 1 ";
+                $stmtSelect = $conn->prepare($sqlSelect);
+                $stmtSelect->execute();
+        
+                $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+                if($rows){
+                    $or_num = $rows['or_num'] + 1;
+                }else{
+                    $or_num =  1;
+                }
+                
                 // Insert the data into the 'changing_meter' table
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, pay_amount, pay_balance, pay_date, branchId) 
-              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
+                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_balance, pay_date, branchId) 
+              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
 
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
+                $stmtInsert->bindParam(':or_num', $or_num);
                 $stmtInsert->bindParam(':pay_amount', $amount);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);
                 $stmtInsert->bindParam(':pay_date', $pay_date);
@@ -72,7 +102,7 @@ try {
                     //para update
                     $statusId = 1;
     
-                    $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
+                    $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId , billing_update_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
                     $stmtUpdate = $conn->prepare($sqlUpdate);
                     $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
                     $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
@@ -84,8 +114,7 @@ try {
             } else {
                 echo "No data found for the specified row.";
             }
-        }else if($past_total_bill && $past_total_bill > $amount && $amount >= 1){
-            // $updated_bill = $past_total_bill - $amount;
+        }else if($past_total_bill > $amount && $amount > 0){
             
             $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2";
             $stmtSelect = $conn->prepare($sqlSelect);
@@ -95,22 +124,36 @@ try {
             $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
     
             if ($row) {
+                $sqlSelect = "SELECT * FROM payment ORDER BY pay_id DESC LIMIT 1 ";
+                $stmtSelect = $conn->prepare($sqlSelect);
+                $stmtSelect->execute();
+        
+                $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+                if($rows){
+                    $or_num = $rows['or_num'] + 1;
+                }else{
+                    $or_num =  1;
+                }
                 // Insert the data into the 'changing_meter' table
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, pay_amount, pay_balance, pay_date, branchId) VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
+               
+                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_balance, pay_date, branchId) 
+              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
+
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
+                $stmtInsert->bindParam(':or_num', $or_num);
                 $stmtInsert->bindParam(':pay_amount', $amount);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);
                 $stmtInsert->bindParam(':pay_date', $pay_date);
-                $stmtInsert->bindParam(':pay_branchId',  $row['branchId']);
+                $stmtInsert->bindParam(':pay_branchId', $row['branchId']);
     
                 if ($stmtInsert->execute()) {
                     //para update
                     $statusId = 1;
     
-                    $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
+                    $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId, billing_update_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
                     $stmtUpdate = $conn->prepare($sqlUpdate);
                     $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
                     $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
@@ -126,9 +169,10 @@ try {
     
                         if ($rows) {
     
+                            $StatusId = 2;
                             $updatedStatusId = 2;
     
-                            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, previous_meter, present_meter, bill_amount, arrears, penalty, total_bill, billing_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :previous_meter, :present_meter, :bill_amount, :arrears, :penalty, :total_bill, :updatedStatusId)";
+                            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
                             $stmt = $conn->prepare($sql);
                             $stmt->bindParam(":consumerId", $rows['consumerId']);
                             $stmt->bindParam(":readerId",  $rows['readerId']);
@@ -136,13 +180,14 @@ try {
                             $stmt->bindParam(":prev_cubic_consumed", $rows['prev_cubic_consumed']);
                             $stmt->bindParam(":cubic_consumed", $rows['cubic_consumed']);
                             $stmt->bindParam(":reading_date", $rows['reading_date']);
+                            $stmt->bindParam(":due_date", $rows['due_date']);
                             $stmt->bindParam(":previous_meter", $rows['previous_meter']);
                             $stmt->bindParam(":present_meter", $rows['present_meter']);
                             $stmt->bindParam(":bill_amount", $rows['bill_amount']);
                             $stmt->bindParam(":arrears", $new_arrears);
-                            $stmt->bindParam(":penalty", $rows['penalty']);
                             $stmt->bindParam(":total_bill", $updated_bill);
-                            $stmt->bindParam(":updatedStatusId", $updatedStatusId);
+                            $stmt->bindParam(":updatedStatusId", $StatusId);
+                            $stmt->bindParam(":billing_update_statusId", $updatedStatusId);
     
                             $stmt->execute();
                         }

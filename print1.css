@@ -1,0 +1,94 @@
+@media print {
+@page {
+    margin: 5mm; /* Adjust as needed */
+  }
+
+  /* Ensure full width for certain elements */
+  .text-center,
+  .col-sm-12 {
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+
+  /* Adjust font size */
+  .container{
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Remove default margins for specific elements */
+  h5,
+  h6,
+  p {
+    margin: 0; /* Remove default margins */
+  }
+
+  /* Adjust spacing between elements */
+  .mt-4,
+  .mt-3 {
+    margin-top: 30mm; /* Adjust as needed */
+  }
+
+  /* Avoid breaking elements across pages */
+  h5,
+  h6,
+  p {
+    page-break-inside: avoid; /* Avoid breaking within elements */
+  }
+
+  /* Hide elements not meant for printing */
+  .btn,
+  footer {
+    display: none;
+  }
+  #modalContent {
+    background-color: white;
+    width: 100%;
+    color: #000;
+  }
+  .par {
+    color: #000;
+    font-size: 7px;
+    font-weight: bold;
+    text-transform: lowercase;
+  }
+  .pres {
+    color: #000;
+    font-size: 7px;
+    font-weight: bold;
+  }
+  .press {
+    color: #000;
+    font-size: 7px;
+    font-weight: bold;
+  }
+  .presss{
+    color: #000;
+    font-size: 6.5px;
+    font-weight: bold;
+  }
+  /* Apply text-transform to the first letter only */
+  .par::first-letter,
+  .pres::first-letter {
+    text-transform: uppercase;
+  }
+  .pars {
+    border: 1px solid black;
+    width: 150px;
+    margin-left: 12px;
+  }
+  .fullname {
+    font-size: 10px;
+    font-weight: bold;
+  }
+  h5 {
+    color: #000;
+    font-size: 9px;
+    font-weight: bold;
+  }
+  h6 {
+    color: #000;
+    font-size: 8.2px;
+    font-weight: bold;
+  }
+}

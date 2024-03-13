@@ -60,7 +60,7 @@ const closeModal = () => {
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Suffix</label>
-                    <select id="suffix" class="form-select"></select>
+                    <select id="suffix" class="form-select" required></select>
                   </div>
                 <div class="col-md-4">
                     <label class="form-label">Phone</label>
@@ -68,37 +68,37 @@ const closeModal = () => {
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email_add" >
+                    <input type="email" class="form-control" id="email_add" required>
                 </div>
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4 ">
                     <label class="form-label">Municipality</label>
-                    <select id="municipality" class="form-select" onchange="getBarangay()"></select>
+                    <select id="municipality" class="form-select" onchange="getBarangay()" required></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Barangay</label>
-                    <select id="barangay" class="form-select" onchange="getZone()">
+                    <select id="barangay" class="form-select" onchange="getZone()" required>
                         <option value="">Select Barangay</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Zone</label>
-                    <select id="zone" class="form-select" >
+                    <select id="zone" class="form-select" required>
                         <option value="">Select Zone</option>
                     </select>
                 </div>
                 <label class="form-label mb-0 underline-label mt-4">Register Account</label>
                 <div class="col-md-4 ">
                     <label class="form-label">Branch</label>
-                    <select id="branch" class="form-select"></select>
+                    <select id="branch" class="form-select" required></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Property Type</label>
-                    <select id="property" class="form-select"></select>
+                    <select id="property" class="form-select" required></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Consumer Type</label>
-                    <select id="consumer" class="form-select"></select>
+                    <select id="consumer" class="form-select" required></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Meter Number</label>
@@ -142,25 +142,40 @@ const closeModal = () => {
         const house_no = document.getElementById("house_no").value;
 
     
-      if (
-        firstname === '' ||
-        middlename === '' ||
-        lastname === '' ||
-        suffixId === '' ||
-        phone === '' ||
-        email_add === '' ||
-        propertyId === '' ||
-        municipalityId === '' ||
-        barangayId === '' ||
-        zoneId === '' ||
-        branchId === '' ||
-        consumer === '' ||
-        meter_no === '' ||
-        house_no === ''
-      ) {
-        alert('Fill in all fields');
-        return;
+        const inputs = [
+          { id: "firstname", element: document.getElementById("firstname") },
+          { id: "middlename", element: document.getElementById("middlename") },
+          { id: "lastname", element: document.getElementById("lastname") },
+          { id: "suffix", element: document.getElementById("suffix") },
+          { id: "phone", element: document.getElementById("phone") },
+          { id: "email_add", element: document.getElementById("email_add") },
+          { id: "property", element: document.getElementById("property") },
+          { id: "municipality", element: document.getElementById("municipality") },
+          { id: "barangay", element: document.getElementById("barangay") },
+          { id: "zone", element: document.getElementById("zone") },
+          { id: "branch", element: document.getElementById("branch") },
+          { id: "consumer", element: document.getElementById("consumer") },
+          { id: "meter_no", element: document.getElementById("meter_no") },
+          { id: "house_no", element: document.getElementById("house_no") }
+      ];
+  
+      console.log(inputs); // Log the inputs array
+  
+      // Check validity of each input
+      inputs.forEach(input => {
+          if (!input.element.validity.valid) {
+              input.element.classList.add('invalid');
+          } else {
+              input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+          }
+      });
+  
+      // If any input is invalid, prevent form submission
+      if (document.querySelector('.invalid')) {
+          alert('Fill in all fields correctly');
+          return;
       }
+    
     
       const myUrl = "http://localhost/waterworks/head/add_consumer.php";
       const formData = new FormData();
@@ -346,6 +361,7 @@ const closeModal = () => {
             // Use selectedMunicipalityId directly
             formData.append("municipalityId", selectedMunicipalityId);
             formData.append("barangayId", sessionStorage.getItem("barangayId"));
+            console.log("barangayId:" , sessionStorage.getItem("barangayId"));
             axios({
               url: barangayUrl,
               method: "post",
@@ -354,7 +370,7 @@ const closeModal = () => {
               .then((response) => {
                 const barangaySelect = document.getElementById("barangay");
                 const barangays = response.data;
-                console.log("success barangay");
+                console.log(response.data);
                 // Clear existing options
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
             

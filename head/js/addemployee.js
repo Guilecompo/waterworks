@@ -80,7 +80,7 @@ const closeModal = () => {
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email_add" >
+                    <input type="email" class="form-control" id="email_add" required>
                 </div>
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4">
@@ -133,22 +133,37 @@ const closeModal = () => {
         const branchId = document.getElementById("branch").value;
         const positionId = document.getElementById("position").value;
       
-        if (
-          firstname === '' ||
-          middlename === '' ||
-          lastname === '' ||
-          phone === '' ||
-          email_add === '' ||
-          provinceName === '' ||
-          municipalityName === '' ||
-          barangayName === '' ||
-          suffixId === '' ||
-          branchId === '' ||
-          positionId === ''
-        ) {
-          alert('Fill in all fields');
+        const inputs = [
+          { id: "firstname", element: document.getElementById("firstname") },
+          { id: "middlename", element: document.getElementById("middlename") },
+          { id: "lastname", element: document.getElementById("lastname") },
+          { id: "suffix", element: document.getElementById("suffix") },
+          { id: "phone", element: document.getElementById("phone") },
+          { id: "email_add", element: document.getElementById("email_add") },
+          { id: "provinceName", element: document.getElementById("provinceName") },
+          { id: "municipalityName", element: document.getElementById("municipalityName") },
+          { id: "barangayName", element: document.getElementById("barangayName") },
+          { id: "branch", element: document.getElementById("branch") },
+          { id: "position", element: document.getElementById("position") }
+      ];
+      
+      console.log(inputs); // Log the inputs array
+      
+      // Check validity of each input
+      inputs.forEach(input => {
+          if (!input.element.validity.valid) {
+              input.element.classList.add('invalid');
+          } else {
+              input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+          }
+      });
+      
+      // If any input is invalid, prevent form submission
+      if (document.querySelector('.invalid')) {
+          alert('Fill in all fields correctly');
           return;
-        }
+      }
+      
       
         const myUrl = "http://localhost/waterworks/head/add_employees.php";
         const formData = new FormData();

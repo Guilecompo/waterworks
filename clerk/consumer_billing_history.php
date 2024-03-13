@@ -27,7 +27,7 @@ $stmt = $conn->prepare("SELECT
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 1 ORDER BY billing_id DESC ");
+    WHERE a.consumerId = :accId AND a.total_bill != 0 ORDER BY billing_id DESC ");
 
 $stmt->bindParam(":accId", $accId);
 $stmt->execute();
@@ -39,6 +39,6 @@ if (count($results) > 0) {
     echo json_encode($results);
 } else {
     // Consumer not found
-    echo json_encode(["error" => "Reader data not found or is invalid"]);
+    echo json_encode(["error" => "Reader data not found or is invalid",]);
 }
 ?>

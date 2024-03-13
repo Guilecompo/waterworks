@@ -1,43 +1,44 @@
-
 let currentPage = 1;
 let consumers = [];
 
 const onLoad = () => {
-     document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-    displayConsumer();
-    getFilterZones();
+  document.getElementById("ngalan").innerText =
+    sessionStorage.getItem("fullname");
+  displayConsumer();
+  getFilterZones();
 
-    const modal = document.getElementById("myModal");
-    const modalContent = document.querySelector(".modal-content");
-    modalContent.addEventListener("click", (event) => {
-        if (event.target === modalContent) {
-            closeModal();
-        }
-    });
+  const modal = document.getElementById("myModal");
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.addEventListener("click", (event) => {
+    if (event.target === modalContent) {
+      closeModal();
+    }
+  });
 };
 
 const displayConsumer = () => {
   const close_butt = document.getElementById("close_butt");
   close_butt.style.display = "flex";
-    var url = "http://localhost/waterworks/meterreader/get_consumers.php";
-    const formData = new FormData();
-    formData.append("branchId", sessionStorage.getItem("branchId"));
-    formData.append("readerId", sessionStorage.getItem("accountId"));
-    axios({
-        url: url,
-        method: "post",
-        data: formData
-    }).then(response => {
-        console.log(response.data);
-        consumers = response.data;
-        
-        // sortConsumersByName();
-        showConsumerPage(currentPage);
-        
-    }).catch(error => {
-        alert("ERRORSSS! - " + error);
-        console.log("ERROR HERE");
-        
+  var url = "http://localhost/waterworks/meterreader/get_consumers.php";
+  const formData = new FormData();
+  formData.append("branchId", sessionStorage.getItem("branchId"));
+  formData.append("readerId", sessionStorage.getItem("accountId"));
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      consumers = response.data;
+
+      // sortConsumersByName();
+      showConsumerPage(currentPage);
+    })
+    .catch((error) => {
+      //   alert("ERRORSSS! - " + error);
+      errorTables();
+      console.log("ERROR HERE");
     });
 };
 
@@ -49,38 +50,46 @@ const displayConsumer = () => {
 //     });
 // };
 const showNextPage = () => {
-    const nextPage = currentPage + 1;
-    const start = (nextPage - 1) * 10;
-    const end = start + 10;
-    const activitiesOnNextPage = consumers.slice(start, end);
+  const nextPage = currentPage + 1;
+  const start = (nextPage - 1) * 10;
+  const end = start + 10;
+  const activitiesOnNextPage = consumers.slice(start, end);
 
-    if (activitiesOnNextPage.length > 0) {
-        currentPage++;
-        showConsumerPage(currentPage);
-    } else {
-        alert("Next page is empty or has no content.");
-    }
+  if (activitiesOnNextPage.length > 0) {
+    currentPage++;
+    showConsumerPage(currentPage);
+  } else {
+    alert("Next page is empty or has no content.");
+  }
 };
 
 const showPreviousPage = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showConsumerPage(currentPage);
-    } else {
-        alert("You are on the first page.");
-    }
+  if (currentPage > 1) {
+    currentPage--;
+    showConsumerPage(currentPage);
+  } else {
+    alert("You are on the first page.");
+  }
 };
 
 const showConsumerPage = (page, consumersToDisplay = consumers) => {
-    var start = (page - 1) * 10;
-    var end = start + 10;
-    var displayedConsumers = consumersToDisplay.slice(start, end);
-    refreshTables(displayedConsumers);
-    showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+  var start = (page - 1) * 10;
+  var end = start + 10;
+  var displayedConsumers = consumersToDisplay.slice(start, end);
+  refreshTables(displayedConsumers);
+  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
 };
-  
+const errorTables = () => {
+  var html = ` 
+      <div style="display: flex; justify-content: center; align-items: center; height: 62vh;">
+        <h5>No work on weekends!</h5>
+      </div>
+    `;
+  document.getElementById("mainDiv").innerHTML = html;
+};
+
 const refreshTables = (employeeList) => {
-    var html = `
+  var html = `
     <table class="table mb-0 mt-0">
     <thead>
         <tr>
@@ -91,51 +100,53 @@ const refreshTables = (employeeList) => {
     </thead>
     <tbody>
     `;
-    employeeList.forEach(employee => {
-        html += `
+  employeeList.forEach((employee) => {
+    html += `
         <tr>
-            <td>${employee.firstname} ${employee.lastname} ${employee.connected_number !== 0 ? '#' + employee.connected_number : ''}</td>
+            <td>${employee.firstname} ${employee.lastname} ${ employee.connected_number !== 0 ? "#" + employee.connected_number : ""  }</td>
             <td>${employee.meter_no}</td>
             <td>
-            <button class="butts" onclick="view(${employee.user_id})">Bill</button>
+            <button class="butts" onclick="view(${
+              employee.user_id
+            })">Bill</button>
             </td>
         </tr>
         `;
-    });
-    html += `</tbody></table>`;
-    document.getElementById("mainDiv").innerHTML = html;
+  });
+  html += `</tbody></table>`;
+  document.getElementById("mainDiv").innerHTML = html;
 };
 
 const view = (user_id) => {
-    const modal = document.getElementById("myModal");
-    const modalContent = document.getElementById("modalContent");
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
 
-    var myUrl = "http://localhost/waterworks/meterreader/get_consumer.php";
-    const formData = new FormData();
-    formData.append("accId", user_id);
+  var myUrl = "http://localhost/waterworks/meterreader/get_consumer.php";
+  const formData = new FormData();
+  formData.append("accId", user_id);
 
-    axios({
-        url: myUrl,
-        method: "post",
-        data: formData,
-    }).then((response) => {
-      
-        var employee = response.data;
-        console.log("PropertyId :",employee[0].propertyId);
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      var employee = response.data;
+      console.log("PropertyId :", employee[0].propertyId);
 
-        const close_butt = document.getElementById("close_butt");
-        if (close_butt) {
-            close_butt.style.display = "none";
-        }
-      
-        var html = `
+      const close_butt = document.getElementById("close_butt");
+      if (close_butt) {
+        close_butt.style.display = "none";
+      }
+
+      var html = `
                   <div class="container-fluid" >
                             <div class="col-md-12">
                                 <div class="row z-depth-3 ">
                                     <div class="col-md-12 rounded-right">
                                         <div class="car-block text-center">
                                             <i class="fas fa-user fa-3x mt-1"></i>
-                                            <h5 class="font-weight-bold mt-2">${employee[0].firstname} ${employee[0].middlename} ${employee[0].lastname} </h5>
+                                            <h5 class="font-weight-bold mt-2">${employee[0].firstname} ${employee[0].lastname} ${ employee[0].connected_number !== 0 ? "#" + employee[0].connected_number : ""  }</h5>
                                             <p >${employee[0].meter_no}</p>
                                         </div>
                                         <hr class="badge-primary mt-0">
@@ -175,153 +186,181 @@ const view = (user_id) => {
                             </div>
                     </div>
                   `;
-                  
-        modalContent.innerHTML = html;
-        modal.style.display = "block";
-    }).catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
     });
 };
 const showPaginationNumbers = (currentPage, totalPages) => {
-    const paginationNumbersDiv = document.getElementById("paginationNumbers");
-    let paginationNumbersHTML = "";
-  
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === currentPage) {
-            paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-        } else {
-            paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-        }
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
     }
-  
-    paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-  };
-  
-  const goToPage = (page) => {
-    currentPage = page;
-    showConsumerPage(currentPage);
-  };
-  
-  const filterConsumers = () => {
-    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+  }
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+const goToPage = (page) => {
+  currentPage = page;
+  showConsumerPage(currentPage);
+};
+
+const filterConsumers = () => {
+  try {
+    const searchInput = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+
+    // Check if consumers array is empty
+    if (consumers.length === 0) {
+      return; // Exit the function if there are no consumers
+    }
+
     const filteredConsumers = consumers.filter((consumer) => {
-        const fullName = (consumer.firstname + ' ' + consumer.lastname + ' ' + consumer.meter_no).toLowerCase();
-        return fullName.includes(searchInput);
+      const fullName = (
+        consumer.firstname +
+        " " +
+        consumer.lastname +
+        " " +
+        consumer.meter_no
+      ).toLowerCase();
+      return fullName.includes(searchInput);
     });
     showFilteredConsumers(filteredConsumers);
+  } catch (error) {
+    // console.error("Error filtering consumers:", error);
+    errorTables();
+  }
 };
 
-  
-  const showFilteredConsumers = (filteredConsumers) => {
-    currentPage = 1;
-    showConsumerPage(currentPage, filteredConsumers);
-  };
-  
-  const submit = (user_id, propertyId) => {
-    const cubic_consumed = document.getElementById("cubic_consumed").value;
-    
-    if (cubic_consumed === '') {
-        alert('Fill in all fields');
-        return;
-    } else if (cubic_consumed <= 0) {
-        alert('Please fill in the fields correctly');
-        return;
-    } else {
-        const myUrl = "http://localhost/waterworks/meterreader/billing.php";
-        const formData = new FormData();
-        formData.append("consumerId", user_id);
-        formData.append("propertyId", propertyId);
-        formData.append("cubic_consumed", cubic_consumed);
-        formData.append("branchId", sessionStorage.getItem("branchId"));
-        formData.append("readerId", sessionStorage.getItem("accountId"));
-        console.log(propertyId);
+const showFilteredConsumers = (filteredConsumers) => {
+  currentPage = 1;
+  showConsumerPage(currentPage, filteredConsumers);
+};
 
-        axios({
-            url: myUrl,
-            method: "post",
-            data: formData
-        }).then(response => {
-            if (response.data.errorCode !== undefined && response.data.errorCode !== 0) {
-                console.log(response.data);
-                // Trigger failed_update_modal() based on the error code
-                failed_update_modal(response.data.errorCode);
-            } else {
-              console.log(response.data);
-              displayConsumer();
-              bill_receipt(user_id);
-            }
-        }).catch(error => {
-            error_modal();
-        });
-    }
-}
+const submit = (user_id, propertyId) => {
+  const cubic_consumed = document.getElementById("cubic_consumed").value;
+
+  if (cubic_consumed === "") {
+    alert("Fill in all fields");
+    return;
+  } else if (cubic_consumed <= 0) {
+    alert("Please fill in the fields correctly");
+    return;
+  } else {
+    const myUrl = "http://localhost/waterworks/meterreader/billing.php";
+    const formData = new FormData();
+    formData.append("consumerId", user_id);
+    formData.append("propertyId", propertyId);
+    formData.append("cubic_consumed", cubic_consumed);
+    formData.append("branchId", sessionStorage.getItem("branchId"));
+    formData.append("readerId", sessionStorage.getItem("accountId"));
+    console.log(propertyId);
+
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        if (
+          response.data.errorCode !== undefined &&
+          response.data.errorCode !== 0
+        ) {
+          console.log(response.data);
+          // Trigger failed_update_modal() based on the error code
+          failed_update_modal(response.data.errorCode);
+        } else {
+          console.log(response.data);
+          displayConsumer();
+          bill_receipt(user_id);
+        }
+      })
+      .catch((error) => {
+        error_modal();
+      });
+  }
+};
 
 const getFilterZones = () => {
-    const positionSelect = document.getElementById("filterZones");
-    const myUrl = "http://localhost/waterworks/meterreader/get_zones_filter.php";
-    const formData = new FormData();
-    formData.append("barangayId", sessionStorage.getItem("barangayId"));
-    formData.append("readerId", sessionStorage.getItem("accountId"));
+  const positionSelect = document.getElementById("filterZones");
+  const myUrl = "http://localhost/waterworks/meterreader/get_zones_filter.php";
+  const formData = new FormData();
+  formData.append("barangayId", sessionStorage.getItem("barangayId"));
+  formData.append("readerId", sessionStorage.getItem("accountId"));
 
-    axios({
-        url: myUrl,
-        method: "post",
-        data: formData
-    })
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
     .then((response) => {
-        const positions = response.data;
-        console.log(positions);
+      const positions = response.data;
+      console.log(positions);
 
-        if (positions && positions.length > 0) {
-            let options = `<option value="all">Select Zone</option>`;
-            positions.forEach((position) => {
-                options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
-            });
-            positionSelect.innerHTML = options;
+      if (positions && positions.length > 0) {
+        let options = `<option value="all">Select Zone</option>`;
+        positions.forEach((position) => {
+          options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
+        });
+        positionSelect.innerHTML = options;
 
-            // Event listener for position change
-            positionSelect.addEventListener("change", () => {
-                selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
-                // Call the appropriate display function based on the selected position
-                if (selectedZone === "all") {
-                    displayConsumer();
-                } else {
-                    displayConsumerByZone(selectedZone); // Pass selectedZone to the function
-                }
-                // Add more conditions as needed for other positions
-            });
-        } else {
-            positionSelect.innerHTML = '<option value="all">No Zones Available</option>';
-        }
+        // Event listener for position change
+        positionSelect.addEventListener("change", () => {
+          selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
+          // Call the appropriate display function based on the selected position
+          if (selectedZone === "all") {
+            displayConsumer();
+          } else {
+            displayConsumerByZone(selectedZone); // Pass selectedZone to the function
+          }
+          // Add more conditions as needed for other positions
+        });
+      } else {
+        positionSelect.innerHTML =
+          '<option value="all">No Zones Available</option>';
+      }
     })
     .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-        console.log(error); 
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log(error);
     });
 };
 
+const displayConsumerByZone = () => {
+  const url =
+    "http://localhost/waterworks/meterreader/get_consumers_filter.php";
 
-  const displayConsumerByZone = () => {
-    const url = "http://localhost/waterworks/meterreader/get_consumers_filter.php";
-    
-    const formData = new FormData();
-    formData.append("branchId", sessionStorage.getItem("branchId"));
-    formData.append("accountId", sessionStorage.getItem("accountId"));
-    formData.append("zoneName", selectedZone);
-    axios({
-      url: url,
-      method: "post",
-      data: formData
-    }).then(response => {
+  const formData = new FormData();
+  formData.append("branchId", sessionStorage.getItem("branchId"));
+  formData.append("accountId", sessionStorage.getItem("accountId"));
+  formData.append("zoneName", selectedZone);
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
       console.log(response.data);
       consumers = response.data;
-    //   sortConsumersByNameByZone();
+      //   sortConsumersByNameByZone();
       showConsumerPageByZone(currentPage);
-    }).catch(error => {
-      alert("ERROR! - " + error);
+    })
+    .catch((error) => {
+      errorTables();
+      //   alert("ERROR! - " + error);
     });
-  };
-  
+};
+
 //   const sortConsumersByNameByZone = () => {
 //     consumers.sort((a, b) => {
 //         const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
@@ -329,18 +368,17 @@ const getFilterZones = () => {
 //         return nameA.localeCompare(nameB);
 //     });
 //   };
-  
-  const showConsumerPageByZone = (page, consumersToDisplay = consumers) => {
-    var start = (page - 1) * 10;
-    var end = start + 10;
-    var displayedConsumers = consumersToDisplay.slice(start, end);
-    refreshTablesByZone(displayedConsumers);
-    showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-  };
 
-  const refreshTablesByZone = (employeeList) => {
-    var html = `
-    <table class="table mb-0 mt-0">
+const showConsumerPageByZone = (page, consumersToDisplay = consumers) => {
+  var start = (page - 1) * 10;
+  var end = start + 10;
+  var displayedConsumers = consumersToDisplay.slice(start, end);
+  refreshTablesByZone(displayedConsumers);
+  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+};
+const refreshTablesByZone = (employeeList) => {
+  var html = `
+    <table class="billtab table mb-0 mt-0">
     <thead>
         <tr>
         <th>Full Name</th>
@@ -350,8 +388,8 @@ const getFilterZones = () => {
     </thead>
     <tbody>
     `;
-    employeeList.forEach(employee => {
-        html += `
+  employeeList.forEach((employee) => {
+    html += `
         <tr>
             <td>${employee.firstname} ${employee.lastname}</td>
             <td>${employee.meter_no}</td>
@@ -360,9 +398,9 @@ const getFilterZones = () => {
             </td>
         </tr>
         `;
-    });
-    html += `</tbody></table>`;
-    document.getElementById("mainDiv").innerHTML = html;
+  });
+  html += `</tbody></table>`;
+  document.getElementById("mainDiv").innerHTML = html;
 };
 
 const success_update_modal = () => {
@@ -370,25 +408,23 @@ const success_update_modal = () => {
   close_butt.style.display = "flex";
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
-var html = `
+  var html = `
       <h5 class="modal-title " style="color: limegreen; text-align:center;">Successfully</h5>
   `;
-    modalContent.innerHTML = html;
-    modal.style.display = "block";
-
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
 };
 
 const failed_update_modal = () => {
   const close_butt = document.getElementById("close_butt");
   close_butt.style.display = "flex";
-const modal = document.getElementById("myModal");
-const modalContent = document.getElementById("modalContent");
-var html = `
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
   <h5 class="modal-title " style="color: red; text-align:center;">Failed !</h5>
 `;
-modalContent.innerHTML = html;
-modal.style.display = "block";
-
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
 };
 const error_modal = () => {
   const close_butt = document.getElementById("close_butt");
@@ -398,9 +434,8 @@ const error_modal = () => {
   var html = `
         <h5 class="modal-title " style="color: red; text-align:center;">Unknown error occurred !</h5>
     `;
-    modalContent.innerHTML = html;
-    modal.style.display = "block";
-
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
 };
 const closeModal = () => {
   const modal = document.getElementById("myModal");
@@ -418,163 +453,225 @@ const closeModal = () => {
   searchInput.style.display = "block";
   prevBtn.style.display = "block";
   nextBtn.style.display = "block";
-
 };
 
-
-
-
-
-const bill_receipt  = (user_id) => {
+const bill_receipt = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-
-  var myUrl = "http://localhost/waterworks/meterreader/consumer_billing_history.php";
+  var myUrl =
+    "http://localhost/waterworks/meterreader/consumer_billing_history.php";
   const formData = new FormData();
   formData.append("accId", user_id);
   console.log("Consumer ID : ", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
       try {
-        
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var records = response.data;
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var records = response.data;
 
-              html = `
-                <div class="wrap wrapper ms-0 ">
-                  <div class="container mt-0 ">
-                      <div class="row ">
-                              <div class="row ">
-                                  <div class="text-center ">
-                                      <h5 class="w-100">EL SALVADOR CITY WATERWORKS</h5>
-                                  </div>
-                                  <div class="col-sm-12 mt-3 ms-0 mb-0">
-                                        <div class="inform mt-1 ">
-                                            <div class="col-sm-12">
-                                                    <p class="par mb-1">NAME : ${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</p>
-                                            </div>
-                                        </div>
-                                        <div class="inform mt-1 ">
-                                            <div class="col-sm-12">
-                                                <p class="par mb-1">ACCOUNT NUMBER : ${records[0].meter_no}</p>
-                                            </div>
-                                        </div>
-                                        <div class="inform mt-1 ">
-                                            <div class="col-sm-12">
-                                            <p class="par mb-1">ADDRESS : ${records[0].zone_name}, ${records[0].barangay_name}, ${records[0].municipality_name}</p>
-                                            </div>
-                                        </div>
-                                  </div>
-                                  
-                              </div>
-                              <div class="row">
-                                  
-                                  </span>
-                                  <table class="tab table table-bordered table-hover">
-                                      <thead>
-                                          <tr>
-                                              <th class="text-center">Previous</th>
-                                              <th class="text-center">Present</th>
-                                              <th class="text-center">Consumed</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr>
-                                              <td class="la col-md-4 text-center">${records[0].previous_meter}</td>
-                                              <td class="la col-md-4 text-center">${records[0].present_meter}</td>
-                                              <td class="la col-md-4 text-center">${records[0].cubic_consumed}</td>
-                                          </tr>
-                                      </tbody>
-                                  </table>
-                                  <table class="tabb1 table table-hover mt-0 mb-0">
-                                      <tbody>
-                                          <tr>
-                                              <td class="col-md-5 text-start border-0 ">
-                                                    <p class="par mt-0">
-                                                        AMOUNT
-                                                  </p>
-                                                  <p class="par mt-0">
-                                                        ARREARS
-                                                  </p>
-                                                  <p class="par mt-0">
-                                                        AMOUNT UNTIL DUE 
-                                                  </p>
-                                              </td>
-                                              <td class="col-md-1 border-0"></td>
-                                              <td class="col-md-3 border-0"></td>
-                                              <td class="col-md-3 text-center border-0">
-                                                  <p class="par mt-0">
-                                                        ${records[0].bill_amount}
-                                                  </p>
-                                                  <p class="par mt-0">
-                                                        ${records[0].arrears}
-                                                  </p>
-                                                  <p class="par mt-0">
-                                                        ${records[0].total_bill}
-                                                  </p>
-                                              </td>
-                                          </tr>
-                                      </tbody>
-                                  </table>                                                     
-                                  <table class="tabb2 table table-bordered table-hover mt-0 mb-0">
-                                      <thead>
-                                          <tr>
-                                              <th class="text-center">Reading Date</th>
-                                              <th class="text-center">Due Date</th>
-                                              <th class="text-center">MONTH OF</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr>
-                                              <td class="las col-md-4 text-center">${records[0].reading_date}</td>
-                                              <td class="las col-md-4 text-center">${records[0].due_date}</td>
-                                              <td class="las col-md-4 text-center">${records[0].formatted_reading_date2}</td>
-                                          </tr>
-                                      </tbody>
-                                  </table>
-                              </div>
-                              <div class="row mt-1">
-                                  <div class="col-sm-12">
-                                    <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
-                              </div>
-                      </div>
+          html = `
+          <div class=" wrapper ms-0 p-0 m-0">
+          <div class="container mt-0 ">
+              <div class="row ">
+                  <div class="title text-center mt-4">
+                      <h5 class="w-100">City Waterworks<br> El Salvador City</h5>
                   </div>
+                  <div class=" col-sm-12">
+                              <h6 class="parss text-center py-1 text-decoration-underline">Billing Statement</h6>
+                          </div>
+                  <div class="col-sm-12 mt-3 mx-0 my-0 ms-0 ps-0 ">
+                      <div class="row justify-content-between m-0 p-0 ">
+                          <div class="col-auto">
+                              <div class="col-sm-12">
+                                  <p class="par">FOR THE MONTH : </p>
+                              </div>
+                          </div>
+                          <div class="col-auto">
+                              <div class="col-sm-12 text-end">
+                                  <p class="par">${records[0].formatted_reading_date2}</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row justify-content-between m-0 p-0">
+                          <div class="col-auto">
+                              <div class="col-sm-12">
+                                  <p class="par">DATE: </p>
+                              </div>
+                          </div>
+                          <div class="col-auto">
+                              <div class="col-sm-12 text-end">
+                                  <p class="par">${records[0].reading_date}</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row justify-content-between m-0 p-0">
+                          <div class="col-auto">
+                              <div class="col-sm-12">
+                                  <p class="presss">Period cover : </p>
+                              </div>
+                          </div>
+                          <div class="col-auto">
+                              <div class="col-sm-12 text-end">
+                                  <p class="pressss">${records[0].reading_date1} TO ${records[0].formatted_reading_date1}</p>
+                              </div>
+                          </div>
+                      </div>
+                          <div class="cont col-sm-12">
+                              <h6 class="pars text-center py-1">${records[0].con_lastname}, ${records[0].con_firstname}</h6>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">PRESENT READING :</p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].present_meter}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">PREVIOUS READING : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].previous_meter}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">Cubic meter: </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].cubic_consumed}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">WATER BILL : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].bill_amount}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">ARREARS : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].arrears}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">TOTAL BILL : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].total_bill}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="pres">Amount due : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].amount_due}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par">DUE DATE : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].formatted_reading_date1}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="presss">METER READER : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="presss">${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row justify-content-between m-0 p-0">
+                              <div class="col-auto">
+                                  <div class="col-sm-12">
+                                      <p class="par"> DELIVERED : </p>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <div class="col-sm-12 text-end">
+                                      <p class="par">${records[0].reading_date}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      <div class="row mt-1">
+                          <div class="col-sm-12">
+                          <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
+                      </div>
               </div>
+          </div>
+      </div>
               `;
-
-              
-          }
-          modalContent.innerHTML = html;
+        }
+        modalContent.innerHTML = html;
       } catch (error) {
-          // Handle any errors here
-          console.log(error);
-         
+        // Handle any errors here
+        console.log(error);
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
-  }).catch((error) => {
+    })
+    .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-  });
+    });
 };
-
 
 const printModalContent = () => {
-    window.print();
-    
+  window.print();
 };
-
-
-
-
-
-

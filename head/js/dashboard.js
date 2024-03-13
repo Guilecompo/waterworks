@@ -121,18 +121,40 @@ const showActivityPage = (page, activitiesToDisplay = activities) => {
 };
 
 const showPaginationNumbers = (currentPage, totalPages) => {
-    const paginationNumbersDiv = document.getElementById("paginationNumbers");
-    let paginationNumbersHTML = "";
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
 
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === currentPage) {
-            paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-        } else {
-            paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-        }
+  const pagesToShow = 5; // Number of pages to display
+
+  // Calculate start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  // Adjust start and end page numbers if they are at the edges
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  // Previous button
+  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+
+  // Generate page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
     }
+  }
 
-    paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+  // Next button
+  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+const goToPage = (pageNumber) => {
+  showActivityPage(pageNumber);
 };
 
 

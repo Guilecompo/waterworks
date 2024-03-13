@@ -8,16 +8,18 @@ include 'connection.php';
 $accId = $_POST['accId'];
 
 $stmt = $conn->prepare("SELECT 
-    a.user_id,a.email,
-    e.barangay_id,i.status_id,
-    a.firstname, a.middlename, a.lastname,
+    a.user_id,
+    a.firstname, a.middlename,
+    a.lastname,a.email, 
     a.phone_no, c.property_name,
-    d.zone_id, d.zone_name, e.barangay_name,
+    d.zone_name, e.barangay_name,
     f.municipality_name, a.meter_no,
     a.password, g.position_name,
-    h.branch_name, i.user_status
+    h.branch_name, i.user_status,
+    b.suffix_id, b.suffix_name
 FROM
-user_consumer_branch a
+    user_consumer a
+INNER JOIN suffix b ON a.suffixId = b.suffix_id
 INNER JOIN property c ON a.propertyId = c.property_id
 INNER JOIN address_zone d ON a.addressId = d.zone_id
 INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
@@ -32,7 +34,7 @@ WHERE a.user_id = :accId
 $stmt->bindParam(":accId", $accId);
 $stmt->execute();
 
-$results = $stmt->rowCount() > 0 ? $stmt->fetchAll(PDO::FETCH_ASSOC) : 0;
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (count($results) > 0) {
     // Consumer data found

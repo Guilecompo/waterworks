@@ -58,7 +58,7 @@
                                 Reports
                             </a>
                         </li>
-                        <li class="sidebar-header ">
+                        <!-- <li class="sidebar-header ">
                             Masterlist Menu
                         </li>
                         <li class="sidebar-item">
@@ -68,7 +68,7 @@
                             </a>
                             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             </ul>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </aside>
@@ -135,21 +135,19 @@
                         </div>
                         <div class="card border-0 mt-2">
                             <div class="card-body">
-                                <div class="mains" id="mainDiv"></div>
+                                <div class="mains " id="mainDiv"></div>
                             </div>
                         </div>
                         
                     </div>
                 </main>
                 <footer>
-                    <div class="col-12 w-100 mb-3 mt-0 d-block">
-                        <div id="pagination" class="pagination d-flex justify-content-center mt-2">
-                            <button id="prevBtn" onclick="showPreviousPage()">Previous</button>
-                            <div id="paginationNumbers"></div>
-                            <button id="nextBtn" onclick="showNextPage()">Next</button>
-                        </div>
+                    <div class="col-12 d-flex justify-content-center mt-2 mb-3">
+                      <div class="pagination-container">
+                        <div id="paginationNumbers" class="pagination-numbers"></div>
+                      </div>
                     </div>
-                </footer>
+                  </footer>
         
             </div>
         </div>

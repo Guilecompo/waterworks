@@ -15,14 +15,21 @@ $readerId = $_POST['readerId'];
 $cubic_consumed = $_POST['cubic_consumed'];
 $branchId = $_POST['branchId'];
 
-
 $reading_date = date('Y-m-d H:i:s');
+
+// Check if the reading date is Saturday or Sunday
+$dayOfWeek = date('N', strtotime($reading_date));
+if ($dayOfWeek >= 6) {
+    echo json_encode(["error" => "No work on weekends!"]);
+    exit; // Stop further execution
+}
 
 $date_added = date("Y-m-d");
 $employee_Id = $_POST['readerId'];
 $login_statusId = 2;
 
 $due_date = date('Y-m-d', strtotime($reading_date . ' +20 days'));
+
 
 try {
     $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId ";

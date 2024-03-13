@@ -7,6 +7,7 @@
  $dbpassword = 'Waterworks2024!';
  $database = 'waterbilling';
 
+
   try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $dbusername, $dbpassword);
     // set the PDO error mode to exception
