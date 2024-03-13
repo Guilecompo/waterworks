@@ -1,5 +1,5 @@
   const login = async () => {
-      const url = "http://10.20.102.248/waterworks.github.com/login.php";
+      const url = "https://github.com/Guilecompo/waterworks/blob/main/login.php";
     
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
