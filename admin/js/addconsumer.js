@@ -191,7 +191,7 @@ const closeModal = () => {
           return;
       }
     
-      const myUrl = "http://localhost/waterworks/admin/add_consumer.php";
+      const myUrl = "http://128.199.232.132/waterworks/admin/add_consumer.php";
       const formData = new FormData();
       formData.append("firstname", firstname);
       formData.append("middlename", middlename);
@@ -236,7 +236,7 @@ const closeModal = () => {
       };
       const getConsumerType = () => {
         const propertySelect = document.getElementById("consumer");
-        var myUrl = "http://localhost/waterworks/gets/get_consumertype.php";
+        var myUrl = "http://128.199.232.132/waterworks/gets/get_consumertype.php";
       
         axios({
           url: myUrl,
@@ -257,7 +257,7 @@ const closeModal = () => {
       };
       const getProperty = () => {
         const propertySelect = document.getElementById("property");
-        var myUrl = "http://localhost/waterworks/gets/get_property.php";
+        var myUrl = "http://128.199.232.132/waterworks/gets/get_property.php";
       
         axios({
           url: myUrl,
@@ -278,7 +278,7 @@ const closeModal = () => {
       };
       const getSuffix = () => {
         const propertySelect = document.getElementById("suffix");
-        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+        var myUrl = "http://128.199.232.132/waterworks/gets/get_suffix.php";
       
         axios({
           url: myUrl,
