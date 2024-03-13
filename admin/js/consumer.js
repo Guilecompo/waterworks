@@ -19,7 +19,7 @@ const displayConsumer = () => {
   branchSelect.style.display = "block";
   searchInput.style.display = "block";
 
-  var url = "http://localhost/waterworks/admin/get_consumers.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_consumers.php";
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
   axios({
@@ -200,7 +200,7 @@ const goToPageConsumer = (pageNumber) => {
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -235,7 +235,7 @@ const getFileterBranch = () => {
 };
 // ----------------------------------FILTER POBLACION------------------------------------------------
 const displayConsumerPoblacion = () => {
-  var url = "http://localhost/waterworks/admin/get_consumers_poblacion.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_consumers_poblacion.php";
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
   axios({
@@ -309,7 +309,7 @@ const edit = (user_id) => {
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
 
-  var myUrl = "http://localhost/waterworks/admin/getconsumer.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/getconsumer.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
@@ -465,7 +465,7 @@ const submit_edit_consumer = (event, user_id) => {
   }
 
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_consumer.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_consumer.php";
   const formData = new FormData();
   formData.append("userid", user_id);
   formData.append("firstname", firstname);
@@ -522,7 +522,7 @@ const submit_edit_consumer = (event, user_id) => {
 };
 const updateBillStatus = () => {
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_billstatus.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_billstatus.php";
   const formData = new FormData();
   formData.append("employee_Id", sessionStorage.getItem("accountId"));
   axios({

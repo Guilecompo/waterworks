@@ -17,7 +17,7 @@ const change = () => {
   if (password !== retype_password) {
     alert("Password not match");
   } else {
-    var url = "http://localhost/waterworks/change_password.php";
+    var url = "http://128.199.232.132/waterworks/change_password.php";
     const formData = new FormData();
     formData.append("password", password);
     formData.append("email", sessionStorage.getItem("email"));
