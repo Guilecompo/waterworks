@@ -44,7 +44,7 @@ const showPreviousPage = () => {
     branchSelect.style.display = "block";
     searchInput.style.display = "block";
 
-      var url = "http://localhost/waterworks/clerk/get_consumers.php";
+      var url = "http://128.199.232.132/waterworks/clerk/get_consumers.php";
       const formData = new FormData();
       formData.append("accountId", sessionStorage.getItem("accountId"));
       formData.append("branchId", sessionStorage.getItem("branchId"));
@@ -180,7 +180,7 @@ const showFilteredConsumers = (filteredConsumers) => {
 
           const modal = document.getElementById("myModal");
           const modalContent = document.getElementById("modalContent");
-          var myUrl = "http://localhost/waterworks/clerk/get_bill.php";
+          var myUrl = "http://128.199.232.132/waterworks/clerk/get_bill.php";
           const formData = new FormData();
           formData.append("accId", user_id);
         
@@ -309,7 +309,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                 alert('Fill in all fields');
                 return;
             } else {
-                const myUrl = "http://localhost/waterworks/clerk/payment.php";
+                const myUrl = "http://128.199.232.132/waterworks/clerk/payment.php";
                 const formData = new FormData();
                 formData.append("consumerId", user_id);
                 formData.append("amount", amount);
@@ -350,7 +350,7 @@ const showFilteredConsumers = (filteredConsumers) => {
           const getFileterZones = () => {
             const positionSelect = document.getElementById("filterZone");
             const barangayName = sessionStorage.getItem("branchId");
-            const myUrl = "http://localhost/waterworks/clerk/get_zones_filter.php";
+            const myUrl = "http://128.199.232.132/waterworks/clerk/get_zones_filter.php";
             const formData = new FormData();
             formData.append("barangayId", barangayName);
           
@@ -386,7 +386,7 @@ const showFilteredConsumers = (filteredConsumers) => {
           };
           
           const displayConsumerByZone = () => {
-            const url = "http://localhost/waterworks/clerk/get_consumers_filter.php";
+            const url = "http://128.199.232.132/waterworks/clerk/get_consumers_filter.php";
             const formData = new FormData();
             formData.append("branchId", sessionStorage.getItem("branchId"));
             formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -511,7 +511,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         const modal = document.getElementById("myModal");
         const modalContent = document.getElementById("modalContent");
     
-        var myUrl = "http://localhost/waterworks/clerk/get_payment_receipt.php";
+        var myUrl = "http://128.199.232.132/waterworks/clerk/get_payment_receipt.php";
         const formData = new FormData();
         formData.append("accId", user_id);
         console.log("Consumer ID : ", user_id);

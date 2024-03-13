@@ -6,7 +6,7 @@ const onLoad = () => {
 }
 
 const view_consumer  = () => {
-    var myUrl = "http://localhost/waterworks/consumer/consumer_billing_history.php";
+    var myUrl = "http://128.199.232.132/waterworks/consumer/consumer_billing_history.php";
     const formData = new FormData();
     formData.append("accId", sessionStorage.getItem("accountId"));
     console.log(sessionStorage.getItem("accountId"));
@@ -99,7 +99,7 @@ const view_consumer  = () => {
     const modalContent = document.getElementById("modalContent");
   
   
-    var myUrl = "http://localhost/waterworks/consumer/consumer_billing_history1.php";
+    var myUrl = "http://128.199.232.132/waterworks/consumer/consumer_billing_history1.php";
     const formData = new FormData();
     formData.append("update_status_id", update_status_id);
     formData.append("billing_id", billing_id);
