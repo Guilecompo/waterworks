@@ -8,60 +8,58 @@ function onLoad() {
   getall();
 }
 const getall = () => {
-  const total_employees = document.getElementById("totalEmployees");
+  const total_employees = document.getElementById('totalEmployees');
 
-  const total_consumers = document.getElementById("totalConsumers");
-
-  const total_consumed = document.getElementById("totalConsumed");
-
-  const total_pay = document.getElementById("totalPay");
+  const total_consumers = document.getElementById('totalConsumers');
+  
+  const total_consumed = document.getElementById('totalConsumed');
+  
+  const total_pay = document.getElementById('totalPay');
 
   if (!total_consumers || !total_employees || !total_consumed || !total_pay) {
-    console.error("One or more required elements not found in the DOM.");
+    console.error('One or more required elements not found in the DOM.');
 
     console.log("Page loaded!");
     return;
   }
-
-  // Fetch data from your PHP script
-  fetch("http://128.199.232.132/admin/total.php")
-    .then((response) => response.json())
-    .then((data) => {
-      if (
-        data &&
-        data.Total_Consumers !== undefined &&
-        data.Total_Employees !== undefined &&
-        data.Total_Consumed !== undefined &&
-        data.Total_Pay !== undefined
-      ) {
+  const Url = `http://128.199.232.132/waterworks/admin/total.php`;
+  const formData = new FormData();
+    formData.append("branchId", sessionStorage.getItem("branchId"));
+    axios({
+      url: Url,
+      method: "post",
+      data: formData
+  })
+  .then(response => response.data)  // Corrected line
+  .then(data => {
+    console.log('Response data:', data); // Log the response
+    if (data && data.Total_Consumers !== undefined 
+        && data.Total_Employees !== undefined 
+        && data.Total_Consumed !== undefined
+        && data.Total_Pay !== undefined
+    ) {
         // Update the DOM with the retrieved data
-
         const totalPayValue = data.Total_Pay !== null ? data.Total_Pay : 0;
-        const totalConsumersValue =
-          data.Total_Consumers !== null ? data.Total_Consumers : 0;
-        const totalEmployeesValue =
-          data.Total_Employees !== null ? data.Total_Employees : 0;
-        const totalConsumedValue =
-          data.Total_Consumed !== null ? data.Total_Consumed : 0;
+        const totalConsumersValue = data.Total_Consumers !== null ? data.Total_Consumers : 0;
+        const totalEmployeesValue = data.Total_Employees !== null ? data.Total_Employees : 0;
+        const totalConsumedValue = data.Total_Consumed !== null ? data.Total_Consumed : 0;
 
         total_employees.innerText = totalEmployeesValue;
 
         total_consumers.innerText = totalConsumersValue;
 
         total_consumed.innerText = totalConsumedValue;
-
+        
         total_pay.innerText = totalPayValue;
-      } else {
-        console.error(
-          "Invalid data format or missing properties in the response."
-        );
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      console.log(response.data);
-    });
-};
+    } else {
+        console.error('Invalid data format or missing properties in the response.');
+    }
+})
+
+  .catch(error => {
+      console.error('Error fetching data:', error);
+  });
+}
 const getpoblacion = () => {
   const total_employees = document.getElementById("totalEmployees");
 
