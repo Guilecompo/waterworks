@@ -14,7 +14,7 @@ const displayHeadEmployee = () => {
   head.style.display = "block";
   paginationNumbers.style.display = "block";
   searchInput.style.display = "block";
-  var url = "http://localhost/waterworks/admin/get_head.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_head.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -190,7 +190,7 @@ const view_head = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_employee.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_employee.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -303,7 +303,7 @@ const edit_head = (user_id) => {
   prevBtn.style.display = "none";
   nextBtn.style.display = "none";
 
-  var myUrl = "http://localhost/waterworks/admin/getemployee.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/getemployee.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
@@ -440,7 +440,7 @@ const submit_edit_employee = (event, user_id) => {
   }
 
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_employee.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_employee.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
   formData.append("firstname", firstname);
@@ -562,7 +562,7 @@ const closeModal = () => {
 
 const getSuffix = () => {
   const suffixSelect = document.getElementById("suffix");
-  var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_suffix.php";
 
   axios({
     url: myUrl,
@@ -583,7 +583,7 @@ const getSuffix = () => {
 };
 const getBranch = () => {
   const propertySelect = document.getElementById("branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
   axios({
     url: myUrl,
     method: "post",
@@ -604,7 +604,7 @@ const getBranch = () => {
 };
 const getPosition = () => {
   const positionSelect = document.getElementById("position");
-  var myUrl = "http://localhost/waterworks/admin/get_position.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_position.php";
 
   axios({
     url: myUrl,

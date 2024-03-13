@@ -937,7 +937,7 @@ const newBill = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_bill.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_bill.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1054,7 +1054,7 @@ const billingHis = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost//waterworks/gets/consumer_billing_history.php";
+  var myUrl = "http://128.199.232.132//waterworks/gets/consumer_billing_history.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1127,7 +1127,7 @@ const bill_receipt = (billing_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/consumer_billing_history1.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/consumer_billing_history1.php";
   const formData = new FormData();
   formData.append("billing_id", billing_id);
   console.log("billing_id  : ", billing_id);
@@ -1257,7 +1257,7 @@ const paymentHis = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_payment_history.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_payment_history.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1331,7 +1331,7 @@ const payment_receipt = (pay_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_payment_receipt.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_payment_receipt.php";
 
   const formData = new FormData();
   formData.append("pay_id", pay_id);
@@ -1447,7 +1447,7 @@ const change = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_consumer.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1533,7 +1533,7 @@ const submit_change = (user_id) => {
     alert("Fill in all fields");
     return;
   } else {
-    const myUrl = "http://localhost/waterworks/admin/change_meter.php";
+    const myUrl = "http://128.199.232.132/waterworks/admin/change_meter.php";
     const formData = new FormData();
     formData.append("consumerId", user_id);
     formData.append("new_meters", new_meters);
@@ -1567,7 +1567,7 @@ const add = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_consumer.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1649,7 +1649,7 @@ const submit_add = (user_id) => {
     alert("Fill in all fields");
     return;
   } else {
-    const myUrl = "http://localhost/waterworks/admin/add_related.php";
+    const myUrl = "http://128.199.232.132/waterworks/admin/add_related.php";
     const formData = new FormData();
     formData.append("consumerId", user_id);
     formData.append("new_meters", new_meters);
@@ -1690,7 +1690,7 @@ const more = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/admin/get_consumer_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_consumer_branch.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1796,7 +1796,7 @@ const connected_edit = (user_id) => {
   prevBtn.style.display = "none";
   nextBtn.style.display = "none";
 
-  var myUrl = "http://localhost/waterworks/admin/get_connected_consumers.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_connected_consumers.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -1940,7 +1940,7 @@ const submit_connected_update = (event, user_id) => {
   }
 
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_connected_consumer.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_connected_consumer.php";
   const formData = new FormData();
   formData.append("userid", user_id);
   formData.append("firstname", firstname);
@@ -1997,7 +1997,7 @@ const submit_connected_update = (event, user_id) => {
 
 const getBranches = () => {
   const branchSelect = document.getElementById("edit_branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
 
@@ -2023,7 +2023,7 @@ const getBranches = () => {
 
 const getProperties = () => {
   const propertySelect = document.getElementById("properties");
-  var myUrl = "http://localhost/waterworks/gets/get_property.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_property.php";
 
   axios({
     url: myUrl,

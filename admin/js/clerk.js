@@ -14,7 +14,7 @@ const displayClerkEmployee = () => {
   head.style.display = "block";
   paginationNumbers.style.display = "block";
   searchInput.style.display = "block";
-  var url = "128.199.232.132/waterworks/admin/get_clerk.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_clerk.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));

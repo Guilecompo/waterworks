@@ -31,7 +31,7 @@ const displayEmployee = () => {
   const nextBtn = document.getElementById("nextBtn");
   head.style.display = "block";
   branchSelect.style.display = "block";
-  var url = "http://localhost/waterworks/admin/get_employee.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_employee.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));

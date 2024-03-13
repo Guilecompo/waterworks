@@ -35,7 +35,7 @@ const displayEmployee = () => {
   searchInput.style.display = "block";
   prevBtn.style.display = "block";
   nextBtn.style.display = "block";
-  var url = "http://localhost/waterworks/admin/get_employee.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_employee.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -170,7 +170,7 @@ const goToPage = (page) => {
 };
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -205,7 +205,7 @@ const getFileterBranch = () => {
 };
 
 const displayPoblacionEmployee = () => {
-  var url = "http://localhost/waterworks/admin/get_employee_poblacion.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_employee_poblacion.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -277,7 +277,7 @@ const PoblacionrefreshTables = (employeeList) => {
 };
 
 const displayMuloganEmployee = () => {
-  var url = "http://localhost/waterworks/admin/get_employee_mulogan.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_employee_mulogan.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -361,7 +361,7 @@ const edit = (user_id) => {
   prevBtn.style.display = "none";
   nextBtn.style.display = "none";
 
-  var myUrl = "http://localhost/waterworks/admin/getemployee.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/getemployee.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
@@ -495,7 +495,7 @@ const submit_edit_employee = (event, user_id) => {
   }
 
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_employee.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_employee.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
   formData.append("firstname", firstname);
@@ -552,7 +552,7 @@ const submit_edit_employee = (event, user_id) => {
 
 const getBranch = () => {
   const propertySelect = document.getElementById("edit_branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -573,7 +573,7 @@ const getBranch = () => {
 };
 const getPosition = () => {
   const positionSelect = document.getElementById("position");
-  var myUrl = "http://localhost/waterworks/admin/get_position.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_position.php";
 
   axios({
     url: myUrl,
