@@ -295,13 +295,9 @@ const edit_head = (user_id) => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
   const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
   head.style.display = "none";
   paginationNumbers.style.display = "none";
   searchInput.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
 
   var myUrl = "http://128.199.232.132/waterworks/admin/getemployee.php";
   const formData = new FormData();
