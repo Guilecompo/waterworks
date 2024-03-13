@@ -550,7 +550,7 @@ const updateBillStatus = () => {
 };
 const getSuffix = () => {
   const propertySelect = document.getElementById("suffix");
-  var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_suffix.php";
 
   axios({
     url: myUrl,
@@ -571,7 +571,7 @@ const getSuffix = () => {
 };
 const getProperty = () => {
   const propertySelect = document.getElementById("property");
-  var myUrl = "http://localhost/waterworks/gets/get_property.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_property.php";
 
   axios({
     url: myUrl,
@@ -593,7 +593,7 @@ const getProperty = () => {
 
 const getBranch = () => {
   const propertySelect = document.getElementById("edit_branch");
-  var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -615,7 +615,7 @@ const getBranch = () => {
 
 // ----------------------------------FILTER MOLUGAN------------------------------------------------
 const displayConsumerMulogan = () => {
-  var url = "http://localhost/waterworks/admin/get_consumers_mulogan.php";
+  var url = "http://128.199.232.132/waterworks/admin/get_consumers_mulogan.php";
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
   axios({
@@ -681,7 +681,7 @@ const MuloganrefreshTables = (consumerList) => {
 
 const getMunicipality = () => {
   const municipalitySelect = document.getElementById("municipality");
-  var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
 
   axios({
     url: myUrl,
@@ -707,7 +707,7 @@ const getMunicipality = () => {
 const getBarangay = () => {
   const selectedMunicipalityId = document.getElementById("municipality").value;
 
-  const barangayUrl = `http://localhost/waterworks/gets/get_barangay.php`;
+  const barangayUrl = `http://128.199.232.132/waterworks/gets/get_barangay.php`;
   const formData = new FormData();
 
   // Use selectedMunicipalityId directly
@@ -742,7 +742,7 @@ const getBarangay = () => {
 const getZone = () => {
   const selectedBarangayId = document.getElementById("barangay").value;
 
-  const zoneUrl = `http://localhost/waterworks/gets/get_zone.php`;
+  const zoneUrl = `http://128.199.232.132/waterworks/gets/get_zone.php`;
   const formData = new FormData();
 
   // Use selectedMunicipalityId directly
@@ -829,7 +829,7 @@ const information = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://localhost/waterworks/gets/get_consumer.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_consumer.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
