@@ -22,7 +22,7 @@ const getall = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/admin/total.php`;
+  const Url = "http://128.199.232.132/waterworks/admin/total.php";
     axios({
       url: Url,
       method: "post",
@@ -73,7 +73,7 @@ const getpoblacion = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/admin/total_poblacion.php`;
+  const Url = "http://128.199.232.132/waterworks/admin/total_poblacion.php";
   const formData = new FormData();
     formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
@@ -126,7 +126,7 @@ const getmolugan = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/admin/total_molugan.php`;
+  const Url = "http://128.199.232.132/waterworks/admin/total_molugan.php";
   const formData = new FormData();
     formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
@@ -206,7 +206,7 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://128.199.232.132/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
