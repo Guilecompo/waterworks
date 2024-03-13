@@ -23,12 +23,9 @@ const getall = () => {
     return;
   }
   const Url = `http://128.199.232.132/waterworks/admin/total.php`;
-  const formData = new FormData();
-    formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
       url: Url,
       method: "post",
-      data: formData
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
