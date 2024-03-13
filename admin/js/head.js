@@ -320,7 +320,7 @@ const edit_head = (user_id) => {
           var html = `
                         <div class=" row  mt-1">
                           <div class="col-md-1 mt-3">
-                            <button class="clear" onclick="displayClerkEmployee()">Back</button>
+                            <button class="clear" onclick="displayHeadEmployee()">Back</button>
                           </div>
                           <div class="col-md-11 mt-3">
                             <h4 style="text-align: center;">Edit Employee</h4>
