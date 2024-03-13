@@ -24,7 +24,7 @@ const getall = () => {
   }
 
   // Fetch data from your PHP script
-  fetch("http://128.199.232.132/admin/total.php")
+  fetch("http://128.199.232.132/waterworks/admin/total.php")
     .then((response) => response.json())
     .then((data) => {
       if (
@@ -78,7 +78,7 @@ const getpoblacion = () => {
   }
 
   // Fetch data from your PHP script
-  fetch("http://128.199.232.132/admin/total_poblacion.php")
+  fetch("http://128.199.232.132/waterworks/admin/total_poblacion.php")
     .then((response) => response.json())
     .then((data) => {
       if (
@@ -131,7 +131,7 @@ const getmolugan = () => {
   }
 
   // Fetch data from your PHP script
-  fetch("http://128.199.232.132/admin/total_molugan.php")
+  fetch("http://128.199.232.132/waterworks/admin/total_molugan.php")
     .then((response) => response.json())
     .then((data) => {
       if (
@@ -209,7 +209,7 @@ var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://128.199.232.132/admin/get_branch.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -244,7 +244,7 @@ const getFileterBranch = () => {
 };
 
 const displayActivity = () => {
-  var url = "http://128.199.232.132/admin/activitylist.php";
+  var url = "http://128.199.232.132/waterworks/admin/activitylist.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
