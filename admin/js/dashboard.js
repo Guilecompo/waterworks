@@ -24,7 +24,7 @@ const getall = () => {
   }
 
   // Fetch data from your PHP script
-  fetch("128.199.232.132/admin/total.php")
+  fetch("http://128.199.232.132/admin/total.php")
     .then((response) => response.json())
     .then((data) => {
       if (
