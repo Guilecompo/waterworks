@@ -1,3 +1,4 @@
+
 <?php
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
@@ -5,34 +6,33 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Prepare and execute the SQL queries
         // total consumers
-        $stmt = $conn->prepare("SELECT COUNT(user_id) AS Total_Consumers FROM user_consumer");
+
+        $stmt = $conn->prepare("SELECT COUNT(user_id) AS Total_Consumers FROM user_consumer ");
         $stmt->execute();
-        $CTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $CTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // total employees
         $stmt = $conn->prepare("SELECT COUNT(user_id) AS Total_Employees FROM user_employee ");
         $stmt->execute();
-        $ETotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ETotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // total consumed (pres + prev)
-        $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS Pres_Total_Consumed FROM billing WHERE total_bill != 0");
+        $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS Pres_Total_Consumed FROM billing ");
         $stmt->execute();
-        $PresConsumedTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $PresConsumedTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT SUM(pay_amount) AS Total_Pay FROM payment");
+        $stmt = $conn->prepare("SELECT SUM(pay_amount) AS Total_Pay FROM payment ");
         $stmt->execute();
-        $PayTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-
+        $PayTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
         $response = [
-            "Total_Consumers" => $CTotalresults[0]['Total_Consumers'],
-            "Total_Employees" => $ETotalresults[0]['Total_Employees'],
-            "Total_Consumed" => $PresConsumedTotalresults[0]['Pres_Total_Consumed'],
-            "Total_Pay" => $PayTotalresults[0]['Total_Pay'],
+            "Total_Consumers" => $CTotalresults['Total_Consumers'],
+            "Total_Employees" => $ETotalresults['Total_Employees'],
+            "Total_Consumed" => $PresConsumedTotalresults['Pres_Total_Consumed'],
+            "Total_Pay" => $PayTotalresults['Total_Pay'],
         ];
 
         echo json_encode($response);
