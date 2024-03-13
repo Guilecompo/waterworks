@@ -280,7 +280,7 @@ const refreshTable = (barangayList) => {
 
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (barangay_id) => {
-  var myUrl = "http://localhost/waterworks/admin/getbarangay.php";
+  var myUrl = "http://128.199.232.132/waterworks/admin/getbarangay.php";
   const formData = new FormData();
   formData.append("barangay_id", barangay_id);
 
@@ -352,7 +352,7 @@ const submit_edit_barangay = (event, barangay_id) => {
   }
 
   const myUrl =
-    "http://localhost/waterworks/admin/update_api/update_barangay.php";
+    "http://128.199.232.132/waterworks/admin/update_api/update_barangay.php";
   const formData = new FormData();
   formData.append("barangay_id", barangay_id);
   formData.append("municipalityId", municipalityId);
@@ -389,7 +389,7 @@ const submit_edit_barangay = (event, barangay_id) => {
 
 const getMunicipality1 = () => {
   const municipalitySelect = document.getElementById("municipality");
-  var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
+  var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
 
   axios({
     url: myUrl,

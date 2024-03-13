@@ -103,7 +103,7 @@ const closeModal = () => {
           return;
         }
       
-        const myUrl = "http://localhost/waterworks/admin/add_branch.php";
+        const myUrl = "http://128.199.232.132/waterworks/admin/add_branch.php";
         const formData = new FormData();
         formData.append("branch", branch);
         formData.append("municipalityId", municipalityId);
@@ -139,7 +139,7 @@ const closeModal = () => {
       };
       const getMunicipality = () => {
         const municipalitySelect = document.getElementById("municipality");
-        var myUrl = "http://localhost/waterworks/gets/get_municipality.php";
+        var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
         
         axios({
           url: myUrl,
@@ -165,7 +165,7 @@ const closeModal = () => {
         const getBarangay = () => {
         const selectedMunicipalityId = document.getElementById("municipality").value;
         
-        const barangayUrl = `http://localhost/waterworks/gets/get_barangay.php`;
+        const barangayUrl = `http://128.199.232.132/waterworks/gets/get_barangay.php`;
         const formData = new FormData();
         
         // Use selectedMunicipalityId directly
@@ -200,7 +200,7 @@ const closeModal = () => {
         const getZone = () => {
           const selectedBarangayId = document.getElementById("barangay").value;
         
-          const zoneUrl = `http://localhost/waterworks/gets/get_zone.php`;
+          const zoneUrl = `http://128.199.232.132/waterworks/gets/get_zone.php`;
           const formData = new FormData();
         
           // Use selectedMunicipalityId directly
