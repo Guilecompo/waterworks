@@ -73,7 +73,7 @@ const closeModal = () => {
         return;
       }
     
-      const myUrl = "http://localhost/waterworks/admin/add_position.php";
+      const myUrl = "http://128.199.232.132/waterworks/admin/add_position.php";
       const formData = new FormData();
       formData.append("add_position", add_position);
       formData.append("employee_Id", sessionStorage.getItem("accountId"));
@@ -105,7 +105,7 @@ const closeModal = () => {
       };
 // ------------------------------FOR TABLE--------------------------------------------------------------
 const displayPosition = () => {
-  var url = "http://localhost/waterworks/admin/positionlist.php";
+  var url = "http://128.199.232.132/waterworks/admin/positionlist.php";
   
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -249,7 +249,7 @@ const displayPosition = () => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (position_id) => {
 
-        var myUrl = "http://localhost/waterworks/admin/getposition.php";
+        var myUrl = "http://128.199.232.132/waterworks/admin/getposition.php";
         const formData = new FormData();
         formData.append("position_id", position_id);
 
@@ -308,7 +308,7 @@ const submit_edit_position = (event, position_id) => {
       return;
   }
 
-  const myUrl = "http://localhost/waterworks/admin/update_api/update_position.php";
+  const myUrl = "http://128.199.232.132/waterworks/admin/update_api/update_position.php";
   const formData = new FormData();
   formData.append("position_id", position_id);
   formData.append("add_position", add_position);
