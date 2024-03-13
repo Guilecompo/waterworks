@@ -79,7 +79,7 @@ const closeModal = () => {
         return;
       }
     
-      const myUrl = "http://localhost/waterworks/admin/add_consumertype.php";
+      const myUrl = "http://128.199.232.132/waterworks/admin/add_consumertype.php";
       const formData = new FormData();
       formData.append("consumertype", consumertype);
       formData.append("discount_percentd", discount_percent);
@@ -112,7 +112,7 @@ const closeModal = () => {
       };
 // ------------------------------FOR TABLE--------------------------------------------------------------
 const displayPosition = () => {
-  var url = "http://localhost/waterworks/admin/consumertypelist.php";
+  var url = "http://128.199.232.132/waterworks/admin/consumertypelist.php";
   
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -260,7 +260,7 @@ const displayPosition = () => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (consumertype_id) => {
 
-        var myUrl = "http://localhost/waterworks/admin/getconsumertype.php";
+        var myUrl = "http://128.199.232.132/waterworks/admin/getconsumertype.php";
         const formData = new FormData();
         formData.append("consumertype_id", consumertype_id);
 
@@ -325,7 +325,7 @@ const submit_edit_position = (event, consumertype_id) => {
       return;
   }
 
-  const myUrl = "http://localhost/waterworks/admin/update_api/update_consumertype.php";
+  const myUrl = "http://128.199.232.132/waterworks/admin/update_api/update_consumertype.php";
   const formData = new FormData();
   formData.append("consumertype_id", consumertype_id);
   formData.append("edit_consumertype", edit_consumertype);

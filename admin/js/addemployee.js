@@ -165,7 +165,7 @@ const closeModal = () => {
       }
       
       
-        const myUrl = "http://localhost/waterworks/admin/add_employees.php";
+        const myUrl = "http://128.199.232.132/waterworks/admin/add_employees.php";
         const formData = new FormData();
         formData.append("firstname", firstname);
         formData.append("middlename", middlename);
@@ -207,7 +207,7 @@ const closeModal = () => {
       };
       const getSuffix = () => {
         const propertySelect = document.getElementById("suffix");
-        var myUrl = "http://localhost/waterworks/gets/get_suffix.php";
+        var myUrl = "http://128.199.232.132/waterworks/gets/get_suffix.php";
       
         axios({
           url: myUrl,
@@ -229,7 +229,7 @@ const closeModal = () => {
 
       const getBranch = () => {
         const propertySelect = document.getElementById("branch");
-        var myUrl = "http://localhost/waterworks/admin/get_branch.php";
+        var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
       
         axios({
           url: myUrl,
@@ -250,7 +250,7 @@ const closeModal = () => {
       };
       const getPosition = () => {
         const positionSelect = document.getElementById("position");
-        var myUrl = "http://localhost/waterworks/admin/get_position.php";
+        var myUrl = "http://128.199.232.132/waterworks/admin/get_position.php";
         
         axios({
           url: myUrl,
