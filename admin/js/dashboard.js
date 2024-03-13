@@ -58,6 +58,7 @@ const getall = () => {
 
   .catch(error => {
       console.error('Error fetching data:', error);
+      console.log(response.data);
   });
 }
 const getpoblacion = () => {
