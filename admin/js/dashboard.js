@@ -84,7 +84,7 @@ const getpoblacion = (selectedBranch) => {
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
-    console.log(response.data);
+    console.log(data);
     console.log('Response data:', data); // Log the response
     if (data && data.Total_Consumers !== undefined 
         && data.Total_Employees !== undefined 
@@ -111,7 +111,7 @@ const getpoblacion = (selectedBranch) => {
 
   .catch(error => {
       console.error('Error fetching data:', error);
-      console.log(response.data);
+      console.log(error.response.data);
   });
 }
 const getmolugan = () => {
