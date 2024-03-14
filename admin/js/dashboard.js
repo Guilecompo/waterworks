@@ -170,45 +170,45 @@ const getmolugan = (selectedBranch) => {
       console.log(error.response.data);
   });
 }
-var data = {
-  labels: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ],
-  datasets: [
-    {
-      label: "New Consumers",
-      borderColor: "rgb(75, 192, 192)",
-      data: [10, 20, 15, 25, 30, 10, 20, 15, 25, 30, 20, 10],
-      fill: false,
-    },
-  ],
-};
+// var data = {
+//   labels: [
+//     "January",
+//     "February",
+//     "March",
+//     "April",
+//     "May",
+//     "June",
+//     "July",
+//     "August",
+//     "September",
+//     "October",
+//     "November",
+//     "December",
+//   ],
+//   datasets: [
+//     {
+//       label: "New Consumers",
+//       borderColor: "rgb(75, 192, 192)",
+//       data: [10, 20, 15, 25, 30, 10, 20, 15, 25, 30, 20, 10],
+//       fill: false,
+//     },
+//   ],
+// };
 
-// Chart configuration with responsive settings
-var config = {
-  type: "line",
-  data: data,
-  options: {
-    maintainAspectRatio: false,
-  },
-};
+// // Chart configuration with responsive settings
+// var config = {
+//   type: "line",
+//   data: data,
+//   options: {
+//     maintainAspectRatio: false,
+//   },
+// };
 
 // Get the canvas element
-var ctx = document.getElementById("lineChart").getContext("2d");
+// var ctx = document.getElementById("lineChart").getContext("2d");
 
-// Create the line chart
-var myChart = new Chart(ctx, config);
+// // Create the line chart
+// var myChart = new Chart(ctx, config);
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
