@@ -217,11 +217,11 @@ const getFileterBranch = () => {
         options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
       });
       branchSelect.innerHTML = options;
-      console.log("Selected branch:",branchSelect);
 
       // Event listener for position change
       branchSelect.addEventListener("change", () => {
         const selectedBranch = branchSelect.value;
+        console.log("Selected branch:",selectedBranch);
         // Call the appropriate display function based on the selected position
         if (selectedBranch === "Poblacion") {
           getpoblacion();
