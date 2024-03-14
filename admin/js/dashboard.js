@@ -3,6 +3,7 @@ let activities = [];
 function onLoad() {
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
+    console.log(sessionStorage.getItem("branchId"));
   displayActivity();
   getFileterBranch();
   getall();
