@@ -267,7 +267,43 @@ const showConsumerPoblacionPage = (page, consumersToDisplay = consumers) => {
   var end = start + 10;
   var displayedConsumers = consumersToDisplay.slice(start, end);
   PoblacionrefreshTables(displayedConsumers);
-  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+  showPaginationNumbersPoblacion(page, Math.ceil(consumersToDisplay.length / 10));
+};
+const showPaginationNumbersPoblacion = (currentPage, totalPages) => {
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
+
+  const pagesToShow = 5; // Number of pages to display
+
+  // Calculate start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  // Adjust start and end page numbers if they are at the edges
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  // Previous button
+  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+
+  // Generate page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPagePoblacion(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPagePoblacion(${i})">${i}</span>`;
+    }
+  }
+
+  // Next button
+  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+};
+
+const goToPagePoblacion = (pageNumber) => {
+  showConsumerPoblacionPage(pageNumber);
 };
 
 const PoblacionrefreshTables = (consumerList) => {
@@ -647,9 +683,44 @@ const showConsumerMuloganPage = (page, consumersToDisplay = consumers) => {
   var end = start + 10;
   var displayedConsumers = consumersToDisplay.slice(start, end);
   MuloganrefreshTables(displayedConsumers);
-  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+  showPaginationNumbersMolugan(page, Math.ceil(consumersToDisplay.length / 10));
+};
+const showPaginationNumbersMolugan = (currentPage, totalPages) => {
+  const paginationNumbersDiv = document.getElementById("paginationNumbers");
+  let paginationNumbersHTML = "";
+
+  const pagesToShow = 5; // Number of pages to display
+
+  // Calculate start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  // Adjust start and end page numbers if they are at the edges
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  // Previous button
+  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+
+  // Generate page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      paginationNumbersHTML += `<span class="active" onclick="goToPageMolugan(${i})">${i}</span>`;
+    } else {
+      paginationNumbersHTML += `<span onclick="goToPageMolugan(${i})">${i}</span>`;
+    }
+  }
+
+  // Next button
+  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+
+  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
 };
 
+const goToPageMolugan = (pageNumber) => {
+  showConsumerMuloganPage(pageNumber);
+};
 const MuloganrefreshTables = (consumerList) => {
   var html = `
       <table class="table">
