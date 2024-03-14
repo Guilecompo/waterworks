@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Prepare and execute the SQL queries
         // total consumers
