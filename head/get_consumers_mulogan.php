@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("SELECT 
             a.user_id,a.meter_no,
             a.firstname, a.middlename,
-            a.lastname, 
+            a.lastname, a.connected_number,
             a.phone_no, c.property_name,
             d.zone_name, e.barangay_name,
             f.municipality_name, a.meter_no,
