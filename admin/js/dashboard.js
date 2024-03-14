@@ -73,13 +73,10 @@ const getpoblacion = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/head/total.php`;
-  const formData = new FormData();
-    formData.append("branchId", branchSelect);
+  const Url = `http://128.199.232.132/waterworks/admin/total_poblacion.php`;
     axios({
       url: Url,
       method: "post",
-      data: formData
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
@@ -217,11 +214,12 @@ const getFileterBranch = () => {
         options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
       });
       branchSelect.innerHTML = options;
+      console.log("Selected branch:",branchSelect);
 
       // Event listener for position change
       branchSelect.addEventListener("change", () => {
         const selectedBranch = branchSelect.value;
-        console.log("Selected branch:",selectedBranch);
+        
         // Call the appropriate display function based on the selected position
         if (selectedBranch === "Poblacion") {
           getpoblacion();

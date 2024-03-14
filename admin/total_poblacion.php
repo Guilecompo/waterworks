@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         // Prepare and execute the SQL queries
         // total consumers
+        // $stmt = $conn->prepare("SELECT COUNT(user_id) AS Total_Consumers FROM user_consumer INNER JOIN branch ON user_consumer.branchId = branch.branch_id WHERE branch.branch_name = 1");
         $stmt = $conn->prepare("SELECT COUNT(user_id) AS Total_Consumers FROM user_consumer WHERE branchId = 1");
         $stmt->execute();
         $CTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
