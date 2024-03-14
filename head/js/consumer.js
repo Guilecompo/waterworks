@@ -14,14 +14,10 @@ const onLoad = () => {
     const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("branch");
     const searchInput = document.getElementById("searchInput");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
     head.style.display = "block";
     paginationNumbers.style.display = "block";
     branchSelect.style.display = "block";
     searchInput.style.display = "block";
-    prevBtn.style.display = "block";
-    nextBtn.style.display = "block";
 
       var url = "http://128.199.232.132/waterworks/head/get_consumers.php";
       const formData = new FormData();
@@ -332,14 +328,10 @@ const edit = (user_id) => {
   const paginationNumbers = document.getElementById("paginationNumbers");
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
   head.style.display = "none";
   paginationNumbers.style.display = "none";
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
 
   var myUrl = "http://128.199.232.132/waterworks/head/getconsumer.php";
   const formData = new FormData();
@@ -915,14 +907,10 @@ const getMunicipality = () => {
         const paginationNumbers = document.getElementById("paginationNumbers");
         const branchSelect = document.getElementById("branch");
         const searchInput = document.getElementById("searchInput");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
         head.style.display = "block";
         paginationNumbers.style.display = "block";
         branchSelect.style.display = "block";
         searchInput.style.display = "block";
-        prevBtn.style.display = "block";
-        nextBtn.style.display = "block";
       
       };
 // ------------------------------------------------- CHANGE METER START --------------------------------------------------
