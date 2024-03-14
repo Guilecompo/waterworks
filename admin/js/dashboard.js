@@ -58,8 +58,8 @@ const getall = () => {
       console.log(response.data);
   });
 }
-const getpoblacion = (branchSelect) => {
-  console.log("selected:", branchSelect);
+const getpoblacion = (selectedBranch) => {
+  console.log("selected:", selectedBranch);
   const total_employees = document.getElementById('totalEmployees');
 
   const total_consumers = document.getElementById('totalConsumers');
@@ -76,7 +76,7 @@ const getpoblacion = (branchSelect) => {
   }
   const Url = `http://128.199.232.132/waterworks/admin/total_poblacion.php`;
   const formData = new FormData();
-    formData.append("branchId", branchSelect);
+    formData.append("branchId", selectedBranch);
     axios({
       url: Url,
       method: "post",
@@ -226,7 +226,7 @@ const getFileterBranch = () => {
         
         // Call the appropriate display function based on the selected position
         if (selectedBranch === "Poblacion") {
-          getpoblacion(branchSelect);
+          getpoblacion(selectedBranch);
         } else if (selectedBranch === "Molugan") {
           getmolugan();
         } else {
