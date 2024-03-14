@@ -74,7 +74,7 @@ const getpoblacion = (selectedBranch) => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/admin/total_poblacion.php`;
+  const Url = "http://128.199.232.132/waterworks/admin/total_poblacion.php";
   const formData = new FormData();
     formData.append("branchId", selectedBranch);
     axios({
