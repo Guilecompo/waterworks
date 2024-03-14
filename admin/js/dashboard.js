@@ -236,7 +236,7 @@ const getFileterBranch = () => {
         if (selectedBranch === "Poblacion") {
           getpoblacion(selectedBranch);
         } else if (selectedBranch === "Molugan") {
-          getmolugan();
+          getmolugan(selectedBranch);
         } else {
           getall();
         }
