@@ -59,6 +59,7 @@ const getall = () => {
   });
 }
 const getpoblacion = (branchSelect) => {
+  console.log("selected:", branchSelect);
   const total_employees = document.getElementById('totalEmployees');
 
   const total_consumers = document.getElementById('totalConsumers');
