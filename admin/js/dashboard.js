@@ -114,7 +114,7 @@ const getpoblacion = (selectedBranch) => {
       console.log(error.response.data);
   });
 }
-const getmolugan = () => {
+const getmolugan = (selectedBranch) => {
   console.log("selected:", selectedBranch);
   const total_employees = document.getElementById('totalEmployees');
 
