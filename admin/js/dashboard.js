@@ -115,6 +115,7 @@ const getpoblacion = (selectedBranch) => {
   });
 }
 const getmolugan = () => {
+  console.log("selected:", selectedBranch);
   const total_employees = document.getElementById('totalEmployees');
 
   const total_consumers = document.getElementById('totalConsumers');
@@ -129,13 +130,17 @@ const getmolugan = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = "http://128.199.232.132/waterworks/admin/total_molugan.php";
+  const Url = "http://128.199.232.132/waterworks/admin/total_poblacion.php";
+  const formData = new FormData();
+    formData.append("branchId", selectedBranch);
     axios({
       url: Url,
       method: "post",
+      data: formData
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
+    console.log(data);
     console.log('Response data:', data); // Log the response
     if (data && data.Total_Consumers !== undefined 
         && data.Total_Employees !== undefined 
@@ -162,6 +167,7 @@ const getmolugan = () => {
 
   .catch(error => {
       console.error('Error fetching data:', error);
+      console.log(error.response.data);
   });
 }
 var data = {
