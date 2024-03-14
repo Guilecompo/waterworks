@@ -419,7 +419,43 @@ const showFilteredConsumers = (filteredConsumers) => {
             var end = start + 10;
             var displayedConsumers = consumersToDisplay.slice(start, end);
             refreshTablesByZone(displayedConsumers);
-            showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
+            showPaginationNumbersReaderFilter(page, Math.ceil(consumersToDisplay.length / 10));
+          };
+          const showPaginationNumbersReaderFilter = (currentPage, totalPages) => {
+            const paginationNumbersDiv = document.getElementById("paginationNumbers");
+            let paginationNumbersHTML = "";
+          
+            const pagesToShow = 5; // Number of pages to display
+          
+            // Calculate start and end page numbers to display
+            let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+          
+            // Adjust start and end page numbers if they are at the edges
+            if (endPage - startPage + 1 < pagesToShow) {
+              startPage = Math.max(1, endPage - pagesToShow + 1);
+            }
+          
+            // Previous button
+            paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+          
+            // Generate page numbers
+            for (let i = startPage; i <= endPage; i++) {
+              if (i === currentPage) {
+                paginationNumbersHTML += `<span class="active" onclick="goToPageConsumerFilter(${i})">${i}</span>`;
+              } else {
+                paginationNumbersHTML += `<span onclick="goToPageConsumerFilter(${i})">${i}</span>`;
+              }
+            }
+          
+            // Next button
+            paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
+          
+            paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+          };
+          
+          const goToPageConsumerFilter = (pageNumber) => {
+            showConsumerPageByZone(pageNumber);
           };
           const refreshTablesByZone = (employeeList) => {
               var html = `
