@@ -3,7 +3,6 @@ let activities = [];
 function onLoad() {
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
-    console.log(sessionStorage.getItem("branchId"));
   displayActivity();
   getFileterBranch();
   getall();
@@ -75,12 +74,9 @@ const getpoblacion = () => {
     return;
   }
   const Url = "http://128.199.232.132/waterworks/admin/total_poblacion.php";
-  const formData = new FormData();
-    formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
       url: Url,
       method: "post",
-      data: formData
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
@@ -128,12 +124,9 @@ const getmolugan = () => {
     return;
   }
   const Url = "http://128.199.232.132/waterworks/admin/total_molugan.php";
-  const formData = new FormData();
-    formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
       url: Url,
       method: "post",
-      data: formData
   })
   .then(response => response.data)  // Corrected line
   .then(data => {
