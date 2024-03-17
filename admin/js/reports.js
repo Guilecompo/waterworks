@@ -1,10 +1,11 @@
 let currentPage = 1;
 let employees = [];
-$(document).ready(function(){
-  $('example').DataTable();
-});
+
 
 const onLoad = () => {
+  $(document).ready(function(){
+    $('example').DataTable();
+  })
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
