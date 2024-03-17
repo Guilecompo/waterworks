@@ -125,6 +125,7 @@ function printTable() {
 function filterByDate() {
   try {
     var dateInput = document.getElementById("dateInput").value;
+    console.log(dateInput);
 
     // Check if dateInput is valid (you can add your own validation logic here)
 
