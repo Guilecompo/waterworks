@@ -76,30 +76,20 @@ const displayPaymentReports = () => {
 // Printing Functionality
 // Printing Functionality
 function printTable() {
-  // Hide DataTable features
-  var table = $('#example').DataTable();
-  table.search('').columns().search('').draw(); // Clear search filters
-  table.settings()[0].oFeatures.bInfo = false; // Hide showing number entries
-  table.settings()[0].oFeatures.bFilter = false; // Hide search
-  table.settings()[0].oFeatures.bPaginate = false; // Hide pagination
 
-  // Save content of mainDiv and hide it temporarily
-  var mainDivContent = document.getElementById("mainDiv").innerHTML;
-  document.getElementById("mainDiv").style.display = "none";
-
-  // Create a new temporary container for printing
-  var printContainer = document.createElement("div");
-  printContainer.innerHTML = mainDivContent;
-
+  
+  var contentToPrint = document.getElementById("mainDiv").innerHTML;
+  var originalBody = document.body.innerHTML;
+  
+  // Replace the body content with the content of mainDiv
+  document.body.innerHTML = contentToPrint;
+  
   // Print the content
-  document.body.appendChild(printContainer);
   window.print();
-
-  // Remove the temporary container and restore mainDiv content
-  document.body.removeChild(printContainer);
-  document.getElementById("mainDiv").style.display = "block";
+  
+  // Restore the original body content
+  document.body.innerHTML = originalBody;
 }
-
 
 // Filter by Date Functionality
 function filterByDate() {
