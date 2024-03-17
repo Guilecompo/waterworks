@@ -73,8 +73,6 @@ const displayPaymentReports = () => {
   });
 };
 
-// Printing Functionality
-// Printing Functionality
 function printTable() {
   // Call displayPaymentReport to populate the table
   displayPaymentReport();
@@ -90,13 +88,14 @@ function printTable() {
       // Write the content to the new window
       printWindow.document.write('<html><head><title>Print</title></head><body>' + contentToPrint + '</body></html>');
 
-      // Wait for the content to be fully loaded in the new window
-      printWindow.onload = () => {
-          // Print the content
-          printWindow.print();
-      };
+      // Print the content
+      printWindow.print();
+
+      // Close the print window after printing
+      printWindow.close();
   }, 1000); // Adjust the timeout as needed to ensure content is loaded before printing
 }
+
 
 const displayPaymentReport = () => {
   var url = "http://128.199.232.132/waterworks/admin/reports.php";
