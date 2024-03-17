@@ -136,12 +136,13 @@ function filterByDate() {
 
     var url = "http://128.199.232.132/waterworks/admin/filter_reports.php";
 
+    const formData = new FormData();
+    formData.append("dateInput", dateInput);
+
     axios({
       url: url,
       method: "post",
-      data: {
-        dateInput: dateInput
-      }
+      data: FormData,
     }).then((response) => {
       try {
         var records = response.data;
