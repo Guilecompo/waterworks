@@ -74,8 +74,19 @@ const displayPaymentReports = () => {
 };
 
 // Printing Functionality
+// Printing Functionality
 function printTable() {
+  var contentToPrint = document.getElementById("mainDiv").innerHTML;
+  var originalBody = document.body.innerHTML;
+  
+  // Replace the body content with the content of mainDiv
+  document.body.innerHTML = contentToPrint;
+  
+  // Print the content
   window.print();
+  
+  // Restore the original body content
+  document.body.innerHTML = originalBody;
 }
 
 // Filter by Date Functionality
