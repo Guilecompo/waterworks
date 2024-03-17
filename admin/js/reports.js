@@ -75,33 +75,26 @@ const displayPaymentReports = () => {
 
 // Printing Functionality
 // Printing Functionality
-// Printing Functionality
 function printTable() {
-  // Hide dropdown entries, search, and pagination
-  var table = $('#example').DataTable();
-  table.search('').columns().search('').draw(); // Clear search filters
-  table.settings()[0].oFeatures.bInfo = false; // Hide showing number entries
-  table.settings()[0].oFeatures.bFilter = false; // Hide search
-  table.settings()[0].oFeatures.bPaginate = false; // Hide pagination
 
-  // Save content of mainDiv and hide it temporarily
-  var mainDivContent = document.getElementById("mainDiv").innerHTML;
-  document.getElementById("mainDiv").style.display = "none";
+    var table = $('#example').DataTable();
+    table.search('').columns().search('').draw(); // Clear search filters
+    table.settings()[0].oFeatures.bInfo = false; // Hide showing number entries
+    table.settings()[0].oFeatures.bFilter = false; // Hide search
+    table.settings()[0].oFeatures.bPaginate = false; // Hide pagination
 
+  var contentToPrint = document.getElementById("mainDiv").innerHTML;
+  var originalBody = document.body.innerHTML;
+  
+  // Replace the body content with the content of mainDiv
+  document.body.innerHTML = contentToPrint;
+  
   // Print the content
   window.print();
-
-  // Restore original table settings
-  table.settings()[0].oFeatures.bInfo = true;
-  table.settings()[0].oFeatures.bFilter = true;
-  table.settings()[0].oFeatures.bPaginate = true;
-  table.draw(); // Redraw table to apply changes
-
-  // Restore content of mainDiv
-  document.getElementById("mainDiv").innerHTML = mainDivContent;
-  document.getElementById("mainDiv").style.display = "block";
+  
+  // Restore the original body content
+  document.body.innerHTML = originalBody;
 }
-
 
 // Filter by Date Functionality
 function filterByDate() {
