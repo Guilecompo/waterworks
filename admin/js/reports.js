@@ -127,6 +127,11 @@ function filterByDate() {
     var dateInput = document.getElementById("dateInput").value;
     console.log(dateInput);
 
+    if (!dateInput) {
+      alert("Please select a date first");
+      return; // Exit the function
+    }
+
     // Check if dateInput is valid (you can add your own validation logic here)
 
     var url = "http://128.199.232.132/waterworks/admin/filter_reports.php";

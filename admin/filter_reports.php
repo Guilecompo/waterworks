@@ -7,9 +7,6 @@ include 'connection.php';
 $dateInput = isset($_POST['dateInput']) ? $_POST['dateInput'] : null;
 
 if ($dateInput) {
-    // Convert dateInput format to match the database format (assuming mm/dd/yyyy)
-    $formattedDateInput = date('Y-m-d', strtotime(str_replace('/', '-', $dateInput)));
-
     $stmt = $conn->prepare("SELECT
         a.pay_id, a.or_num,
         b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
@@ -25,10 +22,10 @@ if ($dateInput) {
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    WHERE DATE(a.pay_date) = STR_TO_DATE(:dateInput, '%m/%d/%Y') -- Convert string to date
+    WHERE DATE(a.pay_date) = :dateInput
     ORDER BY a.or_num");
 
-    $stmt->bindParam(':dateInput', $formattedDateInput);
+    $stmt->bindParam(':dateInput', $dateInput);
 
     $stmt->execute();
     
