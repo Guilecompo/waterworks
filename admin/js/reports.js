@@ -1,5 +1,8 @@
 let currentPage = 1;
 let employees = [];
+$(document).ready(function(){
+  $('example').DataTable();
+});
 
 const onLoad = () => {
   document.getElementById("ngalan").innerText =
