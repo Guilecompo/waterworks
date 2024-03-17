@@ -172,19 +172,20 @@
                         <div class="container-fluid mt-2">
                             <div class="row col-md-12 p-0 mt-3 align-items-center">
                                 <!-- Filtering input -->
-                                <div class="col-md-6">
+                                <div class="col-md-4"> <!-- Adjust the column width for smaller screens -->
                                     <div class="input-group">
                                         <input id="dateInput" type="date" class="form-control">
                                         <button onclick="filterByDate()" class="btn btn-primary">Filter</button>
                                     </div>
                                 </div>
                                 <!-- Spacer to push print button to the end -->
-                                <div class="col-md-6 d-flex justify-content-end">
+                                <div class="col-md-2 d-flex justify-content-end"> <!-- Adjust the column width for smaller screens -->
                                     <!-- Print button -->
                                     <button onclick="printTable()" class="btn btn-primary btn-sm">
                                         <i class="fas fa-print"></i> Print
                                     </button>
                                 </div>
+                                
                                 <!-- Table or mainDiv -->
                                 <div class="mains col-md-12 mt-3" id="mainDiv"></div>
                             </div>
