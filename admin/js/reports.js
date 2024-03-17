@@ -1,39 +1,37 @@
 let currentPage = 1;
-let employees = [];
-
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText =
-    sessionStorage.getItem("fullname");
+    document.getElementById("ngalan").innerText =
+        sessionStorage.getItem("fullname");
 
     displayPaymentReports();
 };
 
 const showNextPage = () => {
-  currentPage++;
-  showEmployeePage(currentPage);
+    currentPage++;
+    showEmployeePage(currentPage);
 };
 
 const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showEmployeePage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
+    if (currentPage > 1) {
+        currentPage--;
+        showEmployeePage(currentPage);
+    } else {
+        alert("You are on the first page.");
+    }
 };
 
 const displayPaymentReports = () => {
-  var url = "http://128.199.232.132/waterworks/admin/reports.php";
+    var url = "http://128.199.232.132/waterworks/admin/reports.php";
 
-  axios({
-      url: url,
-      method: "post",
-  }).then((response) => {
-      try {
-          var records = response.data;
-          console.log(records);
-          var html = `
+    axios({
+        url: url,
+        method: "post",
+    }).then((response) => {
+        try {
+            var records = response.data;
+            console.log(records);
+            var html = `
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                   <thead>
                       <tr>
@@ -45,8 +43,8 @@ const displayPaymentReports = () => {
                   </thead>
                   <tbody>
           `;
-          records.forEach((record) => {
-              html += `
+            records.forEach((record) => {
+                html += `
                   <tr>
                       <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
                       <td class="text-center">${record.zone_name}</td>
@@ -54,63 +52,60 @@ const displayPaymentReports = () => {
                       <td class="text-center">${record.pay_amount}</td>
                   </tr>
               `;
-          });
-          html += `
+            });
+            html += `
                   </tbody>
               </table>
           `;
-          document.getElementById("mainDiv").innerHTML = html;
-          $('#example').DataTable({
-              "ordering": false // Disable sorting for all columns
-          });
-      } catch (error) {
-          var html = `<h2>No Records</h2>`;
-          document.getElementById("mainDiv").innerHTML = html;
-          console.log(error);
-      }
-  }).catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-  });
+            document.getElementById("mainDiv").innerHTML = html;
+            $('#example').DataTable({
+                "ordering": false // Disable sorting for all columns
+            });
+        } catch (error) {
+            var html = `<h2>No Records</h2>`;
+            document.getElementById("mainDiv").innerHTML = html;
+            console.log(error);
+        }
+    }).catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+    });
 };
 
 // Printing Functionality
-// Printing Functionality
 function printTable() {
-  // Hide non-table elements
-  document.body.querySelectorAll(':not(table)').forEach(element => {
-      element.style.display = 'none';
-  });
+    // Hide non-table elements
+    document.querySelectorAll(':not(#mainDiv)').forEach(element => {
+        element.style.display = 'none';
+    });
 
-  // Print the table
-  window.print();
+    // Print the table
+    window.print();
 
-  // Restore display of non-table elements after printing
-  document.body.querySelectorAll(':not(table)').forEach(element => {
-      element.style.display = '';
-  });
+    // Restore display of non-table elements after printing
+    document.querySelectorAll(':not(#mainDiv)').forEach(element => {
+        element.style.display = '';
+    });
 }
-
 
 // Filter by Date Functionality
 function filterByDate() {
-  var filterBy = document.getElementById("filterBy").value;
-  var dateInput = document.getElementById("dateInput").value;
+    var filterBy = document.getElementById("filterBy").value;
+    var dateInput = document.getElementById("dateInput").value;
 
-  var url = "http://128.199.232.132/waterworks/admin/reports.php";
-  
-  // Modify the Axios request to include parameters for filtering
-  axios({
-      url: url,
-      method: "post",
-      data: {
-          filterBy: filterBy,
-          dateInput: dateInput
-      }
-  }).then((response) => {
-      try {
-          var records = response.data;
-          console.log(records);
-          var html = `
+    var url = "http://128.199.232.132/waterworks/admin/reports.php";
+
+    axios({
+        url: url,
+        method: "post",
+        data: {
+            filterBy: filterBy,
+            dateInput: dateInput
+        }
+    }).then((response) => {
+        try {
+            var records = response.data;
+            console.log(records);
+            var html = `
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                   <thead>
                       <tr>
@@ -122,8 +117,8 @@ function filterByDate() {
                   </thead>
                   <tbody>
           `;
-          records.forEach((record) => {
-              html += `
+            records.forEach((record) => {
+                html += `
                   <tr>
                       <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
                       <td class="text-center">${record.zone_name}</td>
@@ -131,29 +126,26 @@ function filterByDate() {
                       <td class="text-center">${record.pay_amount}</td>
                   </tr>
               `;
-          });
-          html += `
+            });
+            html += `
                   </tbody>
               </table>
           `;
-          document.getElementById("mainDiv").innerHTML = html;
-          $('#example').DataTable({
-              "ordering": false // Disable sorting for all columns
-          });
-      } catch (error) {
-          var html = `<h2>No Records</h2>`;
-          document.getElementById("mainDiv").innerHTML = html;
-          console.log(error);
-      }
-  }).catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-  });
+            document.getElementById("mainDiv").innerHTML = html;
+            $('#example').DataTable({
+                "ordering": false // Disable sorting for all columns
+            });
+        } catch (error) {
+            var html = `<h2>No Records</h2>`;
+            document.getElementById("mainDiv").innerHTML = html;
+            console.log(error);
+        }
+    }).catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+    });
 }
 
 // Execute onLoad function when the page is loaded
-window.onload = function() {
-  onLoad();
+window.onload = function () {
+    onLoad();
 };
-
-
-
