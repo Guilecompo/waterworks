@@ -23,7 +23,7 @@ if ($dateInput) {
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    WHERE DATE(a.pay_date, '%Y-%m-%d') = :dateInput
+    WHERE DATE_FORMAT(a.pay_date, '%Y-%m-%d') = :dateInput
     ORDER BY a.or_num");
 
     $stmt->bindParam(':dateInput', $dateInput);
