@@ -170,6 +170,18 @@
                         </div>
                         <div class="container-fluid mt-2">
                         <div class="row col-md-12  p-0 mt-3">
+                            <!-- Printing button -->
+                            <button onclick="printTable()" class="btn btn-primary">Print Table</button>
+
+                            <!-- Filter by date inputs -->
+                            <select id="filterBy" onchange="filterByDate()">
+                                <option value="day">Day</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+                            </select>
+
+                            <input type="date" id="dateInput" onchange="filterByDate()">
+
                             <!-- <table id="example" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
