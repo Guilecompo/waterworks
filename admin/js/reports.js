@@ -3,7 +3,6 @@ let employees = [];
 
 
 const onLoad = () => {
-  new DataTable('#example');
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
@@ -70,6 +69,7 @@ const displayPaymentReports = () => {
 
           html += `</tbody></table><br/><br/>`;
           document.getElementById("mainDiv").innerHTML = html;
+          $('#example').DataTable();
       }
   } catch (error) {
       // Handle any errors here
