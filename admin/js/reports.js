@@ -77,31 +77,7 @@ function printTable() {
   // Call displayPaymentReport to populate the table
   displayPaymentReport();
 
-  // Wait for the content to be loaded
-  setTimeout(() => {
-      // Retrieve the content of the table
-      var contentToPrint = document.getElementById("example_wrapper").outerHTML;
-      
-      // Create a new window for printing
-      var printWindow = window.open('', '_blank');
-
-      // Write the content and styles to the new window
-      printWindow.document.write(`
-          <html>
-          <head>
-              <title>Print</title>
-              <link rel="stylesheet" type="text/css" href="printStyles.css">
-          </head>
-          <body>${contentToPrint}</body>
-          </html>`
-      );
-
-      // Print the content
-      printWindow.print();
-
-      // Close the print window after printing
-      printWindow.close();
-  }, 1000); // Adjust the timeout as needed to ensure content is loaded before printing
+  window.print();
 }
 
 
