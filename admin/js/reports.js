@@ -73,69 +73,42 @@ const displayPaymentReports = () => {
   });
 };
 
+// Printing Functionality
 function printTable() {
-  // Call displayPaymentReport to populate the table
-  displayPaymentReport();
-
-  window.print();
+  var tableContents = document.getElementById("mainDiv").querySelector("table").outerHTML;
+  var printWindow = window.open('', '_blank');
+  printWindow.document.open();
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Print Table</title>
+        <style>
+          @media print {
+            body * {
+              visibility: hidden;
+            }
+            #print-content * {
+              visibility: visible;
+            }
+            #print-content {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div id="print-content">
+          ${tableContents}
+        </div>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.print();
 }
-
-
-const displayPaymentReport = () => {
-  var url = "http://128.199.232.132/waterworks/admin/reports.php";
-
-  axios({
-      url: url,
-      method: "post",
-  }).then((response) => {
-      try {
-          var records = response.data;
-          console.log(records);
-          var html = `
-              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                  <thead>
-                      <tr>
-                          <th class="text-center">NAME</th>
-                          <th class="text-center">ZONE</th>
-                          <th class="text-center">OR #</th>
-                          <th class="text-center">AMOUNT</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-          `;
-          records.forEach((record) => {
-              html += `
-                  <tr>
-                      <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
-                      <td class="text-center">${record.zone_name}</td>
-                      <td class="text-center">${record.or_num}</td>
-                      <td class="text-center">${record.pay_amount}</td>
-                  </tr>
-              `;
-          });
-          html += `
-                  </tbody>
-              </table>
-          `;
-
-          // Directly write the table HTML to the document body
-          document.body.innerHTML = html;
-
-          // Initialize DataTable without search, length menu, and pagination
-          $('#example').DataTable({
-              "ordering": false, // Disable sorting for all columns
-              "searching": false, // Disable search box
-              "lengthChange": false, // Disable entries per page menu
-              "paging": false // Disable pagination
-          });
-      } catch (error) {
-          console.log(error);
-      }
-  }).catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-  });
-};
-
 
 // Filter by Date Functionality
 function filterByDate() {
