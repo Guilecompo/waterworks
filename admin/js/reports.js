@@ -61,11 +61,7 @@ const displayPaymentReports = () => {
           `;
           document.getElementById("mainDiv").innerHTML = html;
           $('#example').DataTable({
-              "order": [], // Disable initial sorting
-              "columnDefs": [{
-                  "targets": 0, // Target the first column (index 0)
-                  "orderable": false // Disable sorting for the first column
-              }]
+              "ordering": false // Disable sorting for all columns
           });
       } catch (error) {
           var html = `<h2>No Records</h2>`;
