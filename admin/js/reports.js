@@ -48,10 +48,10 @@ const displayPaymentReports = () => {
           records.forEach((record) => {
               html += `
                   <tr>
-                      <td>${record.con_lastname}, ${record.con_firstname}</td>
-                      <td>${record.zone_name}</td>
-                      <td>${record.or_num}</td>
-                      <td>${record.pay_amount}</td>
+                      <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
+                      <td class="text-center">${record.zone_name}</td>
+                      <td class="text-center">${record.or_num}</td>
+                      <td class="text-center">${record.pay_amount}</td>
                   </tr>
               `;
           });
