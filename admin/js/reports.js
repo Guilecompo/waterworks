@@ -24,6 +24,7 @@ const showPreviousPage = () => {
 };
 
 const displayPaymentReports = () => {
+  document.getElementById("dateInput").value = "";
   var url = "http://128.199.232.132/waterworks/admin/reports.php";
 
   axios({
