@@ -76,9 +76,8 @@ const displayPaymentReports = () => {
 // Printing Functionality
 function printTable() {
   var tableContents = document.getElementById("mainDiv").querySelector("table").outerHTML;
-  var printWindow = window.open('', '_blank');
-  printWindow.document.open();
-  printWindow.document.write(`
+  var printWindow = window;
+  printWindow.document.body.innerHTML = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -117,9 +116,9 @@ function printTable() {
         </div>
       </body>
     </html>
-  `);
-  printWindow.document.close();
+  `;
   printWindow.print();
+  printWindow.location.reload(); // Reload the page after printing
 }
 
 // Filter by Date Functionality
