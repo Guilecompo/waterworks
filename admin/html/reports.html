@@ -170,56 +170,26 @@
                             <h4 style="text-align: center;">Admin Reports</h4>
                         </div>
                         <div class="container-fluid mt-2">
-                        <div class="row col-md-12  p-0 mt-3">
-                            <!-- Printing button -->
-                            <div class="col-12 w-25 col-md-6">
-                                <button onclick="printTable()" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-print"></i> Print
-                                </button>
+                            <div class="row col-md-12 p-0 mt-3 align-items-center">
+                                <!-- Filtering input -->
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input id="dateInput" type="date" class="form-control">
+                                        <button onclick="filterByDate()" class="btn btn-primary">Filter</button>
+                                    </div>
+                                </div>
+                                <!-- Spacer to push print button to the end -->
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <!-- Print button -->
+                                    <button onclick="printTable()" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
+                                <!-- Table or mainDiv -->
+                                <div class="mains col-md-12 mt-3" id="mainDiv"></div>
                             </div>
-                                                     
-                            
-
-                            <!-- <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">NAME</th>
-                                        <th class="text-center">ZONE</th>
-                                        <th class="text-center">OR #</th>
-                                        <th class="text-center">AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td>Jonas Alexander</td>
-                                        <td>Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>30</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shad Decker</td>
-                                        <td>Regional Director</td>
-                                        <td>Edinburgh</td>
-                                        <td>51</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
-                            <div class="mains" id="mainDiv"></div>
                         </div>
-                    </div>
+                        
                 </main>
             </div>
         </div>
