@@ -3,9 +3,7 @@ let employees = [];
 
 
 const onLoad = () => {
-  $(document).ready(function(){
-    $('example').DataTable();
-  })
+  new DataTable('#example');
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
