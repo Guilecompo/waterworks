@@ -85,8 +85,16 @@ function printTable() {
       // Create a new window for printing
       var printWindow = window.open('', '_blank');
 
-      // Write the content to the new window
-      printWindow.document.write('<html><head><title>Print</title></head><body>' + contentToPrint + '</body></html>');
+      // Write the content and styles to the new window
+      printWindow.document.write(`
+          <html>
+          <head>
+              <title>Print</title>
+              <link rel="stylesheet" type="text/css" href="printStyles.css">
+          </head>
+          <body>${contentToPrint}</body>
+          </html>`
+      );
 
       // Print the content
       printWindow.print();
