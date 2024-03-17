@@ -72,19 +72,21 @@ const displayPaymentReports = () => {
 };
 
 // Printing Functionality
+// Printing Functionality
 function printTable() {
-    // Hide non-table elements
-    document.querySelectorAll(':not(#mainDiv)').forEach(element => {
-        element.style.display = 'none';
-    });
+  // Hide non-table elements
+  var nonTableElements = document.querySelectorAll('body > *:not(table)');
+  nonTableElements.forEach(element => {
+      element.style.display = 'none';
+  });
 
-    // Print the table
-    window.print();
+  // Print the table
+  window.print();
 
-    // Restore display of non-table elements after printing
-    document.querySelectorAll(':not(#mainDiv)').forEach(element => {
-        element.style.display = '';
-    });
+  // Restore display of non-table elements after printing
+  nonTableElements.forEach(element => {
+      element.style.display = '';
+  });
 }
 
 // Filter by Date Functionality
