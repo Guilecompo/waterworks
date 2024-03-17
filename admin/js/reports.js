@@ -142,7 +142,7 @@ function filterByDate() {
     axios({
       url: url,
       method: "post",
-      data: FormData,
+      data: formData,
     }).then((response) => {
       try {
         var records = response.data;
