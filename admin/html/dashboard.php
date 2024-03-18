@@ -3,13 +3,14 @@ if(!isset($_SESSION['accountId'])){
 
   header("Location: /waterworks/");
   exit;
-}else{
-  echo '
-      
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <title>Admin Dashboard</title>
+    
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -351,7 +352,3 @@ if(!isset($_SESSION['accountId'])){
     <script src="../js/dashboard.js"></script>
   </body>
 </html>
-
-  ';
-}
-?>
