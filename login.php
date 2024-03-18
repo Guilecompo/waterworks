@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $response = array("success" => false, "message" => "Invalid username or password");
                 
                 // Ensure accountId session variable is empty on failed login
-                $_SESSION['accountId'] = ""; // Change this to null to clear session
+                $_SESSION['accountId'] = 0; // Change this to null to clear session
                 
             }
         }

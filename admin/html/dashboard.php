@@ -1,5 +1,5 @@
 <?php
-if(!isset($_SESSION['accountId'])){
+if($_SESSION['accountId'] == 0){
 
   header("Location: /waterworks/");
   exit;
@@ -10,7 +10,7 @@ if(!isset($_SESSION['accountId'])){
 <html lang="en" data-bs-theme="dark">
   <head>
     <title>Admin Dashboard</title>
-    
+
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
