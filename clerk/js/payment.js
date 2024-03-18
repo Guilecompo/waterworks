@@ -267,7 +267,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <div class="row mt-0">
                                             <div class="col-sm-4">
                                                 <label class="form-label">Discount</label>
-                                                <select id="consumer" class="form-select"></select>
+                                                <select id="consumer" class="form-select" style="height: 30px;"></select>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label for="amount">Amount to Pay</label>
