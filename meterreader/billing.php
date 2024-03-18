@@ -18,11 +18,11 @@ $branchId = $_POST['branchId'];
 $reading_date = date('Y-m-d H:i:s');
 
 // Check if the reading date is Saturday or Sunday
-// $dayOfWeek = date('N', strtotime($reading_date));
-// if ($dayOfWeek >= 6) {
-//     echo json_encode(["error" => "No work on weekends!"]);
-//     exit; // Stop further execution
-// }
+$dayOfWeek = date('N', strtotime($reading_date));
+if ($dayOfWeek >= 6) {
+    echo json_encode(["error" => "No work on weekends!"]);
+    exit; // Stop further execution
+}
 
 $date_added = date("Y-m-d");
 $employee_Id = $_POST['readerId'];
