@@ -224,7 +224,6 @@ const showFilteredConsumers = (filteredConsumers) => {
                                 <div class="row z-depth-3 ">
                                     <div class="col-md-12 rounded-right">
                                         <div class="car-block text-center">
-                                            <i class="fas fa-user fa-3x mt-1"></i>
                                             <h5 class="font-weight-bold mt-2">${employee[0].con_firstname} ${employee[0].con_middlename} ${employee[0].con_lastname} </h5>
                                             <p >${employee[0].meter_no}</p>
                                         </div>
@@ -266,6 +265,10 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Consumer Type</label>
+                                                <select id="consumer" class="form-select"></select>
+                                            </div>
                                             <div class="col-sm-12">
                                                 <label for="amount">Amount to Pay</label>
                                                 <input type="numer" class="form-control " id="amount" style="height: 30px;" placeholder="Enter Amount To Pay" >
@@ -298,9 +301,31 @@ const showFilteredConsumers = (filteredConsumers) => {
         
               modalContent.innerHTML = html;
               modal.style.display = "block";
+              getConsumerType();
           }).catch((error) => {
               alert(`ERROR OCCURRED! ${error}`);
           });
+        };
+        const getConsumerType = () => {
+          const propertySelect = document.getElementById("consumer");
+          var myUrl = "http://128.199.232.132/waterworks/gets/get_consumertype.php";
+        
+          axios({
+            url: myUrl,
+            method: "post",
+          })
+            .then((response) => {
+              var properties = response.data;
+        
+              var options = ``;
+              properties.forEach((property) => {
+                options += `<option value="${property.consumertype_id }">${property.consumertype}</option>`;
+              });
+              propertySelect.innerHTML = options;
+            })
+            .catch((error) => {
+              alert(`ERROR OCCURRED! ${error}`);
+            });
         };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
