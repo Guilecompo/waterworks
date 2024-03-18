@@ -266,7 +266,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
                                             <div class="col-sm-4">
-                                                <label class="form-label">Discount</label>
+                                                <label class="form-label mb-0">Discount</label>
                                                 <select id="consumer" class="form-select mt-0" style="height: 40px;"></select>
                                             </div>
                                             <div class="col-sm-8">
