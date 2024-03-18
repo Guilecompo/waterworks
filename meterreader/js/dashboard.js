@@ -39,6 +39,8 @@ const displayConsumer = () => {
       //   alert("ERRORSSS! - " + error);
       errorTables();
       console.log("ERROR HERE");
+      console.log(error);
+      console.log(response.data);
     });
 };
 
