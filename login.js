@@ -75,7 +75,7 @@ const login = async () => {
           // Adjust the following cases based on your specific usertype values
           switch (usertype) {
             case "Admin":
-              window.location.href = "./admin/html/dashboard.html";
+              window.location.href = "./admin/html/dashboard.php";
               break;
             case "Head":
               window.location.href = "./head/html/dashboard.html";

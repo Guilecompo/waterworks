@@ -1,3 +1,11 @@
+<?php
+if(!isset($_SESSION['accountId'])){
+
+  header("Location: /waterworks/");
+  exit;
+}else{
+  echo '
+      
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
@@ -343,3 +351,7 @@
     <script src="../js/dashboard.js"></script>
   </body>
 </html>
+
+  ';
+}
+?>

@@ -3,9 +3,10 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
 include 'connection.php';
-session_start();
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
     
     $username = $_POST['username'];
     $password = $_POST['password'];
