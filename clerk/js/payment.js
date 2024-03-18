@@ -238,7 +238,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                 <h6 class="text-muted" >${employee[0].phone_no}</h6>
                                             </div>
                                         </div>
-                                        <hr class="badge-primary mt-4">
+                                        <hr class="badge-primary mt-4 mb-0">
                                         <h4 class="mt-1 text-center" >Bill Information</h4>
                                         <hr class="badge-primary mt-2">
                                         <div class="row">
@@ -261,7 +261,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                 <h6 class="text-muted">₱ ${employee[0].total_bill}</h6>
                                             </div>
                                         </div>
-                                        <hr class="badge-primary mt-1">
+                                        <hr class="badge-primary mt-1 mb-0">
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
