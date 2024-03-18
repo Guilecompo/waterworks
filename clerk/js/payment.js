@@ -308,7 +308,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         };
         const getConsumerType = () => {
           const propertySelect = document.getElementById("consumer");
-          var myUrl = "http://128.199.232.132/waterworks/gets/get_consumertype.php";
+          var myUrl = "http://128.199.232.132/waterworks/clerk/get_consumertype.php";
         
           axios({
             url: myUrl,
