@@ -319,7 +319,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         
               var options = ``;
               properties.forEach((property) => {
-                options += `<option value="${property.consumertype_id }">${property.consumertype}</option>`;
+                options += `<option value="${property.discount_percent }">${property.consumertype}</option>`;
               });
               propertySelect.innerHTML = options;
             })
@@ -329,8 +329,10 @@ const showFilteredConsumers = (filteredConsumers) => {
         };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
+            const consumer = document.getElementById("consumer").value;
+            console.log(consumer);
         
-            if (amount === '') {
+            if (amount === '' || consumer === '') {
                 alert('Fill in all fields');
                 return;
             } else {
