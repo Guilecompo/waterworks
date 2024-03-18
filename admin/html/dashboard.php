@@ -1,13 +1,12 @@
 <?php
 session_start();
 
-// Check if accountId is set and equal to 0
-if(isset($_SESSION['accountId']) && $_SESSION['accountId'] === 0) {
+// Check if accountId is not set or empty
+if(!isset($_SESSION['accountId']) || empty($_SESSION['accountId'])) {
   header("Location: ../../index.html");
   exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
