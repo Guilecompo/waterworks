@@ -267,11 +267,11 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <div class="row mt-0">
                                             <div class="col-sm-4">
                                                 <label class="form-label">Discount</label>
-                                                <select id="consumer" class="form-select" style="height: 30px;"></select>
+                                                <select id="consumer" class="form-select" style="height: 50px;"></select>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label for="amount">Amount to Pay</label>
-                                                <input type="numer" class="form-control " id="amount" style="height: 30px;" placeholder="Enter Amount To Pay" >
+                                                <input type="numer" class="form-control " id="amount" style="height: 50px;" placeholder="Enter Amount To Pay" >
                                                 
                                             </div>
                                         </div>
