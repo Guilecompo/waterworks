@@ -2,7 +2,7 @@
 session_start();
 if($_SESSION['accountId'] === 0){
 
-  header("Location: /waterworks/");
+  header("Location: ../../index.html");
   exit;
 }
 ?>
