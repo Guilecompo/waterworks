@@ -1,11 +1,10 @@
 <?php
-
-if($_SESSION['accountId'] == 0){
+session_start();
+if($_SESSION['accountId'] === 0){
 
   header("Location: /waterworks/");
   exit;
 }
-session_start();
 ?>
 
 <!DOCTYPE html>
