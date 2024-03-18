@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = [
             "Total_Consumed" => $PresConsumedTotalresults['Pres_Total_Consumed'],
             "Total_Pay" => $PayTotalresults['Total_Pay'],
-            "Total_Balance" => $PayTotalresults['Total_Balance'],
+            "Total_Balance" => $BalanceTotalresults['Total_Balance'],
         ];
 
         echo json_encode($response);
