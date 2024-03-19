@@ -179,6 +179,8 @@ const showFilteredConsumers = (filteredConsumers) => {
     const discount = (user_id) =>{
           const modal = document.getElementById("myModal");
           const modalContent = document.getElementById("modalContent");
+          const close_butt = document.getElementById("close_butt");
+          close_butt.style.display = "none";
 
           var html = `
                   <div class="container-fluid" >
