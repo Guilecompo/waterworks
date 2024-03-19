@@ -149,65 +149,66 @@ const showFilteredConsumers = (filteredConsumers) => {
       }
       const refreshTables = (consumerList) => {
         var html = `
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Meter No</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-        `;
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Full Name</th>
+                  <th scope="col">Meter No</th>
+                  <th scope="col">Branch</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+            `;
         consumerList.forEach(consumer => {
             html += `
-            <tr>
-              <td>${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
-              <td>${consumer.meter_no}</td>
-              <td>${consumer.branch_name}</td>
-              <td>
-              <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
-              <button class="clear" onclick="discount(${consumer.user_id} ${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number})">Discount</button>
-              </td>
-            </tr>
+                <tr>
+                  <td>${consumer.firstname} ${consumer.lastname} ${consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""}</td>
+                  <td>${consumer.meter_no}</td>
+                  <td>${consumer.branch_name}</td>
+                  <td>
+                    <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
+                    <button class="clear" onclick="discount(${consumer.user_id}, '${consumer.firstname}', '${consumer.lastname}', ${consumer.connected_number})">Discount</button>
+                  </td>
+                </tr>
             `;
         });
         html += `</tbody></table>`;
         document.getElementById("mainDiv").innerHTML = html;
     };
-    const discount = (user_id, firstname, lastname, connected_number) =>{
-          const modal = document.getElementById("myModal");
-          const modalContent = document.getElementById("modalContent");
-          const close_butt = document.getElementById("close_butt");
-          close_butt.style.display = "none";
-
-          var html = `
-                  <div class="container-fluid" >
-                      <div class="col-md-12">
-                          <div class="row z-depth-3 ">
-                              <div class="col-md-12 rounded-right">
-                                  <div class="car-block text-center">
-                                        <h5 class="modal-title " style=" text-align:center;">Are you sure you want to add discount to ${firstname} ${lastname} ${ connected_number !== 0 ? "#" +connected_number : ""  }?</h5>
-                                  </div>
-                                  <div class="row mt-4">
-                                      <div class="col-sm-5">
-                                        <button type="button" class="btn btn-primary w-100" onclick="submit_discount(${user_id})">Submit Discount</button>
-                                      </div>
-                                      <div class="col-sm-2 my-1"></div>
-                                      <div class="col-sm-5">
-                                        <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+    
+    const discount = (user_id, firstname, lastname, connected_number) => {
+        const modal = document.getElementById("myModal");
+        const modalContent = document.getElementById("modalContent");
+        const close_butt = document.getElementById("close_butt");
+        close_butt.style.display = "none";
+    
+        var html = `
+            <div class="container-fluid">
+              <div class="col-md-12">
+                <div class="row z-depth-3">
+                  <div class="col-md-12 rounded-right">
+                    <div class="car-block text-center">
+                      <h5 class="modal-title" style="text-align:center;">Are you sure you want to add discount to ${firstname} ${lastname} ${connected_number !== 0 ? "#" + connected_number : ""}?</h5>
+                    </div>
+                    <div class="row mt-4">
+                      <div class="col-sm-5">
+                        <button type="button" class="btn btn-primary w-100" onclick="submit_discount(${user_id})">Submit Discount</button>
                       </div>
+                      <div class="col-sm-2 my-1"></div>
+                      <div class="col-sm-5">
+                        <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                      </div>
+                    </div>
                   </div>
-          `;
-          modalContent.innerHTML = html;
-          modal.style.display = "block";
-
-    }
+                </div>
+              </div>
+            </div>
+        `;
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
+    };
+    
         const payment = (user_id) => {
           
 
