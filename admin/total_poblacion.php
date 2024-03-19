@@ -32,11 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(":barangayId", $barangayId);
         $stmt->execute();
         $PayTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt = $conn->prepare("SELECT SUM(total_bill) AS Total_Balance FROM billing  WHERE billing_update_statusId = 2 AND branch.branch_name = :barangayId");
+        $stmt->bindParam(":barangayId", $barangayId);
+        $stmt->execute();
+        $BalanceTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
+        
         $response = [
             "Total_Consumers" => $CTotalresults[0]['Total_Consumers'],
             "Total_Employees" => $ETotalresults[0]['Total_Employees'],
             "Total_Consumed" => $PresConsumedTotalresults[0]['Total_Consumed'],
             "Total_Pay" => $PayTotalresults[0]['Total_Pay'],
+            "Total_Balance" => $BalanceTotalresults['Total_Balance'],
         ];
 
         echo json_encode($response);
