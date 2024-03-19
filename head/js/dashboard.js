@@ -71,6 +71,7 @@ const displayActivity = () => {
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
+    formData.append("branchId", sessionStorage.getItem("branchId"));
   
   axios({
     url: url,
