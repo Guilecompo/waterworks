@@ -401,7 +401,6 @@ const showFilteredConsumers = (filteredConsumers) => {
         };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
-            console.log(consumer);
         
             if (amount === '' ) {
                 alert('Fill in all fields');
