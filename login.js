@@ -24,6 +24,7 @@ const login = async () => {
         sessionStorage.setItem("fullname", userDetails.firstname + " " + userDetails.lastname);
         sessionStorage.setItem("email", userDetails.email);
         sessionStorage.setItem("accountId", userDetails.user_id);
+        sessionStorage.setItem("branchId", userDetails.branchId);
 
         // Redirect based on user type
         switch (usertype) {
