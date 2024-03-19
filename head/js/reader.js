@@ -750,6 +750,8 @@ const submit_assigned = (event, user_id, branchId) => {
         success_update_modal();
         // window.location.href = "./employee_list.html";
       } else if (response.data.status === 0) {
+        failed_update_modal();
+
       } else {
         error_modal();
       }

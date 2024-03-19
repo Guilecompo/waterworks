@@ -1,11 +1,12 @@
 let currentPage = 1;
 let employees = [];
 
+
 const onLoad = () => {
   document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
-  // displayEmployee();
+    displayPaymentReports();
 };
 
 const showNextPage = () => {
@@ -22,146 +23,181 @@ const showPreviousPage = () => {
   }
 };
 
-const displayEmployee = () => {
-  const head = document.getElementById("head");
-  const paginationNumbers = document.getElementById("paginationNumbers");
-  const branchSelect = document.getElementById("branch");
-  const searchInput = document.getElementById("searchInput");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  head.style.display = "block";
-  branchSelect.style.display = "block";
-  var url = "http://128.199.232.132/waterworks/admin/get_employee.php";
-
-  const formData = new FormData();
-  formData.append("accountId", sessionStorage.getItem("accountId"));
+const displayPaymentReports = () => {
+  document.getElementById("dateInput").value = "";
+  var url = "http://128.199.232.132/waterworks/admin/reports.php";
 
   axios({
-    url: url,
-    method: "post",
-    data: formData,
-  })
-    .then((response) => {
-      employees = response.data;
-      console.log(employees);
-
-      if (!Array.isArray(employees) || employees.length === 0) {
-        errorTable();
-      } else {
-        sortEmployeesByName();
-        showEmployeePage(currentPage);
+      url: url,
+      method: "post",
+  }).then((response) => {
+      try {
+          var records = response.data;
+          console.log(records);
+          var html = `
+              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th class="text-center">NAME</th>
+                          <th class="text-center">ZONE</th>
+                          <th class="text-center">OR #</th>
+                          <th class="text-center">AMOUNT</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+          `;
+          records.forEach((record) => {
+              html += `
+                  <tr>
+                      <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
+                      <td class="text-center">${record.zone_name}</td>
+                      <td class="text-center">${record.or_num}</td>
+                      <td class="text-center">${record.pay_amount}</td>
+                  </tr>
+              `;
+          });
+          html += `
+                  </tbody>
+              </table>
+          `;
+          document.getElementById("mainDiv").innerHTML = html;
+          $('#example').DataTable({
+              "ordering": false // Disable sorting for all columns
+          });
+      } catch (error) {
+          var html = `<h2>No Records</h2>`;
+          document.getElementById("mainDiv").innerHTML = html;
+          console.log(error);
       }
-    })
-    .catch((error) => {
-      alert("ERROR! - " + error);
-    });
-};
-
-const sortEmployeesByName = () => {
-  employees.sort((a, b) => {
-    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
-    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
-    return nameA.localeCompare(nameB);
+  }).catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
   });
 };
-const filterEmployee = () => {
-  const searchInput = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
-  const filteredEmployees = employees.filter((employee) => {
-    const fullName = (
-      employee.firstname +
-      " " +
-      employee.lastname +
-      " " +
-      employee.position_name
-    ).toLowerCase();
-    return fullName.includes(searchInput);
-  });
-  showFilteredEmployees(filteredEmployees);
-};
 
-const showFilteredEmployees = (filteredEmployees) => {
-  currentPage = 1;
-  showEmployeePage(currentPage, filteredEmployees);
-};
+// Printing Functionality
+function printTable() {
+  var tableContents = document.getElementById("mainDiv").querySelector("table").outerHTML;
+  var printWindow = window;
+  printWindow.document.body.innerHTML = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Print Table</title>
+        <style>
+          @media print {
+            body * {
+              visibility: hidden;
+            }
+            #print-content * {
+              visibility: visible;
+            }
+            #print-content {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div id="print-content">
+          ${tableContents}
+        </div>
+      </body>
+    </html>
+  `;
+  printWindow.print();
+  printWindow.location.reload(); // Reload the page after printing
+}
 
-const showEmployeePage = (page, employeesToDisplay = employees) => {
-  var start = (page - 1) * 10;
-  var end = start + 10;
-  var displayedEmployees = employeesToDisplay.slice(start, end);
-  refreshTable(displayedEmployees);
-  showPaginationNumbers(page, Math.ceil(employeesToDisplay.length / 10));
-};
+function filterByDate() {
+  try {
+    var dateInput = document.getElementById("dateInput").value;
+    console.log(dateInput);
 
-const errorTable = () => {
-  var html = `
-        
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Phone No</th>
-              <th scope="col">Position</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          </table>`;
-
-  document.getElementById("mainDiv").innerHTML = html;
-};
-
-const refreshTable = (employeeList) => {
-  var html = `
-  
-        <table class="table mb-0 mt-0">
-          <thead>
-            <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Position</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-  employeeList.forEach((employee) => {
-    html += `
-          <tr>
-            <td>${employee.firstname} ${employee.lastname}</td>
-            <td>${employee.position_name}</td>
-            <td>${employee.branch_name}</td>
-            <td>${employee.user_status}</td>
-            <td>
-              <button class="clear" onclick="edit(${employee.user_id})">Edit</button>  
-            </td>
-          </tr>
-        `;
-  });
-
-  html += `</tbody></table>`;
-
-  document.getElementById("mainDiv").innerHTML = html;
-};
-
-const showPaginationNumbers = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
+    if (!dateInput) {
+      alert("Please select a date first");
+      return; // Exit the function
     }
+
+    // Check if dateInput is valid (you can add your own validation logic here)
+
+    var url = "http://128.199.232.132/waterworks/admin/filter_reports.php";
+
+    const formData = new FormData();
+    formData.append("dateInput", dateInput);
+
+    axios({
+      url: url,
+      method: "post",
+      data: formData,
+    }).then((response) => {
+      try {
+        var records = response.data;
+        if (records && Array.isArray(records)) {
+          var html = `
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+              <thead>
+                <tr>
+                  <th class="text-center">NAME</th>
+                  <th class="text-center">ZONE</th>
+                  <th class="text-center">OR #</th>
+                  <th class="text-center">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+          records.forEach((record) => {
+            html += `
+              <tr>
+                <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
+                <td class="text-center">${record.zone_name}</td>
+                <td class="text-center">${record.or_num}</td>
+                <td class="text-center">${record.pay_amount}</td>
+              </tr>
+            `;
+          });
+          html += `
+              </tbody>
+            </table>
+          `;
+          document.getElementById("mainDiv").innerHTML = html;
+          $('#example').DataTable({
+            "ordering": false // Disable sorting for all columns
+          });
+        } else {
+          var html = `<h2>No Records</h2>`;
+          document.getElementById("mainDiv").innerHTML = html;
+        }
+      } catch (error) {
+        console.log("Error processing response:", error);
+      }
+    }).catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log("Axios Error:", error);
+    });
+  } catch (error) {
+    console.log("An error occurred:", error);
   }
+}
 
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+
+// Execute onLoad function when the page is loaded
+window.onload = function() {
+  onLoad();
 };
 
-const goToPage = (page) => {
-  currentPage = page;
-  showEmployeePage(currentPage);
-};
+
+

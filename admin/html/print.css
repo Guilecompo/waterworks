@@ -1,0 +1,25 @@
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #print-content * {
+        visibility: visible;
+    }
+    #print-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    table {
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black; /* Set border color and thickness */
+        padding: 8px;
+        text-align: left;
+        color: black; /* Set text color */
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+}

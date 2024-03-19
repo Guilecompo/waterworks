@@ -20,9 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $PayTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $stmt = $conn->prepare("SELECT total_bill AS Total_Balance FROM billing WHERE consumerId = :accountId ORDER BY billing_id DESC LIMIT 1");
+        $stmt->bindParam(":accountId", $accountId);
+        $stmt->execute();
+        $BalanceTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $response = [
             "Total_Consumed" => $PresConsumedTotalresults['Pres_Total_Consumed'],
             "Total_Pay" => $PayTotalresults['Total_Pay'],
+            "Total_Balance" => $BalanceTotalresults['Total_Balance'],
         ];
 
         echo json_encode($response);

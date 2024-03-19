@@ -224,7 +224,6 @@ const showFilteredConsumers = (filteredConsumers) => {
                                 <div class="row z-depth-3 ">
                                     <div class="col-md-12 rounded-right">
                                         <div class="car-block text-center">
-                                            <i class="fas fa-user fa-3x mt-1"></i>
                                             <h5 class="font-weight-bold mt-2">${employee[0].con_firstname} ${employee[0].con_middlename} ${employee[0].con_lastname} </h5>
                                             <p >${employee[0].meter_no}</p>
                                         </div>
@@ -239,7 +238,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                 <h6 class="text-muted" >${employee[0].phone_no}</h6>
                                             </div>
                                         </div>
-                                        <hr class="badge-primary mt-4">
+                                        <hr class="badge-primary mt-4 mb-0">
                                         <h4 class="mt-1 text-center" >Bill Information</h4>
                                         <hr class="badge-primary mt-2">
                                         <div class="row">
@@ -262,13 +261,17 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                 <h6 class="text-muted">₱ ${employee[0].total_bill}</h6>
                                             </div>
                                         </div>
-                                        <hr class="badge-primary mt-1">
+                                        <hr class="badge-primary mt-1 mb-0">
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-4">
+                                                <label class="form-label mb-0">Discount</label>
+                                                <select id="consumer" class="form-select mt-0" style="height: 40px;"></select>
+                                            </div>
+                                            <div class="col-sm-8">
                                                 <label for="amount">Amount to Pay</label>
-                                                <input type="numer" class="form-control " id="amount" style="height: 30px;" placeholder="Enter Amount To Pay" >
+                                                <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" >
                                                 
                                             </div>
                                         </div>
@@ -298,14 +301,38 @@ const showFilteredConsumers = (filteredConsumers) => {
         
               modalContent.innerHTML = html;
               modal.style.display = "block";
+              getConsumerType();
           }).catch((error) => {
               alert(`ERROR OCCURRED! ${error}`);
           });
         };
+        const getConsumerType = () => {
+          const propertySelect = document.getElementById("consumer");
+          var myUrl = "http://128.199.232.132/waterworks/clerk/get_consumertype.php";
+        
+          axios({
+            url: myUrl,
+            method: "post",
+          })
+            .then((response) => {
+              var properties = response.data;
+        
+              var options = ``;
+              properties.forEach((property) => {
+                options += `<option value="${property.discount_percent }">${property.consumertype}</option>`;
+              });
+              propertySelect.innerHTML = options;
+            })
+            .catch((error) => {
+              alert(`ERROR OCCURRED! ${error}`);
+            });
+        };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
+            const consumer = document.getElementById("consumer").value;
+            console.log(consumer);
         
-            if (amount === '') {
+            if (amount === '' || consumer === '') {
                 alert('Fill in all fields');
                 return;
             } else {

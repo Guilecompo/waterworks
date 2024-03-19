@@ -1,7 +1,19 @@
+<?php
+session_start();
+
+// Check if accountId is not set or empty
+if(!isset($_SESSION['accountId']) || empty($_SESSION['accountId'])) {
+  header("Location: ../index.html");
+  exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <title>Admin Dashboard</title>
+
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
