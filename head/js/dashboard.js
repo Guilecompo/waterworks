@@ -5,7 +5,6 @@ function onLoad() {
   document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
   getall();
   displayActivity();
-  console.log(sessionStorage.getItem("barangayId"));
 };
 const getall = () => {
   const total_employees = document.getElementById('totalEmployees');
