@@ -23,8 +23,10 @@ try{
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row) {
-        $discounted = $row * $discount;
-        $newTotalBill = $row - $discount;
+        $total_bill = $row['total_bill'];
+        $discounted = $total_bill * $discount;
+        $newTotalBill = $total_bill - $discount;
+
 
         $sqlUpdates = "UPDATE billing SET total_bill = :newTotalBill WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC";
         $stmtUpdates = $conn->prepare($sqlUpdates);
