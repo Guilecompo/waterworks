@@ -168,7 +168,7 @@ const showFilteredConsumers = (filteredConsumers) => {
               <td>${consumer.branch_name}</td>
               <td>
               <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
-              <button class="clear" onclick="discount(${consumer.user_id})">Discount</button>
+              <button class="clear" onclick="discount(${consumer.user_id}, ${consumer.firstname} ,${consumer.lastname} ,${ consumer.connected_number})">Discount</button>
               </td>
             </tr>
             `;
@@ -176,7 +176,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         html += `</tbody></table>`;
         document.getElementById("mainDiv").innerHTML = html;
     };
-    const discount = (user_id) =>{
+    const discount = (user_id, firstname, lastname, connected_number) =>{
           const modal = document.getElementById("myModal");
           const modalContent = document.getElementById("modalContent");
           const close_butt = document.getElementById("close_butt");
@@ -188,7 +188,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                           <div class="row z-depth-3 ">
                               <div class="col-md-12 rounded-right">
                                   <div class="car-block text-center">
-                                        <h5 class="modal-title " style=" text-align:center;">Are you sure you want to add discount for this consumer?</h5>
+                                        <h5 class="modal-title " style=" text-align:center;">Are you sure you want to add discount to ${firstname} ${lastname} ${ connected_number !== 0 ? "#" +connected_number : ""  }?</h5>
                                   </div>
                                   <div class="row mt-4">
                                       <div class="col-sm-5">
