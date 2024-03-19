@@ -189,8 +189,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                 <div class="row z-depth-3">
                   <div class="col-md-12 rounded-right">
                     <div class="car-block text-center">
-                      <h5 class="modal-title" style="text-align:center;">Are you sure you want to add senior citizen discount to </h5>
-                      <h5 class="modal-title" style="color: orange; text-align:center;">${firstname} ${lastname} ${connected_number !== 0 ? "#" + connected_number : ""}?</h5>
+                    <h5 class="modal-title" style="text-align:center;">Are you sure you want to add senior citizen discount to <span style="color: orange; text-align:center;">${firstname} ${lastname} ${connected_number !== 0 ? "#" + connected_number : ""}</span> ?</h5>
                     </div>
                     <div class="row mt-4">
                       <div class="col-sm-5">
