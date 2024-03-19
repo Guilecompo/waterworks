@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $PayTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT SUM(total_bill) AS Total_Balance FROM billing ");
+        $stmt = $conn->prepare("SELECT SUM(total_bill) AS Total_Balance FROM billing  WHERE billing_update_statusId = 2");
         $stmt->execute();
         $BalanceTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
 
