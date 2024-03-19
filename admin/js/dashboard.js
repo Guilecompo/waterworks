@@ -241,7 +241,7 @@ const getFileterBranch = () => {
         // Call the appropriate display function based on the selected position
         if (selectedBranch === selectedBranch) {
           getpoblacion(selectedBranch);
-        }  else {
+        }  else if(selectedBranch === !selectedBranch){
           getall();
         }
         // Add more conditions as needed for other positions
