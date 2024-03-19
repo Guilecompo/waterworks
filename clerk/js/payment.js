@@ -189,7 +189,13 @@ const showFilteredConsumers = (filteredConsumers) => {
                 <div class="row z-depth-3">
                   <div class="col-md-12 rounded-right">
                     <div class="car-block text-center">
-                    <h5 class="modal-title" style="text-align:center;">Are you sure you want to add senior citizen discount to <span style="color: orange; text-align:center;">${firstname} ${lastname} ${connected_number !== 0 ? "#" + connected_number : ""}</span> ?</h5>
+                      <h5 class="modal-title" style="text-align:center;">Are you sure you want to add senior citizen discount to <span style="color: orange; text-align:center;">${firstname} ${lastname} ${connected_number !== 0 ? "#" + connected_number : ""}</span> ?</h5>
+                    </div>
+                    <div class="row mt-0">
+                        <div class="col-sm-12">
+                            <label class="form-label mb-0">Discount</label>
+                            <select id="consumer" class="form-select mt-0" style="height: 40px;"></select>
+                        </div>
                     </div>
                     <div class="row mt-4">
                       <div class="col-sm-5">
@@ -207,7 +213,11 @@ const showFilteredConsumers = (filteredConsumers) => {
         `;
         modalContent.innerHTML = html;
         modal.style.display = "block";
+        getConsumerType();
     };
+    const submit_discount = (user_id) => {
+
+    }
     
         const payment = (user_id) => {
           
@@ -299,14 +309,9 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
-                                            <div class="col-sm-4">
-                                                <label class="form-label mb-0">Discount</label>
-                                                <select id="consumer" class="form-select mt-0" style="height: 40px;"></select>
-                                            </div>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-12">
                                                 <label for="amount">Amount to Pay</label>
                                                 <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" >
-                                                
                                             </div>
                                         </div>
                                         <div class="row mt-4">
@@ -335,7 +340,6 @@ const showFilteredConsumers = (filteredConsumers) => {
         
               modalContent.innerHTML = html;
               modal.style.display = "block";
-              getConsumerType();
           }).catch((error) => {
               alert(`ERROR OCCURRED! ${error}`);
           });
