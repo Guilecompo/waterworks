@@ -181,7 +181,26 @@ const showFilteredConsumers = (filteredConsumers) => {
           const modalContent = document.getElementById("modalContent");
 
           var html = `
-              <h5 class="modal-title " style=" text-align:center;">Are You Sure you want to add discount ?</h5>
+                  <div class="container-fluid" >
+                      <div class="col-md-12">
+                          <div class="row z-depth-3 ">
+                              <div class="col-md-12 rounded-right">
+                                  <div class="car-block text-center">
+                                        <h5 class="modal-title " style="color: red; text-align:center;">No Billing Transactions Yet !</h5>
+                                  </div>
+                                  <div class="row mt-4">
+                                      <div class="col-sm-5">
+                                        <button type="button" class="btn btn-primary w-100" onclick="submit_discount(${user_id})">Submit Discount</button>
+                                      </div>
+                                      <div class="col-sm-2 my-1"></div>
+                                      <div class="col-sm-5">
+                                        <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
           `;
           modalContent.innerHTML = html;
           modal.style.display = "block";
@@ -210,27 +229,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                       const modal = document.getElementById("myModal");
                       const modalContent = document.getElementById("modalContent");
                       var html = `
-                      <div class="container-fluid" >
-                          <div class="col-md-12">
-                              <div class="row z-depth-3 ">
-                                  <div class="col-md-12 rounded-right">
-                                      <div class="car-block text-center">
-                                            <h5 class="modal-title " style="color: red; text-align:center;">No Billing Transactions Yet !</h5>
-                                      </div>
-                                      <div class="row mt-4">
-                                          <div class="col-sm-5">
-                                            <button type="button" class="btn btn-primary w-100" onclick="submit_discount(${employee[0].user_id})">Submit Discount</button>
-                                          </div>
-                                          <div class="col-sm-2 my-1"></div>
-                                          <div class="col-sm-5">
-                                            <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                            
+                            <h5 class="modal-title " style="color: red; text-align:center;">No Billing Transactions Yet !</h5>
                         `;
                         modalContent.innerHTML = html;
                         modal.style.display = "block";
