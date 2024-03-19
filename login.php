@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($positionResult as $position) {
             $stmt = $conn->prepare("SELECT 
                 a.*, g.position_name,
-                h.*, 
+                h.*, a.branchId,
                 i.user_status, 
                 address_zone.barangayId AS barangayIds
             FROM
