@@ -234,7 +234,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         data: formData
     }).then(response => {
       if (response.data.status === 1) {
-        succesuccess_update_modalss_modal();
+        success_update_modal();
         console.log("success save");
         displayConsumer();
       }else if (response.data.status === 0) {
