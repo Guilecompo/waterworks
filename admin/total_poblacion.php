@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $PayTotalresults = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT SUM(total_bill) AS Total_Balance FROM billing  WHERE billing_update_statusId = 2 AND branch.branch_name = :barangayId");
+        $stmt = $conn->prepare("SELECT SUM(total_bill) AS Total_Balance FROM billing INNER JOIN branch ON billing.branchId = branch.branch_id  WHERE billing_update_statusId = 2 AND branch.branch_name = :barangayId");
         $stmt->bindParam(":barangayId", $barangayId);
         $stmt->execute();
         $BalanceTotalresults = $stmt->fetch(PDO::FETCH_ASSOC);
