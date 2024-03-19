@@ -216,7 +216,40 @@ const showFilteredConsumers = (filteredConsumers) => {
         getConsumerType();
     };
     const submit_discount = (user_id) => {
+      const consumerDiscount = document.getElementById("consumer").value;
       console.log("consumer ID:",  user_id);
+
+      if (consumerDiscount === '') {
+        alert('Fill in all fields');
+        return;
+    } else {
+      const myUrl = "http://128.199.232.132/waterworks/clerk/discount.php";
+      const formData = new FormData();
+      formData.append("consumerId", user_id);
+      formData.append("consumerDiscount", consumerDiscount);
+
+      axios({
+        url: myUrl,
+        method: "post",
+        data: formData
+    }).then(response => {
+      if (response.data.status === 1) {
+        succesuccess_update_modalss_modal();
+        console.log("success save");
+        displayConsumer();
+      }else if (response.data.status === 0) {
+        failed_update_modal();
+      } else {
+        // alert("Unknown error occurred.");
+        error_modal();
+        console.log(response);
+      }
+    }).catch(error => {
+      // Handle the request failure
+      console.error('Request failed:', error);
+      error_modal();
+     });
+    }
 
     }
     
@@ -368,10 +401,9 @@ const showFilteredConsumers = (filteredConsumers) => {
         };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
-            const consumer = document.getElementById("consumer").value;
             console.log(consumer);
         
-            if (amount === '' || consumer === '') {
+            if (amount === '' ) {
                 alert('Fill in all fields');
                 return;
             } else {
