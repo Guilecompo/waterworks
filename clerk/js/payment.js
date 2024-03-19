@@ -216,6 +216,7 @@ const showFilteredConsumers = (filteredConsumers) => {
         getConsumerType();
     };
     const submit_discount = (user_id) => {
+      console.log("consumer ID:",  user_id);
 
     }
     
