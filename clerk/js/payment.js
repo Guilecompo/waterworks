@@ -168,7 +168,7 @@ const showFilteredConsumers = (filteredConsumers) => {
               <td>${consumer.branch_name}</td>
               <td>
               <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
-              <button class="clear" onclick="discount(${consumer.user_id}, ${consumer.firstname} ,${consumer.lastname} ,${ consumer.connected_number})">Discount</button>
+              <button class="clear" onclick="discount(${consumer.user_id} ${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number})">Discount</button>
               </td>
             </tr>
             `;
