@@ -12,8 +12,10 @@ const getall = () => {
   const total_consumed = document.getElementById('totalConsumed');
   
   const total_pay = document.getElementById('totalPay');
+  
+  const total_balance = document.getElementById('totalBalance');
 
-  if (!total_consumers || !total_consumed || !total_pay) {
+  if (!total_consumers || !total_consumed || !total_pay || !total_balance) {
     console.error('One or more required elements not found in the DOM.');
 
     console.log("Page loaded!");
@@ -33,16 +35,20 @@ const getall = () => {
     if (data && data.Total_Consumers !== undefined 
         && data.Total_Consumed !== undefined
         && data.Total_Pay !== undefined
+        && data.Total_Balance !== undefined
     ) {
         
 
         const totalPayValue = data.Total_Pay !== null ? data.Total_Pay : 0;
         const totalConsumersValue = data.Total_Consumers !== null ? data.Total_Consumers : 0;
         const totalConsumedValue = data.Total_Consumed !== null ? data.Total_Consumed : 0;
+        const totalBalanceValue = data.Total_Balance !== null ? data.Total_Balance : 0;
 
         total_consumers.innerText = totalConsumersValue;
 
         total_consumed.innerText = totalConsumedValue;
+
+        total_balance.innerText = totalBalanceValue;
         
         total_pay.innerText = totalPayValue;
     } else {
