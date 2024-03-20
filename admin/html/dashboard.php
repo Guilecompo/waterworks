@@ -1,7 +1,7 @@
 <?php
+session_start();
 require ('set_session.php');
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
