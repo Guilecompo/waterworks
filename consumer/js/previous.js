@@ -1,8 +1,14 @@
 const onLoad = () => {
+    var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
     document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     document.getElementById("fullname").innerText = sessionStorage.getItem("fullname");
     document.getElementById("meter_no").innerText = sessionStorage.getItem("meter");
     view_consumer();
+  }
+    
 }
 
 const view_consumer  = () => {

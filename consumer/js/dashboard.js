@@ -1,6 +1,13 @@
 function onLoad() {
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
     document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-    
+    getall();
+  }
+};
+  const getall = () => {
     const total_consumed = document.getElementById('totalConsumed');
     
     const total_pay = document.getElementById('totalPay');
@@ -44,5 +51,5 @@ function onLoad() {
     .catch(error => {
         console.error('Error fetching data:', error);
     });
-    
-  };
+
+  }
