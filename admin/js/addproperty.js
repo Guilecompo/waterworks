@@ -2,9 +2,14 @@ let currentPage = 1;
 let properties = [];
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
+    document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     add_property();
     displayProperty();
+  }
   }; 
 // ------------------------------FOR FORM--------------------------------------------------------------
   const success_modal = () => {

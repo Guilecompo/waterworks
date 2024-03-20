@@ -1,5 +1,10 @@
 const onLoad = () => {
-  document.getElementById("ngalan").innerText =
+
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
+    document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
   document.getElementById("Name").innerText =
     sessionStorage.getItem("fullname");
@@ -14,6 +19,8 @@ const onLoad = () => {
     sessionStorage.getItem("usernames");
   document.getElementById("Branch").innerText =
     sessionStorage.getItem("branchName");
+  }
+  
 };
 
 const profile = (barangay_id) => {

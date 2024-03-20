@@ -2,10 +2,15 @@ let currentPage = 1;
 let barangays = [];
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText =
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
+    document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
-  add_barangay();
-  displayBarangay();
+    add_barangay();
+    displayBarangay();
+  }
 };
 
 // ------------------------------FOR FORM--------------------------------------------------------------
