@@ -1,8 +1,10 @@
-<?php
-session_start();
-require ('set_session.php');
-?>
 
+<script>
+  if(sessionStorage.getItem("accountId") == 0){
+    window.location.href = "/waterworks/";
+  
+}
+</script>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
