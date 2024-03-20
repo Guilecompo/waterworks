@@ -15,8 +15,6 @@ const onLoad = () => {
     sessionStorage.getItem("phone_no");
   document.getElementById("Address").innerText =
     sessionStorage.getItem("address");
-  document.getElementById("Username").innerText =
-    sessionStorage.getItem("usernames");
   document.getElementById("Branch").innerText =
     sessionStorage.getItem("branchName");
   }
