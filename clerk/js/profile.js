@@ -1,13 +1,18 @@
 const onLoad = () => {
-    document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
-    document.getElementById("Name").innerText = sessionStorage.getItem("fullname");
-    document.getElementById("Position").innerText = sessionStorage.getItem("positionName");
-    document.getElementById("Email").innerText = sessionStorage.getItem("email");
-    document.getElementById("Phone").innerText = sessionStorage.getItem("phone_no");
-    document.getElementById("Address").innerText = sessionStorage.getItem("address");
-    document.getElementById("Username").innerText = sessionStorage.getItem("usernames");
-    document.getElementById("Branch").innerText = sessionStorage.getItem("branchName");
-    }; 
+    var accountId = sessionStorage.getItem("accountId");
+    if (!accountId || accountId === "0") {
+        window.location.href = "/waterworks/";
+    } else {
+      document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
+      document.getElementById("Name").innerText = sessionStorage.getItem("fullname");
+      document.getElementById("Position").innerText = sessionStorage.getItem("positionName");
+      document.getElementById("Email").innerText = sessionStorage.getItem("email");
+      document.getElementById("Phone").innerText = sessionStorage.getItem("phone_no");
+      document.getElementById("Address").innerText = sessionStorage.getItem("address");
+      document.getElementById("Username").innerText = sessionStorage.getItem("usernames");
+      document.getElementById("Branch").innerText = sessionStorage.getItem("branchName");
+    }
+}; 
 
     const profile = (barangay_id) => {
 
