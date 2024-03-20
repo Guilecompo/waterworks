@@ -1,11 +1,5 @@
 <?php
-session_start();
-
-// Check if accountId is not set or empty
-if(!isset($_SESSION['accountId']) || empty($_SESSION['accountId'])) {
-  header("Location: ../index.html");
-  exit;
-}
+require ('set_session.php');
 ?>
 
 
