@@ -2,18 +2,24 @@ let currentPage = 1;
 let consumers = [];
 
 const onLoad = () => {
-  document.getElementById("ngalan").innerText =
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
+    document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
-  displayConsumer();
-  getFilterZones();
+    displayConsumer();
+    getFilterZones();
 
-  const modal = document.getElementById("myModal");
-  const modalContent = document.querySelector(".modal-content");
-  modalContent.addEventListener("click", (event) => {
-    if (event.target === modalContent) {
-      closeModal();
-    }
-  });
+    const modal = document.getElementById("myModal");
+    const modalContent = document.querySelector(".modal-content");
+    modalContent.addEventListener("click", (event) => {
+      if (event.target === modalContent) {
+        closeModal();
+      }
+    });
+  }
+  
 };
 
 const displayConsumer = () => {
