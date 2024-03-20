@@ -1,11 +1,18 @@
 let currentPage = 1;
 let activities = [];
 function onLoad() {
-  document.getElementById("ngalan").innerText =
-    sessionStorage.getItem("fullname");
-  displayActivity();
-  getFileterBranch();
-  getall();
+
+  var accountId = sessionStorage.getItem("accountId");
+            if (accountId === "0") {
+              window.location.href = "/waterworks/";
+            } else {
+              document.getElementById("ngalan").innerText =
+              sessionStorage.getItem("fullname");
+              displayActivity();
+              getFileterBranch();
+              getall();
+            }
+  
 }
 const getall = () => {
   const total_employees = document.getElementById('totalEmployees');
