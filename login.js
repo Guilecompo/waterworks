@@ -40,7 +40,7 @@ const login = async () => {
             window.location.href = "./consumer/html/dashboard.html";
             break;
           case "Admin":
-            window.location.href = "./admin/html/dashboard.html";
+            window.location.href = "./admin/html/dashboard.php";
             break;
           case "Head":
             window.location.href = "./head/html/dashboard.html";
