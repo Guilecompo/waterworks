@@ -3,7 +3,7 @@ let activities = [];
 function onLoad() {
 
   var accountId = sessionStorage.getItem("accountId");
-            if (accountId === "0") {
+            if (!accountId || accountId === "0" ) {
               window.location.href = "/waterworks/";
             } else {
               document.getElementById("ngalan").innerText =
