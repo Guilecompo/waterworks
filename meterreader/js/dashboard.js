@@ -44,9 +44,6 @@ const displayConsumer = () => {
     .catch((error) => {
       //   alert("ERRORSSS! - " + error);
       errorTables();
-      console.log("ERROR HERE");
-      console.log(error);
-      console.log(response.data);
     });
 };
 
@@ -90,7 +87,7 @@ const showConsumerPage = (page, consumersToDisplay = consumers) => {
 const errorTables = () => {
   var html = ` 
       <div style="display: flex; justify-content: center; align-items: center; height: 62vh;">
-        <h5>No work on weekends!</h5>
+        <h5>No work on on this day!</h5>
       </div>
     `;
   document.getElementById("mainDiv").innerHTML = html;
