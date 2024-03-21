@@ -38,7 +38,7 @@ try {
     $penalty = 0.1;
 
     $stmt = $conn->prepare("SELECT
-            a.billing_id,
+            a.billing_id,a.period_cover,
             b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
             c.user_id, c.meter_no,
             c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,

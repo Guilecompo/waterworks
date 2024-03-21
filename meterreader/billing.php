@@ -23,7 +23,7 @@ $period_end = date('F j, Y', strtotime('-1 day', strtotime($reading_date)));
 $period_cover = $period_start . ' to ' . $period_end;
 
 // Debug statements to output variable values
-echo "Current Day: " . $currentDay . "\n";
+echo "Current Day: " . $reading_date . "\n";
 echo "Period Start: " . $period_start . "\n";
 echo "Period End: " . $period_end . "\n";
 

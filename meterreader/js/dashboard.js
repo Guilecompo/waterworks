@@ -526,7 +526,7 @@ const bill_receipt = (user_id) => {
                           </div>
                           <div class="col-auto">
                               <div class="col-sm-12 text-end">
-                                  <p class="pressss">${records[0].reading_date1} TO ${records[0].formatted_reading_date1}</p>
+                                  <p class="pressss">${records[0].period_cover}</p>
                               </div>
                           </div>
                       </div>
