@@ -52,12 +52,10 @@ try {
     $stmt1->execute();
     $past_total_bill = $stmt1->fetchColumn();
 
-    $updated_bills = $past_total_bill - $amount;
+    $updated_bill = $past_total_bill - $amount;
 
-    if ($updated_bills < 0) {
+    if ($updated_bill < 0) {
         $updated_bill = 0;
-    }else{
-        $updated_bill = $updated_bills;
     }
     
          if ($amount < 1 ) {
