@@ -46,7 +46,6 @@ const displayConsumer = () => {
       errorTables();
     });
 };
-
 // const sortConsumersByName = () => {
 //     consumers.sort((a, b) => {
 //         const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
