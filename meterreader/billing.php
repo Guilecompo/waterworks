@@ -17,15 +17,25 @@ $branchId = $_POST['branchId'];
 
 $reading_date = date('Y-m-d H:i:s');
 
-$period_start = date('F j', strtotime('-1 month', strtotime($reading_date)));
-$period_end = date('F j, Y', strtotime('-1 day', strtotime($reading_date)));
+// Calculate period start and end dates
+$today = date('Y-m-d'); // Current date
+$period_start = date('F j', strtotime('first day of previous month', strtotime($today)));
+$period_end = date('F j, Y', strtotime('last day of current month', strtotime($today)));
 
+// Modify period start to always start at the 26th day of the previous month
+$period_start = date('F j', strtotime('26th day of previous month', strtotime($period_start)));
+
+// Modify period end to always end at the 25th day of the current month
+$period_end = date('F j, Y', strtotime('25th day of current month', strtotime($period_end)));
+
+// Concatenate period start and end
 $period_cover = $period_start . ' to ' . $period_end;
 
 // Debug statements to output variable values
-echo "Current Day: " . $reading_date . "\n";
+echo "Current Day: " . $today . "\n";
 echo "Period Start: " . $period_start . "\n";
 echo "Period End: " . $period_end . "\n";
+
 
 // Check if the reading date is Saturday or Sunday
 $dayOfWeek = date('N', strtotime($reading_date));
