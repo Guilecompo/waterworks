@@ -675,7 +675,6 @@ const bill_receipt = (user_id) => {
                     }
                     modalContent.innerHTML = html;
                   } catch (error) {
-                    // Handle any errors here
                     console.log(error);
                   }
             
