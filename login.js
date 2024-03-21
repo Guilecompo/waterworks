@@ -1,9 +1,6 @@
 function onLoad() {
   var accountId = sessionStorage.getItem("accountId");
-  if (!accountId || accountId === "0") {
-    window.location.href = "/waterworks/";
-    exit;
-  } else {
+  if (accountId && accountId !== "0") {
     var usertype = sessionStorage.getItem("usertype");
     switch (usertype) {
       case "Consumer":
@@ -24,8 +21,9 @@ function onLoad() {
       default:
         alert("Unknown usertype");
     }
-  }
+  } 
 }
+
 
 
 const login = async () => {
