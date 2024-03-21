@@ -483,6 +483,14 @@ const bill_receipt = (user_id) => {
         } else {
           var records = response.data;
 
+          const currentDate = new Date();
+          const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+          const currentYear = currentDate.getFullYear();
+
+          const startDate = `1 ${currentMonth} ${currentYear}`;
+          const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+          const endDateFormatted = endDate.toLocaleDateString('en-PH', { day: 'numeric', month: 'long', year: 'numeric' });
+
           html = `
           <div class=" wrapper ms-0 p-0 m-0">
           <div class="container mt-0 ">
@@ -502,7 +510,7 @@ const bill_receipt = (user_id) => {
                           </div>
                           <div class="col-auto">
                               <div class="col-sm-12 text-end">
-                                  <p class="par">${records[0].formatted_reading_date2}</p>
+                                  <p class="par">${currentMonth} ${currentYear}</p>
                               </div>
                           </div>
                       </div>
@@ -526,7 +534,7 @@ const bill_receipt = (user_id) => {
                           </div>
                           <div class="col-auto">
                               <div class="col-sm-12 text-end">
-                                  <p class="pressss">${records[0].reading_date1} TO ${records[0].formatted_reading_date1}</p>
+                                  <p class="pressss">${startDate} TO ${endDateFormatted}</p>
                               </div>
                           </div>
                       </div>
@@ -614,67 +622,68 @@ const bill_receipt = (user_id) => {
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
                                       <p class="par">${records[0].amount_due}</p>
+                                      </div>
+                                      </div>
+                                      <div class="row justify-content-between m-0 p-0">
+                                          <div class="col-auto">
+                                              <div class="col-sm-12">
+                                                  <p class="par">DUE DATE : </p>
+                                              </div>
+                                          </div>
+                                          <div class="col-auto">
+                                              <div class="col-sm-12 text-end">
+                                                  <p class="par">${records[0].formatted_reading_date1}</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="row justify-content-between m-0 p-0">
+                                          <div class="col-auto">
+                                              <div class="col-sm-12">
+                                                  <p class="presss">METER READER : </p>
+                                              </div>
+                                          </div>
+                                          <div class="col-auto">
+                                              <div class="col-sm-12 text-end">
+                                                  <p class="presss">${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="row justify-content-between m-0 p-0">
+                                          <div class="col-auto">
+                                              <div class="col-sm-12">
+                                                  <p class="par"> DELIVERED : </p>
+                                              </div>
+                                          </div>
+                                          <div class="col-auto">
+                                              <div class="col-sm-12 text-end">
+                                                  <p class="par">${records[0].reading_date}</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  <div class="row mt-1">
+                                      <div class="col-sm-12">
+                                      <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
                                   </div>
-                              </div>
                           </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par">DUE DATE : </p>
-                                  </div>
-                              </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].formatted_reading_date1}</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="presss">METER READER : </p>
-                                  </div>
-                              </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="presss">${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par"> DELIVERED : </p>
-                                  </div>
-                              </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].reading_date}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      <div class="row mt-1">
-                          <div class="col-sm-12">
-                          <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
                       </div>
-              </div>
-          </div>
-      </div>
-              `;
-        }
-        modalContent.innerHTML = html;
-      } catch (error) {
-        // Handle any errors here
-        console.log(error);
-      }
+                  </div>
+                          `;
+                    }
+                    modalContent.innerHTML = html;
+                  } catch (error) {
+                    // Handle any errors here
+                    console.log(error);
+                  }
+            
+                  modalContent.innerHTML = html;
+                  modal.style.display = "block";
+                })
+                .catch((error) => {
+                  alert(`ERROR OCCURRED! ${error}`);
+                });
+            };
+            
 
-      modalContent.innerHTML = html;
-      modal.style.display = "block";
-    })
-    .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-    });
-};
 
 const printModalContent = () => {
   window.print();
