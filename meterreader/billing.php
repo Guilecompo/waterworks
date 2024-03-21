@@ -22,7 +22,7 @@ $dayOfWeek = date('N', strtotime($reading_date));
 $currentDay = date('j');
 
 // Check if the current date falls within the specified range (25th to 5th)
-if ($currentDay < 25 || $currentDay > 5) {
+if ($currentDay < 22 || $currentDay > 5) {
     echo json_encode(["error" => "Billing can only occur between the 25th and 5th of the month."]);
     exit; // Stop further execution
 }
