@@ -129,25 +129,28 @@ function printTable() {
 }
 // Function to save content of mainDiv as PDF
 function saveAsPDF() {
-  // Create a new jsPDF instance
-  var doc = new window.jspdf.jsPDF({
-    orientation: 'portrait',
-    unit: 'in',
-    format: 'letter'
-});
+  try {
+    // Create a new jsPDF instance
+    var doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt', // change unit to points
+      format: 'a4' // change format to A4
+    });
 
-  // Get the HTML content of mainDiv
-  var pdfContent = document.getElementById("mainDiv").innerHTML;
+    // Get the HTML content of mainDiv
+    var pdfContent = document.getElementById("mainDiv").innerHTML;
 
-  // Add HTML content to the PDF
-  doc.html(pdfContent, {
+    // Add HTML content to the PDF
+    doc.html(pdfContent, {
       callback: function (doc) {
-          // Save the PDF with a specific name
-          doc.save("report.pdf");
-      },
-      x: 0.5, // Set left margin to 0.5 inches
-      y: 0.5 // Set top margin to 0.5 inches
-  });
+        // Save the PDF with a specific name
+        doc.save("report.pdf");
+      }
+    });
+  } catch (error) {
+    console.error("An error occurred while saving as PDF:", error);
+    alert("An error occurred while saving as PDF. Please try again.");
+  }
 }
 
 
