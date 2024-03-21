@@ -130,21 +130,26 @@ function printTable() {
 // Function to save content of mainDiv as PDF
 function saveAsPDF() {
   // Create a new jsPDF instance
-  var doc = new jsPDF();
-  
+  var doc = new jsPDF({
+      orientation: 'portrait', // Set orientation to portrait
+      unit: 'in', // Set measurement unit to inches
+      format: 'letter' // Set paper size to letter
+  });
+
   // Get the HTML content of mainDiv
   var pdfContent = document.getElementById("mainDiv").innerHTML;
-  
+
   // Add HTML content to the PDF
   doc.html(pdfContent, {
       callback: function (doc) {
           // Save the PDF with a specific name
           doc.save("report.pdf");
       },
-      x: 10,
-      y: 10
+      x: 0.5, // Set left margin to 0.5 inches
+      y: 0.5 // Set top margin to 0.5 inches
   });
 }
+
 
 
 // Function to save content of mainDiv as Excel
