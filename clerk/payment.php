@@ -135,9 +135,10 @@ try {
                     $or_num =  1;
                 }
                 // Insert the data into the 'changing_meter' table
+                $pay_change = 0.00;
                
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_balance, pay_date, branchId) 
-              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
+                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
+              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
 
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
@@ -145,6 +146,7 @@ try {
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
                 $stmtInsert->bindParam(':or_num', $or_num);
                 $stmtInsert->bindParam(':pay_amount', $amount);
+                $stmtInsert->bindParam(':pay_change', $pay_change);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);
                 $stmtInsert->bindParam(':pay_date', $pay_date);
                 $stmtInsert->bindParam(':pay_branchId', $row['branchId']);
