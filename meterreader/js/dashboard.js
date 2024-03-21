@@ -268,7 +268,10 @@ const submit = (user_id, propertyId) => {
     formData.append("cubic_consumed", cubic_consumed);
     formData.append("branchId", sessionStorage.getItem("branchId"));
     formData.append("readerId", sessionStorage.getItem("accountId"));
-    console.log(propertyId);
+    console.log('consumerId:', user_id);
+    console.log('propertyId Id:', propertyId);
+    console.log('branchId:', sessionStorage.getItem("branchId"));
+    console.log('readerId Id:', sessionStorage.getItem("accountId"));
 
     axios({
       url: myUrl,
