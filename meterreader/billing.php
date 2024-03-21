@@ -17,6 +17,11 @@ $branchId = $_POST['branchId'];
 
 $reading_date = date('Y-m-d H:i:s');
 
+$period_start = date('F j, Y', strtotime('-1 month', strtotime($reading_date)));
+$period_end = date('F j, Y', strtotime('-1 day', strtotime($reading_date)));
+
+$period_cover = $period_start . ' to ' . $period_end;
+
 // Check if the reading date is Saturday or Sunday
 $dayOfWeek = date('N', strtotime($reading_date));
 $currentDay = date('j');
@@ -142,7 +147,7 @@ try {
                         $updatedStatusId = 2;
                         $paid_unpaid = 2;
 
-                        $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+                        $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(":consumerId", $consumerId);
                         $stmt->bindParam(":readerId", $readerId);
@@ -151,6 +156,7 @@ try {
                         $stmt->bindParam(":cubic_consumed", $current_bill_amount);
                         $stmt->bindParam(":reading_date", $reading_date);
                         $stmt->bindParam(":due_date", $due_date);
+                        $stmt->bindParam(":period_cover", $period_cover);
                         $stmt->bindParam(":previous_meter", $previous_meter);
                         $stmt->bindParam(":present_meter", $cubic_consumed);
                         $stmt->bindParam(":bill_amount", $bill_amount);
@@ -270,7 +276,7 @@ try {
                 $stmtUpdates->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_INT);
                 
                 if ($stmtUpdates->execute()) {
-                    $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+                    $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(":consumerId", $consumerId);
                     $stmt->bindParam(":readerId", $readerId);
@@ -279,6 +285,7 @@ try {
                     $stmt->bindParam(":cubic_consumed", $cubic_consumed);
                     $stmt->bindParam(":reading_date", $reading_date);
                     $stmt->bindParam(":due_date", $due_date);
+                    $stmt->bindParam(":period_cover", $period_cover);
                     $stmt->bindParam(":previous_meter", $previous_meter);
                     $stmt->bindParam(":bill_amount", $bill_amount);
                     $stmt->bindParam(":arrears", $arrears);
