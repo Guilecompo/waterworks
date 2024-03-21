@@ -127,12 +127,15 @@ function printTable() {
   printWindow.print();
   printWindow.location.reload(); // Reload the page after printing
 }
+// Function to save table content as PDF
 function saveAsPDF() {
   const table = document.getElementById("mainDiv").querySelector("table");
   const pdf = new jsPDF();
   pdf.autoTable({ html: table });
   pdf.save("report.pdf");
 }
+
+// Function to save table content as Excel
 function saveAsExcel() {
   const table = document.getElementById("mainDiv").querySelector("table");
   const wb = XLSX.utils.table_to_book(table);
@@ -145,6 +148,7 @@ function saveAsExcel() {
   }
   saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), 'report.xlsx');
 }
+
 
 
 function filterByDate() {
