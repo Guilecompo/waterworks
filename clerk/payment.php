@@ -56,7 +56,7 @@ try {
 
     
     
-         if ($amount < 1 || $amount > $past_total_bill) {
+         if ($amount < 1 ) {
             echo json_encode(['error' => 'Invalid Input amount']);
          }else if($amount >= $past_total_bill ){
 
