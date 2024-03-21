@@ -7,7 +7,7 @@ const onLoad = () => {
   if (!accountId || accountId === "0") {
       window.location.href = "/waterworks/";
   } else {
-    document.getElementById("ngalan").innerText =
+     document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
     displayPaymentReports();
@@ -126,51 +126,6 @@ function printTable() {
   `;
   printWindow.print();
   printWindow.location.reload(); // Reload the page after printing
-}
-// Function to save content of mainDiv as PDF
-function saveAsPDF() {
-  try {
-    // Create a new jsPDF instance
-    var doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt', // change unit to points
-      format: 'a4' // change format to A4
-    });
-
-    // Get the HTML content of mainDiv
-    var pdfContent = document.getElementById("mainDiv").innerHTML;
-
-    // Add HTML content to the PDF
-    doc.html(pdfContent, {
-      callback: function (doc) {
-        // Save the PDF with a specific name
-        doc.save("report.pdf");
-      }
-    });
-  } catch (error) {
-    console.error("An error occurred while saving as PDF:", error);
-    alert("An error occurred while saving as PDF. Please try again.");
-  }
-}
-
-
-
-// Function to save content of mainDiv as Excel
-function saveAsExcel() {
-  // Code to convert HTML table to Excel format
-  var table = document.getElementById("mainDiv").querySelector("table");
-  var html = table.outerHTML;
-  var blob = new Blob([html], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
-  });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  a.href = url;
-  a.download = "report.xlsx";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 
 function filterByDate() {
