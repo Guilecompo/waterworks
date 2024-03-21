@@ -484,13 +484,15 @@ const bill_receipt = (user_id) => {
           var records = response.data;
 
           const currentDate = new Date();
+          currentDate.setDate(1); // Set the current date to the first day of the current month
+          currentDate.setHours(-1); // Move to the last hour of the previous day
           const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
           const currentYear = currentDate.getFullYear();
-          const nextMonth = currentDate.getMonth() === 11 ? 0 : currentDate.getMonth() + 1;
-          const nextYear = nextMonth === 0 ? currentYear + 1 : currentYear;
 
-          const startDate = `26 ${currentMonth} ${currentYear}`;
-          const endDate = new Date(nextYear, nextMonth, 25);
+          const previousMonth = currentDate.getMonth() === 0 ? 11 : currentDate.getMonth() - 1;
+          const previousYear = previousMonth === 11 ? currentYear - 1 : currentYear;
+          const startDate = `26 ${currentMonth} ${previousYear}`;
+          const endDate = new Date(currentYear, currentDate.getMonth(), 25);
           const endDateFormatted = endDate.toLocaleDateString('en-PH', { day: 'numeric', month: 'long', year: 'numeric' });
 
           html = `
@@ -559,133 +561,133 @@ const bill_receipt = (user_id) => {
                               <div class="col-auto">
                                   <div class="col-sm-12">
                                       <p class="par">PREVIOUS READING : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].previous_meter}</p>
+                                      </div>
                                   </div>
                               </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].previous_meter}</p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par">Cubic meter: </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].cubic_consumed}</p>
+                                      </div>
                                   </div>
                               </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par">Cubic meter: </p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par">WATER BILL : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].bill_amount}</p>
+                                      </div>
                                   </div>
                               </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].cubic_consumed}</p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par">ARREARS : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].arrears}</p>
+                                      </div>
                                   </div>
                               </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par">WATER BILL : </p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par">TOTAL BILL : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].total_bill}</p>
+                                      </div>
                                   </div>
                               </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].bill_amount}</p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="pres">Amount due : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].amount_due}</p>
+                                      </div>
                                   </div>
                               </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par">ARREARS : </p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par">DUE DATE : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].formatted_reading_date1}</p>
+                                      </div>
                                   </div>
                               </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].arrears}</p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="presss">METER READER : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="presss">${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
+                                      </div>
                                   </div>
                               </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="par">TOTAL BILL : </p>
+                              <div class="row justify-content-between m-0 p-0">
+                                  <div class="col-auto">
+                                      <div class="col-sm-12">
+                                          <p class="par"> DELIVERED : </p>
+                                      </div>
+                                  </div>
+                                  <div class="col-auto">
+                                      <div class="col-sm-12 text-end">
+                                          <p class="par">${records[0].reading_date}</p>
+                                      </div>
                                   </div>
                               </div>
-                              <div class="col-auto">
-                                  <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].total_bill}</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row justify-content-between m-0 p-0">
-                              <div class="col-auto">
-                                  <div class="col-sm-12">
-                                      <p class="pres">Amount due : </p>
-                                  </div>
-                              </div>
-                              <div class="col-auto">
-                              <div class="col-sm-12 text-end">
-                                  <p class="par">${records[0].amount_due}</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row justify-content-between m-0 p-0">
-                          <div class="col-auto">
+                          <div class="row mt-1">
                               <div class="col-sm-12">
-                                  <p class="par">DUE DATE : </p>
-                              </div>
+                              <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
                           </div>
-                          <div class="col-auto">
-                              <div class="col-sm-12 text-end">
-                                  <p class="par">${records[0].formatted_reading_date1}</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row justify-content-between m-0 p-0">
-                          <div class="col-auto">
-                              <div class="col-sm-12">
-                                  <p class="presss">METER READER : </p>
-                              </div>
-                          </div>
-                          <div class="col-auto">
-                              <div class="col-sm-12 text-end">
-                                  <p class="presss">${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row justify-content-between m-0 p-0">
-                          <div class="col-auto">
-                              <div class="col-sm-12">
-                                  <p class="par"> DELIVERED : </p>
-                              </div>
-                          </div>
-                          <div class="col-auto">
-                              <div class="col-sm-12 text-end">
-                                  <p class="par">${records[0].reading_date}</p>
-                              </div>
-                          </div>
-                      </div>
-                  <div class="row mt-1">
-                      <div class="col-sm-12">
-                      <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
                   </div>
+              </div>
           </div>
-      </div>
-  </div>
-          `;
-    }
-    modalContent.innerHTML = html;
-  } catch (error) {
-    // Handle any errors here
-    console.log(error);
-  }
-
-  modalContent.innerHTML = html;
-  modal.style.display = "block";
-})
-.catch((error) => {
-  alert(`ERROR OCCURRED! ${error}`);
-});
-};
-
+                  `;
+            }
+            modalContent.innerHTML = html;
+          } catch (error) {
+            // Handle any errors here
+            console.log(error);
+          }
+    
+          modalContent.innerHTML = html;
+          modal.style.display = "block";
+        })
+        .catch((error) => {
+          alert(`ERROR OCCURRED! ${error}`);
+        });
+    };
+    
 
 
 const printModalContent = () => {
