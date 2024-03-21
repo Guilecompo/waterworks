@@ -19,8 +19,11 @@ $reading_date = date('Y-m-d H:i:s');
 
 // Check if the reading date is Saturday or Sunday
 $dayOfWeek = date('N', strtotime($reading_date));
-if ($dayOfWeek >= 6) {
-    echo json_encode(["error" => "No work on weekends!"]);
+$currentDay = date('j');
+
+// Check if the current date falls within the specified range (25th to 5th)
+if ($currentDay < 25 || $currentDay > 5) {
+    echo json_encode(["error" => "Billing can only occur between the 25th and 5th of the month."]);
     exit; // Stop further execution
 }
 
