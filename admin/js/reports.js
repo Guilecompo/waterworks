@@ -129,14 +129,23 @@ function printTable() {
 }
 // Function to save content of mainDiv as PDF
 function saveAsPDF() {
+  // Create a new jsPDF instance
+  var doc = new jsPDF();
+  
+  // Get the HTML content of mainDiv
   var pdfContent = document.getElementById("mainDiv").innerHTML;
-  var printWindow = window.open('', '_blank');
-  printWindow.document.write('<html><head><title>PDF Export</title></head><body>');
-  printWindow.document.write(pdfContent);
-  printWindow.document.write('</body></html>');
-  printWindow.document.close();
-  printWindow.print();
+  
+  // Add HTML content to the PDF
+  doc.html(pdfContent, {
+      callback: function (doc) {
+          // Save the PDF with a specific name
+          doc.save("report.pdf");
+      },
+      x: 10,
+      y: 10
+  });
 }
+
 
 // Function to save content of mainDiv as Excel
 function saveAsExcel() {
