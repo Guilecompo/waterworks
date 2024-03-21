@@ -29,7 +29,7 @@ const forgot = () => {
     if (email === '') {
         alert('Fill in username');
     } else {
-        const url = "http://localhost/waterworks/z_forgot/forgot.php";
+        const url = "http://128.199.232.132/waterworks/z_forgot/forgot.php";
         sendForgotRequest(url, email);
     }
 }

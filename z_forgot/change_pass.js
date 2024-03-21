@@ -11,7 +11,7 @@ const change = () => {
     if(password !== Cpassword){
       failed_modal2();
     } else {
-        var url = "http://localhost/waterworks/z_forgot/change_pass.php";
+        var url = "http://128.199.232.132/waterworks/z_forgot/change_pass.php";
       const formData = new FormData();
       formData.append("password", password);
       formData.append("Email", sessionStorage.getItem("Email"));

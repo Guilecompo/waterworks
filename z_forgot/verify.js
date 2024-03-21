@@ -6,7 +6,7 @@ const verify = () => {
     if (code === '' ) {
       alert('Fill in fields');
     } else {
-        var url = "http://localhost/waterworks/z_forgot/verify.php";
+        var url = "http://128.199.232.132/waterworks/z_forgot/verify.php";
       const formData = new FormData();
       formData.append("code", code);
   
