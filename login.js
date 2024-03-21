@@ -1,3 +1,32 @@
+function onLoad() {
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+    login();
+  } else {
+    var usertype = sessionStorage.getItem("usertype");
+    switch (usertype) {
+      case "Consumer":
+        window.location.href = "./consumer/html/dashboard.html";
+        break;
+      case "Admin":
+        window.location.href = "./admin/html/dashboard.html";
+        break;
+      case "Head":
+        window.location.href = "./head/html/dashboard.html";
+        break;
+      case "Clerk":
+        window.location.href = "./clerk/html/dashboard.html";
+        break;
+      case "Meter Reader":
+        window.location.href = "./meterreader/html/dashboard.html";
+        break;
+      default:
+        alert("Unknown usertype");
+    }
+  }
+}
+
+
 const login = async () => {
   const url = "http://128.199.232.132//waterworks/login.php";
 
