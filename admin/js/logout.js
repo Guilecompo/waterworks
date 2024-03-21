@@ -7,6 +7,7 @@ const logout = async () => {
   
       if (response.ok) {
         // Redirect to the login page after successful logout
+        sessionStorage.clear();
         window.location.href = "/waterworks/"; // Replace with your login page URL
       } else {
         console.error('Logout failed');
