@@ -127,6 +127,34 @@ function printTable() {
   printWindow.print();
   printWindow.location.reload(); // Reload the page after printing
 }
+// Function to save content of mainDiv as PDF
+function saveAsPDF() {
+  var pdfContent = document.getElementById("mainDiv").innerHTML;
+  var printWindow = window.open('', '_blank');
+  printWindow.document.write('<html><head><title>PDF Export</title></head><body>');
+  printWindow.document.write(pdfContent);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.print();
+}
+
+// Function to save content of mainDiv as Excel
+function saveAsExcel() {
+  // Code to convert HTML table to Excel format
+  var table = document.getElementById("mainDiv").querySelector("table");
+  var html = table.outerHTML;
+  var blob = new Blob([html], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+  });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "report.xlsx";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 function filterByDate() {
   try {
