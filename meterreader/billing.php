@@ -19,14 +19,14 @@ $reading_date = date('Y-m-d H:i:s');
 
 // Calculate period start and end dates
 $today = date('Y-m-d'); // Current date
-$period_start = date('F j', strtotime('previous month', strtotime($today)));
-$period_end = date('F j, Y', strtotime('this month', strtotime($today)));
+$year = date('Y', strtotime($today));
+$month = date('m', strtotime($today));
 
-// Modify period start to always start at the 26th day of the previous month
-$period_start = date('F j', strtotime('26th day of previous month', strtotime($period_start)));
+// Set the start date to the 26th day of the previous month
+$period_start = date('F j', strtotime(($month == 1 ? ($year - 1) : $year) . '-' . ($month == 1 ? '12' : str_pad($month - 1, 2, '0', STR_PAD_LEFT)) . '-26'));
 
-// Modify period end to always end at the 25th day of the current month
-$period_end = date('F j, Y', strtotime('25th day of current month', strtotime($period_end)));
+// Set the end date to the 25th day of the current month
+$period_end = date('F j, Y', strtotime($year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-25'));
 
 // Concatenate period start and end
 $period_cover = $period_start . ' to ' . $period_end;
