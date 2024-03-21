@@ -1,7 +1,7 @@
 function onLoad() {
   var accountId = sessionStorage.getItem("accountId");
   if (!accountId || accountId === "0") {
-    login();
+    window.location.href = "/waterworks/";
   } else {
     var usertype = sessionStorage.getItem("usertype");
     switch (usertype) {
