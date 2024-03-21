@@ -130,11 +130,11 @@ function printTable() {
 // Function to save content of mainDiv as PDF
 function saveAsPDF() {
   // Create a new jsPDF instance
-  var doc = new jsPDF({
-      orientation: 'portrait', // Set orientation to portrait
-      unit: 'in', // Set measurement unit to inches
-      format: 'letter' // Set paper size to letter
-  });
+  var doc = new window.jspdf.jsPDF({
+    orientation: 'portrait',
+    unit: 'in',
+    format: 'letter'
+});
 
   // Get the HTML content of mainDiv
   var pdfContent = document.getElementById("mainDiv").innerHTML;
