@@ -2,8 +2,6 @@
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
-date_default_timezone_set('Asia/Manila');
-
 include 'connection.php';
 session_start();
 
@@ -18,21 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit; // Stop further execution
         }
 
-        echo "Current Day: " . $currentDay . "<br>";
         $dayOfWeek = date('N', strtotime($reading_date));
-        echo "Day of Week: " . $dayOfWeek . "<br>";
 
         // Check if it's Saturday (6) or Sunday (7)
         if ($dayOfWeek >= 6) {
             echo json_encode(["error" => "No work on weekends!"]);
             exit; // Stop further execution
         }
-
-        $debugOutput = [
-            "currentDay" => $currentDay,
-            "dayOfWeek" => $dayOfWeek
-        ];
-        
 
         $branchId = $_POST['branchId'];
         $readerId = $_POST['readerId'];
