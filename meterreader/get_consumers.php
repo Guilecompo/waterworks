@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $reading_date = date('Y-m-d');
 
-        // $currentDay = date('d');
+        // $currentDay = date('j');
 
         // // Check if the current day is between 25th and 5th
         // if ($currentDay < 22 && $currentDay > 5) {

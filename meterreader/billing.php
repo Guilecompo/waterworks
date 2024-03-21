@@ -17,7 +17,7 @@ $branchId = $_POST['branchId'];
 
 $reading_date = date('Y-m-d H:i:s');
 
-$period_start = date('F j, Y', strtotime('-1 month', strtotime($reading_date)));
+$period_start = date('F j', strtotime('-1 month', strtotime($reading_date)));
 $period_end = date('F j, Y', strtotime('-1 day', strtotime($reading_date)));
 
 $period_cover = $period_start . ' to ' . $period_end;
