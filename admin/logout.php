@@ -1,8 +1,14 @@
 <?php
+// Start the session
 session_start();
 
-unset($_SESSION['accountId']);
-// Redirect to the login page or any other page after logout
-header('Location: /waterworks/');
-exit;
+// Unset all session variables
+$_SESSION = array();
+
+// Destroy the session
+session_destroy();
+
+// Redirect to the desired page
+header("Location: /waterworks/");
+exit();
 ?>
