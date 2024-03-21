@@ -127,6 +127,25 @@ function printTable() {
   printWindow.print();
   printWindow.location.reload(); // Reload the page after printing
 }
+function saveAsPDF() {
+  const table = document.getElementById("mainDiv").querySelector("table");
+  const pdf = new jsPDF();
+  pdf.autoTable({ html: table });
+  pdf.save("report.pdf");
+}
+function saveAsExcel() {
+  const table = document.getElementById("mainDiv").querySelector("table");
+  const wb = XLSX.utils.table_to_book(table);
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  function s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+      return buf;
+  }
+  saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), 'report.xlsx');
+}
+
 
 function filterByDate() {
   try {
