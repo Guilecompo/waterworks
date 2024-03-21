@@ -19,8 +19,8 @@ $reading_date = date('Y-m-d H:i:s');
 
 // Calculate period start and end dates
 $today = date('Y-m-d'); // Current date
-$period_start = date('F j', strtotime('first day of previous month', strtotime($today)));
-$period_end = date('F j, Y', strtotime('last day of current month', strtotime($today)));
+$period_start = date('F j', strtotime('previous month', strtotime($today)));
+$period_end = date('F j, Y', strtotime('this month', strtotime($today)));
 
 // Modify period start to always start at the 26th day of the previous month
 $period_start = date('F j', strtotime('26th day of previous month', strtotime($period_start)));
