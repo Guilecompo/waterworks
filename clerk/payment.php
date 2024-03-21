@@ -58,7 +58,7 @@ try {
     
          if ($amount < 1 || $amount > $past_total_bill) {
             echo json_encode(['error' => 'Invalid Input amount']);
-         }else if($amount == $past_total_bill ){
+         }else if($amount >= $past_total_bill ){
 
             echo "Debug: Amount = $amount, Past Total Bill = $past_total_bill";
 
@@ -80,13 +80,16 @@ try {
                 $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
                 if($rows){
                     $or_num = $rows['or_num'] + 1;
+                    
                 }else{
                     $or_num =  1;
                 }
+                $total_bill = $row['total_bill'];
+                $pay_change = $amount - $total_bill;
                 
                 // Insert the data into the 'changing_meter' table
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_balance, pay_date, branchId) 
-              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_balance, :pay_date, :pay_branchId)";
+                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
+              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
 
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
@@ -94,6 +97,7 @@ try {
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
                 $stmtInsert->bindParam(':or_num', $or_num);
                 $stmtInsert->bindParam(':pay_amount', $amount);
+                $stmtInsert->bindParam(':pay_change', $pay_change);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);
                 $stmtInsert->bindParam(':pay_date', $pay_date);
                 $stmtInsert->bindParam(':pay_branchId', $row['branchId']);
