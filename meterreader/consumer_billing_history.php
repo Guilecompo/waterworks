@@ -32,7 +32,7 @@ $accId = $_POST['accId'];
 try {
     // Calculate the interval days
     $startDate = date('Y-m-d'); // Today's date
-    $endDate = date('Y-m-d', strtotime('+30 days')); // or whatever your end date is
+    $endDate = date('Y-m-d', strtotime('+30 days')); 
     $intervalDays = 20; // 20 working days
     $formatted_reading_date1 = getBusinessDays($startDate, $endDate, $intervalDays);
     $penalty = 0.1;
