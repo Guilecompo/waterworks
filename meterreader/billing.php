@@ -119,7 +119,7 @@ try {
             $stmtUpdateConsumer->execute();
 
             // Insert new billing record
-            $sqlInsertBilling = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, 1, 2)";
+            $sqlInsertBilling = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, 2, 2)";
             $stmtInsertBilling = $conn->prepare($sqlInsertBilling);
             $stmtInsertBilling->bindParam(':consumerId', $consumerId);
             $stmtInsertBilling->bindParam(':readerId', $readerId);
@@ -196,7 +196,7 @@ try {
             $stmtUpdateConsumer->execute();
 
             // Insert new billing record
-            $sqlInsertBilling = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, 0, :cubic_consumed, :reading_date, :due_date, :period_cover, 0, :cubic_consumed, :bill_amount, 0, :bill_amount, 1, 2)";
+            $sqlInsertBilling = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, 0, :cubic_consumed, :reading_date, :due_date, :period_cover, 0, :cubic_consumed, :bill_amount, 0, :bill_amount, 2, 2)";
             $stmtInsertBilling = $conn->prepare($sqlInsertBilling);
             $stmtInsertBilling->bindParam(':consumerId', $consumerId);
             $stmtInsertBilling->bindParam(':readerId', $readerId);
