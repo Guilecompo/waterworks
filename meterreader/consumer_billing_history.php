@@ -38,7 +38,7 @@ try {
     $penalty = 0.1;
 
     $stmt = $conn->prepare("SELECT
-            a.billing_id,a.period_cover,
+            a.billing_id, a.period_cover,
             b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
             c.user_id, c.meter_no,
             c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
@@ -49,7 +49,7 @@ try {
             DATE_FORMAT(a.reading_date, '%M %d') AS reading_date1,
             DATE_FORMAT(a.due_date, '%M %d %Y') AS due_date,
             :formatted_reading_date1 AS formatted_reading_date1,
-            DATE_FORMAT(a.reading_date, '%M %Y') AS formatted_reading_date,
+            DATE_FORMAT(a.reading_date, '%M %Y') AS formatted_reading_date2,
             a.previous_meter,
             a.present_meter,
             a.arrears,
