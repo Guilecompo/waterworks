@@ -487,6 +487,8 @@ const bill_receipt = (user_id) => {
           var records = response.data;
           console.log('responese: ',response.data)
 
+          if (records && records.length > 0) {
+
           html = `
           <div class=" wrapper ms-0 p-0 m-0">
           <div class="container mt-0 ">
@@ -665,6 +667,10 @@ const bill_receipt = (user_id) => {
           </div>
       </div>
               `;
+            } else {
+              // Handle case when no records are found
+              html = `<h2>No Records Found</h2>`;
+            }
         }
         modalContent.innerHTML = html;
       } catch (error) {
