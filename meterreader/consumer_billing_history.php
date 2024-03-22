@@ -4,12 +4,6 @@ header("Access-Control-Allow-Origin: *");
 
 include 'connection.php';
 
-// Check if accId is sent from the client
-if (!isset($_POST['accId'])) {
-    echo json_encode(["error" => "accId parameter is missing"]);
-    exit;
-}
-
 function getBusinessDays($startDate, $endDate, $intervalDays) {
     $businessDays = 0;
     $currentDate = strtotime($startDate);
@@ -94,5 +88,7 @@ try {
 } catch (PDOException $e) {
     // Handle database errors
     echo json_encode(["error" => "Database error: " . $e->getMessage()]);
+    exit(); // Terminate script execution after encountering an error
 }
+
 ?>
