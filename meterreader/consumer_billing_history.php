@@ -26,12 +26,13 @@ function getBusinessDays($startDate, $endDate, $intervalDays) {
     return date('F j Y', $currentDate);
 }
 
+// Get the account ID sent from the client
 $accId = $_POST['accId'];
 
 try {
     // Calculate the interval days
     $startDate = date('Y-m-d'); // Today's date
-    $endDate = date('Y-m-d', strtotime('+30 days')); 
+    $endDate = date('Y-m-d', strtotime('+30 days')); // or whatever your end date is
     $intervalDays = 20; // 20 working days
     $formatted_reading_date1 = getBusinessDays($startDate, $endDate, $intervalDays);
     $penalty = 0.1;
@@ -47,7 +48,8 @@ try {
             DATE_FORMAT(a.reading_date, '%M %d %Y') AS reading_date,
             DATE_FORMAT(a.reading_date, '%M %d') AS reading_date1,
             DATE_FORMAT(a.due_date, '%M %d %Y') AS due_date,
-            DATE_FORMAT(a.reading_date, '%M %Y') AS formatted_reading_date2,
+            :formatted_reading_date1 AS formatted_reading_date1,
+            DATE_FORMAT(a.reading_date, '%M %Y') AS formatted_reading_date,
             a.previous_meter,
             a.present_meter,
             a.arrears,
@@ -62,6 +64,7 @@ try {
         WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 2 ORDER BY billing_id DESC ");
 
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
+    $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
     $stmt->execute();
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

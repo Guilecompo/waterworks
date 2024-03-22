@@ -506,7 +506,7 @@ const bill_receipt = (user_id) => {
                           </div>
                           <div class="col-auto">
                               <div class="col-sm-12 text-end">
-                                  <p class="par">${records[0].formatted_reading_date2}</p>
+                                  <p class="par">${records[0].formatted_reading_date}</p>
                               </div>
                           </div>
                       </div>
@@ -629,7 +629,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].due_date}</p>
+                                      <p class="par">${records[0].formatted_reading_date1}</p>
                                   </div>
                               </div>
                           </div>
