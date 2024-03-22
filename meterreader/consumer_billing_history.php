@@ -26,7 +26,6 @@ function getBusinessDays($startDate, $endDate, $intervalDays) {
     return date('F j Y', $currentDate);
 }
 
-// Get the account ID sent from the client
 $accId = $_POST['accId'];
 
 try {
