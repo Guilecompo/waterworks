@@ -48,7 +48,6 @@ try {
             DATE_FORMAT(a.reading_date, '%M %d %Y') AS reading_date,
             DATE_FORMAT(a.reading_date, '%M %d') AS reading_date1,
             DATE_FORMAT(a.due_date, '%M %d %Y') AS due_date,
-            :formatted_reading_date1 AS formatted_reading_date1,
             DATE_FORMAT(a.reading_date, '%M %Y') AS formatted_reading_date2,
             a.previous_meter,
             a.present_meter,

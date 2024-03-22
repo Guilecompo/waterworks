@@ -485,6 +485,7 @@ const bill_receipt = (user_id) => {
           var html = `<h2>No Records</h2>`;
         } else {
           var records = response.data;
+          console.log('responese: ',response.data)
 
           html = `
           <div class=" wrapper ms-0 p-0 m-0">
@@ -628,7 +629,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].formatted_reading_date1}</p>
+                                      <p class="par">${records[0].due_date}</p>
                                   </div>
                               </div>
                           </div>
