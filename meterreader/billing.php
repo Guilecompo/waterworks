@@ -37,7 +37,9 @@ echo "Period Start: " . $period_start . "\n";
 echo "Period End: " . $period_end . "\n";
 
 // Check if the current date falls within the specified range (25th to 5th)
+// $currentDay = date('j');
 $currentDay = date('d', strtotime($today));
+echo "currentDay : " . $currentDay . "\n";
 if ($currentDay < 22 || $currentDay > 5) {
     echo json_encode(["error" => "Billing can only occur between the 25th and 5th of the month."]);
     exit; // Stop further execution
