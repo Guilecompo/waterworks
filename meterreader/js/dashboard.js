@@ -485,6 +485,7 @@ const bill_receipt = (user_id) => {
           var html = `<h2>No Records</h2>`;
         } else {
           var records = response.data;
+          console.log('responese: ',response.data)
 
           html = `
           <div class=" wrapper ms-0 p-0 m-0">
