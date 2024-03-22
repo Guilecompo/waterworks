@@ -9,13 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $reading_date = date('Y-m-d');
 
-        // $currentDay = date('j');
+        $currentDay = date('j');
 
-        // // Check if the current day is between 25th and 5th
-        // if ($currentDay < 22 && $currentDay > 5) {
-        //     echo json_encode(["error" => "Data can only be displayed between the 25th and 5th of the month."]);
-        //     exit; // Stop further execution
-        // }
+        // Check if the current day is between 25th and 5th
+        if ($currentDay < 25 && $currentDay > 5) {
+            echo json_encode(["error" => "Data can only be displayed between the 25th and 5th of the month."]);
+            exit; // Stop further execution
+        }
 
         $dayOfWeek = date('N', strtotime($reading_date));
 
