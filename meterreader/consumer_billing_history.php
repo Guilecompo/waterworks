@@ -61,7 +61,7 @@ try {
         INNER JOIN address_zone d ON c.addressId = d.zone_id
         INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
         INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-        WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 2 ORDER BY billing_id DESC ");
+        WHERE a.consumerId = :accId AND a.billing_statusId = 2 ORDER BY billing_id DESC ");
 
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
     $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
