@@ -31,22 +31,17 @@ $period_end = date('F j, Y', strtotime($year . '-' . str_pad($month, 2, '0', STR
 // Concatenate period start and end
 $period_cover = $period_start . ' to ' . $period_end;
 
-// Debug statements to output variable values
-echo "Current Day: " . $today . "\n";
-echo "Period Start: " . $period_start . "\n";
-echo "Period End: " . $period_end . "\n";
-
 
 // Check if the reading date is Saturday or Sunday
 $dayOfWeek = date('N', strtotime($reading_date));
 
-$currentDay = date('j');
+// $currentDay = date('j');
 
-// Check if the current date falls within the specified range (25th to 5th)
-if ($currentDay < 22 || $currentDay > 5) {
-    echo json_encode(["error" => "Billing can only occur between the 25th and 5th of the month."]);
-    exit; // Stop further execution
-}
+// // Check if the current date falls within the specified range (25th to 5th)
+// if ($currentDay < 25 || $currentDay > 5) {
+//     echo json_encode(["error" => "Billing can only occur between the 25th and 5th of the month."]);
+//     exit; // Stop further execution
+// }
 
 $date_added = date("Y-m-d");
 $employee_Id = $_POST['readerId'];
