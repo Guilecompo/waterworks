@@ -62,7 +62,6 @@ try {
         WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 2 ORDER BY billing_id DESC ");
 
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
-    $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
     $stmt->execute();
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
