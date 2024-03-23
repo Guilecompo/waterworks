@@ -46,11 +46,12 @@ try {
                 // Username or phone number already exists, don't insert the data
                 echo json_encode(['status' => 'duplicate', 'message' => 'Duplicate Meter Number']);
             } else {
+                $total_cubic_consumed = 0;
                 $connected_number = $rows['connected_number'] + 1;
                 $new_statusId = 1;
                 $password = md5('waterworks');
                 // Insert the data into the 'changing_meter' table
-                $sqlInsert = "INSERT INTO user_consumer( firstname, middlename, lastname, suffixId, connected_parentId, connected_number, phone_no, addressId, propertyId, email, house_no, meter_no, password, positionId, consumertypeId,  branchId, statusId, login_statusId, date_added, employee_Id, billing_status ) VALUES ( :firstname, :middlename, :lastname, :suffixId, :connected_parentId, :connected_number, :phone_no, :addressId, :propertyId, :email_add, :house_no, :meter_no, :password, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
+                $sqlInsert = "INSERT INTO user_consumer( firstname, middlename, lastname, suffixId, connected_parentId, connected_number, phone_no, addressId, propertyId, email, house_no, meter_no, password, total_cubic_consumed, positionId, consumertypeId,  branchId, statusId, login_statusId, date_added, employee_Id, billing_status ) VALUES ( :firstname, :middlename, :lastname, :suffixId, :connected_parentId, :connected_number, :phone_no, :addressId, :propertyId, :email_add, :house_no, :meter_no, :password, :total_cubic_consumed, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
                 $stmtInsert = $conn->prepare($sqlInsert);
                 $stmtInsert->bindParam(':firstname', $row['firstname']);
                 $stmtInsert->bindParam(':middlename', $row['middlename']);
@@ -65,6 +66,7 @@ try {
                 $stmtInsert->bindParam(':house_no', $row['house_no']);
                 $stmtInsert->bindParam(':meter_no', $new_meter);
                 $stmtInsert->bindParam(':password', $password);
+                $stmtInsert->bindParam(':total_cubic_consumed', $total_cubic_consumed);
                 $stmtInsert->bindParam(':positionId', $row['positionId']);
                 $stmtInsert->bindParam(':consumertypeId', $row['consumertypeId']);
                 $stmtInsert->bindParam(':branchId', $row['branchId']);
