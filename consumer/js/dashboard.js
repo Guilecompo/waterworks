@@ -71,7 +71,7 @@ function onLoad() {
   
         var options = `<option value="all">Other Accounts</option>`;
         positions.forEach((position) => {
-          options += `<option value="${position.user_id}">${position.lastname} ${position.connected_number}</option>`;
+          options += `<option value="${position.user_id}">${position.lastname} ${position.connected_number !== 0 ? "#" + position.connected_number : ""}</option>`;
         });
         submeterSelect.innerHTML = options;
   
