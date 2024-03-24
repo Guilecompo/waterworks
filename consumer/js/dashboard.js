@@ -5,6 +5,7 @@ function onLoad() {
   } else {
     document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     getall();
+    getSubmeter();
   }
 };
   const getall = () => {
@@ -53,3 +54,42 @@ function onLoad() {
     });
 
   }
+  const getSubmeter = () => {
+    const submeterSelect = document.getElementById("submeter");
+    var myUrl = "http://localhost/waterworks/consumer/get_submeter.php";
+    const formData = new FormData();
+    formData.append("accountId", sessionStorage.getItem("accountId"));
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        var positions = response.data;
+        console.log(positions);
+  
+        var options = `<option value="all">Other Accounts</option>`;
+        positions.forEach((position) => {
+          options += `<option value="${position.user_id}">${position.meter_no}</option>`;
+        });
+        submeterSelect.innerHTML = options;
+  
+        // Event listener for position change
+        submeterSelect.addEventListener("change", () => {
+          const selectedBranch = submeterSelect.value;
+          // Call the appropriate display function based on the selected position
+          if (selectedBranch === "Poblacion") {
+            getpoblacion();
+          } else if (selectedBranch === "Molugan") {
+            getmolugan();
+          } else {
+            getall();
+          }
+          // Add more conditions as needed for other positions
+        });
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
