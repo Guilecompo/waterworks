@@ -121,7 +121,7 @@ function onLoad() {
           if (position.connected_number !== 0) {
             options += `<option value="${position.user_id}">${position.lastname} #${position.connected_number}</option>`;
           } else {
-            options += `<option value="${position.user_id}">${position.lastname}</option>`;
+            options += `<option value="</option>`;
           }
         });
         submeterSelect.innerHTML = options;
