@@ -17,14 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //     exit; // Stop further execution
         // }
 
-        $dayOfWeek = date('N', strtotime($reading_date));
+        // $dayOfWeek = date('N', strtotime($reading_date));
 
-        
-        // Check if it's Saturday (6) or Sunday (7)
-        if ($dayOfWeek >= 6) {
-            echo json_encode(["error" => "No work on weekends!"]);
-            exit; // Stop further execution
-        }
+        // // Check if it's Saturday (6) or Sunday (7)
+        // if ($dayOfWeek >= 6) {
+        //     echo json_encode(["error" => "No work on weekends!"]);
+        //     exit; // Stop further execution
+        // }
 
         $branchId = $_POST['branchId'];
         $readerId = $_POST['readerId'];
