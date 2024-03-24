@@ -122,7 +122,7 @@ function onLoad() {
           var positions = response.data;
           console.log(positions);
   
-          var options = `<option value="main">Other Accounts</option>`;
+          var options = `<option value="main">Main</option>`;
           positions.forEach((position) => {
             options += `<option value="${position.user_id}">${position.lastname} #${position.connected_number}</option>`;
           });
