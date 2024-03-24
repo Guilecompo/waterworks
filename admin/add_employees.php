@@ -35,22 +35,31 @@ try {
         // 3. Define SQL statement for insertion
         $password = md5('waterworks');
 
+        // Sanitize other POST values
+        $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
+        $middlename = htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8');
+        $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
+        $provinceNames = htmlspecialchars($_POST['provinceNames'], ENT_QUOTES, 'UTF-8');
+        $municipalityNames = htmlspecialchars($_POST['municipalityNames'], ENT_QUOTES, 'UTF-8');
+        $barangayNames = htmlspecialchars($_POST['barangayNames'], ENT_QUOTES, 'UTF-8');
+        $positionId = htmlspecialchars($_POST['positionId'], ENT_QUOTES, 'UTF-8');
+
         $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
         $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":firstname", htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
-        $stmt->bindParam(":middlename", htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
-        $stmt->bindParam(":lastname", htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+        $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
+        $stmt->bindParam(":middlename", $middlename, PDO::PARAM_STR);
+        $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
         $stmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
-        $stmt->bindParam(":provinceNames", htmlspecialchars($_POST['provinceNames'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
-        $stmt->bindParam(":municipalityNames", htmlspecialchars($_POST['municipalityNames'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
-        $stmt->bindParam(":barangayNames", htmlspecialchars($_POST['barangayNames'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+        $stmt->bindParam(":provinceNames", $provinceNames, PDO::PARAM_STR);
+        $stmt->bindParam(":municipalityNames", $municipalityNames, PDO::PARAM_STR);
+        $stmt->bindParam(":barangayNames", $barangayNames, PDO::PARAM_STR);
         $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR); 
         $stmt->bindParam(":code", $code, PDO::PARAM_STR);
         $stmt->bindParam(":suffixId", $suffixId, PDO::PARAM_INT);
         $stmt->bindParam(":password", $password, PDO::PARAM_STR);
-        $stmt->bindParam(":positionId", htmlspecialchars($_POST['positionId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+        $stmt->bindParam(":positionId", $positionId, PDO::PARAM_INT);
         $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
         $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
         $stmt->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
