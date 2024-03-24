@@ -180,7 +180,7 @@ try {
                             $StatusId = 2;
                             $updatedStatusId = 2;
     
-                            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
+                            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
                             $stmt = $conn->prepare($sql);
                             $stmt->bindParam(":consumerId", $rows['consumerId']);
                             $stmt->bindParam(":readerId",  $rows['readerId']);
@@ -189,6 +189,7 @@ try {
                             $stmt->bindParam(":cubic_consumed", $rows['cubic_consumed']);
                             $stmt->bindParam(":reading_date", $rows['reading_date']);
                             $stmt->bindParam(":due_date", $rows['due_date']);
+                            $stmt->bindParam(":period_cover", $rows['period_cover']);
                             $stmt->bindParam(":previous_meter", $rows['previous_meter']);
                             $stmt->bindParam(":present_meter", $rows['present_meter']);
                             $stmt->bindParam(":bill_amount", $rows['bill_amount']);
