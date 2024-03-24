@@ -6,9 +6,10 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 
 // 2. Check for duplicate username and phone number
-$consumertype = $_POST['consumertype'];
+$consumertype = htmlspecialchars($_POST['consumertype'], ENT_QUOTES, 'UTF-8');
+$discount_percentd = htmlspecialchars($_POST['discount_percentd'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 $position_statusId = 1;
 
 // Query to check for duplicate username or phone number
@@ -27,8 +28,8 @@ if ($result['count'] > 0) {
     $sql .= "VALUES (:consumertype, :discount_percentd, :date_added, :employee_Id, :position_statusId)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":consumertype", $_POST['consumertype'], PDO::PARAM_STR);
-    $stmt->bindParam(":discount_percentd", $_POST['discount_percentd'], PDO::PARAM_STR);
+    $stmt->bindParam(":consumertype", $consumertype, PDO::PARAM_STR);
+    $stmt->bindParam(":discount_percentd", $discount_percentd, PDO::PARAM_STR);
     $stmt->bindParam(":position_statusId", $position_statusId, PDO::PARAM_INT);
     $stmt->bindParam(":date_added", $date_added);
     $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
@@ -52,7 +53,7 @@ if ($result['count'] > 0) {
         $stmt1->execute();
 
         echo json_encode(array("status" => $returnValue, "message" => "Position Successfully Added & Added to Activity Log!"));
-    }else {
+    } else {
         echo json_encode(array("status" => 0, "message" => "Failed to add Position"));
     }
 }

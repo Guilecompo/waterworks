@@ -1,42 +1,45 @@
 const change = () => {
-    
-  
-    const password = document.getElementById("password").value;
-    const Cpassword = document.getElementById("Cpassword").value;
-    
-    if (password === '' || Cpassword === '' ) {
+  const password = document.getElementById("password").value;
+  const Cpassword = document.getElementById("Cpassword").value;
+
+  // Password validation regex pattern
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+
+  if (password === '' || Cpassword === '') {
       failed_modal();
       return;
-    }
-    if(password !== Cpassword){
-      failed_modal2();
-    } else {
-        var url = "http://128.199.232.132/waterworks/z_forgot/change_pass.php";
-      const formData = new FormData();
-      formData.append("password", password);
-      formData.append("Email", sessionStorage.getItem("Email"));
-  
-      axios({
-        url: url,
-        method: "post",
-        data: formData
-      }).then(response => {
-        var returnValue = response.data;
-        if (returnValue === 0 ) {
-          failed_modal();
-          // alert("Failed to change or Fill password again");
-        //   verify1();
-        } else {
-          // Store user information in sessionStorage
-          success_modal();
-        }
-      }).catch(error => {
-        // error_modal();
-        failed_modal();
-        console.log(error);
-      })
-    }
   }
+  if (password !== Cpassword) {
+      failed_modal2();
+      return;
+  }
+  if (!passwordPattern.test(password)) {
+      failed_modal3();
+      return;
+  }
+
+  var url = "http://128.199.232.132/waterworks/z_forgot/change_pass.php";
+  const formData = new FormData();
+  formData.append("password", password);
+  formData.append("Email", sessionStorage.getItem("Email"));
+
+  axios({
+      url: url,
+      method: "post",
+      data: formData
+  }).then(response => {
+      var returnValue = response.data;
+      if (returnValue === 0) {
+          failed_modal1();
+      } else {
+          success_modal();
+      }
+  }).catch(error => {
+      failed_modal();
+      console.log(error);
+  });
+}
+
 
   const success_modal = () => {
     const modal = document.getElementById("myModal");
