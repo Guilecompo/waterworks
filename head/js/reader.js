@@ -954,7 +954,7 @@ const getBarangay = () => {
 
   // Fetch barangays based on the selected municipality
   // Replace this URL with your actual API endpoint
-  const barangayUrl = `http://128.199.232.132/waterworks/head/get_barangay.php`;
+  const barangayUrl = "http://128.199.232.132/waterworks/head/get_barangay.php";
   const formData = new FormData();
 
   // Use selectedMunicipalityId directly
