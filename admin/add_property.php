@@ -5,13 +5,13 @@ header("Access-Control-Allow-Origin: *");
 // 1. Establish connection to the database
 include 'connection.php';
 
-// 2. Check for duplicate username and phone number
-$add_property = $_POST['add_property'];
+// 2. Check for duplicate property name
+$add_property = htmlspecialchars($_POST['add_property'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 $property_statusId = 1;
 
-// Query to check for duplicate username or phone number
+// Query to check for duplicate property name
 $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM property WHERE property_name = :add_property ";
 $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
 $checkDuplicateStmt->bindParam(":add_property", $add_property, PDO::PARAM_STR);
@@ -19,7 +19,7 @@ $checkDuplicateStmt->execute();
 $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 
 if ($result['count'] > 0) {
-    // Username or phone number already exists, don't insert the data
+    // Property name already exists, don't insert the data
     echo json_encode(['status' => 0, 'message' => 'Duplicate Property']);
 } else {
     // 3. Define SQL statement for insertion
@@ -27,7 +27,7 @@ if ($result['count'] > 0) {
     $sql .= "VALUES (:add_property, :date_added, :employee_Id, :property_statusId)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":add_property", $_POST['add_property'], PDO::PARAM_STR);
+    $stmt->bindParam(":add_property", $add_property, PDO::PARAM_STR);
     $stmt->bindParam(":property_statusId", $property_statusId, PDO::PARAM_INT);
     $stmt->bindParam(":date_added", $date_added);
     $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
@@ -51,7 +51,7 @@ if ($result['count'] > 0) {
         $stmt1->execute();
 
         echo json_encode(array("status" => $returnValue, "message" => "Property Successfully Added & Added to Activity Log!"));
-    }else {
+    } else {
         echo json_encode(array("status" => 0, "message" => "Failed to add Property"));
     }
 }

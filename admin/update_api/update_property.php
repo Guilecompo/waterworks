@@ -11,12 +11,12 @@ include '../connection.php';
 
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$add_property = $_POST['add_property'];
+$add_property = htmlspecialchars($_POST['add_property'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 try {
-    // Check if barangay_name already exists
+    // Check if property_name already exists
     $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM property WHERE property_name = :add_property";
     $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
     $checkDuplicateStmt->bindParam(":add_property", $add_property, PDO::PARAM_STR);
@@ -31,7 +31,7 @@ try {
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":property_id", $_POST['property_id'], PDO::PARAM_INT);
-        $stmt->bindParam(":add_property", $_POST['add_property'], PDO::PARAM_STR);
+        $stmt->bindParam(":add_property", $add_property, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $activity_type = "Edit";
             $table_name = "Property";
