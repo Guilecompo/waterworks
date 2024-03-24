@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $zones = array_column($rows, 'zone_Id'); 
 
             $stmt = $conn->prepare("SELECT 
-                a.user_id, a.branchId,
+                a.user_id, a.branchId, a.connected_number,
                 a.firstname, a.middlename,
                 a.lastname,a.connected_number,
                 a.phone_no, c.property_name,
