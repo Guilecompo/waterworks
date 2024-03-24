@@ -72,9 +72,12 @@ const success_modal = (message) => {
 
 const failed_modal = (message) => {
   const modalContent = document.getElementById("modalContent");
-  modalContent.innerHTML = `<h5 class="modal-title" style="color: red; text-align:center;">${message}</h5>`;
-  $('#passwordIndicationModal').modal('show');
+  modalContent.innerHTML = `<div class="modal-title" style="color: red; text-align:center;">${message}</div>`;
+  const modal = new bootstrap.Modal(document.getElementById('passwordIndicationModal'));
+  modal.show();
 };
+
+
 
 const failed_modal1 = (message) => {
   const modalContent = document.getElementById("modalContent");
