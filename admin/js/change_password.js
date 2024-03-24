@@ -21,16 +21,16 @@ const change = () => {
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,12}$/;
 
   if (password === "" || retype_password === "") {
-      alert("Fill in both fields");
-      return;
+    failed_modal("Fill in both fields");
+    return;
   }
   if (password !== retype_password) {
-      alert("Passwords do not match");
-      return;
+    failed_modal("Passwords do not match");
+    return;
   }
   if (!passwordPattern.test(password)) {
-      alert("Password must be 8 to 12 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*)");
-      return;
+    failed_modal3(); // Show password requirements modal
+    return;
   }
 
   var url = "http://128.199.232.132/waterworks/change_password.php";
@@ -40,23 +40,67 @@ const change = () => {
   formData.append("accountId", sessionStorage.getItem("accountId"));
 
   axios({
-      url: url,
-      method: "post",
-      data: formData,
+    url: url,
+    method: "post",
+    data: formData,
   })
-  .then((response) => {
+    .then((response) => {
       var returnValue = response.data;
       if (returnValue === 0) {
-          alert("Failed to change password. Please try again.");
-          //   verify1();
+        failed_modal1("Failed to change password. Please try again.");
       } else {
-          alert("Password successfully changed");
-          window.location.href = "./change_password.html"; // Redirect to the customer page
+        success_modal("Password successfully changed");
       }
-  })
-  .catch((error) => {
-      alert("An error occurred. Please try again later.");
+    })
+    .catch((error) => {
+      error_modal("An error occurred. Please try again later.");
       console.error("ERROR!", error);
-  });
+    });
 };
+
+const success_modal = (message) => {
+  const modalContent = document.getElementById("modalContent");
+  modalContent.innerHTML = `<h5 class="modal-title" style="color: limegreen; text-align:center;">${message}</h5>`;
+  $('#passwordIndicationModal').modal('show');
+  setTimeout(() => {
+    $('#passwordIndicationModal').modal('hide');
+    window.location.href = "./change_password.html";
+  }, 5000); // Auto close modal after 5 seconds
+};
+
+const failed_modal = (message) => {
+  const modalContent = document.getElementById("modalContent");
+  modalContent.innerHTML = `<h5 class="modal-title" style="color: red; text-align:center;">${message}</h5>`;
+  $('#passwordIndicationModal').modal('show');
+};
+
+const failed_modal1 = (message) => {
+  const modalContent = document.getElementById("modalContent");
+  modalContent.innerHTML = `<h5 class="modal-title" style="color: red; text-align:center;">${message}</h5>`;
+  $('#passwordIndicationModal').modal('show');
+};
+
+const failed_modal3 = () => {
+  const modalContent = document.getElementById("modalContent");
+  const html = `
+    <div style="background-color: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <h3 style="color: #FF5733; text-align: center; margin-bottom: 10px;">Password Requirements</h3>
+      <ul style="list-style-type: none; padding-left: 0; margin-bottom: 0;">
+        <li style="color: #FF5733; margin-bottom: 5px;"><strong>Be 8 to 12 characters long</strong></li>
+        <li style="color: #FF5733; margin-bottom: 5px;"><strong>Contain at least one uppercase letter</strong></li>
+        <li style="color: #FF5733; margin-bottom: 5px;"><strong>Contain at least one lowercase letter</strong></li>
+        <li style="color: #FF5733; margin-bottom: 5px;"><strong>Contain at least one digit (0-9)</strong></li>
+        <li style="color: #FF5733; margin-bottom: 5px;"><strong>Contain at least one special character (!@#$%^&* etc.)</strong></li>
+      </ul>
+    </div>`;
+  modalContent.innerHTML = html;
+  $('#passwordIndicationModal').modal('show');
+};
+
+const error_modal = (message) => {
+  const modalContent = document.getElementById("modalContent");
+  modalContent.innerHTML = `<h5 class="modal-title" style="color: red; text-align:center;">${message}</h5>`;
+  $('#passwordIndicationModal').modal('show');
+};
+
 
