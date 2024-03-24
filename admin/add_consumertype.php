@@ -5,14 +5,14 @@ header("Access-Control-Allow-Origin: *");
 // 1. Establish connection to the database
 include 'connection.php';
 
-// Sanitize POST data
-$consumertype = htmlspecialchars($_POST['consumertype'], ENT_QUOTES, 'UTF-8');
-$discount_percentd = htmlspecialchars($_POST['discount_percentd'], ENT_QUOTES, 'UTF-8');
+// 2. Fetch POST data and sanitize it
+$consumertype = isset($_POST['consumertype']) ? htmlspecialchars($_POST['consumertype']) : '';
+$discount_percentd = isset($_POST['discount_percentd']) ? htmlspecialchars($_POST['discount_percentd']) : '';
+$employee_Id = isset($_POST['employee_Id']) ? intval($_POST['employee_Id']) : 0;
 $date_added = date("Y-m-d");
-$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 $position_statusId = 1;
 
-// Query to check for duplicate username or phone number
+// Query to check for duplicate consumer type
 $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM consumer_type WHERE consumertype = :consumertype ";
 $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
 $checkDuplicateStmt->bindParam(":consumertype", $consumertype, PDO::PARAM_STR);
@@ -20,7 +20,7 @@ $checkDuplicateStmt->execute();
 $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 
 if ($result['count'] > 0) {
-    // Username or phone number already exists, don't insert the data
+    // Consumer type already exists, don't insert the data
     echo json_encode(['status' => 0, 'message' => 'Duplicate Position']);
 } else {
     // 3. Define SQL statement for insertion

@@ -94,6 +94,23 @@ var html = `
       modal.style.display = "block";
   
   };
+  const failed_modal3 = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    var html = `
+        <h5 class="modal-title" style="color: red; text-align:center;">Password must:</h5>
+        <ul style="text-align: left;">
+            <li style="color: red;">Be 8 to 12 characters long</li>
+            <li style="color: red;">Contain at least one uppercase letter</li>
+            <li style="color: red;">Contain at least one lowercase letter</li>
+            <li style="color: red;">Contain at least one digit (0-9)</li>
+            <li style="color: red;">Contain at least one special character (!@#$%^&* etc.)</li>
+        </ul>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+};
+
   const error_modal = () => {
     const modal = document.getElementById("myModal");
     const modalContent = document.getElementById("modalContent");
