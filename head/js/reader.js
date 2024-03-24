@@ -951,6 +951,7 @@ const getMunicipality = () => {
 const getBarangay = () => {
   const selectedMunicipalityId = document.getElementById("municipality").value;
   const barangayName = sessionStorage.getItem("barangayId");
+  console.log('barangayID: ',barangayName);
 
   // Fetch barangays based on the selected municipality
   // Replace this URL with your actual API endpoint
