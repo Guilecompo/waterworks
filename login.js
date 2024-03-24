@@ -53,7 +53,7 @@ const login = async () => {
         sessionStorage.setItem("email", userDetails.email);
         sessionStorage.setItem("accountId", userDetails.user_id);
         sessionStorage.setItem("branchId", userDetails.branchId);
-        sessionStorage.setItem("barangayId", userDetails.barangayId);
+        
 
         // Redirect based on user types
         switch (usertype) {
@@ -69,15 +69,19 @@ const login = async () => {
             window.location.href = "./consumer/html/dashboard.html";
             break;
           case "Admin":
+            sessionStorage.setItem("barangayId", userDetails.barangayId);
             window.location.href = "./admin/html/dashboard.html";
             break;
           case "Head":
+            sessionStorage.setItem("barangayId", userDetails.barangayId);
             window.location.href = "./head/html/dashboard.html";
             break;
           case "Clerk":
+            sessionStorage.setItem("barangayId", userDetails.barangayId);
             window.location.href = "./clerk/html/dashboard.html";
             break;
           case "Meter Reader":
+            sessionStorage.setItem("barangayId", userDetails.barangayId);
             window.location.href = "./meterreader/html/dashboard.html";
             break;
           default:
