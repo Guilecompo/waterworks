@@ -56,7 +56,7 @@ function onLoad() {
   }
   const getSubmeter = () => {
     const submeterSelect = document.getElementById("submeter");
-    var myUrl = "http://localhost/waterworks/consumer/get_submeter.php";
+    var myUrl = "http://128.199.232.132/waterworks/consumer/get_submeter.php";
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
   
