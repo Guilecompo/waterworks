@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 // 1. Establish connection to the database
 include 'connection.php';
 
-// 2. Check for duplicate username and phone number
+// Sanitize POST data
 $consumertype = htmlspecialchars($_POST['consumertype'], ENT_QUOTES, 'UTF-8');
 $discount_percentd = htmlspecialchars($_POST['discount_percentd'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
