@@ -57,7 +57,8 @@ const change = () => {
       }
   })
   .catch((error) => {
-      alert("ERROR! - " + error);
+    displayPasswordRequirementsModal();
+    console.log(error);
   });
 };
 
