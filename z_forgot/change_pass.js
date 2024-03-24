@@ -98,18 +98,21 @@ var html = `
     const modal = document.getElementById("myModal");
     const modalContent = document.getElementById("modalContent");
     var html = `
-        <h5 class="modal-title" style="color: red; text-align:center;">Password must:</h5>
-        <ul style="text-align: left;">
-            <li style="color: red;">Be 8 to 12 characters long</li>
-            <li style="color: red;">Contain at least one uppercase letter</li>
-            <li style="color: red;">Contain at least one lowercase letter</li>
-            <li style="color: red;">Contain at least one digit (0-9)</li>
-            <li style="color: red;">Contain at least one special character (!@#$%^&* etc.)</li>
-        </ul>
+        <div style="background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #FF5733; text-align: center; margin-bottom: 20px;">Password Requirements</h2>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="color: #FF5733; margin-bottom: 10px;"><strong>Be 8 to 12 characters long</strong></li>
+                <li style="color: #FF5733; margin-bottom: 10px;"><strong>Contain at least one uppercase letter</strong></li>
+                <li style="color: #FF5733; margin-bottom: 10px;"><strong>Contain at least one lowercase letter</strong></li>
+                <li style="color: #FF5733; margin-bottom: 10px;"><strong>Contain at least one digit (0-9)</strong></li>
+                <li style="color: #FF5733; margin-bottom: 10px;"><strong>Contain at least one special character (!@#$%^&* etc.)</strong></li>
+            </ul>
+        </div>
     `;
     modalContent.innerHTML = html;
     modal.style.display = "block";
 };
+
 
   const error_modal = () => {
     const modal = document.getElementById("myModal");
