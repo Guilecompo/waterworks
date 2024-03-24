@@ -53,7 +53,7 @@ const login = async () => {
         sessionStorage.setItem("email", userDetails.email);
         sessionStorage.setItem("accountId", userDetails.user_id);
         sessionStorage.setItem("branchId", userDetails.branchId);
-        sessionStorage.setItem("barangayIds", userDetails.barangayIds);
+        sessionStorage.setItem("barangayIds", userDetails.barangayIds.join(','));
 
         // Redirect based on user type
         switch (usertype) {
