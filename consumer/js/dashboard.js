@@ -106,39 +106,47 @@ function onLoad() {
     var myUrl = "http://128.199.232.132/waterworks/consumer/get_submeter.php";
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
-  
+    
     axios({
       url: myUrl,
       method: "post",
       data: formData,
     })
-      .then((response) => {
-        var positions = response.data;
-        console.log(positions);
+    .then((response) => {
+      if (response && response.data) {
+        if (response.data.message) {
+          // Display an alert if the message exists
+          alert(response.data.message);
+        } else {
+          // Process the data if no message is returned
+          var positions = response.data;
+          console.log(positions);
   
-        var options = `<option value="main">Other Accounts</option>`;
-        positions.forEach((position) => {
-          if (position.connected_number !== 0) {
+          var options = `<option value="main">Other Accounts</option>`;
+          positions.forEach((position) => {
             options += `<option value="${position.user_id}">${position.lastname} #${position.connected_number}</option>`;
-          } else {
-            options += `<option value="</option>`;
-          }
-        });
-        submeterSelect.innerHTML = options;
+          });
+          submeterSelect.innerHTML = options;
   
-        // Event listener for position change
-        submeterSelect.addEventListener("change", () => {
-          const selectedBranch = submeterSelect.value;
-          // Call the appropriate display function based on the selected position
-          if (selectedBranch !== "main") {
-            getfilter(selectedBranch);
-          } else {
-            getall();
-          }
-          // Add more conditions as needed for other positions
-        });
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-      });
+          // Event listener for position change
+          submeterSelect.addEventListener("change", () => {
+            const selectedBranch = submeterSelect.value;
+            // Call the appropriate display function based on the selected position
+            if (selectedBranch !== "main") {
+              getfilter(selectedBranch);
+            } else {
+              getall();
+            }
+            // Add more conditions as needed for other positions
+          });
+        }
+      } else {
+        // Handle unexpected response format
+        alert("Unexpected response format");
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
   };
+  

@@ -1,15 +1,21 @@
 <?php
-  header("Access-Control-Allow-Origin:*");
-  include 'connection.php';
+header("Access-Control-Allow-Origin:*");
+include 'connection.php';
 
-  $accountId = $_POST['accountId'];
+$accountId = $_POST['accountId'];
 
-  $sql = "SELECT * FROM user_consumer WHERE connected_parentId = :accountId ORDER BY connected_number";
-  $stmt = $conn->prepare($sql);
-  $stmt->bindParam(":accountId", $accountId, PDO::PARAM_INT);
-  $stmt->execute();
-  
-  $returnValue = $stmt->rowCount() > 0 ? $stmt->fetchAll(PDO::FETCH_ASSOC) : 0;
+$sql = "SELECT * FROM user_consumer WHERE connected_parentId = :accountId ORDER BY connected_number";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(":accountId", $accountId, PDO::PARAM_INT);
+$stmt->execute();
 
-  echo json_encode($returnValue);
+$returnValue = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($returnValue)) {
+    // If the result set is empty, return an alert
+    echo json_encode(["message" => "No data found"]);
+} else {
+    // If the result set is not empty, return the data
+    echo json_encode($returnValue);
+}
 ?>
