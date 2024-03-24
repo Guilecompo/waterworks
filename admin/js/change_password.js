@@ -1,3 +1,18 @@
+const onLoad = () => {
+
+  var accountId = sessionStorage.getItem("accountId");
+  if (!accountId || accountId === "0") {
+      window.location.href = "/waterworks/";
+  } else {
+    document.getElementById("ngalan").innerText =
+    sessionStorage.getItem("fullname");
+  document.getElementById("Name").innerText =
+    sessionStorage.getItem("fullname");
+  document.getElementById("Position").innerText =
+    sessionStorage.getItem("positionName");
+  }
+};
+
 const change = () => {
   const password = document.getElementById("password").value;
   const retype_password = document.getElementById("retype_password").value;
@@ -44,3 +59,4 @@ const change = () => {
       console.error("ERROR!", error);
   });
 };
+
