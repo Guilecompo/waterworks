@@ -116,7 +116,7 @@ function onLoad() {
       if (response && response.data) {
         if (response.data.message) {
           // Display an alert if the message exists
-          alert(response.data.message);
+          // alert(response.data.message);
         } else {
           // Process the data if no message is returned
           var positions = response.data;
