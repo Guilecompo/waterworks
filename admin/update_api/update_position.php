@@ -15,7 +15,7 @@ error_log(print_r($_POST, true));
 // Check if the required POST parameters are set
 if(isset($_POST['add_position'], $_POST['position_id'], $_POST['employee_Id'])) {
     // Sanitize and fetch POST data
-    $add_position = $_POST['add_position'];
+    $add_position = htmlspecialchars($_POST['add_position'], ENT_QUOTES, 'UTF-8');
     $position_id = $_POST['position_id'];
     $employee_Id = $_POST['employee_Id'];
     $date_added = date("Y-m-d");
