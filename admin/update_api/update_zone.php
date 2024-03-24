@@ -8,16 +8,16 @@ error_reporting(E_ALL);
 // include 'connection.php';
 include '../connection.php';
 
-
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$edited_zone = $_POST['edited_zone'];
-$barangayId = $_POST['barangayId'];
+// Sanitize and fetch POST data
+$edited_zone = htmlspecialchars($_POST['edited_zone'], ENT_QUOTES, 'UTF-8');
+$barangayId = htmlspecialchars($_POST['barangayId'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 try {
-    // Check if barangay_name already exists
+    // Check if zone_name already exists
     $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM address_zone WHERE zone_name = :edited_zone AND barangayId = :barangayId";
     $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
     $checkDuplicateStmt->bindParam(":edited_zone", $edited_zone, PDO::PARAM_STR);
@@ -26,7 +26,7 @@ try {
     $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result['count'] == 0) {
-        // If barangay_name doesn't exist, proceed with the update
+        // If zone_name doesn't exist, proceed with the update
         $sql = "UPDATE address_zone SET
         zone_name = :edited_zone, 
         barangayId = :barangayId
@@ -34,8 +34,8 @@ try {
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":zone_id", $_POST['zone_id'], PDO::PARAM_INT);
-        $stmt->bindParam(":edited_zone", $_POST['edited_zone'], PDO::PARAM_STR);
-        $stmt->bindParam(":barangayId", $_POST['barangayId'], PDO::PARAM_INT);
+        $stmt->bindParam(":edited_zone", $edited_zone, PDO::PARAM_STR);
+        $stmt->bindParam(":barangayId", $barangayId, PDO::PARAM_INT);
         if ($stmt->execute()) {
             $activity_type = "Edit";
             $table_name = "Zone";

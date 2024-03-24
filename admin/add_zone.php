@@ -9,12 +9,14 @@ include 'connection.php';
 
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$barangayId = $_POST['barangayId'];
-$add_zone = $_POST['add_zone'];
+// Sanitize and fetch POST data
+$barangayId = htmlspecialchars($_POST['barangayId'], ENT_QUOTES, 'UTF-8');
+$add_zone = htmlspecialchars($_POST['add_zone'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
+
 try {
-    // Check if barangay_name already exists
+    // Check if zone_name already exists
     $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM address_zone WHERE zone_name = :add_zone AND barangayId = :barangayId";
     $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
     $checkDuplicateStmt->bindParam(":add_zone", $add_zone, PDO::PARAM_STR);
@@ -23,12 +25,12 @@ try {
     $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result['count'] == 0) {
-
+        // If zone_name doesn't exist, proceed with insertion
         $sql = "INSERT INTO address_zone (zone_name, barangayId, date_added, employee_Id) ";
         $sql .= "VALUES (:add_zone, :barangayId, :date_added, :employee_Id)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":add_zone", $_POST['add_zone'], PDO::PARAM_STR);
+        $stmt->bindParam(":add_zone", $add_zone, PDO::PARAM_STR);
         $stmt->bindParam(":barangayId", $barangayId, PDO::PARAM_INT);
         $stmt->bindParam(":date_added", $date_added);
         $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
@@ -51,15 +53,13 @@ try {
             $stmt1->execute();
 
             echo json_encode(array("status" => $returnValue, "message" => "Zone Successfully Added & Added to Activity Log!"));
-        }else {
+        } else {
             echo json_encode(array("status" => 0, "message" => "Failed to add Zone"));
         }
     } else {
-        
-        echo json_encode(array("status" => 0, "message" => "Duplicate entry for barangay_name"));
+        echo json_encode(array("status" => 0, "message" => "Duplicate entry for zone_name"));
     }
 } catch (PDOException $e) {
-    
     echo json_encode(array("status" => 0, "message" => "Connection failed: " . $e->getMessage()));
 }
 
