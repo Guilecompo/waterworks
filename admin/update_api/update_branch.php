@@ -9,9 +9,11 @@ include '../connection.php';
 
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$edit_branch = $_POST['edit_branch'];
+// Sanitize input data
+$edit_branch = htmlspecialchars($_POST['edit_branch'], ENT_QUOTES, 'UTF-8');
+$edit_phone_no = htmlspecialchars($_POST['edit_phone_no'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 try {
     // Check if branch_name already exists
@@ -31,9 +33,9 @@ try {
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":branch_id", $_POST['branch_id'], PDO::PARAM_INT);
-        $stmt->bindParam(":edit_branch", $_POST['edit_branch'], PDO::PARAM_STR);
+        $stmt->bindParam(":edit_branch", $edit_branch, PDO::PARAM_STR);
         $stmt->bindParam(":zoneId", $_POST['zoneId'], PDO::PARAM_INT);
-        $stmt->bindParam(":edit_phone_no", $_POST['edit_phone_no'], PDO::PARAM_STR);
+        $stmt->bindParam(":edit_phone_no", $edit_phone_no, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $activity_type = "Edit";
             $table_name = "Branch";

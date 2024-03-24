@@ -6,10 +6,10 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 
 // 2. Check for duplicate username and phone number
-$branch = $_POST['branch'];
-$phone = $_POST['phone_no'];
+$branch = htmlspecialchars($_POST['branch'], ENT_QUOTES, 'UTF-8');
+$phone = htmlspecialchars($_POST['phone_no'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 $statusId = 1;
 
 // Query to check for duplicate username or phone number
@@ -31,7 +31,7 @@ if ($result['count'] > 0) {
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":branch_names", $branch, PDO::PARAM_STR);
     $stmt->bindParam(":location", $_POST['zoneId'], PDO::PARAM_INT);
-    $stmt->bindParam(":phone_no", $_POST['phone_no'], PDO::PARAM_INT);
+    $stmt->bindParam(":phone_no", $phone, PDO::PARAM_INT);
     $stmt->bindParam(":date_added", $date_added);
     $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
     $stmt->bindParam(":statusId", $statusId, PDO::PARAM_INT);
@@ -55,7 +55,7 @@ if ($result['count'] > 0) {
         $stmt1->execute();
 
         echo json_encode(array("status" => $returnValue, "message" => "Branch Successfully Added & Added to Activity Log!"));
-    }else {
+    } else {
         echo json_encode(array("status" => 0, "message" => "Failed to add Branch"));
     }
 }
