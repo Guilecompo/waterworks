@@ -55,7 +55,7 @@ const login = async () => {
         sessionStorage.setItem("branchId", userDetails.branchId);
         sessionStorage.setItem("barangayId", userDetails.barangayIds);
 
-        // Redirect based on user type
+        // Redirect based on user types
         switch (usertype) {
           case "Consumer":
             sessionStorage.setItem("location", userDetails.barangayId);
