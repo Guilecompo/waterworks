@@ -8,13 +8,13 @@ error_reporting(E_ALL);
 // include 'connection.php';
 include '../connection.php';
 
-
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$municipalityId = $_POST['municipalityId'];
-$add_barangay = $_POST['add_barangay'];
+// Sanitize and fetch POST data
+$municipalityId = htmlspecialchars($_POST['municipalityId'], ENT_QUOTES, 'UTF-8');
+$add_barangay = htmlspecialchars($_POST['add_barangay'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 try {
     // Check if barangay_name already exists
@@ -33,7 +33,7 @@ try {
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":barangay_id", $_POST['barangay_id'], PDO::PARAM_INT);
-        $stmt->bindParam(":add_barangay", $_POST['add_barangay'], PDO::PARAM_STR);
+        $stmt->bindParam(":add_barangay", $add_barangay, PDO::PARAM_STR);
         $stmt->bindParam(":municipalityId", $municipalityId, PDO::PARAM_INT);
         if ($stmt->execute()) {
             $activity_type = "Edit";

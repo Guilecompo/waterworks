@@ -9,10 +9,11 @@ include 'connection.php';
 
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$municipalityId = $_POST['municipalityId'];
-$add_barangay = $_POST['add_barangay'];
+// Sanitize and fetch POST data
+$municipalityId = htmlspecialchars($_POST['municipalityId'], ENT_QUOTES, 'UTF-8');
+$add_barangay = htmlspecialchars($_POST['add_barangay'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 try {
     // Check if barangay_name already exists
@@ -29,7 +30,7 @@ try {
         $sql .= "VALUES (:add_barangay, :municipalityId, :date_added, :employee_Id)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":add_barangay", $_POST['add_barangay'], PDO::PARAM_STR);
+        $stmt->bindParam(":add_barangay", $add_barangay, PDO::PARAM_STR);
         $stmt->bindParam(":municipalityId", $municipalityId, PDO::PARAM_INT);
         $stmt->bindParam(":date_added", $date_added);
         $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
