@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 a.*, g.position_name,
                 h.*, a.branchId,
                 i.user_status, 
-                address_zone.barangayId AS barangayIds
+                address_zone.barangayId
             FROM
                 user_employee a
                 INNER JOIN position g ON a.positionId = g.position_id
