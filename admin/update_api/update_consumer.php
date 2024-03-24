@@ -25,17 +25,17 @@ try {
         WHERE user_id = :user_id";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":firstname", $_POST['firstname'], PDO::PARAM_STR);
-    $stmt->bindParam(":middlename", $_POST['middlename'], PDO::PARAM_STR);
-    $stmt->bindParam(":lastname", $_POST['lastname'], PDO::PARAM_STR);
-    $stmt->bindParam(":phone_no", $_POST['phone'], PDO::PARAM_STR);
-    $stmt->bindParam(":email_add", $_POST['email_add'], PDO::PARAM_STR);
-    $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
-    $stmt->bindParam(":addressId", $_POST['zoneId'], PDO::PARAM_INT);
-    $stmt->bindParam(":meter_no", $_POST['meter_no'], PDO::PARAM_STR);
-    $stmt->bindParam(":house_no", $_POST['house_no'], PDO::PARAM_INT);
-    $stmt->bindParam(":branchId", $_POST['branchId'], PDO::PARAM_INT);
-    $stmt->bindParam(":user_id", $_POST['userid'], PDO::PARAM_INT);
+    $stmt->bindParam(":firstname", htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":middlename", htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":lastname", htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":phone_no", htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":email_add", htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":propertyId", htmlspecialchars($_POST['propertyId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":addressId", htmlspecialchars($_POST['zoneId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":meter_no", htmlspecialchars($_POST['meter_no'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":house_no", htmlspecialchars($_POST['house_no'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":branchId", htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":user_id", htmlspecialchars($_POST['userid'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
     $stmt->execute();
 
     $affectedRows = $stmt->rowCount();
