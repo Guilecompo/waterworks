@@ -66,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 a.*, g.position_name,
                 h.*, a.branchId,
                 i.user_status, 
-                address_zone.barangayId AS barangayIds
+                j.barangayId AS barangayIds
             FROM
                 user_employee a
                 INNER JOIN position g ON a.positionId = g.position_id
                 INNER JOIN branch h ON a.branchId = h.branch_id
                 INNER JOIN user_status i ON a.statusId = i.status_id
-                INNER JOIN address_zone ON h.locationId = address_zone.zone_id
+                INNER JOIN address_zone j ON h.locationId = j.zone_id
 
             WHERE a.email = ? AND a.password = ? AND g.position_name = ?");
             // Assuming you are using plain text passwords (not recommended)
