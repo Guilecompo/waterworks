@@ -950,8 +950,7 @@ const getMunicipality = () => {
 
 const getBarangay = () => {
   const selectedMunicipalityId = document.getElementById("municipality").value;
-  const barangayName = sessionStorage.getItem("barangayId");
-  console.log('barangayID: ',barangayName);
+  console.log('barangayID: ',sessionStorage.getItem("barangayId"));
 
   // Fetch barangays based on the selected municipality
   // Replace this URL with your actual API endpoint
@@ -959,7 +958,7 @@ const getBarangay = () => {
   const formData = new FormData();
 
   // Use selectedMunicipalityId directly
-  formData.append("barangayId", barangayName);
+  formData.append("barangayId", sessionStorage.getItem("barangayId"));
   formData.append("municipalityId", selectedMunicipalityId);
 
   axios({
