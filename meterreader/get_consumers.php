@@ -2,29 +2,36 @@
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
+
 include 'connection.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $reading_date = date('Y-m-d');
-        $currentDay = date('d');
+        $currentDay = date('j');
 
         // Check if the current day is between 25th and 5th
         if ($currentDay < 25 && $currentDay > 5) {
-            $response = ["error" => "Data can only be displayed between the 25th and 5th of the month."];
-            echo json_encode($response);
+            echo json_encode(["error" => "Data can only be displayed between the 25th and 5th of the month."]);
             exit; // Stop further execution
         }
 
+        echo "Current Day: " . $currentDay . "<br>";
         $dayOfWeek = date('N', strtotime($reading_date));
+        echo "Day of Week: " . $dayOfWeek . "<br>";
 
         // Check if it's Saturday (6) or Sunday (7)
         if ($dayOfWeek >= 6) {
-            $response = ["error" => "No work on weekends!"];
-            echo json_encode($response);
+            echo json_encode(["error" => "No work on weekends!"]);
             exit; // Stop further execution
         }
+
+        $debugOutput = [
+            "currentDay" => $currentDay,
+            "dayOfWeek" => $dayOfWeek
+        ];
+        
 
         $branchId = $_POST['branchId'];
         $readerId = $_POST['readerId'];
@@ -69,22 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Debugging output
-            $debugOutput = [
-                "currentDay" => $currentDay,
-                "dayOfWeek" => $dayOfWeek
-            ];
-
-            // Include debug output in the response
-            $response = ["debug" => $debugOutput, "data" => $results];
-            echo json_encode($response);
+            echo json_encode($results);
             
         } else {
             echo json_encode(["error" => "No data found for the given readerId"]);
         }
     } catch (PDOException $e) {
-        $response = ["error" => "Error: " . $e->getMessage()];
-        echo json_encode($response);
+        die("Error: " . $e->getMessage());
     }
 } else {
     http_response_code(405);

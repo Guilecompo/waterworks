@@ -29,35 +29,23 @@ const displayConsumer = () => {
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
   formData.append("readerId", sessionStorage.getItem("accountId"));
-  // Inside your JavaScript code
-axios({
-  url: url,
-  method: "post",
-  data: formData,
-})
-.then((response) => {
-  console.log(response.data); // Entire response object
-  const data = response.data.data; // Extracting data from response
-  const debugOutput = response.data.debug; // Extracting debug output from response
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      consumers = response.data;
 
-  // Check if debugOutput is present
-  if (debugOutput !== undefined) {
-    console.log(debugOutput); // Logging debug output to console
-  } else {
-    console.log("Debug output is undefined"); // Log message if debugOutput is undefined
-  }
-
-  consumers = data;
-  showConsumerPage(currentPage);
-})
-.catch((error) => {
-  // Handle errors
-  console.error(error);
-  errorTables();
-});
-
+      // sortConsumersByName();
+      showConsumerPage(currentPage);
+    })
+    .catch((error) => {
+      //   alert("ERRORSSS! - " + error);
+      errorTables();
+    });
 };
-
 
 // const sortConsumersByName = () => {
 //     consumers.sort((a, b) => {
