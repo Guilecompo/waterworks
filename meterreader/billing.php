@@ -28,7 +28,7 @@ $date_added = date("Y-m-d");
 $employee_Id = $_POST['readerId'];
 $login_statusId = 2;
 
-$due_date = date('Y-m-d', strtotime($reading_date . ' -20 days'));
+$due_date = date('Y-m-d', strtotime($reading_date . ' +20 days'));
 
 
 try {
