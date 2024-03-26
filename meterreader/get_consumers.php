@@ -8,7 +8,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $reading_date = date('Y-m-d');
-        $currentDay = date('j');
+        $currentDay = date('d');
 
         // Check if the current day is between 25th and 5th
         if ($currentDay < 25 && $currentDay > 5) {
