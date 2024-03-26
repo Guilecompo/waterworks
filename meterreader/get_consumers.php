@@ -17,8 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         echo "Current Day: " . $currentDay . "<br>";
+        echo json_encode(["error" => "Current Day: " . $currentDay . "<br>"]);
         $dayOfWeek = date('N', strtotime($reading_date));
         echo "Day of Week: " . $dayOfWeek . "<br>";
+        echo json_encode(["error" => "Day of Week: " . $dayOfWeek . "<br>"]);
 
         // Check if it's Saturday (6) or Sunday (7)
         if ($dayOfWeek >= 6) {
