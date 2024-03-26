@@ -2,6 +2,10 @@
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 include 'connection.php';
 session_start();
 
@@ -17,10 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         echo "Current Day: " . $currentDay . "<br>";
-        echo json_encode(["error" => "Current Day: " . $currentDay . "<br>"]);
         $dayOfWeek = date('N', strtotime($reading_date));
         echo "Day of Week: " . $dayOfWeek . "<br>";
-        echo json_encode(["error" => "Day of Week: " . $dayOfWeek . "<br>"]);
 
         // Check if it's Saturday (6) or Sunday (7)
         if ($dayOfWeek >= 6) {
