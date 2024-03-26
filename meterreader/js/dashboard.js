@@ -38,11 +38,11 @@ const displayConsumer = () => {
       console.log(response.data);
       const data = response.data.data;
       const debugOutput = response.data.debug;
-  
+
       // Process data and debug output as needed
       console.log(data);
       console.log(debugOutput);
-  
+
       consumers = data;
       showConsumerPage(currentPage);
     })
@@ -51,8 +51,8 @@ const displayConsumer = () => {
       console.error(error);
       errorTables();
     });
-  
 };
+
 
 // const sortConsumersByName = () => {
 //     consumers.sort((a, b) => {
