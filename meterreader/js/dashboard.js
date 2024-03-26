@@ -36,15 +36,22 @@ const displayConsumer = () => {
   })
     .then((response) => {
       console.log(response.data);
-      consumers = response.data;
-
-      // sortConsumersByName();
+      const data = response.data.data;
+      const debugOutput = response.data.debug;
+  
+      // Process data and debug output as needed
+      console.log(data);
+      console.log(debugOutput);
+  
+      consumers = data;
       showConsumerPage(currentPage);
     })
     .catch((error) => {
-      //   alert("ERRORSSS! - " + error);
+      // Handle errors
+      console.error(error);
       errorTables();
     });
+  
 };
 
 // const sortConsumersByName = () => {

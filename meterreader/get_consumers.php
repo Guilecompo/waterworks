@@ -2,10 +2,6 @@
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-
 include 'connection.php';
 session_start();
 
@@ -16,17 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Check if the current day is between 25th and 5th
         if ($currentDay < 25 && $currentDay > 5) {
-            echo json_encode(["error" => "Data can only be displayed between the 25th and 5th of the month."]);
+            $response = ["error" => "Data can only be displayed between the 25th and 5th of the month."];
+            echo json_encode($response);
             exit; // Stop further execution
         }
 
-        echo "Current Day: " . $currentDay . "<br>";
         $dayOfWeek = date('N', strtotime($reading_date));
-        echo "Day of Week: " . $dayOfWeek . "<br>";
 
         // Check if it's Saturday (6) or Sunday (7)
         if ($dayOfWeek >= 6) {
-            echo json_encode(["error" => "No work on weekends!"]);
+            $response = ["error" => "No work on weekends!"];
+            echo json_encode($response);
             exit; // Stop further execution
         }
 
@@ -73,13 +69,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode($results);
+            // Debugging output
+            $debugOutput = [
+                "currentDay" => $currentDay,
+                "dayOfWeek" => $dayOfWeek
+            ];
+
+            // Include debug output in the response
+            $response = ["debug" => $debugOutput, "data" => $results];
+            echo json_encode($response);
             
         } else {
             echo json_encode(["error" => "No data found for the given readerId"]);
         }
     } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
+        $response = ["error" => "Error: " . $e->getMessage()];
+        echo json_encode($response);
     }
 } else {
     http_response_code(405);
