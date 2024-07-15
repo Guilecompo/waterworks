@@ -18,7 +18,7 @@ const onLoad = () => {
 
         
 
-        var myUrl = "http://128.199.232.132/waterworks/admin/getbarangay.php";
+        var myUrl = "http://152.42.243.189/waterworks/admin/getbarangay.php";
         const formData = new FormData();
         formData.append("barangay_id", barangay_id);
 

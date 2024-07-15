@@ -49,7 +49,7 @@ const displayConsumer = () => {
     branchSelect.style.display = "block";
     searchInput.style.display = "block";
 
-    var url = "http://128.199.232.132/waterworks/clerk/get_consumers.php";
+    var url = "http://152.42.243.189/waterworks/clerk/get_consumers.php";
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
     formData.append("branchId", sessionStorage.getItem("branchId"));
@@ -190,7 +190,7 @@ const view_consumer = (user_id) => {
     const modalContent = document.getElementById("modalContent");
     let html = ""; // Define html variable here
 
-    var myUrl = "http://128.199.232.132/waterworks/clerk/consumer_billing_history.php";
+    var myUrl = "http://152.42.243.189/waterworks/clerk/consumer_billing_history.php";
     const formData = new FormData();
     formData.append("accId", user_id);
     console.log("Consumer ID : ", user_id);
@@ -397,7 +397,7 @@ const edit = (user_id) => {
   branchSelect.style.display = "none";
   searchInput.style.display = "none";
 
-  var myUrl = "http://128.199.232.132/waterworks/head/getconsumer.php";
+  var myUrl = "http://152.42.243.189/waterworks/head/getconsumer.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
@@ -539,7 +539,7 @@ const submit_edit_consumer = (event, user_id) => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterworks/head/update_api/update_consumer.php";
+      const myUrl = "http://152.42.243.189/waterworks/head/update_api/update_consumer.php";
       const formData = new FormData();
       formData.append("userid", user_id);
       formData.append("firstname", firstname);
@@ -591,7 +591,7 @@ const submit_edit_consumer = (event, user_id) => {
       };
   const getProperties = () => {
     const propertySelect = document.getElementById("properties");
-    var myUrl = "http://128.199.232.132/waterworks/gets/get_property.php";
+    var myUrl = "http://152.42.243.189/waterworks/gets/get_property.php";
   
     axios({
       url: myUrl,
@@ -613,7 +613,7 @@ const submit_edit_consumer = (event, user_id) => {
 
   const getBranches = () => {
     const branchSelect = document.getElementById("edit_branch");
-    var myUrl = "http://128.199.232.132/waterworks/head/get_branch.php";
+    var myUrl = "http://152.42.243.189/waterworks/head/get_branch.php";
     const formData = new FormData();
     formData.append("branchId", sessionStorage.getItem("branchId"));
 
@@ -640,7 +640,7 @@ const submit_edit_consumer = (event, user_id) => {
 
     const getMunicipality = () => {
       const municipalitySelect = document.getElementById("municipality");
-      var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
+      var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
       
       axios({
         url: myUrl,
@@ -666,7 +666,7 @@ const submit_edit_consumer = (event, user_id) => {
       const getBarangay = () => {
       const selectedMunicipalityId = document.getElementById("municipality").value;
       
-      const barangayUrl = `http://128.199.232.132/waterworks/gets/get_barangay.php`;
+      const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
       const formData = new FormData();
       
       // Use selectedMunicipalityId directly
@@ -701,7 +701,7 @@ const submit_edit_consumer = (event, user_id) => {
       const getZone = () => {
         const selectedBarangayId = document.getElementById("barangay").value;
       
-        const zoneUrl = `http://128.199.232.132/waterworks/gets/get_zone.php`;
+        const zoneUrl = `http://152.42.243.189/waterworks/gets/get_zone.php`;
         const formData = new FormData();
       
         // Use selectedMunicipalityId directly
@@ -743,7 +743,7 @@ const submit_edit_consumer = (event, user_id) => {
       const getFileterZones = () => {
         const positionSelect = document.getElementById("filterZone");
         const barangayName = sessionStorage.getItem("branchId");
-        const myUrl = "http://128.199.232.132/waterworks/clerk/get_zones_filter.php";
+        const myUrl = "http://152.42.243.189/waterworks/clerk/get_zones_filter.php";
         const formData = new FormData();
         formData.append("barangayId", barangayName);
       
@@ -779,7 +779,7 @@ const submit_edit_consumer = (event, user_id) => {
       };
       
       const displayConsumerByZone = () => {
-        const url = "http://128.199.232.132/waterworks/clerk/get_consumers_filter.php";
+        const url = "http://152.42.243.189/waterworks/clerk/get_consumers_filter.php";
         const formData = new FormData();
         formData.append("branchId", sessionStorage.getItem("branchId"));
         formData.append("accountId", sessionStorage.getItem("accountId"));
