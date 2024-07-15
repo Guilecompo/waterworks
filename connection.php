@@ -7,7 +7,7 @@
 //  $dbpassword = 'S2gyyhJcalFV4';
 //  $database = 'if0_36105237_waterbilling';
 
-$host = '128.199.232.132';
+$host = '152.42.243.189';
  $dbusername = 'waterworks';
  $dbpassword = 'Waterworks2024!';
  $database = 'waterbilling';
