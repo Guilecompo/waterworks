@@ -153,7 +153,7 @@ const closeModal = () => {
             
             // Use selectedMunicipalityId directly
             formData.append("municipalityId", selectedMunicipalityId);
-            formData.append("barangayId", sessionStorage.getItem("barangayId"));
+            formData.append("barangayId", sessionStorage.getItem("barangayIds"));
             axios({
               url: barangayUrl,
               method: "post",
