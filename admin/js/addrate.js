@@ -105,7 +105,7 @@ const submit_rate = (event) => {
     return;
   }
 
-  const myUrl = "http://128.199.232.132/waterworks/admin/add_property_rate.php";
+  const myUrl = "http://152.42.243.189/waterworks/admin/add_property_rate.php";
   const formData = new FormData();
   formData.append("propertyId", propertyId);
   formData.append("minimum_rate", minimum_rate);
@@ -140,7 +140,7 @@ const submit_rate = (event) => {
 };
 const getProperty = () => {
   const propertySelect = document.getElementById("property");
-  var myUrl = "http://128.199.232.132/waterworks/gets/get_property.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_property.php";
 
   axios({
     url: myUrl,
@@ -162,7 +162,7 @@ const getProperty = () => {
 // ------------------------------FOR TABLE--------------------------------------------------------------
 
 const displayRate = () => {
-  var url = "http://128.199.232.132/waterworks/admin/ratelist.php";
+  var url = "http://152.42.243.189/waterworks/admin/ratelist.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));

@@ -78,7 +78,7 @@ const closeModal = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterworks/admin/add_property.php";
+      const myUrl = "http://152.42.243.189/waterworks/admin/add_property.php";
       const formData = new FormData();
       formData.append("add_property", add_property);
       formData.append("employee_Id", sessionStorage.getItem("accountId"));
@@ -111,7 +111,7 @@ const closeModal = () => {
 // ------------------------------FOR TABLE--------------------------------------------------------------
 
 const displayProperty = () => {
-  var url = "http://128.199.232.132/waterworks/admin/propertylist.php";
+  var url = "http://152.42.243.189/waterworks/admin/propertylist.php";
   
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -256,7 +256,7 @@ const displayProperty = () => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (property_id) => {
 
-        var myUrl = "http://128.199.232.132/waterworks/admin/getproperty.php";
+        var myUrl = "http://152.42.243.189/waterworks/admin/getproperty.php";
         const formData = new FormData();
         formData.append("property_id", property_id);
 
@@ -315,7 +315,7 @@ const submit_edit_property = (event, property_id) => {
       return;
   }
 
-  const myUrl = "http://128.199.232.132/waterworks/admin/update_api/update_property.php";
+  const myUrl = "http://152.42.243.189/waterworks/admin/update_api/update_property.php";
   const formData = new FormData();
   formData.append("property_id", property_id);
   formData.append("add_property", add_property);

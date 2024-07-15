@@ -79,7 +79,7 @@ const submit_barangay = () => {
     return;
   }
 
-  const myUrl = "http://128.199.232.132/waterbilling/admin/add_barangay.php";
+  const myUrl = "http://152.42.243.189/waterbilling/admin/add_barangay.php";
   const formData = new FormData();
   formData.append("municipalityId", municipalityId);
   formData.append("add_barangay", add_barangay);
@@ -136,7 +136,7 @@ const submit_zone = () => {
     return;
   }
 
-  const myUrl = "http://128.199.232.132/waterbilling/admin/add_zone.php";
+  const myUrl = "http://152.42.243.189/waterbilling/admin/add_zone.php";
   const formData = new FormData();
   formData.append("barangayId", barangayId);
   formData.append("add_zone", add_zone);
@@ -186,7 +186,7 @@ const submit_property = () => {
     return;
   }
 
-  const myUrl = "http://128.199.232.132/waterbilling/admin/add_property.php";
+  const myUrl = "http://152.42.243.189/waterbilling/admin/add_property.php";
   const formData = new FormData();
   formData.append("add_property", add_property);
 
@@ -232,7 +232,7 @@ const submit_property = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterbilling/admin/add_position.php";
+      const myUrl = "http://152.42.243.189/waterbilling/admin/add_position.php";
       const formData = new FormData();
       formData.append("add_position", add_position);
     
@@ -298,7 +298,7 @@ const submit_property = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterbilling/admin/add_branch.php";
+      const myUrl = "http://152.42.243.189/waterbilling/admin/add_branch.php";
       const formData = new FormData();
       formData.append("branch", branch);
       formData.append("municipalityId", municipalityId);
@@ -366,7 +366,7 @@ const submit_property = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterbilling/admin/add_property_rate.php";
+      const myUrl = "http://152.42.243.189/waterbilling/admin/add_property_rate.php";
       const formData = new FormData();
       formData.append("propertyId", propertyId);
       formData.append("minimum_rate", minimum_rate);
@@ -458,7 +458,7 @@ const submit_property = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterbilling/admin/add_consumer.php";
+      const myUrl = "http://152.42.243.189/waterbilling/admin/add_consumer.php";
       const formData = new FormData();
       formData.append("firstname", firstname);
       formData.append("middlename", middlename);
@@ -657,7 +657,7 @@ const submit_property = () => {
         return;
       }
     
-      const myUrl = "http://128.199.232.132/waterbilling/admin/add_employees.php";
+      const myUrl = "http://152.42.243.189/waterbilling/admin/add_employees.php";
       const formData = new FormData();
       formData.append("firstname", firstname);
       formData.append("middlename", middlename);
@@ -717,7 +717,7 @@ const submit_property = () => {
     // };
     const getMunicipality1 = () => {
       const municipalitySelect = document.getElementById("municipality");
-      var myUrl = "http://128.199.232.132/waterbilling/admin/get_municipality.php";
+      var myUrl = "http://152.42.243.189/waterbilling/admin/get_municipality.php";
       
       axios({
         url: myUrl,
@@ -740,7 +740,7 @@ const submit_property = () => {
     
     const getMunicipality = () => {
     const municipalitySelect = document.getElementById("municipality");
-    var myUrl = "http://128.199.232.132/waterbilling/admin/get_municipality.php";
+    var myUrl = "http://152.42.243.189/waterbilling/admin/get_municipality.php";
     
     axios({
       url: myUrl,
@@ -767,7 +767,7 @@ const submit_property = () => {
     
     // Fetch barangays based on the selected municipality
     // Replace this URL with your actual API endpoint
-    const barangayUrl = `http://128.199.232.132/waterbilling/admin/get_barangay.php`;
+    const barangayUrl = `http://152.42.243.189/waterbilling/admin/get_barangay.php`;
     const formData = new FormData();
     
     // Use selectedMunicipalityId directly
@@ -802,7 +802,7 @@ const submit_property = () => {
     const getZone = () => {
     const selectedBarangayId = document.getElementById("barangay").value;
     
-      const zoneUrl = `http://128.199.232.132/waterbilling/admin/get_zone.php`;
+      const zoneUrl = `http://152.42.243.189/waterbilling/admin/get_zone.php`;
       const formData = new FormData();
     
     // Use selectedMunicipalityId directly
@@ -834,7 +834,7 @@ const submit_property = () => {
     
     const getPosition = () => {
     const positionSelect = document.getElementById("position");
-    var myUrl = "http://128.199.232.132/waterbilling/admin/get_position.php";
+    var myUrl = "http://152.42.243.189/waterbilling/admin/get_position.php";
     
     axios({
       url: myUrl,
@@ -856,7 +856,7 @@ const submit_property = () => {
     
     const getProperty = () => {
       const propertySelect = document.getElementById("property");
-      var myUrl = "http://128.199.232.132/waterbilling/admin/get_property.php";
+      var myUrl = "http://152.42.243.189/waterbilling/admin/get_property.php";
     
       axios({
         url: myUrl,
@@ -878,7 +878,7 @@ const submit_property = () => {
 
     const getBranch = () => {
       const propertySelect = document.getElementById("branch");
-      var myUrl = "http://128.199.232.132/waterbilling/admin/get_branch.php";
+      var myUrl = "http://152.42.243.189/waterbilling/admin/get_branch.php";
     
       axios({
         url: myUrl,

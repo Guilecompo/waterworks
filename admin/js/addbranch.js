@@ -109,7 +109,7 @@ const closeModal = () => {
           return;
         }
       
-        const myUrl = "http://128.199.232.132/waterworks/admin/add_branch.php";
+        const myUrl = "http://152.42.243.189/waterworks/admin/add_branch.php";
         const formData = new FormData();
         formData.append("branch", branch);
         formData.append("municipalityId", municipalityId);
@@ -145,7 +145,7 @@ const closeModal = () => {
       };
       const getMunicipality = () => {
         const municipalitySelect = document.getElementById("municipality");
-        var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
+        var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
         
         axios({
           url: myUrl,
@@ -171,7 +171,7 @@ const closeModal = () => {
         const getBarangay = () => {
         const selectedMunicipalityId = document.getElementById("municipality").value;
         
-        const barangayUrl = `http://128.199.232.132/waterworks/gets/get_barangay.php`;
+        const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
         const formData = new FormData();
         
         // Use selectedMunicipalityId directly
@@ -206,7 +206,7 @@ const closeModal = () => {
         const getZone = () => {
           const selectedBarangayId = document.getElementById("barangay").value;
         
-          const zoneUrl = `http://128.199.232.132/waterworks/gets/get_zone.php`;
+          const zoneUrl = `http://152.42.243.189/waterworks/gets/get_zone.php`;
           const formData = new FormData();
         
           // Use selectedMunicipalityId directly
@@ -246,7 +246,7 @@ const closeModal = () => {
 // ------------------------------FOR TABLE--------------------------------------------------------------
 
 const displayBranch = () => {
-  var url = "http://128.199.232.132/waterworks/admin/branchlist.php";
+  var url = "http://152.42.243.189/waterworks/admin/branchlist.php";
   
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -397,7 +397,7 @@ const displayBranch = () => {
 const edit = (branch_id) => {
         console.log(branch_id);
 
-        var myUrl = "http://128.199.232.132/waterworks/admin/getbranch.php";
+        var myUrl = "http://152.42.243.189/waterworks/admin/getbranch.php";
         const formData = new FormData();
         formData.append("branch_id", branch_id);
 
@@ -493,7 +493,7 @@ const submit_edit_branch = (event, branch_id) => {
       return;
   }
 
-  const myUrl = "http://128.199.232.132/waterworks/admin/update_api/update_branch.php";
+  const myUrl = "http://152.42.243.189/waterworks/admin/update_api/update_branch.php";
   const formData = new FormData();
   formData.append("branch_id", branch_id);
   formData.append("municipalityId", municipalityId);
@@ -533,7 +533,7 @@ const submit_edit_branch = (event, branch_id) => {
 
 const getMunicipality1 = () => {
   const municipalitySelect = document.getElementById("municipalities");
-  var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
   
   axios({
     url: myUrl,
@@ -557,7 +557,7 @@ const getMunicipality1 = () => {
   const getBarangay1 = () => {
     const selectedMunicipalityId = document.getElementById("municipalities").value;
     
-    const barangayUrl = `http://128.199.232.132/waterworks/gets/get_barangay.php`;
+    const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
     const formData = new FormData();
     
     // Use selectedMunicipalityId directly
@@ -591,7 +591,7 @@ const getMunicipality1 = () => {
     const getZone1 = () => {
       const selectedBarangayId = document.getElementById("barangays").value;
       
-        const zoneUrl = `http://128.199.232.132/waterworks/gets/get_zone.php`;
+        const zoneUrl = `http://152.42.243.189/waterworks/gets/get_zone.php`;
         const formData = new FormData();
       
       // Use selectedMunicipalityId directly

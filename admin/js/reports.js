@@ -31,7 +31,7 @@ const showPreviousPage = () => {
 
 const displayPaymentReports = () => {
   document.getElementById("dateInput").value = "";
-  var url = "http://128.199.232.132/waterworks/admin/reports.php";
+  var url = "http://152.42.243.189/waterworks/admin/reports.php";
 
   axios({
       url: url,
@@ -158,7 +158,7 @@ function filterByDate() {
 
     // Check if dateInput is valid (you can add your own validation logic here)
 
-    var url = "http://128.199.232.132/waterworks/admin/filter_reports.php";
+    var url = "http://152.42.243.189/waterworks/admin/filter_reports.php";
 
     const formData = new FormData();
     formData.append("dateInput", dateInput);
