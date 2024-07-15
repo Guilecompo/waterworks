@@ -18,7 +18,7 @@ const change = () => {
       return;
   }
 
-  var url = "http://128.199.232.132/waterworks/z_forgot/change_pass.php";
+  var url = "http://152.42.243.189/waterworks/z_forgot/change_pass.php";
   const formData = new FormData();
   formData.append("password", password);
   formData.append("Email", sessionStorage.getItem("Email"));

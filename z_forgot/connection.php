@@ -2,7 +2,7 @@
  header('Content-Type: application/json');
  header("Access-Control-Allow-Origin: *");
  
- $host = '128.199.232.132';
+ $host = '152.42.243.189';
  $dbusername = 'waterworks';
  $dbpassword = 'Waterworks2024!';
  $database = 'waterbilling';
