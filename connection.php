@@ -3,11 +3,7 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
- 
-//  $host = 'sql303.infinityfree.com';
-//  $dbusername = 'if0_36105237';
-//  $dbpassword = 'S2gyyhJcalFV4';
-//  $database = 'if0_36105237_waterbilling';
+
 
 $host = '152.42.243.189';
  $dbusername = 'waterworks';
