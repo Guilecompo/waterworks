@@ -27,7 +27,7 @@ function onLoad() {
 
 
 const login = async () => {
-  const url = "http://152.42.243.189//waterworks/login.php";
+  const url = "http://152.42.243.189/waterworks/login.php";
 
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
