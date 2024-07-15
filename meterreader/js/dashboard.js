@@ -25,7 +25,7 @@ const onLoad = () => {
 const displayConsumer = () => {
   const close_butt = document.getElementById("close_butt");
   close_butt.style.display = "flex";
-  var url = "http://128.199.232.132/waterworks/meterreader/get_consumers.php";
+  var url = "http://152.42.243.189/waterworks/meterreader/get_consumers.php";
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
   formData.append("readerId", sessionStorage.getItem("accountId"));
@@ -125,7 +125,7 @@ const view = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://128.199.232.132/waterworks/meterreader/get_consumer.php";
+  var myUrl = "http://152.42.243.189/waterworks/meterreader/get_consumer.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
@@ -261,7 +261,7 @@ const submit = (user_id, propertyId) => {
     alert("Please fill in the fields correctly");
     return;
   } else {
-    const myUrl = "http://128.199.232.132/waterworks/meterreader/billing.php";
+    const myUrl = "http://152.42.243.189/waterworks/meterreader/billing.php";
     const formData = new FormData();
     formData.append("consumerId", user_id);
     formData.append("propertyId", propertyId);
@@ -300,7 +300,7 @@ const submit = (user_id, propertyId) => {
 
 const getFilterZones = () => {
   const positionSelect = document.getElementById("filterZones");
-  const myUrl = "http://128.199.232.132/waterworks/meterreader/get_zones_filter.php";
+  const myUrl = "http://152.42.243.189/waterworks/meterreader/get_zones_filter.php";
   const formData = new FormData();
   formData.append("barangayId", sessionStorage.getItem("barangayId"));
   formData.append("readerId", sessionStorage.getItem("accountId"));
@@ -345,7 +345,7 @@ const getFilterZones = () => {
 
 const displayConsumerByZone = () => {
   const url =
-    "http://128.199.232.132/waterworks/meterreader/get_consumers_filter.php";
+    "http://152.42.243.189/waterworks/meterreader/get_consumers_filter.php";
 
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
@@ -467,7 +467,7 @@ const bill_receipt = (user_id) => {
   const modalContent = document.getElementById("modalContent");
 
   var myUrl =
-    "http://128.199.232.132/waterworks/meterreader/consumer_billing_history.php";
+    "http://152.42.243.189/waterworks/meterreader/consumer_billing_history.php";
   const formData = new FormData();
   formData.append("accId", user_id);
   console.log("Consumer ID : ", user_id);
