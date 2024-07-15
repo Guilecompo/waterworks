@@ -5,10 +5,10 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
 
-$host = '152.42.243.189';
- $dbusername = 'waterworks';
- $dbpassword = 'Waterworks2024!';
- $database = 'waterbilling';
+  $host = '152.42.243.189';
+  $dbusername = 'waterworks';
+  $dbpassword = 'Waterworks2024!';
+  $database = 'waterbilling';
 
   try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $dbusername, $dbpassword);
