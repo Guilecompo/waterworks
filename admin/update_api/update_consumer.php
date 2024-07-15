@@ -10,6 +10,19 @@ include '../connection.php';
 error_log(print_r($_POST, true)); 
 
 try {
+    // Sanitize and fetch POST data
+    $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
+    $middlename = htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8');
+    $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
+    $phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
+    $addressId = htmlspecialchars($_POST['zoneId'], ENT_QUOTES, 'UTF-8');
+    $propertyId = htmlspecialchars($_POST['propertyId'], ENT_QUOTES, 'UTF-8');
+    $email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
+    $house_no = htmlspecialchars($_POST['house_no'], ENT_QUOTES, 'UTF-8');
+    $meter_no = htmlspecialchars($_POST['meter_no'], ENT_QUOTES, 'UTF-8');
+    $branchId = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
+    $user_id = htmlspecialchars($_POST['userid'], ENT_QUOTES, 'UTF-8');
+
     // Check if branch_name already exists
     $sql = "UPDATE user_consumer SET
         firstname = :firstname, 
@@ -25,17 +38,19 @@ try {
         WHERE user_id = :user_id";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":firstname", $_POST['firstname'], PDO::PARAM_STR);
-    $stmt->bindParam(":middlename", $_POST['middlename'], PDO::PARAM_STR);
-    $stmt->bindParam(":lastname", $_POST['lastname'], PDO::PARAM_STR);
-    $stmt->bindParam(":phone_no", $_POST['phone'], PDO::PARAM_STR);
-    $stmt->bindParam(":email_add", $_POST['email_add'], PDO::PARAM_STR);
-    $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
-    $stmt->bindParam(":addressId", $_POST['zoneId'], PDO::PARAM_INT);
-    $stmt->bindParam(":meter_no", $_POST['meter_no'], PDO::PARAM_STR);
-    $stmt->bindParam(":house_no", $_POST['house_no'], PDO::PARAM_INT);
-    $stmt->bindParam(":branchId", $_POST['branchId'], PDO::PARAM_INT);
-    $stmt->bindParam(":user_id", $_POST['userid'], PDO::PARAM_INT);
+
+    // Bind parameters
+    $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
+    $stmt->bindParam(":middlename", $middlename, PDO::PARAM_STR);
+    $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
+    $stmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
+    $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR);
+    $stmt->bindParam(":propertyId", $propertyId, PDO::PARAM_INT);
+    $stmt->bindParam(":addressId", $addressId, PDO::PARAM_INT);
+    $stmt->bindParam(":meter_no", $meter_no, PDO::PARAM_STR);
+    $stmt->bindParam(":house_no", $house_no, PDO::PARAM_INT);
+    $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
+    $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
     $stmt->execute();
 
     $affectedRows = $stmt->rowCount();

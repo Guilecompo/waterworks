@@ -6,15 +6,15 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 
 $status = '1';
-$branch = $_POST['branchId'];
+$branch = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
 
 // 2. Check for duplicate username and phone number
-$meter_no = $_POST['meter_no'];
-$phone_no = $_POST['phone'];
-$email_add = $_POST['email_add'];
+$meter_no = htmlspecialchars($_POST['meter_no'], ENT_QUOTES, 'UTF-8');
+$phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
+$email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
 
 $date_added = date("Y-m-d");
-$employee_Id = $_POST['employee_Id'];
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 $login_statusId = 2;
 $connected_parentId = 0;
 $connected_number = 0;
@@ -43,26 +43,26 @@ if ($result['count'] > 0) {
     $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :connected_parentId, :connected_number, :phone_no, :addressId, :propertyId, :email_add, :code, :house_no, :meter_no, :password, :total_cubic_consumed, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":firstname", $_POST['firstname'], PDO::PARAM_STR);
-    $stmt->bindParam(":middlename", $_POST['middlename'], PDO::PARAM_STR);
-    $stmt->bindParam(":lastname", $_POST['lastname'], PDO::PARAM_STR);
-    $stmt->bindParam(":suffixId", $_POST['suffixId'], PDO::PARAM_INT);
+    $stmt->bindParam(":firstname", htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":middlename", htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":lastname", htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":suffixId", htmlspecialchars($_POST['suffixId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
     $stmt->bindParam(":connected_parentId", $connected_parentId, PDO::PARAM_INT);
     $stmt->bindParam(":connected_number", $connected_number, PDO::PARAM_INT);
 
-    $stmt->bindParam(":phone_no", $_POST['phone'], PDO::PARAM_STR);
-    $stmt->bindParam(":email_add", $_POST['email_add'], PDO::PARAM_STR);
+    $stmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
+    $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR);
     $stmt->bindParam(":code", $code, PDO::PARAM_STR);
-    $stmt->bindParam(":propertyId", $_POST['propertyId'], PDO::PARAM_INT);
-    $stmt->bindParam(":addressId", $_POST['zoneId'], PDO::PARAM_INT);
+    $stmt->bindParam(":propertyId", htmlspecialchars($_POST['propertyId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":addressId", htmlspecialchars($_POST['zoneId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
 
-    $stmt->bindParam(":house_no", $_POST['house_no'], PDO::PARAM_INT);
-    $stmt->bindParam(":meter_no", $_POST['meter_no'], PDO::PARAM_STR);
+    $stmt->bindParam(":house_no", htmlspecialchars($_POST['house_no'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":meter_no", $meter_no, PDO::PARAM_STR);
     $stmt->bindParam(":password", $password, PDO::PARAM_STR);
 
     $stmt->bindParam(":total_cubic_consumed", $total_cubic_consumed, PDO::PARAM_INT);
     $stmt->bindParam(":positionId", $position, PDO::PARAM_INT);
-    $stmt->bindParam(":consumertypeId", $_POST['consumer'], PDO::PARAM_INT);
+    $stmt->bindParam(":consumertypeId", htmlspecialchars($_POST['consumer'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
 
     $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
