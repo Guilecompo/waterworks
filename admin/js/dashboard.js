@@ -29,7 +29,7 @@ const getall = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = "http://128.199.232.132/waterworks/admin/total.php";
+  const Url = "http://152.42.243.189/waterworks/admin/total.php";
     axios({
       url: Url,
       method: "post",
@@ -87,7 +87,7 @@ const getfilter = (selectedBranch) => {
     console.log("Page loaded!");
     return;
   }
-  const Url = "http://128.199.232.132/waterworks/admin/total_poblacion.php";
+  const Url = "http://152.42.243.189/waterworks/admin/total_poblacion.php";
   const formData = new FormData();
     formData.append("branchId", selectedBranch);
     axios({
@@ -174,7 +174,7 @@ const getfilter = (selectedBranch) => {
 
 const getFileterBranch = () => {
   const branchSelect = document.getElementById("branch");
-  var myUrl = "http://128.199.232.132/waterworks/admin/get_branch.php";
+  var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
 
   axios({
     url: myUrl,
@@ -209,7 +209,7 @@ const getFileterBranch = () => {
 };
 
 const displayActivity = () => {
-  var url = "http://128.199.232.132/waterworks/admin/activitylist.php";
+  var url = "http://152.42.243.189/waterworks/admin/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));

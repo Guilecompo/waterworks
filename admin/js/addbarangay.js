@@ -83,7 +83,7 @@ const submit_barangay = (event) => {
     return;
   }
 
-  const myUrl = "http://128.199.232.132/waterworks/admin/add_barangay.php";
+  const myUrl = "http://152.42.243.189/waterworks/admin/add_barangay.php";
   const formData = new FormData();
   formData.append("municipalityId", municipalityId);
   formData.append("add_barangay", add_barangay);
@@ -116,7 +116,7 @@ const submit_barangay = (event) => {
 };
 const getMunicipality = () => {
   const municipalitySelect = document.getElementById("municipality");
-  var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
 
   axios({
     url: myUrl,
@@ -139,7 +139,7 @@ const getMunicipality = () => {
 // ---------------------------------------------FOR TABLE-----------------------------------------------------
 
 const displayBarangay = () => {
-  var url = "http://128.199.232.132/waterworks/admin/barangaylist.php";
+  var url = "http://152.42.243.189/waterworks/admin/barangaylist.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
@@ -285,7 +285,7 @@ const refreshTable = (barangayList) => {
 
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (barangay_id) => {
-  var myUrl = "http://128.199.232.132/waterworks/admin/getbarangay.php";
+  var myUrl = "http://152.42.243.189/waterworks/admin/getbarangay.php";
   const formData = new FormData();
   formData.append("barangay_id", barangay_id);
 
@@ -357,7 +357,7 @@ const submit_edit_barangay = (event, barangay_id) => {
   }
 
   const myUrl =
-    "http://128.199.232.132/waterworks/admin/update_api/update_barangay.php";
+    "http://152.42.243.189/waterworks/admin/update_api/update_barangay.php";
   const formData = new FormData();
   formData.append("barangay_id", barangay_id);
   formData.append("municipalityId", municipalityId);
@@ -394,7 +394,7 @@ const submit_edit_barangay = (event, barangay_id) => {
 
 const getMunicipality1 = () => {
   const municipalitySelect = document.getElementById("municipality");
-  var myUrl = "http://128.199.232.132/waterworks/gets/get_municipality.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
 
   axios({
     url: myUrl,
