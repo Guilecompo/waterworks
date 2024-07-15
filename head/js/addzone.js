@@ -186,7 +186,7 @@ const displayZones = () => {
   
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
-  formData.append("barangayId", sessionStorage.getItem("barangayId"));
+  formData.append("barangayId", sessionStorage.getItem("barangayIds"));
   axios({
     url: url,
     method: "post",
