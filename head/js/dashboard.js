@@ -28,7 +28,7 @@ const getall = () => {
     console.log("Page loaded!");
     return;
   }
-  const Url = `http://128.199.232.132/waterworks/head/total.php`;
+  const Url = `http://152.42.243.189/waterworks/head/total.php`;
   const formData = new FormData();
     formData.append("branchId", sessionStorage.getItem("branchId"));
     axios({
@@ -72,7 +72,7 @@ const getall = () => {
 }
 
 const displayActivity = () => {
-  var url = "http://128.199.232.132/waterworks/head/activitylist.php";
+  var url = "http://152.42.243.189/waterworks/head/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
