@@ -1,7 +1,7 @@
 // Define the logout function
 const logout = async () => {
     try {
-      const response = await fetch('http://128.199.232.132/waterworks/gets/logout.php', {
+      const response = await fetch('http://152.42.243.189/waterworks/gets/logout.php', {
         method: 'POST'
       });
   

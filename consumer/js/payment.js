@@ -12,7 +12,7 @@
 
     const view_consumer  = () => {
     
-        var myUrl = "http://128.199.232.132/waterworks/consumer/get_payment_history.php";
+        var myUrl = "http://152.42.243.189/waterworks/consumer/get_payment_history.php";
         const formData = new FormData();
         formData.append("accId", sessionStorage.getItem("accountId"));
         console.log(sessionStorage.getItem("accountId"));
@@ -101,7 +101,7 @@
         const modalContent = document.getElementById("modalContent");
       
       
-        var myUrl = "http://128.199.232.132/waterworks/consumer/get_payment_receipt.php";
+        var myUrl = "http://152.42.243.189/waterworks/consumer/get_payment_receipt.php";
         
         const formData = new FormData();
         formData.append("pay_id", pay_id);

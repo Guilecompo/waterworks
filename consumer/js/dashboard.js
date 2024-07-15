@@ -21,7 +21,7 @@ function onLoad() {
       console.log("Page loaded!");
       return;
     }
-    const Url = `http://128.199.232.132/waterworks/consumer/total.php`;
+    const Url = `http://152.42.243.189/waterworks/consumer/total.php`;
     const formData = new FormData();
       formData.append("accountId", sessionStorage.getItem("accountId"));
       axios({
@@ -68,7 +68,7 @@ function onLoad() {
       console.log("Page loaded!");
       return;
     }
-    const Url = `http://128.199.232.132/waterworks/consumer/filter_total.php`;
+    const Url = `http://152.42.243.189/waterworks/consumer/filter_total.php`;
     const formData = new FormData();
       formData.append("accountId", selectedBranch);
       axios({
@@ -103,7 +103,7 @@ function onLoad() {
   }
   const getSubmeter = () => {
     const submeterSelect = document.getElementById("submeter");
-    var myUrl = "http://128.199.232.132/waterworks/consumer/get_submeter.php";
+    var myUrl = "http://152.42.243.189/waterworks/consumer/get_submeter.php";
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
     
