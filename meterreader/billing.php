@@ -105,10 +105,10 @@ try {
                     $bill_amount = $minimum_rate + ($second_rate * $new);
                 } elseif ($i > 20 && $i <= 30) {
                     $new = $i - 20;
-                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * $new);
+                    $bill_amount = ($minimum_rate + ($second_rate * 10)) + ($third_rate * $new);
                 } elseif ($i > 30) {
                     $new = $i - 30;
-                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
+                    $bill_amount = $minimum_rate + ($second_rate * 10) + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
                 }
             }
 
