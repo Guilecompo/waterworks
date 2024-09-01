@@ -87,31 +87,27 @@ try {
 
             // Calculate billing amount
             $sql = "SELECT present_meter FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
-            $stmts = $conn->prepare($sql);
-            $stmts->bindParam(":consumerId", $consumerId);
-            $stmts->execute();
-            $old_present_meter = $stmts->fetchColumn();
-            $previous_meter = $old_present_meter !== false ? $old_present_meter : 0;
-            $current_bill_amount = $cubic_consumed - $previous_meter;
-            $bill_amounts = $minimum_rate;
-            $additional_units = $current_bill_amount;
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":consumerId", $consumerId);
+        $stmt->execute();
+        
+        $old_present_meter = $stmt->fetchColumn();
+        $previous_meter = ($old_present_meter !== false) ? $old_present_meter : 0;
 
-            // Calculate total bill amount
-            $bill_amount = 0;
-            for ($i = 1; $i <= $additional_units; $i++) {
-                if ($i >= 1 && $i <= 10) {
-                    $bill_amount = $bill_amounts;
-                } elseif ($i >= 11 && $i <= 20) {
-                    $new = $i - 10;
-                    $bill_amount = $bill_amounts + ($second_rate * $new);
-                } elseif ($i > 20 && $i <= 30) {
-                    $new = $i - 20;
-                    $bill_amount = $bill_amounts + ($third_rate * $new);
-                } elseif ($i > 30) {
-                    $new = $i - 30;
-                    $bill_amount = $bill_amounts + ($last_rate * $new);
-                }
+        $current_bill_amount = $cubic_consumed - $previous_meter;
+        $bill_amount = 0;
+
+        if ($current_bill_amount > 0) {
+            if ($current_bill_amount <= 10) {
+                $bill_amount = $current_bill_amount * $minimum_rate;
+            } elseif ($current_bill_amount <= 20) {
+                $bill_amount = (10 * $minimum_rate) + (($current_bill_amount - 10) * $second_rate);
+            } elseif ($current_bill_amount <= 30) {
+                $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (($current_bill_amount - 20) * $third_rate);
+            } else {
+                $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (10 * $third_rate) + (($current_bill_amount - 30) * $last_rate);
             }
+        }
 
             $sql = "SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
             $stmt = $conn->prepare($sql);
