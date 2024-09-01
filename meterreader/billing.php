@@ -205,6 +205,7 @@ try {
             $bill_amounts = $minimum_rate;
 
             $additional_units = $cubic_consumed;
+            $bill_amount = 0;
 
             for ($i = 1; $i <= $additional_units; $i++) {
                 if ($i >= 1 && $i <= 10) {
