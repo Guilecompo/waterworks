@@ -201,8 +201,7 @@ try {
             $third_rate = $rowRate['third_rate'];
             $last_rate = $rowRate['last_rate'];
 
-            $current_bill_amount = $cubic_consumed;
-            $additional_units = $current_bill_amount;
+            $additional_units = $cubic_consumed;
 
             // Calculate total bill amount
             $bill_amount = 0;
