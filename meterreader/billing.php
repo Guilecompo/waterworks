@@ -96,7 +96,7 @@ try {
     
             $current_bill_amount = $cubic_consumed - $previous_meter;
             $bill_amount = 0;
-    
+
             if ($current_bill_amount > 0) {
                 if ($current_bill_amount <= 10) {
                     $bill_amount = $current_bill_amount * $minimum_rate;
@@ -203,8 +203,7 @@ try {
 
             $current_bill_amount = $cubic_consumed;
             $bill_amount = 0;
-
-            // Calculate bill amount
+            
             if ($current_bill_amount > 0) {
                 if ($current_bill_amount <= 10) {
                     $bill_amount = $current_bill_amount * $minimum_rate;
