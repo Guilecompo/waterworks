@@ -98,19 +98,29 @@ try {
 
             // Calculate total bill amount
             $bill_amount = 0;
-            for ($i = 1; $i <= $additional_units; $i++) {
-                if ($i >= 1 && $i <= 10) {
-                    $bill_amount = $bill_amounts;
-                } elseif ($i >= 11 && $i <= 20) {
-                    $new = $i - 10;
-                    $bill_amount = $bill_amounts + ($second_rate * $new);
-                } elseif ($i > 20 && $i <= 30) {
-                    $new = $i - 20;
-                    $bill_amount = $bill_amounts + ($third_rate * $new);
-                } elseif ($i > 30) {
-                    $new = $i - 30;
-                    $bill_amount = $bill_amounts + ($last_rate * $new);
-                }
+
+            // Calculate the amount based on the ranges
+            if ($additional_units <= 10) {
+                $bill_amount = $minimum_rate;
+            } elseif ($additional_units <= 20) {
+                $bill_amount = $minimum_rate + ($additional_units - 10) * $second_rate;
+            } elseif ($additional_units <= 30) {
+                $bill_amount = $minimum_rate + 10 * $second_rate + ($additional_units - 20) * $third_rate;
+            } else {
+                $bill_amount = $minimum_rate + 10 * $second_rate + 10 * $third_rate + ($additional_units - 30) * $last_rate;
+            }
+
+            // If minimum_rate should be applied only to the first 10 units and not a fixed fee, add this logic:
+            if ($additional_units > 10) {
+                $bill_amount += ($additional_units - 10) * $second_rate;
+            }
+
+            if ($additional_units > 20) {
+                $bill_amount += ($additional_units - 20) * $third_rate;
+            }
+
+            if ($additional_units > 30) {
+                $bill_amount += ($additional_units - 30) * $last_rate;
             }
 
             $sql = "SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
@@ -202,23 +212,31 @@ try {
             $third_rate = $rowRate['third_rate'];
             $last_rate = $rowRate['last_rate'];
 
-            $bill_amounts = $minimum_rate;
-
+            $bill_amount = 0;
             $additional_units = $cubic_consumed;
 
-            for ($i = 1; $i <= $additional_units; $i++) {
-                if ($i >= 1 && $i <= 10) {
-                    $bill_amount += $bill_amounts ;
-                } elseif ($i >= 11 && $i <= 20) {
-                    $new = $i - 10;
-                    $bill_amount +=  ($second_rate * $new);
-                } elseif ($i > 20 && $i <= 30) {
-                    $new = $i - 20;
-                    $bill_amount += ($third_rate * $new);
-                } elseif ($i > 30) {
-                    $new = $i - 30;
-                    $bill_amount += ($last_rate * $new);
-                }
+            // Calculate the amount based on the ranges
+            if ($additional_units <= 10) {
+                $bill_amount = $minimum_rate;
+            } elseif ($additional_units <= 20) {
+                $bill_amount = $minimum_rate + ($additional_units - 10) * $second_rate;
+            } elseif ($additional_units <= 30) {
+                $bill_amount = $minimum_rate + 10 * $second_rate + ($additional_units - 20) * $third_rate;
+            } else {
+                $bill_amount = $minimum_rate + 10 * $second_rate + 10 * $third_rate + ($additional_units - 30) * $last_rate;
+            }
+
+            // If minimum_rate should be applied only to the first 10 units and not a fixed fee, add this logic:
+            if ($additional_units > 10) {
+                $bill_amount += ($additional_units - 10) * $second_rate;
+            }
+
+            if ($additional_units > 20) {
+                $bill_amount += ($additional_units - 20) * $third_rate;
+            }
+
+            if ($additional_units > 30) {
+                $bill_amount += ($additional_units - 30) * $last_rate;
             }
 
             // $sql = "SELECT present_meter FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
