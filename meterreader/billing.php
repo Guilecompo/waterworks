@@ -95,27 +95,21 @@ try {
             $current_bill_amount = $cubic_consumed - $previous_meter;
             $bill_amounts = $minimum_rate;
             $additional_units = $current_bill_amount;
-            $bill_amount = 0;  // Initialize total bill amount
 
+            // Calculate total bill amount
+            $bill_amount = 0;
             for ($i = 1; $i <= $additional_units; $i++) {
                 if ($i >= 1 && $i <= 10) {
-                    // For units 1-10, apply minimum_rate
-                    $bill_amount = $minimum_rate;
+                    $bill_amount = $bill_amounts;
                 } elseif ($i >= 11 && $i <= 20) {
-                    // For units 11-20, apply second_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 10;  // e.g., i=11, units_in_range=1
-                    $bill_amount = $minimum_rate + ($units_in_range * $second_rate);
-                } elseif ($i >= 21 && $i <= 30) {
-                    // For units 21-30, apply third_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 20;  // e.g., i=21, units_in_range=1
-                    $bill_amount = $minimum_rate + (10 * $second_rate) + ($units_in_range * $third_rate);
+                    $new = $i - 10;
+                    $bill_amount = $bill_amounts + ($second_rate * $new);
+                } elseif ($i > 20 && $i <= 30) {
+                    $new = $i - 20;
+                    $bill_amount = $bill_amounts + ($third_rate * $new);
                 } elseif ($i > 30) {
-                    // For units above 30, apply last_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 30;  // e.g., i=31, units_in_range=1
-                    $bill_amount = $minimum_rate + (10 * $second_rate) + (10 * $third_rate) + ($units_in_range * $last_rate);
+                    $new = $i - 30;
+                    $bill_amount = $bill_amounts + ($last_rate * $new);
                 }
             }
 
@@ -208,28 +202,22 @@ try {
             $third_rate = $rowRate['third_rate'];
             $last_rate = $rowRate['last_rate'];
 
-            $additional_units = $cubic_consumed;  // Total cubic units consumed
-            $bill_amount = 0;  // Initialize total bill amount
+            $bill_amounts = $minimum_rate;
+
+            $additional_units = $cubic_consumed;
 
             for ($i = 1; $i <= $additional_units; $i++) {
                 if ($i >= 1 && $i <= 10) {
-                    // For units 1-10, apply minimum_rate
-                    $bill_amount = $minimum_rate;
+                    $bill_amount = $bill_amounts ;
                 } elseif ($i >= 11 && $i <= 20) {
-                    // For units 11-20, apply second_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 10;  // e.g., i=11, units_in_range=1
-                    $bill_amount = $minimum_rate + ($units_in_range * $second_rate);
-                } elseif ($i >= 21 && $i <= 30) {
-                    // For units 21-30, apply third_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 20;  // e.g., i=21, units_in_range=1
-                    $bill_amount = $minimum_rate + (10 * $second_rate) + ($units_in_range * $third_rate);
+                    $new = $i - 10;
+                    $bill_amount = $bill_amounts + ($second_rate * $new);
+                } elseif ($i > 20 && $i <= 30) {
+                    $new = $i - 20;
+                    $bill_amount = $bill_amounts + ($third_rate * $new);
                 } elseif ($i > 30) {
-                    // For units above 30, apply last_rate
-                    // Calculate the number of units in this range
-                    $units_in_range = $i - 30;  // e.g., i=31, units_in_range=1
-                    $bill_amount = $minimum_rate + (10 * $second_rate) + (10 * $third_rate) + ($units_in_range * $last_rate);
+                    $new = $i - 30;
+                    $bill_amount = $bill_amounts + ($last_rate * $new);
                 }
             }
 
