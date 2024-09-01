@@ -95,20 +95,30 @@ try {
             $previous_meter = ($old_present_meter !== false) ? $old_present_meter : 0;
     
             $current_bill_amount = $cubic_consumed - $previous_meter;
-$bill_amount = 0;
+            $bill_amount = 0;
 
-if ($current_bill_amount > 0) {
-    if ($current_bill_amount <= 10) {
-        $bill_amount = $current_bill_amount * $minimum_rate;
-    } elseif ($current_bill_amount <= 20) {
-        $bill_amount = (10 * $minimum_rate) + (($current_bill_amount - 10) * $second_rate);
-    } elseif ($current_bill_amount <= 30) {
-        $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (($current_bill_amount - 20) * $third_rate);
-    } else {
-        $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (10 * $third_rate) + (($current_bill_amount - 30) * $last_rate);
-    }
-}
-    
+            if ($current_bill_amount > 0) {
+                if ($current_bill_amount <= 10) {
+                    // Charge only the minimum rate for up to 10 cubic meters
+                    $bill_amount = $minimum_rate;
+                } elseif ($current_bill_amount <= 20) {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    $bill_amount = $minimum_rate + (($current_bill_amount - 10) * $second_rate);
+                } elseif ($current_bill_amount <= 30) {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    // Plus third rate for cubic meters between 21 and 30
+                    $bill_amount = $minimum_rate + (10 * $second_rate) + (($current_bill_amount - 20) * $third_rate);
+                } else {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    // Plus third rate for cubic meters between 21 and 30
+                    // Plus last rate for cubic meters above 30
+                    $bill_amount = $minimum_rate + (10 * $second_rate) + (10 * $third_rate) + (($current_bill_amount - 30) * $last_rate);
+                }
+            }
+            
             // Fetch past billing details
             $sql = "SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
             $stmt = $conn->prepare($sql);
@@ -201,20 +211,30 @@ if ($current_bill_amount > 0) {
             $third_rate = $rowRate['third_rate'];
             $last_rate = $rowRate['last_rate'];
 
-            $current_bill_amount = $cubic_consumed ;
-$bill_amount = 0;
-
-if ($current_bill_amount > 0) {
-    if ($current_bill_amount <= 10) {
-        $bill_amount = $current_bill_amount * $minimum_rate;
-    } elseif ($current_bill_amount <= 20) {
-        $bill_amount = (10 * $minimum_rate) + (($current_bill_amount - 10) * $second_rate);
-    } elseif ($current_bill_amount <= 30) {
-        $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (($current_bill_amount - 20) * $third_rate);
-    } else {
-        $bill_amount = (10 * $minimum_rate) + (10 * $second_rate) + (10 * $third_rate) + (($current_bill_amount - 30) * $last_rate);
-    }
-}
+            $current_bill_amount = $cubic_consumed;
+            $bill_amount = 0;
+            
+            if ($current_bill_amount > 0) {
+                if ($current_bill_amount <= 10) {
+                    // Charge only the minimum rate for up to 10 cubic meters
+                    $bill_amount = $minimum_rate;
+                } elseif ($current_bill_amount <= 20) {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    $bill_amount = $minimum_rate + (($current_bill_amount - 10) * $second_rate);
+                } elseif ($current_bill_amount <= 30) {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    // Plus third rate for cubic meters between 21 and 30
+                    $bill_amount = $minimum_rate + (10 * $second_rate) + (($current_bill_amount - 20) * $third_rate);
+                } else {
+                    // Charge the minimum rate for the first 10 cubic meters
+                    // Plus second rate for cubic meters between 11 and 20
+                    // Plus third rate for cubic meters between 21 and 30
+                    // Plus last rate for cubic meters above 30
+                    $bill_amount = $minimum_rate + (10 * $second_rate) + (10 * $third_rate) + (($current_bill_amount - 30) * $last_rate);
+                }
+            }
 
             $previous_meter = 0;
             $arrears = 0;
