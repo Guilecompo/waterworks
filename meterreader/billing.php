@@ -65,151 +65,123 @@ try {
         $stmtCheck->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
         $stmtCheck->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_STR);
         $stmtCheck->execute();
-        
         $rowCheck = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
         if ($rowCheck && $rowCheck['present_meter'] > $cubic_consumed) {
-            // Set a specific error code
-            $errorCode = 123; // You can use any value other than 0
-        
-            echo json_encode(["error" => "Error: present_meter is greater than cubic_consumed", "errorCode" => $errorCode]);
-        }else {
-            $conn->beginTransaction();
+            echo json_encode(["error" => "Error: present_meter is greater than cubic_consumed", "errorCode" => 123]);
+            exit;
+        }
 
-            // Fetch property rates
-            $sqlSelectRate = "SELECT minimum_rate, second_rate, third_rate, last_rate FROM property_rate WHERE property_Id = :propertyId ORDER BY rate_id DESC LIMIT 1";
-            $stmtSelectRate = $conn->prepare($sqlSelectRate);
-            $stmtSelectRate->bindParam(':propertyId', $_POST['propertyId'], PDO::PARAM_INT);
-            $stmtSelectRate->execute();
-            
-            $rowRate = $stmtSelectRate->fetch(PDO::FETCH_ASSOC);
+        // Fetch property rates
+        $sqlSelectRate = "SELECT minimum_rate, second_rate, third_rate, last_rate FROM property_rate WHERE property_Id = :propertyId ORDER BY rate_id DESC LIMIT 1";
+        $stmtSelectRate = $conn->prepare($sqlSelectRate);
+        $stmtSelectRate->bindParam(':propertyId', $propertyId, PDO::PARAM_INT);
+        $stmtSelectRate->execute();
+        $rowRate = $stmtSelectRate->fetch(PDO::FETCH_ASSOC);
 
-            if ($rowRate) {
-                $minimum_rate = $rowRate['minimum_rate'];
-                $second_rate = $rowRate['second_rate'];
-                $third_rate = $rowRate['third_rate'];
-                $last_rate = $rowRate['last_rate'];
+        if ($rowRate) {
+            $minimum_rate = $rowRate['minimum_rate'];
+            $second_rate = $rowRate['second_rate'];
+            $third_rate = $rowRate['third_rate'];
+            $last_rate = $rowRate['last_rate'];
 
-                // Calculate bill amount based on cubic_consumed
-                $sql = "SELECT present_meter FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
-                $stmts = $conn->prepare($sql);
-                $stmts->bindParam(":consumerId", $consumerId);
-                $stmts->execute();
+            // Calculate billing amount
+            $sql = "SELECT present_meter FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
+            $stmts = $conn->prepare($sql);
+            $stmts->bindParam(":consumerId", $consumerId);
+            $stmts->execute();
+            $old_present_meter = $stmts->fetchColumn();
+            $previous_meter = $old_present_meter !== false ? $old_present_meter : 0;
+            $current_bill_amount = $cubic_consumed - $previous_meter;
+            $bill_amounts = $minimum_rate;
+            $additional_units = $current_bill_amount;
 
-                $old_present_meter = $stmts->fetchColumn();
-                $previous_meter = ($old_present_meter !== false) ? $old_present_meter : 0;
-
-                $current_bill_amount = $cubic_consumed - $previous_meter;
-                // Initialize bill_amount with the minimum rate
-                $bill_amounts = $minimum_rate;
-
-                $additional_units = $current_bill_amount;
-
-                for ($i = 1; $i <= $additional_units; $i++) {
-                    if ($i >= 1 && $i <= 10) {
-                        $bill_amount = $bill_amounts ;
-                    } elseif ($i >= 11 && $i <= 20) {
-                        $new = $i - 10;
-                        $bill_amount = $bill_amounts + ($second_rate * $new);
-                    } elseif ($i > 20 && $i <= 30) {
-                        $new = $i - 20;
-                        $bill_amount = $bill_amounts + ($third_rate * $new);
-                    } elseif ($i > 30) {
-                        $new = $i - 30;
-                        $bill_amount = $bill_amounts + ($last_rate * $new);
-                    }
+            // Calculate total bill amount
+            $bill_amount = 0;
+            for ($i = 1; $i <= $additional_units; $i++) {
+                if ($i >= 1 && $i <= 10) {
+                    $bill_amount = $bill_amounts;
+                } elseif ($i >= 11 && $i <= 20) {
+                    $new = $i - 10;
+                    $bill_amount = $bill_amounts + ($second_rate * $new);
+                } elseif ($i > 20 && $i <= 30) {
+                    $new = $i - 20;
+                    $bill_amount = $bill_amounts + ($third_rate * $new);
+                } elseif ($i > 30) {
+                    $new = $i - 30;
+                    $bill_amount = $bill_amounts + ($last_rate * $new);
                 }
-
-                $sql = "SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(":consumerId", $consumerId);
-                $stmt->execute();
-                $past_cubic_consumed = $stmt->fetchColumn();
-
-                $sql = "SELECT total_bill FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC LIMIT 1";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(":consumerId", $consumerId);
-                $stmt->execute();
-                $past_total_bills = $stmt->fetchColumn();
-                $past_total_bill = ($past_total_bills !== false) ? $past_total_bills : 0;
-
-
-                $arrears = 0 + $past_total_bill;
-
-                $new_total = $bill_amount + $past_total_bill;
-                
-                
-
-                $statusId = 1;
-
-                $sqlUpdates = "UPDATE user_consumer SET billing_status = :statusId , total_cubic_consumed = :cubic_consumed WHERE user_id = :consumerId ";
-                $stmtUpdates = $conn->prepare($sqlUpdates);
-                $stmtUpdates->bindParam(':statusId', $statusId, PDO::PARAM_INT);
-                $stmtUpdates->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
-                $stmtUpdates->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_INT);
-
-                if ($stmtUpdates->execute()) {
-                    $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
-                    $stmtUpdate = $conn->prepare($sqlUpdate);
-                    $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
-                    $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
-
-                    if ($stmtUpdate->execute()) {
-
-                        $updatedStatusId = 2;
-                        $paid_unpaid = 2;
-
-                        $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(":consumerId", $consumerId);
-                        $stmt->bindParam(":readerId", $readerId);
-                        $stmt->bindParam(":branchId", $branchId);
-                        $stmt->bindParam(":prev_cubic_consumed", $past_cubic_consumed);
-                        $stmt->bindParam(":cubic_consumed", $current_bill_amount);
-                        $stmt->bindParam(":reading_date", $reading_date);
-                        $stmt->bindParam(":due_date", $due_date);
-                        $stmt->bindParam(":period_cover", $period_cover);
-                        $stmt->bindParam(":previous_meter", $previous_meter);
-                        $stmt->bindParam(":present_meter", $cubic_consumed);
-                        $stmt->bindParam(":bill_amount", $bill_amount);
-                        $stmt->bindParam(":arrears", $arrears);
-                        $stmt->bindParam(":total_bill", $new_total);
-                        $stmt->bindParam(":updatedStatusId", $updatedStatusId);
-                        $stmt->bindParam(":paid_unpaid", $paid_unpaid);
-
-                        $returnValue = 0;
-                        $stmt->execute();
-                        
-                        if ($stmt->rowCount() > 0) {
-                            $activity_type = "Add";
-                            $table_name = "Billing";
-                            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
-                            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
-                
-                            $stmt1 = $conn->prepare($sql1);
-                            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
-                            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
-                            $stmt1->bindParam(":date_added", $date_added);
-                            $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
-                            $stmt1->execute();
-                
-                            $returnValue = "Successfully Billed";
-                        }else {
-                        echo "Error updating data: " . $stmt1->errorInfo()[2];
-                        }
-                        $conn->commit();
-
-                        echo "Data inserted successfully into 'adding bill'";
-
-                    } else {
-                        echo "Error updating data: " . $stmtUpdate->errorInfo()[2];
-                    }
-                }else {
-                    echo "Error updating data: " . $stmtUpdates->errorInfo()[2];
-                }
-                
-            } else {
-                echo "Error: Unable to fetch property rates.";
             }
+
+            $sql = "SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":consumerId", $consumerId);
+            $stmt->execute();
+            $past_cubic_consumed = $stmt->fetchColumn();
+
+            $sql = "SELECT total_bill FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":consumerId", $consumerId);
+            $stmt->execute();
+            $past_total_bills = $stmt->fetchColumn();
+            $past_total_bill = $past_total_bills !== false ? $past_total_bills : 0;
+            $arrears = $past_total_bill;
+            $new_total = $bill_amount + $past_total_bill;
+
+            // Update user_consumer
+            $statusId = 1;
+            $sqlUpdates = "UPDATE user_consumer SET billing_status = :statusId, total_cubic_consumed = :cubic_consumed WHERE user_id = :consumerId";
+            $stmtUpdates = $conn->prepare($sqlUpdates);
+            $stmtUpdates->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+            $stmtUpdates->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
+            $stmtUpdates->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_INT);
+            $stmtUpdates->execute();
+
+            // Update previous billing status
+            $sqlUpdate = "UPDATE billing SET billing_statusId = :statusId WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
+            $stmtUpdate = $conn->prepare($sqlUpdate);
+            $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+            $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
+            $stmtUpdate->execute();
+
+            // Insert new billing record
+            $updatedStatusId = 2;
+            $paid_unpaid = 2;
+            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":consumerId", $consumerId);
+            $stmt->bindParam(":readerId", $readerId);
+            $stmt->bindParam(":branchId", $branchId);
+            $stmt->bindParam(":prev_cubic_consumed", $past_cubic_consumed);
+            $stmt->bindParam(":cubic_consumed", $current_bill_amount);
+            $stmt->bindParam(":reading_date", $reading_date);
+            $stmt->bindParam(":due_date", $due_date);
+            $stmt->bindParam(":period_cover", $period_cover);
+            $stmt->bindParam(":previous_meter", $previous_meter);
+            $stmt->bindParam(":present_meter", $cubic_consumed);
+            $stmt->bindParam(":bill_amount", $bill_amount);
+            $stmt->bindParam(":arrears", $arrears);
+            $stmt->bindParam(":total_bill", $new_total);
+            $stmt->bindParam(":updatedStatusId", $updatedStatusId);
+            $stmt->bindParam(":paid_unpaid", $paid_unpaid);
+            $stmt->execute();
+
+            // Log activity
+            $activity_type = "Add";
+            $table_name = "Billing";
+            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+            $stmt1->bindParam(":date_added", $date_added);
+            $stmt1->bindParam(":employee_Id", $readerId, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            $conn->commit();
+            echo json_encode(["message" => "Successfully Billed"]);
+        } else {
+            echo json_encode(["error" => "Error: Unable to fetch property rates."]);
+            $conn->rollBack();
         }
         
     } else {
