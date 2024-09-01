@@ -93,23 +93,22 @@ try {
             $old_present_meter = $stmts->fetchColumn();
             $previous_meter = $old_present_meter !== false ? $old_present_meter : 0;
             $current_bill_amount = $cubic_consumed - $previous_meter;
-            $bill_amounts = $minimum_rate;
             $additional_units = $current_bill_amount;
 
             // Calculate total bill amount
             $bill_amount = 0;
             for ($i = 1; $i <= $additional_units; $i++) {
                 if ($i >= 1 && $i <= 10) {
-                    $bill_amount = $bill_amounts;
+                    $bill_amount = $minimum_rate;
                 } elseif ($i >= 11 && $i <= 20) {
                     $new = $i - 10;
-                    $bill_amount = $bill_amounts + ($second_rate * $new);
+                    $bill_amount = $minimum_rate + ($second_rate * $new);
                 } elseif ($i > 20 && $i <= 30) {
                     $new = $i - 20;
-                    $bill_amount = $bill_amounts + ($second_rate * 10) + ($third_rate * $new);
+                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * $new);
                 } elseif ($i > 30) {
                     $new = $i - 30;
-                    $bill_amount = $bill_amounts + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
+                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
                 }
             }
 
@@ -203,23 +202,22 @@ try {
             $last_rate = $rowRate['last_rate'];
 
             $current_bill_amount = $cubic_consumed;
-            $bill_amounts = $minimum_rate;
             $additional_units = $current_bill_amount;
 
             // Calculate total bill amount
             $bill_amount = 0;
             for ($i = 1; $i <= $additional_units; $i++) {
                 if ($i >= 1 && $i <= 10) {
-                    $bill_amount = $bill_amounts;
+                    $bill_amount = $minimum_rate;
                 } elseif ($i >= 11 && $i <= 20) {
                     $new = $i - 10;
-                    $bill_amount = $bill_amounts + ($second_rate * $new);
+                    $bill_amount = $minimum_rate + ($second_rate * $new);
                 } elseif ($i > 20 && $i <= 30) {
                     $new = $i - 20;
-                    $bill_amount = $bill_amounts + ($second_rate * 10) + ($third_rate * $new);
+                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * $new);
                 } elseif ($i > 30) {
                     $new = $i - 30;
-                    $bill_amount = $bill_amounts + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
+                    $bill_amount = $minimum_rate + ($minimum_rate * 10) + ($second_rate * 10) + ($third_rate * 10) + ($last_rate * $new);
                 }
             }
 
