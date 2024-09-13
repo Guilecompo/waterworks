@@ -59,10 +59,10 @@ const displayPaymentPaidReports = (branchName = '') => {
                 records.forEach((record) => {
                     html += `
                         <tr>
-                            <td class="text-center">${record.lastname}, ${record.firstname}</td>
-                            <td class="text-center">${record.zone_name}</td>
-                            <td class="text-center">${record.or_num}</td>
-                            <td class="text-center">${record.pay_amount}</td>
+                            <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
+                                    <td class="text-center">${record.zone_name}</td>
+                                    <td class="text-center">${record.or_num}</td>
+                                    <td class="text-center">${record.pay_amount}</td>
                         </tr>
                     `;
                 });
