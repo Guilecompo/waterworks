@@ -170,6 +170,18 @@
                             <h4 style="text-align: center;">Admin Reports</h4>
                         </div>
                         <div class="container-fluid mt-2">
+                            <div class="col-md-6"> <!-- Adjust the column width for smaller screens -->
+                                <select
+                                    id="paymentStatus"
+                                    class="form-select"
+                                    aria-label="Select Payment Status"
+                                    style="min-width: fit-content; max-width: 100px;"
+                                    onchange="filterByPaymentStatus()">
+                                    <option value="">Select Payment Status</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="not_paid">Not Paid</option>
+                                </select>
+                            </div>
                             <div class="row col-md-12 p-0 mt-3 align-items-center">
                                 <!-- Filtering input -->
                                 <div class="col-md-6"> <!-- Adjust the column width for smaller screens -->

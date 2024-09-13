@@ -10,7 +10,7 @@ const onLoad = () => {
      document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
 
-    displayPaymentReports();
+    displayPaymentPaidReports();
   }
  
 };
@@ -29,7 +29,19 @@ const showPreviousPage = () => {
   }
 };
 
-const displayPaymentReports = () => {
+const filterByPaymentStatus = () => {
+  const paymentStatus = document.getElementById("paymentStatus").value;
+
+  if (paymentStatus === "paid") {
+    displayPaymentPaidReports();  // Display paid reports
+  } else if (paymentStatus === "not_paid") {
+    displayPaymentNotPaidReports();  // Display not paid reports
+  } else {
+    document.getElementById("mainDiv").innerHTML = `<h2>Please select a payment status</h2>`;
+  }
+};
+
+const displayPaymentPaidReports = () => {
   document.getElementById("dateInput").value = "";
   var url = "http://152.42.243.189/waterworks/admin/reports.php";
 
@@ -79,6 +91,57 @@ const displayPaymentReports = () => {
       alert(`ERROR OCCURRED! ${error}`);
   });
 };
+const displayPaymentNotPaidReports = () => {
+  document.getElementById("dateInput").value = "";
+  var url = "http://152.42.243.189/waterworks/admin/notpaid.php";
+
+  axios({
+      url: url,
+      method: "post",
+  }).then((response) => {
+      try {
+          var records = response.data;
+          console.log(records);
+          var html = `
+              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th class="text-center">NAME</th>
+                          <th class="text-center">ZONE</th>
+                          <th class="text-center">BRANCH</th>
+                          <th class="text-center">AMOUNT</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+          `;
+          records.forEach((record) => {
+              html += `
+                  <tr>
+                      <td class="text-center">${record.lastname}, ${record.firstname}</td>
+                      <td class="text-center">${record.zone_name}</td>
+                      <td class="text-center">${record.branch_name}</td>
+                      <td class="text-center">${record.total_bill}</td>
+                  </tr>
+              `;
+          });
+          html += `
+                  </tbody>
+              </table>
+          `;
+          document.getElementById("mainDiv").innerHTML = html;
+          $('#example').DataTable({
+              "ordering": false // Disable sorting for all columns
+          });
+      } catch (error) {
+          var html = `<h2>No Records</h2>`;
+          document.getElementById("mainDiv").innerHTML = html;
+          console.log(error);
+      }
+  }).catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+  });
+};
+
 
 // Printing Functionality
 function printTable() {
@@ -216,6 +279,7 @@ function filterByDate() {
     console.log("An error occurred:", error);
   }
 }
+
 
 
 // Execute onLoad function when the page is loaded
