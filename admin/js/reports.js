@@ -42,7 +42,7 @@ const filterByPaymentStatus = () => {
 };
 
 const displayPaymentPaidReports = () => {
-  document.getElementById("dateInput").value = "";
+  // document.getElementById("dateInput").value = "";
   var url = "http://152.42.243.189/waterworks/admin/reports.php";
 
   axios({
@@ -92,7 +92,7 @@ const displayPaymentPaidReports = () => {
   });
 };
 const displayPaymentNotPaidReports = () => {
-  document.getElementById("dateInput").value = "";
+  // document.getElementById("dateInput").value = "";
   var url = "http://152.42.243.189/waterworks/admin/notpaid.php";
 
   axios({
