@@ -545,7 +545,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].present_meter}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].present_meter}</p>
                                   </div>
                               </div>
                           </div>
@@ -557,7 +557,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].previous_meter}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].previous_meter}</p>
                                   </div>
                               </div>
                           </div>
@@ -569,7 +569,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].cubic_consumed}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].cubic_consumed}</p>
                                   </div>
                               </div>
                           </div>
@@ -581,7 +581,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].bill_amount}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].bill_amount}</p>
                                   </div>
                               </div>
                           </div>
@@ -593,7 +593,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].arrears}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].arrears}</p>
                                   </div>
                               </div>
                           </div>
@@ -605,7 +605,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].total_bill}</p>
+                                      <p class="par" style="font-size: medium;">${records[0].total_bill}</p>
                                   </div>
                               </div>
                           </div>
@@ -617,7 +617,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].amount_due}</p>
+                                      <p class="par " style="font-size: medium;">${records[0].amount_due}</p>
                                   </div>
                               </div>
                           </div>
@@ -629,7 +629,7 @@ const bill_receipt = (user_id) => {
                               </div>
                               <div class="col-auto">
                                   <div class="col-sm-12 text-end">
-                                      <p class="par">${records[0].formatted_reading_date1}</p>
+                                      <p class="par" >${records[0].formatted_reading_date1}</p>
                                   </div>
                               </div>
                           </div>
