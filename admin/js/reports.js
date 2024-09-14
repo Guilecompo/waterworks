@@ -120,7 +120,7 @@ const displayPaymentNotPaidReports = () => {
                       <td class="text-center">${record.lastname}, ${record.firstname}</td>
                       <td class="text-center">${record.zone_name}</td>
                       <td class="text-center">${record.branch_name}</td>
-                      <td class="text-center">${record.pay_amount}</td>
+                      <td class="text-center">${record.total_bill}</td>
                   </tr>
               `;
           });
