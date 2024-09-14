@@ -7,7 +7,6 @@ include 'connection.php';
 $branchId = $_POST['branchId'];
     $stmt = $conn->prepare("SELECT
         a.pay_id, a.or_num,
-        b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
         d.zone_name, e.barangay_name,
