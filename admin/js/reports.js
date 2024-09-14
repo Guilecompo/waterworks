@@ -64,6 +64,7 @@ const displayPaymentPaidReports = () => {
                   </thead>
                   <tbody>
           `;
+          let totalAmount = 0;
           records.forEach((record) => {
               html += `
                   <tr>
@@ -73,9 +74,16 @@ const displayPaymentPaidReports = () => {
                       <td class="text-center">${record.pay_amount}</td>
                   </tr>
               `;
+              totalAmount += parseFloat(record.pay_amount);
           });
           html += `
                   </tbody>
+                  <tfoot>
+                      <tr>
+                          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                          <td class="text-center"><strong>${totalAmount.toFixed(2)}</strong></td>
+                      </tr>
+                  </tfoot>
               </table>
           `;
           document.getElementById("mainDiv").innerHTML = html;
@@ -114,6 +122,7 @@ const displayPaymentNotPaidReports = () => {
                   </thead>
                   <tbody>
           `;
+          let totalAmount = 0;
           records.forEach((record) => {
               html += `
                   <tr>
@@ -123,9 +132,16 @@ const displayPaymentNotPaidReports = () => {
                       <td class="text-center">${record.total_bill}</td>
                   </tr>
               `;
+              totalAmount += parseFloat(record.total_bill);
           });
           html += `
                   </tbody>
+                  <tfoot>
+                      <tr>
+                          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                          <td class="text-center"><strong>${totalAmount.toFixed(2)}</strong></td>
+                      </tr>
+                  </tfoot>
               </table>
           `;
           document.getElementById("mainDiv").innerHTML = html;

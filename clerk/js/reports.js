@@ -51,6 +51,19 @@ const displayPaymentPaidReports = () => {
       const records = response.data;
       console.log("Server response:", records);
 
+      let totalPayAmount = 0;
+      const tableRows = Array.isArray(records) && records.length > 0 ? records.map(record => {
+        totalPayAmount += parseFloat(record.pay_amount);
+        return `
+          <tr>
+            <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
+            <td class="text-center">${record.zone_name}</td>
+            <td class="text-center">${record.or_num}</td>
+            <td class="text-center">${record.pay_amount}</td>
+          </tr>
+        `;
+      }).join('') : '';
+
       const html = `
         <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
@@ -62,15 +75,14 @@ const displayPaymentPaidReports = () => {
             </tr>
           </thead>
           <tbody>
-            ${Array.isArray(records) && records.length > 0 ? records.map(record => `
-              <tr>
-                <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
-                <td class="text-center">${record.zone_name}</td>
-                <td class="text-center">${record.or_num}</td>
-                <td class="text-center">${record.pay_amount}</td>
-              </tr>
-            `).join('') : ''}
+            ${tableRows}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="text-right"><strong>Total:</strong></td>
+              <td class="text-center"><strong>${totalPayAmount.toFixed(2)}</strong></td>
+            </tr>
+          </tfoot>
         </table>
       `;
 
@@ -112,6 +124,19 @@ const displayPaymentNotPaidReports = () => {
       const records = response.data;
       console.log(records);
 
+      let totalBill = 0;
+      const tableRows = Array.isArray(records) && records.length > 0 ? records.map(record => {
+        totalBill += parseFloat(record.total_bill);
+        return `
+          <tr>
+            <td class="text-center">${record.lastname}, ${record.firstname}</td>
+            <td class="text-center">${record.zone_name}</td>
+            <td class="text-center">${record.branch_name}</td>
+            <td class="text-center">${record.total_bill}</td>
+          </tr>
+        `;
+      }).join('') : '';
+
       const html = `
         <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
@@ -123,15 +148,14 @@ const displayPaymentNotPaidReports = () => {
             </tr>
           </thead>
           <tbody>
-            ${Array.isArray(records) && records.length > 0 ? records.map(record => `
-              <tr>
-                <td class="text-center">${record.lastname}, ${record.firstname}</td>
-                <td class="text-center">${record.zone_name}</td>
-                <td class="text-center">${record.branch_name}</td>
-                <td class="text-center">${record.total_bill}</td>
-              </tr>
-            `).join('') : ''}
+            ${tableRows}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="text-right"><strong>Total:</strong></td>
+              <td class="text-center"><strong>${totalBill.toFixed(2)}</strong></td>
+            </tr>
+          </tfoot>
         </table>
       `;
 

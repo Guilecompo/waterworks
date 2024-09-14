@@ -45,7 +45,7 @@ try {
             d.zone_name, e.barangay_name,
             f.municipality_name,
             a.cubic_consumed,
-            DATE_FORMAT(a.reading_date, '%M %d %Y') AS reading_date,
+            DATE_FORMAT(a.reading_date, '%M %d %Y %h:%i %p') AS reading_date,
             DATE_FORMAT(a.reading_date, '%M %d') AS reading_date1,
             DATE_FORMAT(a.due_date, '%M %d %Y') AS due_date,
             :formatted_reading_date1 AS formatted_reading_date1,
