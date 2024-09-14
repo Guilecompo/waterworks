@@ -79,9 +79,15 @@ const displayPaymentPaidReports = () => {
       `;
 
       document.getElementById("mainDiv").innerHTML = html;
-      $('#example').DataTable({
-        ordering: false // Disable sorting for all columns
-      });
+      
+      // Check if jQuery and DataTables are available
+      if (typeof $ !== 'undefined' && $.fn.DataTable) {
+        $('#example').DataTable({
+          ordering: false // Disable sorting for all columns
+        });
+      } else {
+        console.warn("jQuery or DataTables is not loaded. Table functionality may be limited.");
+      }
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -89,57 +95,58 @@ const displayPaymentPaidReports = () => {
     });
 };
 const displayPaymentNotPaidReports = () => {
-  // document.getElementById("dateInput").value = "";
-  var url = "http://152.42.243.189/waterworks/head/notpaid.php";
+  const url = "http://152.42.243.189/waterworks/head/notpaid.php";
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
 
-  axios({
-      url: url,
-      method: "post",
-      data: formData
-  }).then((response) => {
-      try {
-          var records = response.data;
-          console.log(records);
-          var html = `
-              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                  <thead>
-                      <tr>
-                          <th class="text-center">NAME</th>
-                          <th class="text-center">ZONE</th>
-                          <th class="text-center">BRANCH</th>
-                          <th class="text-center">AMOUNT</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-          `;
-          records.forEach((record) => {
-              html += `
-                  <tr>
-                      <td class="text-center">${record.lastname}, ${record.firstname}</td>
-                      <td class="text-center">${record.zone_name}</td>
-                      <td class="text-center">${record.branch_name}</td>
-                      <td class="text-center">${record.total_bill}</td>
-                  </tr>
-              `;
-          });
-          html += `
-                  </tbody>
-              </table>
-          `;
-          document.getElementById("mainDiv").innerHTML = html;
-          $('#example').DataTable({
-              "ordering": false // Disable sorting for all columns
-          });
-      } catch (error) {
-          var html = `<h2>No Records</h2>`;
-          document.getElementById("mainDiv").innerHTML = html;
-          console.log(error);
+  axios.post(url, formData)
+    .then((response) => {
+      const records = response.data;
+      console.log(records);
+
+      if (records.length === 0) {
+        document.getElementById("mainDiv").innerHTML = "<h2>No Records</h2>";
+        return;
       }
-  }).catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-  });
+
+      const html = `
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-center">NAME</th>
+              <th class="text-center">ZONE</th>
+              <th class="text-center">BRANCH</th>
+              <th class="text-center">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${records.map(record => `
+              <tr>
+                <td class="text-center">${record.lastname}, ${record.firstname}</td>
+                <td class="text-center">${record.zone_name}</td>
+                <td class="text-center">${record.branch_name}</td>
+                <td class="text-center">${record.total_bill}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById("mainDiv").innerHTML = html;
+      
+      // Check if jQuery and DataTables are available
+      if (typeof $ !== 'undefined' && $.fn.DataTable) {
+        $('#example').DataTable({
+          ordering: false // Disable sorting for all columns
+        });
+      } else {
+        console.warn("jQuery or DataTables is not loaded. Table functionality may be limited.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      document.getElementById("mainDiv").innerHTML = "<h2>Error loading records</h2>";
+    });
 };
 
 
