@@ -50,13 +50,13 @@ const displayPaymentPaidReports = () => {
       const records = response.data;
       console.log("Server response:", records);
 
-      if (!Array.isArray(records)) {
-        throw new Error("Server did not return an array of records");
+      if (!records || (Array.isArray(records) && records.length === 0)) {
+        document.getElementById("mainDiv").innerHTML = "<h2>No Records found</h2>";
+        return;
       }
 
-      if (records.length === 0) {
-        document.getElementById("mainDiv").innerHTML = "<h2>No Records</h2>";
-        return;
+      if (!Array.isArray(records)) {
+        throw new Error("Server did not return an array of records");
       }
 
       const html = `
@@ -95,7 +95,7 @@ const displayPaymentPaidReports = () => {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
-      document.getElementById("mainDiv").innerHTML = `<h2>Error loading records: ${error.message}</h2>`;
+      document.getElementById("mainDiv").innerHTML = "<h2>Error loading records</h2>";
     });
 };
 const displayPaymentNotPaidReports = () => {
