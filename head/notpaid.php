@@ -18,7 +18,7 @@ try {
         INNER JOIN user_consumer ON billing.consumerId = user_consumer.user_id 
         INNER JOIN branch ON user_consumer.branchId = branch.branch_id 
         INNER JOIN address_zone ON branch.locationId = address_zone.zone_id 
-        WHERE billing_statusId = 2 AND branchId = :branchId
+        WHERE billing.billing_statusId = 2 AND billing.branchId = :branchId
     ");
     $stmt->bindParam(':branchId', $branchId);
     $stmt->execute();
