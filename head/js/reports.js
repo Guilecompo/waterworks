@@ -48,7 +48,11 @@ const displayPaymentPaidReports = () => {
   axios.post(url, formData)
     .then((response) => {
       const records = response.data;
-      console.log(records);
+      console.log("Server response:", records);
+
+      if (!Array.isArray(records)) {
+        throw new Error("Server did not return an array of records");
+      }
 
       if (records.length === 0) {
         document.getElementById("mainDiv").innerHTML = "<h2>No Records</h2>";
@@ -91,7 +95,7 @@ const displayPaymentPaidReports = () => {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
-      document.getElementById("mainDiv").innerHTML = "<h2>Error loading records</h2>";
+      document.getElementById("mainDiv").innerHTML = `<h2>Error loading records: ${error.message}</h2>`;
     });
 };
 const displayPaymentNotPaidReports = () => {
