@@ -50,15 +50,6 @@ const displayPaymentPaidReports = () => {
       const records = response.data;
       console.log("Server response:", records);
 
-      if (!records || (Array.isArray(records) && records.length === 0)) {
-        document.getElementById("mainDiv").innerHTML = "<h2>No Records found</h2>";
-        return;
-      }
-
-      if (!Array.isArray(records)) {
-        throw new Error("Server did not return an array of records");
-      }
-
       const html = `
         <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
@@ -70,14 +61,14 @@ const displayPaymentPaidReports = () => {
             </tr>
           </thead>
           <tbody>
-            ${records.map(record => `
+            ${Array.isArray(records) && records.length > 0 ? records.map(record => `
               <tr>
                 <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
                 <td class="text-center">${record.zone_name}</td>
                 <td class="text-center">${record.or_num}</td>
                 <td class="text-center">${record.pay_amount}</td>
               </tr>
-            `).join('')}
+            `).join('') : ''}
           </tbody>
         </table>
       `;
@@ -95,7 +86,19 @@ const displayPaymentPaidReports = () => {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
-      document.getElementById("mainDiv").innerHTML = "<h2>Error loading records</h2>";
+      document.getElementById("mainDiv").innerHTML = `
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-center">NAME</th>
+              <th class="text-center">ZONE</th>
+              <th class="text-center">OR #</th>
+              <th class="text-center">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      `;
     });
 };
 const displayPaymentNotPaidReports = () => {
@@ -108,11 +111,6 @@ const displayPaymentNotPaidReports = () => {
       const records = response.data;
       console.log(records);
 
-      if (records.length === 0) {
-        document.getElementById("mainDiv").innerHTML = "<h2>No Records</h2>";
-        return;
-      }
-
       const html = `
         <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
@@ -124,14 +122,14 @@ const displayPaymentNotPaidReports = () => {
             </tr>
           </thead>
           <tbody>
-            ${records.map(record => `
+            ${Array.isArray(records) && records.length > 0 ? records.map(record => `
               <tr>
                 <td class="text-center">${record.lastname}, ${record.firstname}</td>
                 <td class="text-center">${record.zone_name}</td>
                 <td class="text-center">${record.branch_name}</td>
                 <td class="text-center">${record.total_bill}</td>
               </tr>
-            `).join('')}
+            `).join('') : ''}
           </tbody>
         </table>
       `;
@@ -149,7 +147,19 @@ const displayPaymentNotPaidReports = () => {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
-      document.getElementById("mainDiv").innerHTML = "<h2>Error loading records</h2>";
+      document.getElementById("mainDiv").innerHTML = `
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-center">NAME</th>
+              <th class="text-center">ZONE</th>
+              <th class="text-center">BRANCH</th>
+              <th class="text-center">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      `;
     });
 };
 

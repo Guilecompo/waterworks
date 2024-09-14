@@ -18,7 +18,14 @@
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.bootstrap5.css">
         <link rel="stylesheet" href="../../style.css">
+        <link rel="stylesheet" href="./print.css">
+
+        <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script defer src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+        <script defer src="https://cdn.datatables.net/2.0.2/js/dataTables.bootstrap5.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -103,10 +110,83 @@
                         </ul>
                     </div>
                 </nav>
-                <main class="content px-3 py-2">
-                    <div class="container-fluid row p-0 m-0">
+                <main class="content px-3 py-0">
+                    <div class="modal" tabindex="-1" id="myModal">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Alert</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
+                            </div>
+                            <div class="modal-body" id="modalContent"></div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="container-fluid">
+                        <div class="mt-4" id="head">
+                            <h4 style="text-align: center;">Head Reports</h4>
+                        </div>
+                        <div class="container-fluid mt-2">
+                            <!-- <div class="col-md-6"> 
+                                <select
+                                    id="paymentStatus"
+                                    class="form-select"
+                                    aria-label="Select Payment Status"
+                                    style="min-width: fit-content; max-width: 100px;"
+                                    onchange="filterByPaymentStatus()">
+                                    <option value="paid">Paid</option>
+                                    <option value="not_paid">Not Paid</option>
+                                </select>
+                            </div> -->
+                            <div class="row col-md-12 p-0 mt-3 align-items-center">
+                                <!-- Filtering input -->
+                                <!-- <div class="col-md-6"> 
+                                    <div class="input-group">
+                                        <button onclick="displayPaymentReports()" class="btn btn-primary">
+                                            <i class="fas fa-sync-alt"></i> 
+                                        </button>
+                                        <input id="dateInput" type="date" class="form-control">
+                                        <button onclick="filterByDate()" class="btn btn-primary">Filter</button>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6 d-flex"> 
+                                    <select
+                                        id="paymentStatus"
+                                        class="form-select"
+                                        aria-label="Select Payment Status"
+                                        style="min-width: fit-content; max-width: 100px; margin-right:10px;"
+                                        onchange="filterByPaymentStatus()">
+                                        <option value="paid">Paid</option>
+                                        <option value="not_paid">Not Paid</option>
+                                    </select>
+                                    <!-- <select
+                                        id="branch"
+                                        class="form-select"
+                                        aria-label="Default select example"
+                                        style="min-width: fit-content; max-width: 100px;">
+                                        <option value="">Select Branch</option>
+                                    </select> -->
+                                </div>
+                                <!-- Spacer to push print button to the end -->
+                                <div class="col-md-6 d-flex justify-content-end"> <!-- Adjust the column width for smaller screens -->
+                                    <!-- Table or mainDiv -->
+                                    <!-- Save as Excel button -->
+                                    <button onclick="saveAsExcel()" class="btn btn-primary me-2">
+                                        <i class="far fa-file-excel"></i> Save as Excel
+                                    </button>
+                                    <!-- Print button -->
+                                    <button onclick="printTable()" class="btn btn-primary">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
+                                <div class="mains" id="mainDiv"></div>
+                            </div>
+                        </div>
                         
-                    </div>
+                        
                 </main>
         
             </div>
