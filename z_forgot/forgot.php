@@ -101,7 +101,7 @@ if ($stmtConsumer->rowCount() > 0) {
                 $mail->Host       = 'smtp.gmail.com'; // Add your SMTP host
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'kisa.compo.coc@phinmaed.com'; // Add your SMTP username
-                $mail->Password   = 'ymyubmbnfwuuiwry'; // Add your SMTP password
+                $mail->Password   = 'lofohrjrzifpufka'; // Add your SMTP password
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465;
 
