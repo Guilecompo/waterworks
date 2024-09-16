@@ -1,4 +1,8 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
@@ -27,7 +31,12 @@ function getBusinessDays($startDate, $endDate, $intervalDays) {
 }
 
 // Get the account ID sent from the client
-$accId = $_POST['accId'];
+$accId = isset($_POST['accId']) ? $_POST['accId'] : null;
+
+if (!$accId) {
+    echo json_encode(["error" => "Account ID is missing"]);
+    exit();
+}
 
 try {
     // Calculate the interval days
@@ -65,7 +74,10 @@ try {
 
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
     $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
-    $stmt->execute();
+    
+    if (!$stmt->execute()) {
+        throw new PDOException("Query execution failed: " . implode(" ", $stmt->errorInfo()));
+    }
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -87,8 +99,14 @@ try {
     }
 } catch (PDOException $e) {
     // Handle database errors
-    echo json_encode(["error" => "Database error: " . $e->getMessage()]);
-    exit(); // Terminate script execution after encountering an error
+    error_log("Database error in consumer_billing_history.php: " . $e->getMessage());
+    echo json_encode(["error" => "Database error occurred. Please try again later."]);
+    exit();
+} catch (Exception $e) {
+    // Handle any other unexpected errors
+    error_log("Unexpected error in consumer_billing_history.php: " . $e->getMessage());
+    echo json_encode(["error" => "An unexpected error occurred. Please try again later."]);
+    exit();
 }
 
 ?>
