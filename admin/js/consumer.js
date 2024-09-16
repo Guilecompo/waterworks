@@ -1131,7 +1131,7 @@ const billingHis = (user_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  var myUrl = "http://152.42.243.189//waterworks/gets/consumer_billing_history.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/consumer_billing_history.php";
   const formData = new FormData();
   formData.append("accId", user_id);
 
