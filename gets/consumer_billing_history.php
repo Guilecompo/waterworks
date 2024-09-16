@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 
 include 'connection.php';
 
+if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
     $accId = intval($_POST['accId']);
     $stmt = $conn->prepare("SELECT
         a.billing_id,
@@ -40,5 +41,8 @@ include 'connection.php';
         // Consumer not found
         echo json_encode(["error" => "No billing records found for this users."]);
     }
-
+} else {
+    // Invalid 'accId' parameter
+    echo json_encode(["error" => "Invalid or missing account ID parameter."]);
+}
 ?>
