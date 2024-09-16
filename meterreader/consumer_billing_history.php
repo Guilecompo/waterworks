@@ -63,7 +63,11 @@ try {
             a.present_meter,
             a.arrears,
             a.bill_amount,
-            a.total_bill
+            a.total_bill,
+            a.prev_cubic_consumed,
+            a.branchId,
+            a.billing_statusId,
+            a.billing_update_statusId
         FROM billing a
         INNER JOIN user_employee b ON a.readerId = b.user_id
         INNER JOIN user_consumer c ON a.consumerId = c.user_id
