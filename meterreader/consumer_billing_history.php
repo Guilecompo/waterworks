@@ -1,8 +1,4 @@
 <?php
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
@@ -31,12 +27,7 @@ function getBusinessDays($startDate, $endDate, $intervalDays) {
 }
 
 // Get the account ID sent from the client
-$accId = isset($_POST['accId']) ? $_POST['accId'] : null;
-
-if (!$accId) {
-    echo json_encode(["error" => "Account ID is missing"]);
-    exit();
-}
+$accId = $_POST['accId'];
 
 try {
     // Calculate the interval days
@@ -63,11 +54,7 @@ try {
             a.present_meter,
             a.arrears,
             a.bill_amount,
-            a.total_bill,
-            a.prev_cubic_consumed,
-            a.branchId,
-            a.billing_statusId,
-            a.billing_update_statusId
+            a.total_bill
         FROM billing a
         INNER JOIN user_employee b ON a.readerId = b.user_id
         INNER JOIN user_consumer c ON a.consumerId = c.user_id
@@ -78,10 +65,7 @@ try {
 
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
     $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
-    
-    if (!$stmt->execute()) {
-        throw new PDOException("Query execution failed: " . implode(" ", $stmt->errorInfo()));
-    }
+    $stmt->execute();
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -103,14 +87,8 @@ try {
     }
 } catch (PDOException $e) {
     // Handle database errors
-    error_log("Database error in consumer_billing_history.php: " . $e->getMessage());
-    echo json_encode(["error" => "Database error occurred. Please try again later."]);
-    exit();
-} catch (Exception $e) {
-    // Handle any other unexpected errors
-    error_log("Unexpected error in consumer_billing_history.php: " . $e->getMessage());
-    echo json_encode(["error" => "An unexpected error occurred. Please try again later."]);
-    exit();
+    echo json_encode(["error" => "Database error: " . $e->getMessage()]);
+    exit(); // Terminate script execution after encountering an error
 }
 
 ?>

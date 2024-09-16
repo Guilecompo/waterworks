@@ -20,7 +20,13 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         a.arrears,
         a.penalty,
         a.bill_amount,
-        a.total_bill
+        a.total_bill,
+        a.prev_cubic_consumed,
+        a.branchId,
+        a.period_cover,
+        DATE_FORMAT(a.due_date, '%M %d, %Y') AS due_date,
+        a.billing_statusId,
+        a.billing_update_statusId
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id
