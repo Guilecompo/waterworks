@@ -13,7 +13,6 @@ if (!$conn) {
     exit;
 }
 
-if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
     $accId = intval($_POST['accId']);
     
     try {
@@ -38,7 +37,7 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
         INNER JOIN address_zone d ON c.addressId = d.zone_id
         INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
         INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-        WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 1 ORDER BY billing_id DESC");
+        WHERE a.consumerId = :accId AND a.total_bill != 0 AND a.billing_statusId = 2 ORDER BY billing_id DESC");
 
         $stmt->bindParam(":accId", $accId);
         $stmt->execute();
@@ -53,7 +52,4 @@ if (isset($_POST['accId']) && is_numeric($_POST['accId'])) {
     } catch (PDOException $e) {
         echo json_encode(["error" => "Database error: " . $e->getMessage()]);
     }
-} else {
-    echo json_encode(["error" => "Invalid or missing account ID parameter."]);
-}
 ?>
