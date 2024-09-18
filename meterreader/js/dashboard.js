@@ -305,42 +305,43 @@ const getFilterZones = () => {
   formData.append("branchId", sessionStorage.getItem("branchId"));
   formData.append("readerId", sessionStorage.getItem("accountId"));
 
-  // Show a loading message or spinner
-  positionSelect.innerHTML = '<option>Loading...</option>';
-
-  axios.post(myUrl, formData)
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
     .then((response) => {
       const positions = response.data;
       console.log(positions);
 
-      // Ensure positions is an array
-      if (Array.isArray(positions) && positions.length > 0) {
+      if (positions && positions.length > 0) {
         let options = `<option value="all">Select Zone</option>`;
         positions.forEach((position) => {
-          options += `<option value="${position.zone_id}">${position.barangay_name}, ${position.zone_name}</option>`;
+          options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
         });
         positionSelect.innerHTML = options;
-      } else {
-        positionSelect.innerHTML = '<option value="all">No Zones Available</option>';
-      }
 
-      // Set up the event listener (only once)
-      positionSelect.onchange = () => {
-        const selectedZone = positionSelect.value.toLowerCase();
-        if (selectedZone === "all") {
-          displayConsumer();
-        } else {
-          displayConsumerByZone(selectedZone);
-        }
-      };
+        // Event listener for position change
+        positionSelect.addEventListener("change", () => {
+          selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
+          // Call the appropriate display function based on the selected position
+          if (selectedZone === "all") {
+            displayConsumer();
+          } else {
+            displayConsumerByZone(selectedZone); // Pass selectedZone to the function
+          }
+          // Add more conditions as needed for other positions
+        });
+      } else {
+        positionSelect.innerHTML =
+          '<option value="all">No Zones Available</option>';
+      }
     })
     .catch((error) => {
-      console.error("Error fetching zones:", error);
-      positionSelect.innerHTML = '<option value="all">Error loading zones</option>';
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log(error);
     });
 };
-
-
 
 const displayConsumerByZone = () => {
   const url =
