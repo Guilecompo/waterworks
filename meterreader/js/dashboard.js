@@ -302,7 +302,7 @@ const getFilterZones = () => {
   const positionSelect = document.getElementById("filterZones");
   const myUrl = "http://152.42.243.189/waterworks/meterreader/get_zones_filter.php";
   const formData = new FormData();
-  formData.append("barangayId", sessionStorage.getItem("barangayId"));
+  formData.append("branchId", sessionStorage.getItem("branchId"));
   formData.append("readerId", sessionStorage.getItem("accountId"));
 
   axios({

@@ -5,9 +5,9 @@ include 'connection.php';
 // Assuming you're using POST method to send data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate if 'readerId' and 'barangayId' are set
-    if (isset($_POST['readerId'], $_POST['barangayId'])) {
+    if (isset($_POST['readerId'], $_POST['branchId'])) {
         $readerId = $_POST['readerId'];
-        $barangayId = $_POST['barangayId'];
+        $barangayId = $_POST['branchId'];
 
         // Check if 'readerId' exists in the 'assign' table
         $stmt = $conn->prepare("SELECT * FROM assign WHERE emp_Id = :readerId");
@@ -20,14 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $zoneIds = array_column($rows, 'zone_Id');
 
             // Fetch data based on 'barangayId' and 'zone_Id' from the list of zone IDs
-            $sql = "SELECT a.zone_id, a.zone_name, b.barangay_name
-                    FROM address_zone a
-                    INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
-                    WHERE a.barangayId = :barangayId AND a.zone_id IN (".implode(',', $zoneIds).")
-                    ORDER BY zone_name";
+            // $sql = "SELECT a.zone_id, a.zone_name, b.barangay_name
+            //         FROM address_zone a
+            //         INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
+            //         WHERE a.barangayId = :barangayId AND a.zone_id IN (".implode(',', $zoneIds).")
+            //         ORDER BY zone_name";
+            $sql = "SELECT c.zone_id, c.zone_name, d.barangay_name
+                    FROM assign a
+                    INNER JOIN branch b ON a.branchId = b.branch_id
+                    INNER JOIN address_zone c ON b.locationId = c.zone_id
+                    INNER JOIN address_barangay d ON c.barangayId = d.barangay_id
+                    WHERE a.branchId = :branchId AND c.zone_id IN (".implode(',', $zoneIds).")
+                    ORDER BY c.zone_name";
 
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(":barangayId", $barangayId);
+            $stmt->bindParam(":branchId", $branchId);
             $stmt->execute();
 
             $returnValue = $stmt->rowCount() > 0 ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
