@@ -309,33 +309,32 @@ const getFilterZones = () => {
   positionSelect.innerHTML = '<option>Loading...</option>';
 
   axios.post(myUrl, formData)
-    .then((response) => {
-      const positions = response.data;
-      console.log(positions);
-
-      // Clear previous options
-      positionSelect.innerHTML = '';
-
-      if (positions && positions.length > 0) {
-        let options = `<option value="all">Select Zone</option>`;
-        positions.forEach((position) => {
-          options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
-        });
-        positionSelect.innerHTML = options;
+  .then((response) => {
+    const positions = response.data;
+    console.log(positions);
+  
+    // Ensure positions is an array
+    if (Array.isArray(positions) && positions.length > 0) {
+      let options = `<option value="all">Select Zone</option>`;
+      positions.forEach((position) => {
+        options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
+      });
+      positionSelect.innerHTML = options;
+    } else {
+      positionSelect.innerHTML = '<option value="all">No Zones Available</option>';
+    }
+  
+    // Set up the event listener (only once)
+    positionSelect.onchange = () => {
+      const selectedZone = positionSelect.value.toLowerCase();
+      if (selectedZone === "all") {
+        displayConsumer();
       } else {
-        positionSelect.innerHTML = '<option value="all">No Zones Available</option>';
+        displayConsumerByZone(selectedZone);
       }
-
-      // Ensure the event listener is only added once
-      positionSelect.onchange = () => {
-        const selectedZone = positionSelect.value.toLowerCase();
-        if (selectedZone === "all") {
-          displayConsumer();
-        } else {
-          displayConsumerByZone(selectedZone);
-        }
-      };
-    })
+    };
+  })
+  
     .catch((error) => {
       console.error("Error fetching zones:", error);
       positionSelect.innerHTML = '<option value="all">Error loading zones</option>';
