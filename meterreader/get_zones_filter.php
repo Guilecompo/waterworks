@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $readerId = $_POST['readerId'];
         $branchId = $_POST['branchId'];
 
+        // Fetch zone_Id associated with the readerId
         $stmt = $conn->prepare("SELECT zone_Id FROM assign WHERE emp_Id = :readerId");
         $stmt->bindParam(":readerId", $readerId);
         $stmt->execute();
@@ -28,12 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($zoneIds as $key => $id) {
                 $placeholders[] = ":zoneId$key";
             }
-            // sql
+
+            // Prepare SQL to fetch zone details
             $sql = "SELECT c.zone_id, c.zone_name, d.barangay_name
                     FROM branch a
                     INNER JOIN address_zone c ON a.locationId = c.zone_id
                     INNER JOIN address_barangay d ON c.barangayId = d.barangay_id
-                    WHERE a.branch_id = :branchId AND c.zone_id IN (" . implode(',', $placeholders) . ")
+                    WHERE a.branchId = :branchId AND c.zone_id IN (" . implode(',', $placeholders) . ")
                     ORDER BY c.zone_name";
 
             $stmt = $conn->prepare($sql);
