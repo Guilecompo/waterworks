@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($zoneIds as $key => $id) {
                 $placeholders[] = ":zoneId$key";
             }
-
+            // sql
             $sql = "SELECT c.zone_id, c.zone_name, d.barangay_name
                     FROM branch a
                     INNER JOIN address_zone c ON a.locationId = c.zone_id
