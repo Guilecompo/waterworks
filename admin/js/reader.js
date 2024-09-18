@@ -570,7 +570,7 @@ const view_assigned = (user_id) => {
                       <tr>
                           <td>${record.zone_name}</td>
                           <td>${record.branch_name}</td>
-                          <td><button class="butt" onclick="view_assigned(${record.user_id})">Remove</button></td>
+                          <td><button class="butt" onclick="remove_assigned(${record.assign_id})">Remove</button></td>
                       </tr>
                   `;
           });
@@ -594,10 +594,12 @@ const view_assigned = (user_id) => {
                   <tr>
                     <th scope="col">Zone Assigned</th>
                     <th scope="col">Branch</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                 <tr>
+                  <td>NO RECORDS</td>
                   <td>NO RECORDS</td>
                   <td>NO RECORDS</td>
                 </tr>
@@ -614,6 +616,36 @@ const view_assigned = (user_id) => {
     });
 };
 //---------------------------VIEW ASSIGNED END--------------------------------------
+
+// --------------------------REMOVE ASSIGNED START--------------------------------
+const remove_assigned = (assign_id) => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+
+  var myUrl = "http://152.42.243.189/waterworks/gets/remove_assigned.php";
+  const formData = new FormData();
+  formData.append("assignId", assign_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+  .then((response) => {
+    if (response.data.success) { // Check for success property
+      success_update_modal();
+    } else {
+      fail_modal();
+    }
+  })
+  .catch((error) => {
+    console.error("Error in assigned function (HTTP request):", error);
+    fail_modal(); // Call fail_modal on error
+  });
+};
+
+
+// --------------------------REMOVE ASSIGNED END--------------------------------------
 
 //----------------------------ADD ASSIGNED START---------------------------------------------
 const add_assigned = (user_id) => {
@@ -982,6 +1014,16 @@ const getBarangay = () => {
 };
 
 //------------------------------------------------------------------------------
+
+const fail_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
+      <h5 class="modal-title " style="color: limegreen; text-align:center;">Failed to removed</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
 
 const success_update_modal = () => {
   const modal = document.getElementById("myModal");
