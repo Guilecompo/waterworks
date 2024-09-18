@@ -9,19 +9,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $readerId = $_POST['readerId'];
         $branchId = $_POST['branchId'];
 
+        // Query to get zones assigned to the reader
         $stmt = $conn->prepare("SELECT * FROM assign WHERE emp_Id = :readerId");
         $stmt->bindParam(":readerId", $readerId);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($rows) {
+            // Fetch zone IDs from the result
             $zoneIds = array_column($rows, 'zone_Id');
 
             if (!empty($zoneIds)) {
+                // Prepare SQL to fetch zones based on 'barangayId' and zone IDs
                 $sql = "SELECT a.zone_id, a.zone_name, b.barangay_name
                         FROM address_zone a
                         INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
-                        WHERE a.barangayId = :branchId AND a.zone_id IN (".implode(',', array_map('intval', $zoneIds)).")
+                        WHERE a.branchId = :branchId AND a.zone_id IN (" . implode(',', array_map('intval', $zoneIds)) . ")
                         ORDER BY zone_name";
 
                 $stmt = $conn->prepare($sql);
@@ -29,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
                 $returnValue = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                echo json_encode($returnValue);
+                echo json_encode($returnValue); // Return the zone data as JSON
             } else {
-                echo json_encode([]);
+                echo json_encode([]); // No zones found
             }
         } else {
             echo json_encode(['error' => 'Reader not found']);
