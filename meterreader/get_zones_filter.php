@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     FROM branch a
                     INNER JOIN address_zone c ON a.locationId = c.zone_id
                     INNER JOIN address_barangay d ON c.barangayId = d.barangay_id
-                    WHERE a.branchId = :branchId AND c.zone_id IN (" . implode(',', $placeholders) . ")
+                    WHERE a.branch_id = :branchId AND c.zone_id IN (" . implode(',', $placeholders) . ")
                     ORDER BY c.zone_name";
 
             $stmt = $conn->prepare($sql);
