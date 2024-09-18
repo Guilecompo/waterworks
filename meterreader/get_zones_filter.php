@@ -26,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //         WHERE a.barangayId = :barangayId AND a.zone_id IN (".implode(',', $zoneIds).")
             //         ORDER BY zone_name";
             $sql = "SELECT c.zone_id, c.zone_name, d.barangay_name
-                    FROM assign a
-                    INNER JOIN branch b ON a.branchId = b.branch_id
-                    INNER JOIN address_zone c ON b.locationId = c.zone_id
+                    FROM branch a
+                    INNER JOIN address_zone c ON a.locationId = c.zone_id
                     INNER JOIN address_barangay d ON c.barangayId = d.barangay_id
-                    WHERE a.branchId = :branchId AND c.zone_id IN (".implode(',', $zoneIds).")
+                    WHERE a.emp_Id = :readerId AND a.branchId = :branchId AND c.zone_id IN (".implode(',', $zoneIds).")
                     ORDER BY c.zone_name";
 
             $stmt = $conn->prepare($sql);
+            // $stmt->bindParam(":readerId", $readerId);
             $stmt->bindParam(":branchId", $branchId);
             $stmt->execute();
 
