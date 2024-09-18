@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sql = "SELECT a.zone_id, a.zone_name, b.barangay_name
                             FROM address_zone a
                             INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
-                            WHERE a.branchId = :branchId AND a.zone_id IN (" . implode(',', array_map('intval', $zoneIds)) . ")
+                            WHERE a.barangayId = :branchId AND a.zone_id IN (" . implode(',', array_map('intval', $zoneIds)) . ")
                             ORDER BY zone_name";
 
                     $stmt = $conn->prepare($sql);
