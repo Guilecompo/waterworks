@@ -306,41 +306,39 @@ const getFilterZones = () => {
   formData.append("readerId", sessionStorage.getItem("accountId"));
 
   axios({
-    url: myUrl,
-    method: "post",
-    data: formData,
+      url: myUrl,
+      method: "post",
+      data: formData,
   })
-    .then((response) => {
-      const positions = response.data;
-      console.log(positions);
+      .then((response) => {
+          const positions = response.data;
+          console.log(positions);
 
-      if (positions && positions.length > 0) {
-        let options = `<option value="all">Select Zone</option>`;
-        positions.forEach((position) => {
-          options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
-        });
-        positionSelect.innerHTML = options;
+          if (positions && positions.length > 0) {
+              let options = `<option value="all">Select Zone</option>`;
+              positions.forEach((position) => {
+                  options += `<option value="${position.zone_name}">${position.barangay_name}, ${position.zone_name}</option>`;
+              });
+              positionSelect.innerHTML = options;
 
-        // Event listener for position change
-        positionSelect.addEventListener("change", () => {
-          selectedZone = positionSelect.value.toLowerCase(); // Assign value to selectedZone
-          // Call the appropriate display function based on the selected position
-          if (selectedZone === "all") {
-            displayConsumer();
+              // Event listener for position change
+              positionSelect.addEventListener("change", () => {
+                  const selectedZone = positionSelect.value.toLowerCase();
+                  if (selectedZone === "all") {
+                      displayConsumer();
+                  } else {
+                      displayConsumerByZone(selectedZone);
+                  }
+              });
           } else {
-            displayConsumerByZone(selectedZone); // Pass selectedZone to the function
+              positionSelect.innerHTML =
+                  '<option value="all">No Zones Available</option>';
           }
-          // Add more conditions as needed for other positions
-        });
-      } else {
-        positionSelect.innerHTML =
-          '<option value="all">No Zones Available</option>';
-      }
-    })
-    .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-      console.log(error);
-    });
+      })
+      .catch((error) => {
+          alert(`ERROR OCCURRED! ${error}`);
+          console.log(error);
+      });
 };
 
 const displayConsumerByZone = () => {
