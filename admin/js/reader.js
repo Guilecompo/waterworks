@@ -559,6 +559,7 @@ const view_assigned = (user_id) => {
                     <tr>
                       <th scope="col">Zone Assigned</th>
                       <th scope="col">Branch</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -569,6 +570,7 @@ const view_assigned = (user_id) => {
                       <tr>
                           <td>${record.zone_name}</td>
                           <td>${record.branch_name}</td>
+                          <button class="butt" onclick="view_assigned(${employee.user_id})">Remove</button>
                       </tr>
                   `;
           });
