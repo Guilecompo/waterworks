@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     FROM address_zone a
                     INNER JOIN address_barangay b ON a.barangayId = b.barangay_id
                     WHERE a.barangayId = :branchId AND a.zone_id IN (".implode(',', $zoneIds).")
-                    ORDER BY zone_name";
+                    ORDER BY a.zone_name";
             // $sql = "SELECT b.zone_id, b.zone_name, c.barangay_name
             //         FROM branch a
             //         INNER JOIN address_zone b ON a.locationId = b.zone_id
@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //         ORDER BY b.zone_name";
 
             $stmt = $conn->prepare($sql);
-            // $stmt->bindParam(":readerId", $readerId);
             $stmt->bindParam(":branchId", $branchId);
             $stmt->execute();
 
