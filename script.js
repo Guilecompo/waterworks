@@ -28,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Check if elements exist before accessing their properties
         if (card) {
-            card.style.backgroundColor = newTheme === 'dark' ? '#166534' : 'ced4da';
+            card.style.backgroundColor = newTheme === 'dark' ? '#212529' : 'ced4da';
         }
 
         if (sidebar) {
-            sidebar.style.backgroundColor = newTheme === 'dark' ? '#166534' : '#166534';
+            sidebar.style.backgroundColor = newTheme === 'dark' ? '#212529' : '#212529';
         }
 
         if (sidebarLogo) {
