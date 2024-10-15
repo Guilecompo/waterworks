@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Check if elements exist before accessing their properties
         if (card) {
-            card.style.backgroundColor = newTheme === 'dark' ? '#212529' : 'ced4da';
+            card.style.backgroundColor = newTheme === 'dark' ? '#212529' : '##217899';
         }
 
         if (sidebar) {
@@ -44,9 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         if (sidebarToggle) {
             sidebarToggle.style.color = newTheme === 'dark' ? '#ffffff' : '#ffffff';
-        }
-        if (sidebarToggle) {
-            sidebarToggle.style.color = newTheme === 'light' ? '#ffffff' : '#ffffff';
         }
         
 
