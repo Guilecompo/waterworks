@@ -42,13 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (sidebarHeader) {
             sidebarHeader.style.color = newTheme === 'dark' ? '#adb5bd' : '#adb5bd';
         }
-        if (sidebarToggle) {
-            sidebarToggle.style.color = newTheme === 'dark' ? '#ffffff' : '#ffffff';
-        }
-        if (sidebarToggle) {
-            sidebarToggle.style.color = newTheme === 'light' ? '#ffffff' : '#ffffff';
-        }
-        
 
         // Dynamically set text color for each sidebar link based on the theme
         sidebarLinks.forEach(link => {
