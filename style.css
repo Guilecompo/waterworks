@@ -222,7 +222,7 @@ a.sidebar-link {
 }
 .navbar,
 .nav-item a {
-  background-color: #212529;
+  background-color: transparent;
   color: #ffffff;
 }
 
@@ -238,7 +238,7 @@ a.sidebar-link {
   }
   #navi,
   .nav-item a {
-    background-color: #212529;
+    background-color: transparent;
     color: #ffffff;
   }
 
