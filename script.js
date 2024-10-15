@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (sidebarToggle) {
             sidebarToggle.style.color = newTheme === 'dark' ? '#ffffff' : '#ffffff';
         }
+        if (sidebarToggle) {
+            sidebarToggle.style.color = newTheme === 'light' ? '#ffffff' : '#ffffff';
+        }
         
 
         // Dynamically set text color for each sidebar link based on the theme
