@@ -223,7 +223,7 @@ a.sidebar-link {
 .navbar,
 .nav-item a {
   background-color: #212529;
-  color: white;
+  color: #ffffff;
 }
 
 /* Footer and Nav */
@@ -239,7 +239,7 @@ a.sidebar-link {
   #navi,
   .nav-item a {
     background-color: #212529;
-    color: white;
+    color: #ffffff;
   }
 
   .navbar,

@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sidebarHeader.style.color = newTheme === 'dark' ? '#adb5bd' : '#adb5bd';
         }
         if (sidebarToggle) {
-            sidebarToggle.style.color = newTheme === 'dark' ? '#fff' : '#fff';
+            sidebarToggle.style.color = newTheme === 'dark' ? '#ffffff' : '#ffffff';
         }
         
 
