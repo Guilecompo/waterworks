@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Check if elements exist before accessing their properties
         if (card) {
-            card.style.backgroundColor = newTheme === 'dark' ? '#212529' : '#217899';
+            card.style.backgroundColor = newTheme === 'dark' ? '#217899' : 'ced4da';
         }
 
         if (sidebar) {
