@@ -316,6 +316,10 @@ const view_clerk = (user_id) => {
                               <h6 class="text-muted" >${employee[0].phone_no}</h6>
                           </div>
                           <div class="col-md-8 mt-3">
+                              <label class="form-label">Username</label>
+                              <h6 class="text-muted" >${employee[0].username}</h6>
+                          </div>
+                          <div class="col-md-12 mt-3">
                               <label class="form-label">Email</label>
                               <h6 class="text-muted" >${employee[0].email}</h6>
                           </div>

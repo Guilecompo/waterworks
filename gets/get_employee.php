@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Prepare and execute the SQL query
         $accId = $_POST['accId'];
         $stmt = $conn->prepare("SELECT 
-                a.user_id, a.branchId,
+                a.user_id, a.branchId,a.username,
                 a.firstname, a.middlename,
                 a.lastname, a.phone_no,
                 a.email, a.provinceName, a.municipalityName, a.barangayName,
