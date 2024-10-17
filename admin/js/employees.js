@@ -420,6 +420,10 @@ const edit_clerk = (user_id) => {
                   <label class="form-label">Email</label>
                   <input type="email" class="form-control" id="email_add" value="${employee[0].email}" required >
                 </div>
+                <div class="col-md-6 mt-2">
+                  <label class="form-label">Username</label>
+                  <input type="text" class="form-control" id="username" value="${employee[0].username}" required >
+                </div>
                 <label class="form-label mt-3 mb-0 underline-label">Address</label>
                 <div class="col-md-6 mt-2">
                   <label class="form-label">Province</label>
@@ -488,6 +492,7 @@ const submit_edit_employee = (event, user_id) => {
   const barangayName = document.getElementById("barangayName").value;
 
   const email_add = document.getElementById("email_add").value;
+  const username = document.getElementById("username").value;
   const branchId = document.getElementById("branch").value;
   const positionId = document.getElementById("position").value;
 
@@ -497,6 +502,7 @@ const submit_edit_employee = (event, user_id) => {
     lastname === "" ||
     phone === "" ||
     email_add === "" ||
+    username === "" ||
     provinceName === "" ||
     municipalityName === "" ||
     barangayName === "" ||
@@ -517,6 +523,7 @@ const submit_edit_employee = (event, user_id) => {
   formData.append("lastname", lastname);
   formData.append("phone", phone);
   formData.append("email_add", email_add);
+  formData.append("username", username);
   formData.append("provinceNames", provinceName);
   formData.append("municipalityNames", municipalityName);
   formData.append("barangayNames", barangayName);
@@ -532,6 +539,7 @@ const submit_edit_employee = (event, user_id) => {
     suffixId,
     phone,
     email_add,
+    username,
     provinceName,
     municipalityName,
     barangayName,
@@ -549,16 +557,16 @@ const submit_edit_employee = (event, user_id) => {
       console.log("Responses status : ", response.data.status);
 
       if (response.data.status === 1) {
-        success_modal();
+        success_modals();
         console.log("success update");
         displayClerkEmployee();
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
-        failed_modal();
+        failed_modals();
         console.log(response.data);
       } else {
         // alert("Unknown error occurred.");
-        error_modal();
+        error_modals();
         console.log(response);
       }
     })
@@ -743,7 +751,7 @@ const success_modals = () => {
   const modal = document.getElementById("myModals");
   const modalContent = document.getElementById("modalContents");
   var html = `
-      <h5 class="modal-title" style="color: limegreen; text-align:center;">Successfully added employee!</h5>
+      <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
   `;
   modalContent.innerHTML = html;
   modal.style.display = "block";
@@ -753,7 +761,7 @@ const failed_modals = () => {
   const modal = document.getElementById("myModals");
   const modalContent = document.getElementById("modalContents");
   var html = `
-  <h5 class="modal-title" style="color: red; text-align:center;">Duplicate entry detected!</h5>
+  <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
   `;
   modalContent.innerHTML = html;
   modal.style.display = "block";

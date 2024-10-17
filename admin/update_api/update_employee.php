@@ -23,6 +23,7 @@ $provinceNames = htmlspecialchars($_POST['provinceNames'], ENT_QUOTES, 'UTF-8');
 $municipalityNames = htmlspecialchars($_POST['municipalityNames'], ENT_QUOTES, 'UTF-8');
 $barangayNames = htmlspecialchars($_POST['barangayNames'], ENT_QUOTES, 'UTF-8');
 $email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
+$username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
 $positionId = htmlspecialchars($_POST['positionId'], ENT_QUOTES, 'UTF-8');
 $branch = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
 $status = '1';
@@ -42,6 +43,7 @@ try {
             barangayName = :barangayNames, 
             email = :email_add, 
             code = :code, 
+            username = :username, 
             positionId = :positionId, 
             branchId = :branchId, 
             statusId = :statusId, 
@@ -59,6 +61,7 @@ try {
     $stmt->bindParam(":municipalityNames", $municipalityNames, PDO::PARAM_STR);
     $stmt->bindParam(":barangayNames", $barangayNames, PDO::PARAM_STR);
     $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR); 
+    $stmt->bindParam(":username", $username, PDO::PARAM_STR); 
     $stmt->bindParam(":code", $code, PDO::PARAM_STR);
     $stmt->bindParam(":positionId", $positionId, PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
