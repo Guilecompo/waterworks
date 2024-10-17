@@ -1,5 +1,7 @@
 let currentPage = 1;
 let employees = [];
+let selectedBranch = "all";
+let selectedPosition = "all";
 
 const onLoad = () => {
   var accountId = sessionStorage.getItem("accountId");
@@ -8,10 +10,11 @@ const onLoad = () => {
   } else {
     document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
     displayClerkEmployee();
-    getFilterBranch(); // Corrected function name here from "getFileterBranch"
+    getFilterBranch();
     getFilterPosition();
   }
 };
+
 const getFilterPosition = () => {
   const positionSelect = document.getElementById("position");
   var myUrl = "http://152.42.243.189/waterworks/admin/get_positions.php";
@@ -22,29 +25,62 @@ const getFilterPosition = () => {
   })
     .then((response) => {
       var positions = response.data;
-
       var options = `<option value="all">Select Position</option>`;
       positions.forEach((position) => {
         options += `<option value="${position.position_name}">${position.position_name}</option>`;
       });
       positionSelect.innerHTML = options;
 
-      // Event listener for branch change
+      // Event listener for position change
       positionSelect.addEventListener("change", () => {
-        const selectedPosition = positionSelect.value;
-        
-        // Call the appropriate display function based on the selected branch
-        if (selectedPosition !== "all") {
-          displayClerkEmployeePosition(selectedPosition);
-        } else {
-          displayClerkEmployee(); // Show all employees if "Select Branch" is chosen
-        }
+        selectedPosition = positionSelect.value;
+        applyFilters();
       });
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
+
+const getFilterBranch = () => {
+  const branchSelect = document.getElementById("branch");
+  var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
+
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var branches = response.data;
+      var options = `<option value="all">Select Branch</option>`;
+      branches.forEach((branch) => {
+        options += `<option value="${branch.branch_name}">${branch.branch_name}</option>`;
+      });
+      branchSelect.innerHTML = options;
+
+      // Event listener for branch change
+      branchSelect.addEventListener("change", () => {
+        selectedBranch = branchSelect.value;
+        applyFilters();
+      });
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const applyFilters = () => {
+  if (selectedBranch === "all" && selectedPosition === "all") {
+    displayClerkEmployee(); // If both filters are 'all', show all employees
+  } else if (selectedBranch !== "all" && selectedPosition === "all") {
+    displayClerkEmployeeBranch(selectedBranch); // Filter by branch only
+  } else if (selectedBranch === "all" && selectedPosition !== "all") {
+    displayClerkEmployeePosition(selectedPosition); // Filter by position only
+  } else {
+    displayClerkEmployeeByBranchAndPosition(selectedBranch, selectedPosition); // Filter by both
+  }
+};
+
 const displayClerkEmployeePosition = (selectedPosition) => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
@@ -76,41 +112,6 @@ const displayClerkEmployeePosition = (selectedPosition) => {
       alert("ERROR! - " + error);
     });
 };
-
-const getFilterBranch = () => {
-  const branchSelect = document.getElementById("branch");
-  var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
-
-  axios({
-    url: myUrl,
-    method: "post",
-  })
-    .then((response) => {
-      var positions = response.data;
-
-      var options = `<option value="employee">Select Branch</option>`;
-      positions.forEach((position) => {
-        options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
-      });
-      branchSelect.innerHTML = options;
-
-      // Event listener for branch change
-      branchSelect.addEventListener("change", () => {
-        const selectedBranch = branchSelect.value;
-        
-        // Call the appropriate display function based on the selected branch
-        if (selectedBranch !== "employee") {
-          displayClerkEmployeeBranch(selectedBranch);
-        } else {
-          displayClerkEmployee(); // Show all employees if "Select Branch" is chosen
-        }
-      });
-    })
-    .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
-    });
-};
-
 const displayClerkEmployeeBranch = (selectedBranch) => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
@@ -143,10 +144,38 @@ const displayClerkEmployeeBranch = (selectedBranch) => {
     });
 };
 
+const displayClerkEmployeeByBranchAndPosition = (branch, position) => {
+  const head = document.getElementById("head");
+  head.style.display = "block";
+  
+  var url = "http://152.42.243.189/waterworks/admin/get_employee_by_branch_and_position.php";
+
+  const formData = new FormData();
+  formData.append("accountId", sessionStorage.getItem("accountId"));
+  formData.append("branch", branch);
+  formData.append("position", position);
+
+  axios({
+    url: url,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      employees = response.data;
+
+      if (!Array.isArray(employees) || employees.length === 0) {
+        ClerkErrorTable();
+      } else {
+        ClerkrefreshTable(employees);
+      }
+    })
+    .catch((error) => {
+      alert("ERROR! - " + error);
+    });
+};
+
 const displayClerkEmployee = () => {
   const head = document.getElementById("head");
-  const paginationNumbers = document.getElementById("paginationNumbers");
-  const searchInput = document.getElementById("searchInput");
   head.style.display = "block";
 
   var url = "http://152.42.243.189/waterworks/admin/get_employee.php";
@@ -165,7 +194,7 @@ const displayClerkEmployee = () => {
       if (!Array.isArray(employees) || employees.length === 0) {
         ClerkErrorTable();
       } else {
-        ClerkrefreshTable(employees); // Refresh the table with all employees
+        ClerkrefreshTable(employees);
       }
     })
     .catch((error) => {
