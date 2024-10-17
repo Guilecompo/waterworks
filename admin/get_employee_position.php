@@ -8,7 +8,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Prepare and execute the SQL query
-        $branchId = $_POST['branchId']; 
+        $selectedPosition = $_POST['selectedPosition']; 
         $stmt = $conn->prepare("SELECT 
                 a.*, g.position_name,
                 h.branch_name, i.user_status
@@ -17,10 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 INNER JOIN position g ON a.positionId = g.position_id
                 INNER JOIN branch h ON a.branchId = h.branch_id
                 INNER JOIN user_status i ON a.statusId = i.status_id
-        WHERE g.position_name NOT IN ('Admin') AND h.branch_name = :branchId;
+        WHERE g.position_name NOT IN ('Admin') AND g.position_name = :selectedPosition;
         ");
 
-        $stmt->bindParam(":branchId", $branchId);
+        $stmt->bindParam(":selectedPosition", $selectedPosition);
          $stmt->execute();
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
