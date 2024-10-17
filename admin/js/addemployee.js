@@ -115,7 +115,7 @@ const closeModal = () => {
               </form>
         </div>
         `;
-        document.getElementById("mainDiv").innerHTML = html;
+        document.getElementById("mainDivs").innerHTML = html;
         
         getSuffix();
         // getMunicipality();
