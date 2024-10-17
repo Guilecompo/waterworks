@@ -47,7 +47,7 @@ const getFilterPosition = () => {
       });
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      // alert(`ERROR OCCURRED! ${error}`);
     });
 };
 
@@ -596,6 +596,10 @@ const add_employee = () => {
                     <label class="form-label">Email</label>
                     <input type="email" class="form-control" id="email_add" required>
                 </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Username</label>
+                    <input type="username" class="form-control" id="username" required>
+                </div>
                 <label class="form-label mt-3 mb-0 underline-label">Address</label>
                 <div class="col-md-6 mt-2">
                     <label class="form-label">Province</label>
@@ -657,6 +661,7 @@ const submit_employee = (event) => {
   const barangayName = document.getElementById("barangayName").value;
 
   const email_add = document.getElementById("email_add").value;
+  const username = document.getElementById("username").value;
   const branchId = document.getElementById("branch").value;
   const positionId = document.getElementById("position").value;
 
@@ -667,6 +672,7 @@ const submit_employee = (event) => {
     { id: "suffix", element: document.getElementById("suffix") },
     { id: "phone", element: document.getElementById("phone") },
     { id: "email_add", element: document.getElementById("email_add") },
+    { id: "username", element: document.getElementById("username") },
     { id: "provinceName", element: document.getElementById("provinceName") },
     { id: "municipalityName", element: document.getElementById("municipalityName") },
     { id: "barangayName", element: document.getElementById("barangayName") },
@@ -698,6 +704,7 @@ const submit_employee = (event) => {
   formData.append("lastname", lastname);
   formData.append("phone", phone);
   formData.append("email_add", email_add);
+  formData.append("username", username);
   formData.append("provinceNames", provinceName);
   formData.append("municipalityNames", municipalityName);
   formData.append("barangayNames", barangayName);
