@@ -4,16 +4,15 @@ let employees = [];
 const onLoad = () => {
   var accountId = sessionStorage.getItem("accountId");
   if (!accountId || accountId === "0") {
-      window.location.href = "/waterworks/";
+    window.location.href = "/waterworks/";
   } else {
-    document.getElementById("ngalan").innerText =
-    sessionStorage.getItem("fullname");
-  displayClerkEmployee();
-  getFileterBranch();
+    document.getElementById("ngalan").innerText = sessionStorage.getItem("fullname");
+    displayClerkEmployee();
+    getFilterBranch(); // Corrected function name here from "getFileterBranch"
   }
- 
 };
-const getFileterBranch = () => {
+
+const getFilterBranch = () => {
   const branchSelect = document.getElementById("branch");
   var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
 
@@ -29,37 +28,37 @@ const getFileterBranch = () => {
         options += `<option value="${position.branch_name}">${position.branch_name}</option>`;
       });
       branchSelect.innerHTML = options;
-      console.log("Selected branch:",branchSelect);
 
-      // Event listener for position change
+      // Event listener for branch change
       branchSelect.addEventListener("change", () => {
         const selectedBranch = branchSelect.value;
         
-        // Call the appropriate display function based on the selected position
+        // Call the appropriate display function based on the selected branch
         if (selectedBranch !== "employee") {
           displayClerkEmployeeBranch(selectedBranch);
         } else {
-          displayClerkEmployee();
+          displayClerkEmployee(); // Show all employees if "Select Branch" is chosen
         }
-        // Add more conditions as needed for other positions
       });
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
+
 const displayClerkEmployeeBranch = (selectedBranch) => {
+  console.log("brach Id Selected: ", selectedBranch);
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
   const searchInput = document.getElementById("searchInput");
   head.style.display = "block";
-//   paginationNumbers.style.display = "block";
-//   searchInput.style.display = "block";
+
   var url = "http://152.42.243.189/waterworks/admin/get_employee_branch.php";
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
-  formData.append("branchId", selectedBranch);
+  formData.append("branchId", selectedBranch); // Ensure this is correct
+ 
 
   axios({
     url: url,
@@ -68,25 +67,24 @@ const displayClerkEmployeeBranch = (selectedBranch) => {
   })
     .then((response) => {
       employees = response.data;
-      console.log(employees);
 
       if (!Array.isArray(employees) || employees.length === 0) {
         ClerkErrorTable();
       } else {
-        ClerkrefreshTable(employees);
+        ClerkrefreshTable(employees); // Refresh the table with filtered employees
       }
     })
     .catch((error) => {
       alert("ERROR! - " + error);
     });
 };
+
 const displayClerkEmployee = () => {
   const head = document.getElementById("head");
   const paginationNumbers = document.getElementById("paginationNumbers");
   const searchInput = document.getElementById("searchInput");
   head.style.display = "block";
-//   paginationNumbers.style.display = "block";
-//   searchInput.style.display = "block";
+
   var url = "http://152.42.243.189/waterworks/admin/get_employee.php";
 
   const formData = new FormData();
@@ -99,14 +97,11 @@ const displayClerkEmployee = () => {
   })
     .then((response) => {
       employees = response.data;
-      console.log(employees);
 
       if (!Array.isArray(employees) || employees.length === 0) {
         ClerkErrorTable();
       } else {
-        // sortClerkEmployeesByName();
-        // showClerkEmployeePage(currentPage);
-        ClerkrefreshTable(employees);
+        ClerkrefreshTable(employees); // Refresh the table with all employees
       }
     })
     .catch((error) => {
@@ -114,59 +109,59 @@ const displayClerkEmployee = () => {
     });
 };
 
-
 const ClerkErrorTable = () => {
   var html = `
-            
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-              <thead>
-                <tr>
-                  <th scope="col">Full Name</th>
-                  <th scope="col">Position</th>
-                  <th scope="col">Branch</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              </table>`;
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+      <thead>
+        <tr>
+          <th scope="col">Full Name</th>
+          <th scope="col">Position</th>
+          <th scope="col">Branch</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+    </table>`;
 
   document.getElementById("mainDiv").innerHTML = html;
 };
 
 const ClerkrefreshTable = (employeeList) => {
   var html = `
-      
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-              <thead>
-                <tr>
-                  <th class="text-center">Full Name</th>
-                  <th class="text-center">Position</th>
-                  <th class="text-center">Branch</th>
-                  <th class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-          `;
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+      <thead>
+        <tr>
+          <th class="text-center">Full Name</th>
+          <th class="text-center">Position</th>
+          <th class="text-center">Branch</th>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+    `;
+
   employeeList.forEach((employee) => {
     html += `
-              <tr>
-                <td>${employee.firstname} ${employee.lastname}</td>
-                <td>${employee.position_name}</td>
-                <td>${employee.branch_name}</td>
-                <td>
-                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="view_clerk(${employee.user_id})">View</button>
-                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="edit_clerk(${employee.user_id})">Edit</button>
-                </td>
-              </tr>
-            `;
+      <tr>
+        <td>${employee.firstname} ${employee.lastname}</td>
+        <td>${employee.position_name}</td>
+        <td>${employee.branch_name}</td>
+        <td>
+          <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="view_clerk(${employee.user_id})">View</button>
+          <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="edit_clerk(${employee.user_id})">Edit</button>
+        </td>
+      </tr>`;
   });
 
   html += `</tbody></table>`;
 
   document.getElementById("mainDiv").innerHTML = html;
+
+  // Initialize DataTable after populating the HTML
   $('#example').DataTable({
     "ordering": false // Disable sorting for all columns
   });
 };
+
 const view_clerk = (user_id) => {
   console.log("USER ID :", user_id);
   const modal = document.getElementById("myModal");
