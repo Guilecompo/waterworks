@@ -2,9 +2,8 @@
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
- // Set this header last
 
- include 'connection.php';
+include 'connection.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
