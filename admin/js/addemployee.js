@@ -123,7 +123,6 @@ const closeModal = () => {
         getPosition();
     };
     const submit_employee = (event) => {
-      event.preventDefault();
         const firstname = document.getElementById("firstname").value;
         const middlename = document.getElementById("middlename").value;
         const lastname = document.getElementById("lastname").value;

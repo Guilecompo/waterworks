@@ -29,10 +29,24 @@ $login_statusId = 2;
 $code = "";
 
 try {
-    // Define SQL statement for insertion
-    $password = md5('waterworks');
-    $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
-    $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
+    // Define SQL statement for updating
+    $sql = "UPDATE user_employee SET 
+            firstname = :firstname, 
+            middlename = :middlename, 
+            lastname = :lastname, 
+            suffixId = :suffixId, 
+            phone_no = :phone_no, 
+            provinceName = :provinceNames, 
+            municipalityName = :municipalityNames, 
+            barangayName = :barangayNames, 
+            email = :email_add, 
+            code = :code, 
+            positionId = :positionId, 
+            branchId = :branchId, 
+            statusId = :statusId, 
+            login_statusId = :login_statusId, 
+            date_added = :date_added 
+            WHERE employee_Id = :employee_Id";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
@@ -45,7 +59,6 @@ try {
     $stmt->bindParam(":barangayNames", $barangayNames, PDO::PARAM_STR);
     $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR); 
     $stmt->bindParam(":code", $code, PDO::PARAM_STR);
-    $stmt->bindParam(":password", $password, PDO::PARAM_STR);
     $stmt->bindParam(":positionId", $positionId, PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
     $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
@@ -54,10 +67,11 @@ try {
     $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        $activity_type = "Add";
+        // Log the update activity
+        $activity_type = "Update";
         $table_name = "Employee";
-        $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
-        $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+        $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) 
+                 VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
         $stmt1 = $conn->prepare($sql1);
         $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
@@ -66,9 +80,9 @@ try {
         $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
         $stmt1->execute();
 
-        echo json_encode(array("status" => 1, "message" => "Employee Successfully Added & Added to Activity Log!"));
+        echo json_encode(array("status" => 1, "message" => "Employee Successfully Updated & Added to Activity Log!"));
     } else {
-        echo json_encode(array("status" => 0, "message" => "Failed to add Employee"));
+        echo json_encode(array("status" => 0, "message" => "Failed to update Employee"));
     }
 } catch (PDOException $e) {
     error_log("Error: " . $e->getMessage());

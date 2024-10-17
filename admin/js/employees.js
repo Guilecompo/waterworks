@@ -545,12 +545,12 @@ const submit_edit_employee = (event, user_id) => {
       console.log("Responses status : ", response.data.status);
 
       if (response.data.status === 1) {
-        success_update_modal();
+        success_modal();
         console.log("success update");
-        window.location.reload();
+        displayClerkEmployee();
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
-        failed_update_modal();
+        failed_modal();
         console.log(response.data);
       } else {
         // alert("Unknown error occurred.");
@@ -560,6 +560,7 @@ const submit_edit_employee = (event, user_id) => {
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
+      console.log('error is: ', error);
     });
 };
 //------------------------------------------------------------------------------
@@ -645,162 +646,151 @@ const add_employee = () => {
 
 const submit_employee = (event) => {
   event.preventDefault();
-    const firstname = document.getElementById("firstname").value;
-    const middlename = document.getElementById("middlename").value;
-    const lastname = document.getElementById("lastname").value;
-    const suffixId = document.getElementById("suffix").value;
-    const phone = document.getElementById("phone").value;
+  const firstname = document.getElementById("firstname").value;
+  const middlename = document.getElementById("middlename").value;
+  const lastname = document.getElementById("lastname").value;
+  const suffixId = document.getElementById("suffix").value;
+  const phone = document.getElementById("phone").value;
 
-    const provinceName = document.getElementById("provinceName").value;
-    const municipalityName = document.getElementById("municipalityName").value;
-    const barangayName = document.getElementById("barangayName").value;
+  const provinceName = document.getElementById("provinceName").value;
+  const municipalityName = document.getElementById("municipalityName").value;
+  const barangayName = document.getElementById("barangayName").value;
 
-    const email_add = document.getElementById("email_add").value;
-    const branchId = document.getElementById("branch").value;
-    const positionId = document.getElementById("position").value;
-  
-    const inputs = [
-      { id: "firstname", element: document.getElementById("firstname") },
-      { id: "middlename", element: document.getElementById("middlename") },
-      { id: "lastname", element: document.getElementById("lastname") },
-      { id: "suffix", element: document.getElementById("suffix") },
-      { id: "phone", element: document.getElementById("phone") },
-      { id: "email_add", element: document.getElementById("email_add") },
-      { id: "provinceName", element: document.getElementById("provinceName") },
-      { id: "municipalityName", element: document.getElementById("municipalityName") },
-      { id: "barangayName", element: document.getElementById("barangayName") },
-      { id: "branch", element: document.getElementById("branch") },
-      { id: "position", element: document.getElementById("position") }
+  const email_add = document.getElementById("email_add").value;
+  const branchId = document.getElementById("branch").value;
+  const positionId = document.getElementById("position").value;
+
+  const inputs = [
+    { id: "firstname", element: document.getElementById("firstname") },
+    { id: "middlename", element: document.getElementById("middlename") },
+    { id: "lastname", element: document.getElementById("lastname") },
+    { id: "suffix", element: document.getElementById("suffix") },
+    { id: "phone", element: document.getElementById("phone") },
+    { id: "email_add", element: document.getElementById("email_add") },
+    { id: "provinceName", element: document.getElementById("provinceName") },
+    { id: "municipalityName", element: document.getElementById("municipalityName") },
+    { id: "barangayName", element: document.getElementById("barangayName") },
+    { id: "branch", element: document.getElementById("branch") },
+    { id: "position", element: document.getElementById("position") }
   ];
-  
+
   console.log(inputs); // Log the inputs array
-  
+
   // Check validity of each input
   inputs.forEach(input => {
-      if (!input.element.validity.valid) {
-          input.element.classList.add('invalid');
-      } else {
-          input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
-      }
+    if (!input.element.validity.valid) {
+      input.element.classList.add('invalid');
+    } else {
+      input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+    }
   });
-  
+
   // If any input is invalid, prevent form submission
   if (document.querySelector('.invalid')) {
-      alert('Fill in all fields correctly');
-      return;
+    alert('Fill in all fields correctly');
+    return;
   }
-  
-  
-    const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php";
-    const formData = new FormData();
-    formData.append("firstname", firstname);
-    formData.append("middlename", middlename);
-    formData.append("lastname", lastname);
-    formData.append("phone", phone);
-    formData.append("email_add", email_add);
-    formData.append("provinceNames", provinceName);
-    formData.append("municipalityNames", municipalityName);
-    formData.append("barangayNames", barangayName);
-    formData.append("suffixId", suffixId);
-    formData.append("branchId", branchId);
-    formData.append("positionId", positionId);
-    formData.append("employee_Id", sessionStorage.getItem("accountId"));
-  
-    axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-    })
-      .then((response) => {
+
+  const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php";
+  const formData = new FormData();
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("phone", phone);
+  formData.append("email_add", email_add);
+  formData.append("provinceNames", provinceName);
+  formData.append("municipalityNames", municipalityName);
+  formData.append("barangayNames", barangayName);
+  formData.append("suffixId", suffixId);
+  formData.append("branchId", branchId);
+  formData.append("positionId", positionId);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.data.status === 1) {
+        success_modals(); // Call the success modal
+        displayClerkEmployee();
+      } else if (response.data.status === 0) {
+        failed_modals(); // Call the failed modal
+      } else {
+        error_modals(); // Call the error modal
         console.log(response);
-        if (response.data.status === 1) {
-          success_modal();
-          // window.location.reload();
-          clearForm();
-          // window.location.href = "./addemployee.html";
-        } else if (response.data.status === 0) {
-          // alert("Username or phone number already exists!");
-          failed_modal();
-        } else {
-          // alert("Unknown error occurred.");
-          error_modal();
-          console.log(response);
-        }
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-      });
-  };
-
-// ------------------------------------------------------------------------------
-const showPaginationNumbers = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-
-  const pagesToShow = 5; // Number of pages to display
-
-  // Calculate start and end page numbers to display
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-
-  // Adjust start and end page numbers if they are at the edges
-  if (endPage - startPage + 1 < pagesToShow) {
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-
-  // Generate page numbers
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-    }
-  }
-
-  // Next button
-  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log('error is: ', error);
+    });
 };
-
-const goToPage = (pageNumber) => {
-  showActivityPage(pageNumber);
-};
-
-
-//-----------------------------------------------------------------------------
-
-const success_update_modal = () => {
-  const modal = document.getElementById("myModal");
-  const modalContent = document.getElementById("modalContent");
+const success_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
   var html = `
-      <h5 class="modal-title " style="color: limegreen; text-align:center;">Successfully</h5>
+      <h5 class="modal-title" style="color: limegreen; text-align:center;">Successfully added employee!</h5>
   `;
   modalContent.innerHTML = html;
   modal.style.display = "block";
 };
 
-const failed_update_modal = () => {
-  const modal = document.getElementById("myModal");
-  const modalContent = document.getElementById("modalContent");
+const failed_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
   var html = `
-  <h5 class="modal-title " style="color: red; text-align:center;">Duplicate !</h5>
-`;
+  <h5 class="modal-title" style="color: red; text-align:center;">Duplicate entry detected!</h5>
+  `;
   modalContent.innerHTML = html;
   modal.style.display = "block";
 };
+
+const error_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
+  var html = `
+      <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
+//-----------------------------------------------------------------------------
+// Modal Functions
+
+const success_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
+      <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
+const failed_modal = () => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+  var html = `
+  <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
 const error_modal = () => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
   var html = `
-      <h5 class="modal-title " style="color: red; text-align:center;">Unknown error occurred !</h5>
+      <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
   `;
   modalContent.innerHTML = html;
   modal.style.display = "block";
 };
+
 const closeModal = () => {
   const modal = document.getElementById("myModal");
   modal.style.display = "none";
