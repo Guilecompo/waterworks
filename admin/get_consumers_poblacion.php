@@ -6,6 +6,7 @@ include 'connection.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        $selectedBranch = $_POST['selectedBranch']; 
         $stmt = $conn->prepare("SELECT 
             a.user_id,a.meter_no,
             a.firstname, a.middlename,
@@ -24,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INNER JOIN position g ON a.positionId = g.position_id
         INNER JOIN branch h ON a.branchId = h.branch_id 
         INNER JOIN user_status i ON a.statusId = i.status_id
-        WHERE i.user_status NOT IN ('in-active') AND h.branch_name = 'Poblacion'
+        WHERE i.user_status NOT IN ('in-active') AND h.branch_name = :selectedBranch
           ");
+        $stmt->bindParam(":selectedBranch", $selectedBranch);
         $stmt->execute();
     
         $results = $stmt->fetchAll();

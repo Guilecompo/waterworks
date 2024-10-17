@@ -21,9 +21,9 @@ const displayConsumer = () => {
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
   head.style.display = "block";
-  paginationNumbers.style.display = "block";
-  branchSelect.style.display = "block";
-  searchInput.style.display = "block";
+  // paginationNumbers.style.display = "block";
+  // branchSelect.style.display = "block";
+  // searchInput.style.display = "block";
 
   var url = "http://152.42.243.189/waterworks/admin/get_consumers.php";
   const formData = new FormData();
@@ -39,8 +39,7 @@ const displayConsumer = () => {
       if (!Array.isArray(consumers) || consumers.length === 0) {
         errorTable();
       } else {
-        sortConsumersByName();
-        showConsumerPage(currentPage);
+        consumerRefreshTables(consumers);
       }
     })
     .catch((error) => {
@@ -48,101 +47,43 @@ const displayConsumer = () => {
     });
 };
 
-const sortConsumersByName = () => {
-  consumers.sort((a, b) => {
-    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
-    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
-    return nameA.localeCompare(nameB);
-  });
-};
-const filterConsumer = () => {
-  const searchInput = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
-  const filteredConsumers = consumers.filter((consumer) => {
-    const fullName = (
-      consumer.firstname +
-      " " +
-      consumer.lastname +
-      " " +
-      consumer.meter_no
-    ).toLowerCase();
-    return fullName.includes(searchInput);
-  });
-  showFilteredConsumers(filteredConsumers);
-};
-
-const showFilteredConsumers = (filteredConsumers) => {
-  currentPage = 1;
-  showConsumerPage(currentPage, filteredConsumers);
-};
-const showNextPage = () => {
-  const nextPage = currentPage + 1;
-  const start = (nextPage - 1) * 10;
-  const end = start + 10;
-  const activitiesOnNextPage = consumers.slice(start, end);
-
-  if (activitiesOnNextPage.length > 0) {
-    currentPage++;
-    showConsumerPage(currentPage);
-  } else {
-    alert("Next page is empty or has no content.");
-    // Optionally, you can choose to disable the button here
-    // For example, if you have a button element with id "nextButton":
-    // document.getElementById("nextButton").disabled = true;
-  }
-};
-
-const showPreviousPage = () => {
-  if (currentPage > 1) {
-    currentPage--;
-    showConsumerPage(currentPage);
-  } else {
-    alert("You are on the first page.");
-  }
-};
-const showConsumerPage = (page, consumersToDisplay = consumers) => {
-  var start = (page - 1) * 10;
-  var end = start + 10;
-  var displayedConsumers = consumersToDisplay.slice(start, end);
-  refreshTables(displayedConsumers);
-  showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
-};
-
 const errorTable = () => {
   var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-                <th scope="col">Full Name</th>
-                <th scope="col">Meter No</th>
-                <th scope="col">Action</th>
+                <th class="text-center">Meter No</th>
+                <th class="text-center">Full Name</th>
+                <th class="text-center">Branch</th>
+                <th class="text-center">Action</th>
             </tr>
           </thead>
           </table>`;
 
   document.getElementById("mainDiv").innerHTML = html;
 };
-const refreshTables = (consumerList) => {
+const consumerRefreshTables = (consumers) => {
   var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Meter No</th>
-              <th scope="col">Action</th>
+              <th class="text-center">Meter No</th>
+              <th class="text-center">Full Name</th>
+              <th class="text-center">Branch</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
         `;
-  consumerList.forEach((consumer) => {
+    consumers.forEach((consumer) => {
     html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname} </td>
-              <td>${consumer.meter_no}</td>
-              <td class="tabe-th">
-                <button   onclick="edit(${consumer.user_id})">Edit</button>
-                  <button class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <td class="text-center">${consumer.meter_no}</td>
+              <td class="text-center">${consumer.firstname} ${consumer.lastname} </td>
+              <td class="text-center">${consumer.branch_name}</td>
+              <td class="text-center">
+                <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
+                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <span >View</span>
                   </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -151,7 +92,7 @@ const refreshTables = (consumerList) => {
                         <li><a class="dropdown-item" onclick="billingHis(${consumer.user_id})">Billing History</a></li>
                         <li><a class="dropdown-item" onclick="paymentHis(${consumer.user_id})">Payment History</a></li>
                     </ul>
-                  <button class="dropdown dropdown-toggle" type="button" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
                     <span >More</span>
                   </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
@@ -165,6 +106,9 @@ const refreshTables = (consumerList) => {
   });
   html += `</tbody></table>`;
   document.getElementById("mainDiv").innerHTML = html;
+  $('#example').DataTable({
+    "ordering": false // Disable sorting for all columns
+  });
 };
 
 const showPaginationNumbersReader = (currentPage, totalPages) => {
@@ -224,11 +168,8 @@ const getFileterBranch = () => {
       // Event listener for position change
       branchSelect.addEventListener("change", () => {
         const selectedBranch = branchSelect.value;
-        // Call the appropriate display function based on the selected position
-        if (selectedBranch === "Poblacion") {
-          displayConsumerPoblacion();
-        } else if (selectedBranch === "Molugan") {
-          displayConsumerMulogan();
+        if (selectedBranch !== "employee") {
+          displayConsumerBranch(selectedBranch);
         } else {
           displayConsumer();
         }
@@ -240,10 +181,11 @@ const getFileterBranch = () => {
     });
 };
 // ----------------------------------FILTER POBLACION------------------------------------------------
-const displayConsumerPoblacion = () => {
+const displayConsumerBranch = (selectedBranch) => {
   var url = "http://152.42.243.189/waterworks/admin/get_consumers_poblacion.php";
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
+  formData.append("selectedBranch", selectedBranch);
   axios({
     url: url,
     method: "post",
@@ -252,93 +194,59 @@ const displayConsumerPoblacion = () => {
     .then((response) => {
       console.log(response.data);
       consumers = response.data;
-      sortConsumersPoblacionByName();
-      showConsumerPoblacionPage(currentPage);
+      branchRefreshTables(consumers);
     })
     .catch((error) => {
       alert("ERROR! - " + error);
     });
 };
-
-const sortConsumersPoblacionByName = () => {
-  consumers.sort((a, b) => {
-    const nameA = (a.firstname + " " + a.lastname).toUpperCase();
-    const nameB = (b.firstname + " " + b.lastname).toUpperCase();
-    return nameA.localeCompare(nameB);
-  });
-};
-
-const showConsumerPoblacionPage = (page, consumersToDisplay = consumers) => {
-  var start = (page - 1) * 10;
-  var end = start + 10;
-  var displayedConsumers = consumersToDisplay.slice(start, end);
-  PoblacionrefreshTables(displayedConsumers);
-  showPaginationNumbersPoblacion(page, Math.ceil(consumersToDisplay.length / 10));
-};
-const showPaginationNumbersPoblacion = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-
-  const pagesToShow = 5; // Number of pages to display
-
-  // Calculate start and end page numbers to display
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-
-  // Adjust start and end page numbers if they are at the edges
-  if (endPage - startPage + 1 < pagesToShow) {
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-
-  // Generate page numbers
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPagePoblacion(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPagePoblacion(${i})">${i}</span>`;
-    }
-  }
-
-  // Next button
-  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-};
-
-const goToPagePoblacion = (pageNumber) => {
-  showConsumerPoblacionPage(pageNumber);
-};
-
-const PoblacionrefreshTables = (consumerList) => {
+const branchRefreshTables = (consumers) => {
   var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Meter No</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
+              <th class="text-center">Meter No</th>
+              <th class="text-center">Full Name</th>
+              <th class="text-center">Branch</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
         `;
-  consumerList.forEach((consumer) => {
+    consumers.forEach((consumer) => {
     html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname}</td>
-              <td>${consumer.meter_no}</td>
-              <td>${consumer.branch_name}</td>
-              <td>
-              <button class="clear" onclick="edit(${consumer.user_id})">Edit</button>
+              <td class="text-center">${consumer.meter_no}</td>
+              <td class="text-center">${consumer.firstname} ${consumer.lastname}</td>
+              <td class="text-center">${consumer.branch_name}</td>
+              <td class="text-center">
+                <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
+                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span >View</span>
+                  </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" onclick="information(${consumer.user_id})">Information</a></li>
+                        <li><a class="dropdown-item" onclick="newBill(${consumer.user_id})">New Bill</a></li>
+                        <li><a class="dropdown-item" onclick="billingHis(${consumer.user_id})">Billing History</a></li>
+                        <li><a class="dropdown-item" onclick="paymentHis(${consumer.user_id})">Payment History</a></li>
+                    </ul>
+                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span >More</span>
+                  </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                        <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
+                        <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
+                        <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
+                    </ul>
               </td>
             </tr>
             `;
   });
   html += `</tbody></table>`;
   document.getElementById("mainDiv").innerHTML = html;
+  $('#example').DataTable({
+    "ordering": false // Disable sorting for all columns
+  });
 };
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
@@ -729,7 +637,7 @@ const goToPageMolugan = (pageNumber) => {
 };
 const MuloganrefreshTables = (consumerList) => {
   var html = `
-      <table class="table">
+      <table  id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
             <th scope="col">Full Name</th>

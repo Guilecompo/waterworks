@@ -216,10 +216,10 @@ const ClerkErrorTable = () => {
     <table id="example" class="table table-striped table-bordered" style="width:100%">
       <thead>
         <tr>
-          <th scope="col">Full Name</th>
-          <th scope="col">Position</th>
-          <th scope="col">Branch</th>
-          <th scope="col">Action</th>
+          <th class="text-center">Full Name</th>
+          <th class="text-center">Position</th>
+          <th class="text-center">Branch</th>
+          <th class="text-center">Action</th>
         </tr>
       </thead>
     </table>`;
