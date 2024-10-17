@@ -227,6 +227,7 @@
               </div>
             </div>
           </div>
+          <!-- NOTE: MODAL FOR ADD AND EDIT -->
           <div class="modal" tabindex="-1" id="myModals">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -253,26 +254,35 @@
                     <div class="row">
                       <!-- INFO: FOR ADD EMPLOYEE -->
                       <div class="col">
-                        <button type="button" class="btn btn-primary">
-                          <i class="fas fa-user-plus"></i> Add Employee
+                        <button type="button" class="btn btn-primary" onclick="add_employee()">
+                            <i class="fas fa-user-plus"></i> Add Employee
                         </button>
-                      </div>                      
+                      </div>                                      
                       <!-- INFO: FOR POSITION -->
-                      <div class="col-md-3"">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <select class="form-select" id="position" aria-label="Select Position">
                             <option selected>Select position</option>
                           </select>
                         </div>
                       </div>
+                      
                       <!-- INFO: FOR BRANCH -->
-                      <div class="col-md-3"">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <select class="form-select" id="branch" aria-label="Select Branch">
                             <option selected>Select branch</option>
                           </select>
                         </div>                        
                       </div>
+                      
+                      <!-- Refresh Icon Below -->
+                      <div class="col-md-1">
+                        <button class="btn btn-outline-secondary" id="refreshButton" onclick="refreshFilters()">
+                          <i class="fas fa-sync-alt"></i>
+                        </button>
+                      </div>
+                      
                     </div>
                   </div>
                   <div class="mains" id="mainDiv"></div>
