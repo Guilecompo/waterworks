@@ -10,6 +10,7 @@ include '../connection.php';
 error_log(print_r($_POST, true)); 
 
 $date_added = date("Y-m-d");
+$user_id = htmlspecialchars($_POST['user_id'], ENT_QUOTES, 'UTF-8');
 $employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
 // Sanitize and assign POST data to variables
@@ -46,7 +47,7 @@ try {
             statusId = :statusId, 
             login_statusId = :login_statusId, 
             date_added = :date_added 
-            WHERE employee_Id = :employee_Id";
+            WHERE user_id = :user_id";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
@@ -64,7 +65,7 @@ try {
     $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
     $stmt->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
     $stmt->bindParam(":date_added", $date_added);
-    $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+    $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
         // Log the update activity
