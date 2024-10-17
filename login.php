@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 INNER JOIN user_status i ON a.statusId = i.status_id
                 INNER JOIN address_zone j ON h.locationId = j.zone_id
 
-            WHERE a.email = ? AND a.password = ? AND g.position_name = ?");
+            WHERE a.username = ? AND a.password = ? AND g.position_name = ?");
             // Assuming you are using plain text passwords (not recommended)
             $stmt->execute([$username, md5($password), $position]);
 
