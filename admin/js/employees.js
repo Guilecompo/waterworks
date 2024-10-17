@@ -14,7 +14,7 @@ const onLoad = () => {
 };
 const getFilterPosition = () => {
   const positionSelect = document.getElementById("position");
-  var myUrl = "http://152.42.243.189/waterworks/admin/get_position.php";
+  var myUrl = "http://152.42.243.189/waterworks/admin/get_positions.php";
 
   axios({
     url: myUrl,
