@@ -152,8 +152,8 @@ const displayClerkEmployeeByBranchAndPosition = (branch, position) => {
 
   const formData = new FormData();
   formData.append("accountId", sessionStorage.getItem("accountId"));
-  formData.append("branch", branch);
-  formData.append("position", position);
+  formData.append("branchId", branch);
+  formData.append("selectedPosition", position);
 
   axios({
     url: url,
