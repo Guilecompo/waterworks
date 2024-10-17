@@ -713,13 +713,13 @@ const submit_employee = () => {
       .then((response) => {
         console.log(response);
         if (response.data.status === 1) {
-          success_modal();
+          success_update_modal();
           // window.location.reload();
           clearForm();
           // window.location.href = "./addemployee.html";
         } else if (response.data.status === 0) {
           // alert("Username or phone number already exists!");
-          failed_modal();
+          failed_update_modal();
         } else {
           // alert("Unknown error occurred.");
           error_modal();
@@ -730,45 +730,6 @@ const submit_employee = () => {
         alert(`ERROR OCCURRED! ${error}`);
       });
   };
-
-// ------------------------------------------------------------------------------
-const showPaginationNumbers = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-
-  const pagesToShow = 5; // Number of pages to display
-
-  // Calculate start and end page numbers to display
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-
-  // Adjust start and end page numbers if they are at the edges
-  if (endPage - startPage + 1 < pagesToShow) {
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-
-  // Generate page numbers
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPage(${i})">${i}</span>`;
-    }
-  }
-
-  // Next button
-  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-};
-
-const goToPage = (pageNumber) => {
-  showActivityPage(pageNumber);
-};
-
 
 //-----------------------------------------------------------------------------
 
@@ -872,3 +833,6 @@ const getPosition = () => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
+
+
+
