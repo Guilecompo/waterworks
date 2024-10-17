@@ -8,9 +8,10 @@ header("Access-Control-Allow-Origin: *");
 // 1. Establish connection to the database
 include 'connection.php';
 
+// Sanitize and fetch POST data
 $status = '1';
-$branch = htmlspecialchars($_POST['branch'], ENT_QUOTES, 'UTF-8');
-$suffixId = htmlspecialchars($_POST['suffix'], ENT_QUOTES, 'UTF-8');
+$branch = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
+$suffixId = htmlspecialchars($_POST['suffixId'], ENT_QUOTES, 'UTF-8');
 $phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
 $email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
 $date_added = date("Y-m-d");
@@ -28,9 +29,11 @@ try {
     $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
     
     if ($result['count'] > 0) {
+        // Username or phone number already exists, don't insert the data
         echo json_encode(['status' => 0, 'message' => 'Duplicate username or phone number']);
     } else {
-        $password = password_hash('waterworks', PASSWORD_DEFAULT); // Hashing password
+        // 3. Define SQL statement for insertion
+        $password = md5('waterworks');
 
         // Sanitize other POST values
         $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
@@ -41,8 +44,8 @@ try {
         $barangayNames = htmlspecialchars($_POST['barangayNames'], ENT_QUOTES, 'UTF-8');
         $positionId = htmlspecialchars($_POST['positionId'], ENT_QUOTES, 'UTF-8');
 
-        $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) 
-                VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
+        $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
+        $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
@@ -64,13 +67,15 @@ try {
         $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
 
         // Execute the prepared statement
+        $returnValue = 0;
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
+            $returnValue = 1;
             $activity_type = "Add";
             $table_name = "Employee";
-            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) 
-                     VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
 
             $stmt1 = $conn->prepare($sql1);
             $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
@@ -79,7 +84,7 @@ try {
             $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
             $stmt1->execute();
 
-            echo json_encode(array("status" => 1, "message" => "Employee Successfully Added & Added to Activity Log!"));
+            echo json_encode(array("status" => $returnValue, "message" => "Employee Successfully Added & Added to Activity Log!"));
         } else {
             echo json_encode(array("status" => 0, "message" => "Failed to add Employee"));
         }
