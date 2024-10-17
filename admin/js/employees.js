@@ -644,21 +644,21 @@ const add_employee = () => {
 };
 
 const submit_employee = () => {
-    const firstname = document.getElementById("firstname").value;
-    const middlename = document.getElementById("middlename").value;
-    const lastname = document.getElementById("lastname").value;
-    const suffixId = document.getElementById("suffix").value;
-    const phone = document.getElementById("phone").value;
+  const firstname = document.getElementById("firstname").value;
+  const middlename = document.getElementById("middlename").value;
+  const lastname = document.getElementById("lastname").value;
+  const suffixId = document.getElementById("suffix").value;
+  const phone = document.getElementById("phone").value;
 
-    const provinceName = document.getElementById("provinceName").value;
-    const municipalityName = document.getElementById("municipalityName").value;
-    const barangayName = document.getElementById("barangayName").value;
+  const provinceName = document.getElementById("provinceName").value;
+  const municipalityName = document.getElementById("municipalityName").value;
+  const barangayName = document.getElementById("barangayName").value;
 
-    const email_add = document.getElementById("email_add").value;
-    const branchId = document.getElementById("branch").value;
-    const positionId = document.getElementById("position").value;
-  
-    const inputs = [
+  const email_add = document.getElementById("email_add").value;
+  const branchId = document.getElementById("branch").value;
+  const positionId = document.getElementById("position").value;
+
+  const inputs = [
       { id: "firstname", element: document.getElementById("firstname") },
       { id: "middlename", element: document.getElementById("middlename") },
       { id: "lastname", element: document.getElementById("lastname") },
@@ -671,9 +671,9 @@ const submit_employee = () => {
       { id: "branch", element: document.getElementById("branch") },
       { id: "position", element: document.getElementById("position") }
   ];
-  
+
   console.log(inputs); // Log the inputs array
-  
+
   // Check validity of each input
   inputs.forEach(input => {
       if (!input.element.validity.valid) {
@@ -682,33 +682,35 @@ const submit_employee = () => {
           input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
       }
   });
-  
+
   // If any input is invalid, prevent form submission
   if (document.querySelector('.invalid')) {
       alert('Fill in all fields correctly');
       return;
   }
-  
-  
-    const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php";
-    const formData = new FormData();
-    formData.append("firstname", firstname);
-    formData.append("middlename", middlename);
-    formData.append("lastname", lastname);
-    formData.append("phone", phone);
-    formData.append("email_add", email_add);
-    formData.append("provinceNames", provinceName);
-    formData.append("municipalityNames", municipalityName);
-    formData.append("barangayNames", barangayName);
-    formData.append("suffixId", suffixId);
-    formData.append("branchId", branchId);
-    formData.append("positionId", positionId);
-    formData.append("employee_Id", sessionStorage.getItem("accountId"));
-  
-    axios({
+
+  const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php";
+  const formData = new FormData();
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("phone", phone);
+  formData.append("email_add", email_add);
+  formData.append("provinceNames", provinceName);
+  formData.append("municipalityNames", municipalityName);
+  formData.append("barangayNames", barangayName);
+  formData.append("suffixId", suffixId);
+  formData.append("branchId", branchId);
+  formData.append("positionId", positionId);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
+
+  axios({
       url: myUrl,
       method: "post",
       data: formData,
+      headers: {
+          'Content-Type': 'multipart/form-data' // Ensures the right content type is sent
+      }
   })
   .then((response) => {
       console.log(response);
@@ -726,7 +728,22 @@ const submit_employee = () => {
       alert(`ERROR OCCURRED! ${error}`);
       error_modal(); // Show error modal on catch
   });
-  };
+};
+
+// Function to clear the form fields after successful submission
+const clearForm = () => {
+  document.getElementById("firstname").value = '';
+  document.getElementById("middlename").value = '';
+  document.getElementById("lastname").value = '';
+  document.getElementById("suffix").value = '';
+  document.getElementById("phone").value = '';
+  document.getElementById("email_add").value = '';
+  document.getElementById("provinceName").value = '';
+  document.getElementById("municipalityName").value = '';
+  document.getElementById("barangayName").value = '';
+  document.getElementById("branch").value = '';
+  document.getElementById("position").value = '';
+};
 
 
 //-----------------------------------------------------------------------------
