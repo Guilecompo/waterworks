@@ -565,127 +565,168 @@ const submit_edit_employee = (event, user_id) => {
 //------------------------------------------------------------------------------
 const add_employee = () => {
   const html = `
-    <div class="container-fluid mt-3">
-          <form class="row g-3" id="employeeForm">
-              <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">First Name</label>
-                  <input type="text" class="form-control" id="firstname" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Middle Name</label>
-                  <input type="text" class="form-control" id="middlename" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Last Name</label>
-                  <input type="text" class="form-control" id="lastname" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Suffix</label>
-                  <select id="suffix" class="form-select">
-                      <option value="" disabled selected>Select Suffix</option>
-                      <option value="Jr.">Jr.</option>
-                      <option value="Sr.">Sr.</option>
-                      <option value="III">III</option>
-                      <!-- Add more suffix options as needed -->
-                  </select>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Phone</label>
-                  <input type="text" class="form-control" id="phone" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email_add" required>
-              </div>
-              <label class="form-label mt-3 mb-0 underline-label">Address</label>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Province</label>
-                  <input type="text" class="form-control" id="provinceName" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Municipality</label>
-                  <input type="text" class="form-control" id="municipalityName" required>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Barangay</label>
-                  <input type="text" class="form-control" id="barangayName" required>
-              </div>
-              <label class="form-label mb-0 underline-label mt-3">Workspace</label>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Branch</label>
-                  <select id="branch" class="form-select">
-                      <option value="" disabled selected>Select Branch</option>
-                      <option value="Branch1">Branch 1</option>
-                      <option value="Branch2">Branch 2</option>
-                      <!-- Add more branch options as needed -->
-                  </select>
-              </div>
-              <div class="col-md-6 mt-2">
-                  <label class="form-label">Position</label>
-                  <select id="position" class="form-select">
-                      <option value="" disabled selected>Select Position</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Staff">Staff</option>
-                      <!-- Add more position options as needed -->
-                  </select>
-              </div>
-              <div class="col-12 mt-3">
-                  <button type="submit" class="btn btn-primary" onclick="submit_employee(event)">Add Employee</button>
-              </div>
-          </form>
-    </div>
+      <div class="container-fluid mt-3">
+            <form class="row g-3" id="employeeForm">
+                <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstname" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Middle Name</label>
+                    <input type="text" class="form-control" id="middlename" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Suffix</label>
+                    <select id="suffix" class="form-select">
+                        <option value="" disabled selected>Select Suffix</option>
+                        <!-- You can add suffix options here -->
+                    </select>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email_add" required>
+                </div>
+                <label class="form-label mt-3 mb-0 underline-label">Address</label>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Province</label>
+                    <input type="text" class="form-control" id="provinceName" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Municipality</label>
+                    <input type="text" class="form-control" id="municipalityName" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Barangay</label>
+                    <input type="text" class="form-control" id="barangayName" required>
+                </div>
+                <label class="form-label mb-0 underline-label mt-3">Workspace</label>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Branch</label>
+                    <select id="branch" class="form-select">
+                        <option value="" disabled selected>Select Branch</option>
+                        <!-- You can add branch options here -->
+                    </select>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="form-label">Position</label>
+                    <select id="position" class="form-select">
+                        <option value="" disabled selected>Select Position</option>
+                        <!-- You can add position options here -->
+                    </select>
+                </div>                     
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary w-100" onclick="submit_employee()">Submit</button>
+                </div>
+            </form>
+        </div>
   `;
+  
+  // Insert the HTML into the modal body
+  document.getElementById("modalContents").innerHTML = html;
 
-  // Function to open modal and display HTML
-  openModal(html); // Replace with your modal open function
+  // Show the modal
+  const myModal = new bootstrap.Modal(document.getElementById('myModals'));
+  myModal.show();
+
+  // Populate the dropdowns
+  getSuffix();
+  getBranch();
+  getPosition();
 };
 
-const submit_employee = (event) => {
-  event.preventDefault();
+const submit_employee = () => {
+    const firstname = document.getElementById("firstname").value;
+    const middlename = document.getElementById("middlename").value;
+    const lastname = document.getElementById("lastname").value;
+    const suffixId = document.getElementById("suffix").value;
+    const phone = document.getElementById("phone").value;
 
-  const firstname = document.getElementById("firstname").value;
-  const middlename = document.getElementById("middlename").value;
-  const lastname = document.getElementById("lastname").value;
-  const suffixId = document.getElementById("suffix").value;
-  const phone = document.getElementById("phone").value;
-  const provinceName = document.getElementById("provinceName").value;
-  const municipalityName = document.getElementById("municipalityName").value;
-  const barangayName = document.getElementById("barangayName").value;
-  const email_add = document.getElementById("email_add").value;
-  const branchId = document.getElementById("branch").value;
-  const positionId = document.getElementById("position").value;
+    const provinceName = document.getElementById("provinceName").value;
+    const municipalityName = document.getElementById("municipalityName").value;
+    const barangayName = document.getElementById("barangayName").value;
 
-  const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php"; // Ensure this URL is correct
-  const formData = new FormData();
-  formData.append("firstname", firstname);
-  formData.append("middlename", middlename);
-  formData.append("lastname", lastname);
-  formData.append("phone", phone);
-  formData.append("email_add", email_add);
-  formData.append("provinceNames", provinceName);
-  formData.append("municipalityNames", municipalityName);
-  formData.append("barangayNames", barangayName);
-  formData.append("suffixId", suffixId);
-  formData.append("branchId", branchId);
-  formData.append("positionId", positionId);
-  formData.append("employee_Id", sessionStorage.getItem("accountId")); // Ensure this is set
-
-  axios.post(myUrl, formData)
-    .then((response) => {
+    const email_add = document.getElementById("email_add").value;
+    const branchId = document.getElementById("branch").value;
+    const positionId = document.getElementById("position").value;
+  
+    const inputs = [
+      { id: "firstname", element: document.getElementById("firstname") },
+      { id: "middlename", element: document.getElementById("middlename") },
+      { id: "lastname", element: document.getElementById("lastname") },
+      { id: "suffix", element: document.getElementById("suffix") },
+      { id: "phone", element: document.getElementById("phone") },
+      { id: "email_add", element: document.getElementById("email_add") },
+      { id: "provinceName", element: document.getElementById("provinceName") },
+      { id: "municipalityName", element: document.getElementById("municipalityName") },
+      { id: "barangayName", element: document.getElementById("barangayName") },
+      { id: "branch", element: document.getElementById("branch") },
+      { id: "position", element: document.getElementById("position") }
+  ];
+  
+  console.log(inputs); // Log the inputs array
+  
+  // Check validity of each input
+  inputs.forEach(input => {
+      if (!input.element.validity.valid) {
+          input.element.classList.add('invalid');
+      } else {
+          input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+      }
+  });
+  
+  // If any input is invalid, prevent form submission
+  if (document.querySelector('.invalid')) {
+      alert('Fill in all fields correctly');
+      return;
+  }
+  
+  
+    const myUrl = "http://152.42.243.189/waterworks/admin/add_employees.php";
+    const formData = new FormData();
+    formData.append("firstname", firstname);
+    formData.append("middlename", middlename);
+    formData.append("lastname", lastname);
+    formData.append("phone", phone);
+    formData.append("email_add", email_add);
+    formData.append("provinceNames", provinceName);
+    formData.append("municipalityNames", municipalityName);
+    formData.append("barangayNames", barangayName);
+    formData.append("suffixId", suffixId);
+    formData.append("branchId", branchId);
+    formData.append("positionId", positionId);
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+  })
+  .then((response) => {
       console.log(response);
       if (response.data.status === 1) {
-        success_update_modal(); // Implement this function to show success
+          success_update_modal(); // Call success modal
+          clearForm(); // Clear the form after successful submission
       } else if (response.data.status === 0) {
-        failed_update_modal(); // Implement this function to show failure
+          failed_update_modal(); // Call failed modal for duplicates
       } else {
-        error_modal(); // Implement this function to show unknown error
+          error_modal(); // Call error modal for unknown errors
+          console.log(response);
       }
-    })
-    .catch((error) => {
+  })
+  .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
-    });
-};
+      error_modal(); // Show error modal on catch
+  });
+  };
 
 
 //-----------------------------------------------------------------------------
@@ -790,6 +831,3 @@ const getPosition = () => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
-
-
-
