@@ -1,95 +1,75 @@
 <?php
+// Include the database connection file
+require 'connection.php'; // Ensure this file sets up your database connection
+
+// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
+// Initialize response array
+$response = array("status" => 0); // Default response status
 
-// 1. Establish connection to the database
-include 'connection.php';
+// Check if the request method is POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve input data from the form
+    $firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+    $middlename = isset($_POST['middlename']) ? $_POST['middlename'] : '';
+    $lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
+    $suffixId = isset($_POST['suffixId']) ? $_POST['suffixId'] : '';
+    $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
+    $email_add = isset($_POST['email_add']) ? $_POST['email_add'] : '';
+    $provinceNames = isset($_POST['provinceNames']) ? $_POST['provinceNames'] : '';
+    $municipalityNames = isset($_POST['municipalityNames']) ? $_POST['municipalityNames'] : '';
+    $barangayNames = isset($_POST['barangayNames']) ? $_POST['barangayNames'] : '';
+    $branchId = isset($_POST['branchId']) ? $_POST['branchId'] : '';
+    $positionId = isset($_POST['positionId']) ? $_POST['positionId'] : '';
+    $employee_Id = isset($_POST['employee_Id']) ? $_POST['employee_Id'] : '';
 
-// Sanitize and fetch POST data
-$status = '1';
-$branch = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
-$suffixId = htmlspecialchars($_POST['suffixId'], ENT_QUOTES, 'UTF-8');
-$phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
-$email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
-$date_added = date("Y-m-d");
-$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
-$login_statusId = 2;
-$code = "";
+    // Check for duplicates based on phone or email
+    $duplicateCheckStmt = $conn->prepare("SELECT * FROM employees WHERE phone = :phone OR email = :email");
+    $duplicateCheckStmt->bindParam(':phone', $phone);
+    $duplicateCheckStmt->bindParam(':email', $email_add);
+    $duplicateCheckStmt->execute();
 
-try {
-    // Query to check for duplicate username or phone number
-    $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM user_employee WHERE phone_no = :phone_no OR email = :email_add";
-    $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
-    $checkDuplicateStmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
-    $checkDuplicateStmt->bindParam(":email_add", $email_add, PDO::PARAM_STR);
-    $checkDuplicateStmt->execute();
-    $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($result['count'] > 0) {
-        // Username or phone number already exists, don't insert the data
-        echo json_encode(['status' => 0, 'message' => 'Duplicate username or phone number']);
+    if ($duplicateCheckStmt->rowCount() > 0) {
+        // If a duplicate is found, return a status indicating this
+        $response["status"] = -1; // Duplicate status
     } else {
-        // 3. Define SQL statement for insertion
-        $password = md5('waterworks');
+        // Prepare the SQL statement to insert a new employee
+        $stmt = $conn->prepare("INSERT INTO employees (firstname, middlename, lastname, suffix, phone, email, province, municipality, barangay, branch, position, added_by) 
+                                 VALUES (:firstname, :middlename, :lastname, :suffix, :phone, :email, :province, :municipality, :barangay, :branch, :position, :added_by)");
 
-        // Sanitize other POST values
-        $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
-        $middlename = htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8');
-        $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
-        $provinceNames = htmlspecialchars($_POST['provinceNames'], ENT_QUOTES, 'UTF-8');
-        $municipalityNames = htmlspecialchars($_POST['municipalityNames'], ENT_QUOTES, 'UTF-8');
-        $barangayNames = htmlspecialchars($_POST['barangayNames'], ENT_QUOTES, 'UTF-8');
-        $positionId = htmlspecialchars($_POST['positionId'], ENT_QUOTES, 'UTF-8');
+        // Bind parameters to the prepared statement
+        $stmt->bindParam(':firstname', $firstname);
+        $stmt->bindParam(':middlename', $middlename);
+        $stmt->bindParam(':lastname', $lastname);
+        $stmt->bindParam(':suffix', $suffixId);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':email', $email_add);
+        $stmt->bindParam(':province', $provinceNames);
+        $stmt->bindParam(':municipality', $municipalityNames);
+        $stmt->bindParam(':barangay', $barangayNames);
+        $stmt->bindParam(':branch', $branchId);
+        $stmt->bindParam(':position', $positionId);
+        $stmt->bindParam(':added_by', $employee_Id);
 
-        $sql = "INSERT INTO user_employee(firstname, middlename, lastname, suffixId, phone_no, provinceName, municipalityName, barangayName, email, code, password, positionId, branchId, statusId, login_statusId, date_added, employee_Id) ";
-        $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :phone_no, :provinceNames, :municipalityNames, :barangayNames, :email_add, :code, :password, :positionId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id)";
+        // Execute the statement and check if it was successful
+        if ($stmt->execute()) {
+            // Log the activity
+            $logStmt = $conn->prepare("INSERT INTO activity_log (activity, employee_id, timestamp) VALUES (:activity, :employee_id, NOW())");
+            $activity = "Added new employee: $firstname $lastname";
+            $logStmt->bindParam(':activity', $activity);
+            $logStmt->bindParam(':employee_id', $employee_Id);
+            $logStmt->execute();
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
-        $stmt->bindParam(":middlename", $middlename, PDO::PARAM_STR);
-        $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
-        $stmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
-        $stmt->bindParam(":provinceNames", $provinceNames, PDO::PARAM_STR);
-        $stmt->bindParam(":municipalityNames", $municipalityNames, PDO::PARAM_STR);
-        $stmt->bindParam(":barangayNames", $barangayNames, PDO::PARAM_STR);
-        $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR); 
-        $stmt->bindParam(":code", $code, PDO::PARAM_STR);
-        $stmt->bindParam(":suffixId", $suffixId, PDO::PARAM_INT);
-        $stmt->bindParam(":password", $password, PDO::PARAM_STR);
-        $stmt->bindParam(":positionId", $positionId, PDO::PARAM_INT);
-        $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
-        $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
-        $stmt->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
-        $stmt->bindParam(":date_added", $date_added);
-        $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
-
-        // Execute the prepared statement
-        $returnValue = 0;
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            $returnValue = 1;
-            $activity_type = "Add";
-            $table_name = "Employee";
-            $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
-            $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
-
-            $stmt1 = $conn->prepare($sql1);
-            $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
-            $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
-            $stmt1->bindParam(":date_added", $date_added);
-            $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
-            $stmt1->execute();
-
-            echo json_encode(array("status" => $returnValue, "message" => "Employee Successfully Added & Added to Activity Log!"));
+            $response["status"] = 1; // Success status
         } else {
-            echo json_encode(array("status" => 0, "message" => "Failed to add Employee"));
+            $response["status"] = 0; // Failure status
         }
     }
-} catch (PDOException $e) {
-    echo json_encode(['status' => 0, 'message' => 'Database error: ' . $e->getMessage()]);
 }
+
+// Return the response in JSON format
+header('Content-Type: application/json');
+echo json_encode($response);
 ?>
