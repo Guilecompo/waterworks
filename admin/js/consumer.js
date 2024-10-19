@@ -10,9 +10,13 @@ const onLoad = () => {
     document.getElementById("ngalan").innerText =
     sessionStorage.getItem("fullname");
   displayConsumer();
-  getFileterBranch();
+  getFilterBranch();
   }
   
+};
+const refreshFilters = () => {
+  displayConsumer();
+  getFilterBranch();
 };
 
 const displayConsumer = () => {
@@ -111,44 +115,96 @@ const consumerRefreshTables = (consumers) => {
   });
 };
 
-const showPaginationNumbersReader = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
+const add_consumer = () => {
+  var html = `
+        <div class="mb-1 mt-3">
+            <h4 style="text-align: center;">Add Consumer</h4>
+        </div>
+        <div class="container-fluid mt-3">
+            <form class="row g-3">
+                <label class="form-label mb-0 underline-label">Personal Information</label>
+                <div class="col-md-4">
+                    <label class="form-label">First Name</label>
+                     <input type="text" class="form-control" id="firstname" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Middle Name</label>
+                    <input type="text" class="form-control" id="middlename" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Suffix</label>
+                    <select id="suffix" class="form-select"></select>
+                  </div>
+                <div class="col-md-4">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email_add" required>
+                </div>
 
-  const pagesToShow = 5; // Number of pages to display
+                <label class="form-label mb-0 underline-label">Address</label>
+                <div class="col-md-4 ">
+                    <label class="form-label">Municipality</label>
+                    <select id="municipality" class="form-select" onchange="getBarangay()" ></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Barangay</label>
+                    <select id="barangay" class="form-select" onchange="getZone()" required>
+                        <option value="">Select Barangay</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Zone</label>
+                    <select id="zone" class="form-select" required>
+                        <option value="">Select Zone</option>
+                    </select>
+                </div>
+                <label class="form-label mb-0 underline-label mt-4">Register Account</label>
+                <div class="col-md-4 ">
+                    <label class="form-label">Branch</label>
+                    <select id="branch" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Property Type</label>
+                    <select id="property" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Consumer Type</label>
+                    <select id="consumer" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Meter Number</label>
+                    <input type="text" class="form-control" id="meter_no" required>
+                </div>   
+                <div class="col-md-4">
+                    <label class="form-label">House Number</label>
+                    <input type="number" class="form-control" id="house_no" required>
+                </div>
+                <div class="col-12 mt-5">
+                    <button type="submit" class="btn btn-primary" onclick="submit_consumer(event)">Submit form</button>
+                </div>
+            </form>
+        </div>
+                          
+        `;
+        document.getElementById("modalContents").innerHTML = html;
 
-  // Calculate start and end page numbers to display
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-
-  // Adjust start and end page numbers if they are at the edges
-  if (endPage - startPage + 1 < pagesToShow) {
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-
-  // Generate page numbers
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
-    }
-  }
-
-  // Next button
-  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-};
-
-const goToPageConsumer = (pageNumber) => {
-  showConsumerPage(pageNumber);
-};
-
-const getFileterBranch = () => {
+        // Show the modal
+        const myModal = new bootstrap.Modal(document.getElementById('myModals'));
+        myModal.show();
+        getSuffix();
+        getBranchs();
+        getConsumerType();
+        getProperty();
+        getMunicipality();
+}
+const getFilterBranch = () => {
   const branchSelect = document.getElementById("branch");
   var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
 
@@ -540,7 +596,31 @@ const getProperty = () => {
       alert(`ERROR OCCURRED! ${error}`);
     });
 };
+const getBranchs = () => {
+  // const barangayId = document.getElementById("barangay").value;
+  const propertySelect = document.getElementById("branch");
+  var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
+  // const formData = new FormData();
+  // formData.append("barangayId", barangayId);
+  //   console.log(barangaySelect);
+  axios({
+    url: myUrl,
+    method: "post",
+    // data: formData
+  })
+    .then((response) => {
+      var properties = response.data;
 
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
 const getBranch = () => {
   const propertySelect = document.getElementById("edit_branch");
   var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
@@ -663,7 +743,49 @@ const MuloganrefreshTables = (consumerList) => {
   html += `</tbody></table>`;
   document.getElementById("mainDiv").innerHTML = html;
 };
+const getConsumerType = () => {
+  const propertySelect = document.getElementById("consumer");
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_consumertype.php";
 
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var properties = response.data;
+
+      var options = ``;
+      properties.forEach((property) => {
+        options += `<option value="${property.consumertype_id }">${property.consumertype}</option>`;
+      });
+      propertySelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const getPosition = () => {
+  const positionSelect = document.getElementById("position");
+  var myUrl = "http://152.42.243.189/waterworks/admin/get_position.php";
+  
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var positions = response.data;
+  
+      var options = ``;
+      positions.forEach((position) => {
+        options += `<option value="${position.position_id}">${position.position_name}</option>`;
+      });
+      positionSelect.innerHTML = options;
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+  };
 const getMunicipality = () => {
   const municipalitySelect = document.getElementById("municipality");
   var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
@@ -732,6 +854,7 @@ const getZone = () => {
 
   // Use selectedMunicipalityId directly
   formData.append("barangayId", selectedBarangayId);
+  console.log('barangayId: ',selectedBarangayId);
   axios({
     url: zoneUrl,
     method: "post",
