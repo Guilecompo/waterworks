@@ -47,7 +47,7 @@ const displayConsumer = () => {
       }
     })
     .catch((error) => {
-      alert("ERROR! - " + error);
+      console.log("ERROR! - " + error);
     });
 };
 
@@ -151,17 +151,17 @@ const add_consumer = () => {
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4 ">
                     <label class="form-label">Municipality</label>
-                    <select id="municipality" class="form-select" onchange="getBarangay()" ></select>
+                    <select id="municipality" class="form-select" onchange="getBarangays()" ></select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Barangay</label>
-                    <select id="barangay" class="form-select" onchange="getZone()" required>
+                    <select id="barangay" class="form-select" onchange="getZones()" required>
                         <option value="">Select Barangay</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Zone</label>
-                    <select id="zone" class="form-select" required>
+                    <select id="zoneId" class="form-select" required>
                         <option value="">Select Zone</option>
                     </select>
                 </div>
@@ -184,10 +184,10 @@ const add_consumer = () => {
                 </div>   
                 <div class="col-md-4">
                     <label class="form-label">House Number</label>
-                    <input type="number" class="form-control" id="house_no" required>
+                    <input type="number" class="form-control" id="house_no">
                 </div>
                 <div class="col-12 mt-5">
-                    <button type="submit" class="btn btn-primary" onclick="submit_consumer(event)">Submit form</button>
+                    <button type="submit" class="btn btn-primary w-100" onclick="submit_consumer(event)">Submit form</button>
                 </div>
             </form>
         </div>
@@ -202,8 +202,118 @@ const add_consumer = () => {
         getBranchs();
         getConsumerType();
         getProperty();
-        getMunicipality();
+        getMunicipalitys();
 }
+const submit_consumer = (event) => {
+  event.preventDefault();
+    const firstname = document.getElementById("firstname").value;
+    const middlename = document.getElementById("middlename").value;
+    const lastname = document.getElementById("lastname").value;
+    const suffixId = document.getElementById("suffix").value;
+
+    const phone = document.getElementById("phone").value;
+    const email_add = document.getElementById("email_add").value;
+    const propertyId = document.getElementById("property").value;
+    const municipalityId = document.getElementById("municipality").value;
+    const barangayId = document.getElementById("barangay").value;
+    const zoneId = document.getElementById("zoneId").value;
+    const branchId = document.getElementById("branch").value;
+
+    const consumer = document.getElementById("consumer").value;
+    const meter_no = document.getElementById("meter_no").value;
+    const house_no = document.getElementById("house_no").value;
+    console.log(
+      firstname,
+      middlename,
+      lastname,
+      suffixId,
+      phone,
+      email_add,
+      propertyId,
+      municipalityId,
+      barangayId,
+      zoneId,
+      branchId,
+      consumer,
+      meter_no,
+      house_no
+    );
+    const inputs = [
+      { id: "firstname", element: document.getElementById("firstname") },
+      { id: "middlename", element: document.getElementById("middlename") },
+      { id: "lastname", element: document.getElementById("lastname") },
+      { id: "suffix", element: document.getElementById("suffix") },
+      { id: "phone", element: document.getElementById("phone") },
+      { id: "email_add", element: document.getElementById("email_add") },
+      { id: "property", element: document.getElementById("property") },
+      { id: "municipality", element: document.getElementById("municipality") },
+      { id: "barangay", element: document.getElementById("barangay") },
+      { id: "zone", element: document.getElementById("zoneId") },
+      { id: "branch", element: document.getElementById("branch") },
+      { id: "consumer", element: document.getElementById("consumer") },
+      { id: "meter_no", element: document.getElementById("meter_no") }
+  ];
+
+  console.log(inputs); // Log the inputs array
+
+  // Check validity of each input
+  inputs.forEach(input => {
+      if (!input.element.validity.valid) {
+          input.element.classList.add('invalid');
+      } else {
+          input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+      }
+  });
+
+  // If any input is invalid, prevent form submission
+  if (document.querySelector('.invalid')) {
+      alert('Fill in all fields correctly');
+      return;
+  }
+
+  const myUrl = "http://152.42.243.189/waterworks/admin/add_consumer.php";
+  const formData = new FormData();
+  formData.append("firstname", firstname);
+  formData.append("middlename", middlename);
+  formData.append("lastname", lastname);
+  formData.append("suffixId", suffixId);
+  formData.append("phone", phone);
+  formData.append("email_add", email_add);
+  formData.append("propertyId", propertyId);
+  formData.append("municipalityId", municipalityId);
+  formData.append("barangayId", barangayId);
+  formData.append("zoneId", zoneId);
+  formData.append("branchId", branchId);
+  formData.append("consumer", consumer);
+  formData.append("meter_no", meter_no);
+  formData.append("house_no", house_no);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 1) {
+          success_modals();
+          displayConsumer();
+          // window.location.href = "./addconsumer.html";
+        } else if (response.data.status === 0) {
+          // alert("Username or phone number already exists!");
+          failed_modals();
+        } else {
+          // alert("Unknown error occurred.");
+          error_modals();
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        console.log(`ERROR OCCURRED! ${error}`);
+        console.log(error);
+      });
+  };
 const getFilterBranch = () => {
   const branchSelect = document.getElementById("branch");
   var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
@@ -233,7 +343,7 @@ const getFilterBranch = () => {
       });
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 // ----------------------------------FILTER POBLACION------------------------------------------------
@@ -253,7 +363,7 @@ const displayConsumerBranch = (selectedBranch) => {
       branchRefreshTables(consumers);
     })
     .catch((error) => {
-      alert("ERROR! - " + error);
+      console.log("ERROR! - " + error);
     });
 };
 const branchRefreshTables = (consumers) => {
@@ -307,13 +417,7 @@ const branchRefreshTables = (consumers) => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
   const head = document.getElementById("head");
-  const paginationNumbers = document.getElementById("paginationNumbers");
-  const branchSelect = document.getElementById("branch");
-  const searchInput = document.getElementById("searchInput");
   head.style.display = "none";
-  paginationNumbers.style.display = "none";
-  branchSelect.style.display = "none";
-  searchInput.style.display = "none";
 
   var myUrl = "http://152.42.243.189/waterworks/admin/getconsumer.php";
   const formData = new FormData();
@@ -410,28 +514,32 @@ const edit = (user_id) => {
                       </div>  
                       <div class="col-md-4 mt-3">
                           <label class="form-label">House Number</label>
-                          <input type="number" class="form-control" id="house_no" value="${consumer[0].house_no}" required>
+                          <input type="number" class="form-control" id="house_no" value="${consumer[0].house_no}">
                       </div>                     
                       <div class="col-12 mt-4">
-                          <button type="submit" class="btn btn-primary" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
+                          <button type="submit" class="btn btn-primary w-100" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
                       </div>
                   </form>
               </div>
                                 
               `;
 
-          document.getElementById("mainDiv").innerHTML = html;
+              document.getElementById("modalContents").innerHTML = html;
+
+              // Trigger the modal
+              var myModal = new bootstrap.Modal(document.getElementById('myModals'), {});
+              myModal.show();
           getSuffix();
           getBranch();
           getProperty();
           getMunicipality();
         }
       } catch (error) {
-        var html = `<h2>NO RECORD</h2>`;
+        document.getElementById("modalContents").innerHTML = `<h2>No Record</h2>`;
       }
     })
     .catch((error) => {
-      alert(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
+      console.log(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
     });
 };
 const submit_edit_consumer = (event, user_id) => {
@@ -463,8 +571,7 @@ const submit_edit_consumer = (event, user_id) => {
     barangayId === "" ||
     zoneId === "" ||
     branchId === "" ||
-    meter_no === "" ||
-    house_no === ""
+    meter_no === "" 
   ) {
     alert("Fill in all fields");
     return;
@@ -510,20 +617,21 @@ const submit_edit_consumer = (event, user_id) => {
     .then((response) => {
       console.log(response);
       if (response.data.status === 1) {
-        success_update_modal();
+        success_modals();
         console.log("success update");
+        displayConsumer();
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
-        failed_update_modal();
+        failed_modals();
         console.log(response);
       } else {
         // alert("Unknown error occurred.");
-        error_modal();
+        error_modals();
         console.log(response);
       }
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const updateBillStatus = () => {
@@ -551,7 +659,7 @@ const updateBillStatus = () => {
       }
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const getSuffix = () => {
@@ -572,7 +680,7 @@ const getSuffix = () => {
       propertySelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const getProperty = () => {
@@ -593,7 +701,7 @@ const getProperty = () => {
       propertySelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const getBranchs = () => {
@@ -618,7 +726,7 @@ const getBranchs = () => {
       propertySelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const getBranch = () => {
@@ -639,7 +747,7 @@ const getBranch = () => {
       propertySelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 
@@ -660,7 +768,7 @@ const displayConsumerMulogan = () => {
       showConsumerMuloganPage(currentPage);
     })
     .catch((error) => {
-      alert("ERROR! - " + error);
+      console.log("ERROR! - " + error);
     });
 };
 
@@ -761,7 +869,7 @@ const getConsumerType = () => {
       propertySelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 
@@ -783,7 +891,7 @@ const getPosition = () => {
       positionSelect.innerHTML = options;
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
   };
 const getMunicipality = () => {
@@ -807,7 +915,7 @@ const getMunicipality = () => {
       getBarangay();
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 
@@ -831,6 +939,7 @@ const getBarangay = () => {
       console.log("success barangay");
       // Clear existing options
       barangaySelect.innerHTML = ``;
+      barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
       // Populate options for barangays
       barangays.forEach((barangay) => {
@@ -842,7 +951,7 @@ const getBarangay = () => {
       getZone();
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED while fetching barangays! ${error}`);
+      console.log(`ERROR OCCURRED while fetching barangays! ${error}`);
     });
 };
 
@@ -885,9 +994,110 @@ const getZone = () => {
       });
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED while fetching zones! ${error}`);
+      console.log(`ERROR OCCURRED while fetching zones! ${error}`);
     });
 };
+
+const getMunicipalitys = () => {
+  const municipalitySelect = document.getElementById("municipality");
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
+  
+  axios({
+    url: myUrl,
+    method: "post",
+  })
+    .then((response) => {
+      var municipalities = response.data;
+      console.log("success municipality");
+  
+      var options = ``;
+      municipalities.forEach((municipality) => {
+        options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
+      });
+      municipalitySelect.innerHTML = options;
+  
+       getBarangays();
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURRED! ${error}`);
+    });
+  };
+  
+  const getBarangays = () => {
+  const selectedMunicipalityId = document.getElementById("municipality").value;
+  
+  const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
+  const formData = new FormData();
+  
+  // Use selectedMunicipalityId directly
+  formData.append("municipalityId", selectedMunicipalityId);
+  
+  axios({
+    url: barangayUrl,
+    method: "post",
+    data: formData
+  })
+    .then((response) => {
+      const barangaySelect = document.getElementById("barangay");
+      const barangays = response.data;
+      console.log("success barangay");
+      // Clear existing options
+      barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+  
+      // Populate options for barangays
+      barangays.forEach((barangay) => {
+        const option = document.createElement("option");
+        option.value = barangay.barangay_id;
+        option.textContent = barangay.barangay_name;
+        barangaySelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURRED while fetching barangays! ${error}`);
+    });
+  };
+  
+  
+  const getZones = () => {
+    const selectedBarangayId = document.getElementById("barangay").value;
+  
+    const zoneUrl = `http://152.42.243.189/waterworks/gets/get_zone.php`;
+    const formData = new FormData();
+  
+    // Use selectedMunicipalityId directly
+    formData.append("barangayId", selectedBarangayId);
+    axios({
+      url: zoneUrl,
+      method: "post",
+      data: formData
+    })
+      .then((response) => {
+        const zoneSelect = document.getElementById("zoneId");
+        const zones = response.data;
+  
+        // Clear existing options
+        zoneSelect.innerHTML = '<option value="">Select Zone</option>';
+  
+        // Sort zones numerically
+        zones.sort((a, b) => {
+          // Extract numeric part from the zone name and compare
+          const aNumber = parseInt(a.zone_name.match(/\d+/)[0]);
+          const bNumber = parseInt(b.zone_name.match(/\d+/)[0]);
+          return aNumber - bNumber;
+        });
+  
+        // Populate options for zones
+        zones.forEach((zone) => {
+          const option = document.createElement("option");
+          option.value = zone.zone_id;
+          option.textContent = zone.zone_name;
+          zoneSelect.appendChild(option);
+        });
+      })
+      .catch((error) => {
+        console.log(`ERROR OCCURRED while fetching zones! ${error}`)
+      });
+  };
 
 const success_update_modal = () => {
   const modal = document.getElementById("myModal");
@@ -926,9 +1136,6 @@ const closeModal = () => {
   const branchSelect = document.getElementById("branch");
   const searchInput = document.getElementById("searchInput");
   head.style.display = "block";
-  paginationNumbers.style.display = "block";
-  branchSelect.style.display = "block";
-  searchInput.style.display = "block";
 };
 
 // -------------------------------------------------VIEW START ---------------------------------------------------
@@ -1038,7 +1245,7 @@ const information = (user_id) => {
       modal.style.display = "block";
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const newBill = (user_id) => {
@@ -1154,7 +1361,7 @@ const newBill = (user_id) => {
       modal.style.display = "block";
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 
@@ -1228,7 +1435,7 @@ const billingHis = (user_id) => {
       modal.style.display = "block";
     })
     .catch((error) => {
-      alert(`ERROR OCCURRED! ${error}`);
+      console.log(`ERROR OCCURRED! ${error}`);
     });
 };
 const bill_receipt = (billing_id) => {
@@ -2149,4 +2356,33 @@ const getProperties = () => {
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
     });
+};
+const success_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
+  var html = `
+      <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
+const failed_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
+  var html = `
+  <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
+};
+
+const error_modals = () => {
+  const modal = document.getElementById("myModals");
+  const modalContent = document.getElementById("modalContents");
+  var html = `
+      <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
+  `;
+  modalContent.innerHTML = html;
+  modal.style.display = "block";
 };
