@@ -20,7 +20,7 @@ try {
     $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM branch WHERE branch_name = :edit_branch AND branch_id != :branch_id";
     $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
     $checkDuplicateStmt->bindParam(":edit_branch", $edit_branch, PDO::PARAM_STR);
-    $stmt->bindParam(":branch_id", $_POST['branch_id'], PDO::PARAM_INT);
+    $checkDuplicateStmt->bindParam(":branch_id", $_POST['branch_id'], PDO::PARAM_INT);
     $checkDuplicateStmt->execute();
     $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 
