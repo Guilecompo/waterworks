@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 include 'connection.php';
 
 $stmt = $conn->prepare("SELECT 
-    a.assign_id, b.firstname, 
+    a.assign_id, b.user_id, b.firstname, 
     b.middlename, b.lastname,
     c.zone_id, c.zone_name, 
     d.barangay_id, d.barangay_name,

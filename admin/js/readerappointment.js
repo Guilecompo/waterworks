@@ -45,6 +45,7 @@ const displayAssigned = () => {
                   <th class="text-center">Full Name</th>
                   <th class="text-center">Area</th>
                   <th class="text-center">Branch</th>
+                  <th class="text-center">Action</th>
               </tr>
             </thead>
             </table>`;
@@ -59,6 +60,7 @@ const displayAssigned = () => {
                 <th class="text-center">Full Name</th>
                 <th class="text-center">Area</th>
                 <th class="text-center">Branch</th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -69,6 +71,9 @@ const displayAssigned = () => {
                 <td class="text-center">${employee.firstname} ${employee.lastname}</td>
                 <td class="text-center">${employee.zone_name}</td>
                 <td class="text-center">${employee.branch_name}</td>
+                <td class="text-center">
+                    <button style="background-color: #b91c1c; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="remove_assigned(${employee.user_id})">Remove</button>
+                </td>
               </tr>
               `;
     });
@@ -78,3 +83,7 @@ const displayAssigned = () => {
       "ordering": false // Disable sorting for all columns
     });
   };
+
+  const remove_assigned = (user_id) => {
+    console.log('You remove :', user_id);
+  }
