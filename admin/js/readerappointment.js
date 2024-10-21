@@ -102,8 +102,8 @@ const displayAssigned = () => {
                 </select>
             </div>
             <div class="col-md-6">
-                <label class="form-label" for="employee">Meter Reader</label><br>
-                <select id="employee" class="form-select" >
+                <label class="form-label" for="user_id">Meter Reader</label><br>
+                <select id="user_id" class="form-select" >
                     <option value="">Select Meter Reader</option>
                 </select>
             </div>
@@ -116,7 +116,7 @@ const displayAssigned = () => {
                 <div id="selectBoxesContainer"></div>
             </div>
             <div style="margin-top: 20px;">
-                <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="submit_assigned(event)">Submit</button>
+                <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="submitSelected()">Submit</button>
             </div>
         </form>
     </div>
@@ -129,10 +129,23 @@ const displayAssigned = () => {
     getBarangay();
     generateSelectBoxes();
 };
+const submitSelected = () => {
+    const userSelect = document.getElementById("user_id");
+    const user_id = userSelect.value;
+    const branchId = userSelect.options[userSelect.selectedIndex].getAttribute("data-branch-id");
+
+    if (!user_id || !branchId) {
+        alert("Please select a Meter Reader.");
+        return;
+    }
+
+    // Call submit_assigned and pass the userId and branchId
+    submit_assigned(event, user_id, branchId);
+};
+
 const submit_assigned = (event, user_id, branchId) => {
     console.log("USER ID: ", user_id);
     event.preventDefault();
-    const municipalityId = document.getElementById("municipality").value;
     const barangayId = document.getElementById("barangay").value;
   
     const numZones = parseInt(document.getElementById("numZones").value, 10);
@@ -161,13 +174,11 @@ const submit_assigned = (event, user_id, branchId) => {
   
     const myUrl = "http://152.42.243.189/waterworks/gets/add_assigned.php";
     const formData = new FormData();
-    formData.append("municipalityId", municipalityId);
     formData.append("barangayId", barangayId);
     formData.append("accId", user_id);
     formData.append("branchId", branchId);
     formData.append("employee_Id", sessionStorage.getItem("accountId"));
   
-    console.log(municipalityId);
     console.log(barangayId);
     console.log(user_id);
     console.log(branchId);
@@ -189,11 +200,13 @@ const submit_assigned = (event, user_id, branchId) => {
         // Check the status property in the response
         if (response.data.status === 1) {
           // alert("Record Successfully Saved!");
-          success_update_modal();
+          success_modals();
+          displayAssigned();
           // window.location.href = "./employee_list.html";
         } else if (response.data.status === 0) {
+            failed_modals();
         } else {
-          error_modal();
+          error_modals();
         }
       })
       .catch((error) => {
@@ -330,7 +343,7 @@ function generateSelectBoxes() {
     axios({
       url: barangayUrl,
       method: "post",
-      data: formData,
+    //   data: formData,
     })
       .then((response) => {
         const barangaySelect = document.getElementById("barangay");
@@ -355,47 +368,49 @@ function generateSelectBoxes() {
 
 const getReaders = () => {
     const barangaySelect = document.getElementById("barangay");
-    const employeeSelect = document.getElementById("employee");
-  
+    const employeeSelect = document.getElementById("user_id");
+
     // Ensure employee select dropdown is displayed
     employeeSelect.style.display = 'block';
-  
+
     // Fetch the selected barangay value
     const selectedBarangayId = barangaySelect.value;
-  
+
     // Proceed only if a barangay is selected
     if (!selectedBarangayId) {
-      console.log("No barangay selected.");
-      return;
+        console.log("No barangay selected.");
+        return;
     }
-  
+
     const myUrl = "http://152.42.243.189/waterworks/admin/get_readers.php";
     const formData = new FormData();
     formData.append("barangayId", selectedBarangayId); // Append selected value, not the element
-  
+
     axios({
-      url: myUrl,
-      method: "post",
-      data: formData
+        url: myUrl,
+        method: "post",
+        data: formData
     })
-      .then((response) => {
+    .then((response) => {
         var employees = response.data;
-  
+
         // Clear existing options
         employeeSelect.innerHTML = '<option value="">Select Meter Reader</option>';
-  
+
         // Populate employee options
         employees.forEach((employee) => {
-          const option = document.createElement("option");
-          option.value = employee.user_id;
-          option.textContent = `${employee.firstname} ${employee.lastname}`;
-          employeeSelect.appendChild(option);
+            const option = document.createElement("option");
+            option.value = employee.user_id;
+            option.textContent = `${employee.firstname} ${employee.lastname}`;
+            option.setAttribute("data-branch-id", employee.branchId);  // Store branchId in data attribute
+            employeeSelect.appendChild(option);
         });
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         console.log(`ERROR OCCURRED! ${error}`);
-      });
-  };
+    });
+};
+
   
   //-----------------------------------------------------------------------------
   // Modal Functions
