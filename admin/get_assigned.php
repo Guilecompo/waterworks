@@ -19,6 +19,7 @@ INNER JOIN address_barangay d ON c.barangayId = d.barangay_id
 INNER JOIN address_municipality e ON d.municipalityId = e.municipality_id
 INNER JOIN position f ON b.positionId = f.position_id
 INNER JOIN branch g ON a.branchId = g.branch_id
+WHERE a.assign_statusId != 0
 ");
 
 $stmt->execute();
