@@ -1,18 +1,30 @@
 @media print {
   .text-center,
   .col-sm-12 {
-    width: 100%; /* Ensure full width */
-    box-sizing: border-box; /* Include padding in width calculation */
+    width: 100%;
+    box-sizing: border-box;
   }
+  .img-circle {
+    width: 30px; /* Adjust as per your need */
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image fits the circle */
+  }
+
   h5,
   h6,
   p {
-    page-break-inside: avoid; /* Avoid breaking within elements */
+    page-break-inside: avoid;
+    overflow-wrap: break-word; /* Ensure text wraps within the container */
+    word-wrap: break-word; /* For older browsers */
+    hyphens: auto; /* Add hyphens where necessary */
   }
+
   .mt-4,
   .mt-3 {
-    margin-top: 30mm; /* Adjust as needed */
+    margin-top: 30mm;
   }
+
   #modalContent {
     background-color: white;
     height: 210mm;
@@ -21,124 +33,79 @@
     margin-left: 0;
     padding-left: 0;
   }
+
   .cont {
     margin: 0;
     padding: 0;
     width: 200px;
   }
+
   .inform {
     display: flex;
   }
+
   .wrapper {
     margin-right: 150px;
     padding-right: 120px;
     width: 100%;
   }
-  .tabb1 .par {
-    margin-top: 0;
-    text-transform: capitalize;
-  }
+
   .row {
     width: 155px;
   }
 
-  .par {
-    color: #000;
-    font-size: 7.2px;
-    font-weight: bold;
-    text-transform: lowercase;
-  }
-  .pres {
-    color: #000;
-    font-size: 6.5px;
-    font-weight: bold;
-    text-transform: lowercase;
-  }
-  .press {
-    color: #000;
-    font-size: 5.7px;
-    font-weight: bold;
-  }
-  .presss {
-    color: #000;
-    font-size: 5.8px;
-    font-weight: bold;
-  }
-  .pressss{
-    color: #000;
-    font-size: 5.5px;
-    font-weight: bold;
-  }
-  /* Apply text-transform to the first letter only */
-  .par::first-letter,
-  .pres::first-letter {
-    text-transform: uppercase;
-  }
-  .pars {
-    border: 1px solid black;
-    width: 145px;
-  }
-  .fullname {
-    font-size: 10px;
-    font-weight: bold;
-  }
-  .conte {
-    color: #000;
-    font-size: 6px;
-    font-weight: bold;
-    justify-content: space-between;
-  }
+  .par,
+  .pres,
+  .press,
+  .presss,
+  .pressss,
+  .fullname,
+  .conte,
   .contepar {
     color: #000;
-    font-size: 6px;
     font-weight: bold;
+    overflow-wrap: break-word; /* Ensure text wraps correctly */
+    word-wrap: break-word; /* For older browsers */
+    hyphens: auto; /* Add hyphens where necessary */
   }
+
+  .par {
+    font-size: 7.2px;
+    text-transform: lowercase;
+  }
+
+  .pres {
+    font-size: 6.5px;
+  }
+
+  .press {
+    font-size: 5.7px;
+  }
+
+  .presss {
+    font-size: 5.8px;
+  }
+
+  .pressss {
+    font-size: 5.5px;
+  }
+
   h5 {
-    color: #000;
     font-size: 9px;
-    font-weight: bold;
   }
 
   h6 {
-    color: #000;
     font-size: 8.2px;
-    font-weight: bold;
   }
-  .tab {
-    border-color: #000;
-    font-size: 7px;
-    color: #000;
-    width: 100%;
-  }
-  .tabb1 {
-    border-color: #000;
-    font-size: 7.4px;
-    color: #000;
-    width: 100%;
-  }
-  .tabb2 {
-    border-color: #000;
-    font-size: 6.5px;
-    color: #000;
-    width: 100%;
-  }
-  .la {
-    color: #000;
-    font-size: 6.5px;
-    font-weight: bold;
-    margin-top: 0;
-  }
-  .las {
-    color: #000;
-    font-size: 6.5px;
-    font-weight: bold;
-  }
+
   .tab,
   .tabb1,
   .tabb2 {
     border-color: #000;
     margin-top: 0;
+    width: 100%;
   }
+
   .tab th,
   .tab td,
   .tabb1 th,

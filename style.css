@@ -6,8 +6,8 @@
   box-sizing: border-box;
 }
 .img-circle {
-  width: 75px; /* Adjust as per your need */
-  height: 75px;
+  width: 50px; /* Adjust as per your need */
+  height: 50px;
   border-radius: 50%;
   object-fit: cover; /* Ensures the image fits the circle */
 }

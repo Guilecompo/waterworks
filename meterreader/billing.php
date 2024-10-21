@@ -71,10 +71,10 @@ try {
         // Extract the numeric part and increment it
         $lastIdNumber = (int)substr($lastUniqueId, strrpos($lastUniqueId, '-') + 1);
         $newIdNumber = str_pad($lastIdNumber + 1, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
-        $uniqueId = "CWB-{$employee_Id}-{$year}-{$month}-{$newIdNumber}";
+        $uniqueId = "CWB-{$employee_Id}-{$year}{$month}-{$newIdNumber}";
     } else {
         // No billing records found, create the first uniqueId
-        $uniqueId = "CWB-{$employee_Id}-{$year}-{$month}-001";
+        $uniqueId = "CWB-{$employee_Id}-{$year}{$month}-001";
     }
     $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId ";
     $stmtSelect = $conn->prepare($sqlSelect);

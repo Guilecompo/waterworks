@@ -460,7 +460,7 @@ const bill_receipt = (user_id) => {
                         
                         <!-- Center Text -->
                         <div class="mx-3">
-                            <h5 class="w-100">City Waterworks<br>El Salvador City</h5>
+                            <h6 class="w-100">Waterworks<br>El Salvador City</h6>
                         </div>
                         
                         <!-- Right Image -->
@@ -610,7 +610,7 @@ const bill_receipt = (user_id) => {
                                 <p>RECEIPT NO:</p>
                             </div>
                             <div class="col-7 text-start" style="padding-left: 1px;">
-                                <p>${records[0].reading_date}</p>
+                                <p>${records[0].billing_uniqueId}</p>
                             </div>
                         </div>
                         <hr>
