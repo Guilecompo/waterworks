@@ -476,7 +476,7 @@ const getReaders = () => {
   };
   
   const closeModal = () => {
-    const modal = document.getElementById("myModal");
+    const modal = document.getElementById("myModals");
     modal.style.display = "none";
   
     const head = document.getElementById("head");
