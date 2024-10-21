@@ -241,10 +241,9 @@ const displayRate = () => {
                     </div>
                     <div class="container-fluid mt-3">
                         <form class="row g-3">
-                            <label class="form-label mb-0 underline-label">Edit Rate</label>
                             <div class="col-md-12">
                                 <label class="form-label">Property Type</label>
-                                <select id="edit_property" class="form-select" selected>
+                                <select id="property" class="form-select" selected>
                                     <option value="${rates[0].property_id}" selected>${rates[0].property_name}</option>
                                 </select>
                             </div>
@@ -267,7 +266,7 @@ const displayRate = () => {
                             </div>
                                             
                             <div class="col-12 mt-5">
-                                <button type="submit" class="btn btn-primary w-100" onclick="submit_edit_rate(event)">Submit form</button>
+                                <button type="submit" class="btn btn-primary w-100" onclick="submit_edit_rate(event,${rates[0].rate_id})">Submit form</button>
                             </div>
                         </form>
                     </div>
@@ -288,6 +287,59 @@ const displayRate = () => {
         alert(`ERROR OCCURRED! ${error}`);
     });
 }
+const submit_edit_rate = (event, rate_id) => {
+    event.preventDefault();
+    const propertyId = document.getElementById("property").value;
+    const minimum_rate = document.getElementById("edit_minimum_rate").value;
+    const second_rate = document.getElementById("edit_second_rate").value;
+    const third_rate = document.getElementById("edit_third_rate").value;
+    const last_rate = document.getElementById("edit_last_rate").value;
+  
+    if (
+      propertyId === "" ||
+      minimum_rate === "" ||
+      second_rate === "" ||
+      third_rate === "" ||
+      last_rate === ""
+    ) {
+      alert("Fill in all fields");
+      return;
+    }
+  
+    const myUrl = "http://152.42.243.189/waterworks/admin/update_api/update_rate.php";
+    const formData = new FormData();
+    formData.append("rate_id", rate_id);
+    formData.append("propertyId", propertyId);
+    formData.append("minimum_rate", minimum_rate);
+    formData.append("second_rate", second_rate);
+    formData.append("third_rate", third_rate);
+    formData.append("last_rate", last_rate);
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 1) {
+          success_modals();
+          displayRate();
+          //   window.location.href = "./addrate.html";
+        } else if (response.data.status === 0) {
+          // alert("Username or phone number already exists!");
+          failed_modals();
+        } else {
+          // alert("Unknown error occurred.");
+          error_modals();
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
 
   const success_modals = () => {
     const modal = document.getElementById("myModals");
