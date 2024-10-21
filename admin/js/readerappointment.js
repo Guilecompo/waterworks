@@ -100,12 +100,6 @@ const displayAssigned = () => {
                 <input type="number" class="form-control" id="numZones" min="1" value="1" onchange="generateSelectBoxes()" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label" for="municipality">Municipality</label><br>
-                <select id="municipality" onchange="getBarangay()" class="form-select" required>
-                    <option value="">Select Municipality</option>
-                </select>
-            </div>
-            <div class="col-md-6">
                 <label class="form-label" for="barangay">Barangay</label><br>
                 <select id="barangay" onchange="getZones()" class="form-select">
                 <option value="">Select Barangay</option>
@@ -117,7 +111,7 @@ const displayAssigned = () => {
             </div>
       
             <div style="margin-top: 20px; ">
-                <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="submit_assigned(event,${user_id},${employee[0].branchId})">Submit</button>
+                <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="submit_assigned(event)">Submit</button>
             </div>
         </form>
     </div>                        
