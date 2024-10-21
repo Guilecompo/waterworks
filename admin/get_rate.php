@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 b.property_id,
                 b.property_name
             FROM
-                position a
+                property_rate a
             INNER JOIN property b ON a.property_Id = b.property_id
         WHERE rate_id = :rate_id
         ");
