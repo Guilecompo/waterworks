@@ -49,16 +49,17 @@ $login_statusId = 2;
 
 $due_date = date('Y-m-d', strtotime($reading_date . ' +20 days'));
 
-$year = date("y");  // last 2 digits of the year
-$month = date("m"); // current month
-
 try {
 
+    $year = date("y");  // Last 2 digits of the year
+    $month = date("m"); // Current month
+
+    // Query to get the last billing_uniqueId
     $sql = "SELECT billing_uniqueId FROM billing WHERE billing_uniqueId LIKE :uniqueIdPattern ORDER BY billing_uniqueId DESC LIMIT 1";
     $stmt = $conn->prepare($sql);
 
     // Bind the parameter with the LIKE clause
-    $uniqueIdPattern = "CWB-{$employee_Id}-{$year}-{$month}-%";
+    $uniqueIdPattern = "CWB-{$readerId}-{$year}{$month}-%";
     $stmt->bindParam(':uniqueIdPattern', $uniqueIdPattern);
     $stmt->execute();
 
@@ -68,13 +69,16 @@ try {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $lastUniqueId = $row['billing_uniqueId'];
 
-        // Extract the numeric part and increment it
+        // Extract the last three characters, convert to int and increment
         $lastIdNumber = (int)substr($lastUniqueId, strrpos($lastUniqueId, '-') + 1);
-        $newIdNumber = str_pad($lastIdNumber + 1, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
-        $uniqueId = "CWB-{$employee_Id}-{$year}{$month}-{$newIdNumber}";
+        $newIdNumber = $lastIdNumber + 1;
+
+        // Convert back to string with leading zeros
+        $newIdNumberString = str_pad($newIdNumber, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
+        $uniqueId = "CWB-{$readerId}-{$year}{$month}-{$newIdNumberString}";
     } else {
         // No billing records found, create the first uniqueId
-        $uniqueId = "CWB-{$employee_Id}-{$year}{$month}-001";
+        $uniqueId = "CWB-{$readerId}-{$year}{$month}-001";
     }
     $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId ";
     $stmtSelect = $conn->prepare($sqlSelect);
