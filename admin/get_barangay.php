@@ -2,7 +2,7 @@
   header("Access-Control-Allow-Origin:*");
   include 'connection.php';
 
-  $municipalityId = $_POST['municipalityId'];
+  $municipalityId = 1;
   $barangayId = $_POST['barangayId'];
   $sql = "SELECT * FROM address_barangay WHERE municipalityId = :municipalityId AND barangay_id = :barangayId ORDER BY barangay_name";
   $stmt = $conn->prepare($sql);

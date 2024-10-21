@@ -122,7 +122,7 @@ const displayAssigned = () => {
     const myModal = new bootstrap.Modal(document.getElementById('myModals'));
     myModal.show();
     
-    getMunicipality();
+    getBarangay();
     generateSelectBoxes();
 };
 function generateSelectBoxes() {
@@ -312,7 +312,6 @@ function generateSelectBoxes() {
   };
   
   const getBarangay = () => {
-    const selectedMunicipalityId = document.getElementById("municipality").value;
     const barangayName = sessionStorage.getItem("branchId");
   
     // Fetch barangays based on the selected municipality
@@ -322,7 +321,6 @@ function generateSelectBoxes() {
   
     // Use selectedMunicipalityId directly
     formData.append("barangayId", barangayName);
-    formData.append("municipalityId", selectedMunicipalityId);
   
     axios({
       url: barangayUrl,
