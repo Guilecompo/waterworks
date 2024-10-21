@@ -36,7 +36,7 @@ try {
         minimum_rate = :minimum_rate,
         second_rate = :second_rate,
         third_rate = :third_rate,
-        last_rate = :last_rate,
+        last_rate = :last_rate
         WHERE rate_id = :rate_id";
 
         $stmt = $conn->prepare($sql);
