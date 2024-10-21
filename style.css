@@ -5,6 +5,12 @@
 ::before {
   box-sizing: border-box;
 }
+.img-circle {
+  width: 75px; /* Adjust as per your need */
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover; /* Ensures the image fits the circle */
+}
 .custom-alert {
   position: fixed;
   top: 20px;

@@ -49,8 +49,33 @@ $login_statusId = 2;
 
 $due_date = date('Y-m-d', strtotime($reading_date . ' +20 days'));
 
+$year = date("y");  // last 2 digits of the year
+$month = date("m"); // current month
 
 try {
+
+    $sql = "SELECT billing_uniqueId FROM billing WHERE billing_uniqueId LIKE :uniqueIdPattern ORDER BY billing_uniqueId DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+
+    // Bind the parameter with the LIKE clause
+    $uniqueIdPattern = "CWB-{$employee_Id}-{$year}-{$month}-%";
+    $stmt->bindParam(':uniqueIdPattern', $uniqueIdPattern);
+    $stmt->execute();
+
+    // Check if any results were returned
+    if ($stmt->rowCount() > 0) {
+        // Get the last billing_uniqueId
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $lastUniqueId = $row['billing_uniqueId'];
+
+        // Extract the numeric part and increment it
+        $lastIdNumber = (int)substr($lastUniqueId, strrpos($lastUniqueId, '-') + 1);
+        $newIdNumber = str_pad($lastIdNumber + 1, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
+        $uniqueId = "CWB-{$employee_Id}-{$year}-{$month}-{$newIdNumber}";
+    } else {
+        // No billing records found, create the first uniqueId
+        $uniqueId = "CWB-{$employee_Id}-{$year}-{$month}-001";
+    }
     $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId ";
     $stmtSelect = $conn->prepare($sqlSelect);
     $stmtSelect->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
@@ -142,13 +167,13 @@ try {
             $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
             $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
             $stmtUpdate->execute();
-
             // Insert new billing record
             $updatedStatusId = 2;
             $paid_unpaid = 2;
-            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+            $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":consumerId", $consumerId);
+            $stmt->bindParam(":uniqueId", $uniqueId);
             $stmt->bindParam(":readerId", $readerId);
             $stmt->bindParam(":branchId", $branchId);
             $stmt->bindParam(":prev_cubic_consumed", $past_cubic_consumed);
@@ -261,9 +286,10 @@ try {
                 $stmtUpdates->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_INT);
                 
                 if ($stmtUpdates->execute()) {
-                    $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+                    $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(":consumerId", $consumerId);
+                    $stmt->bindParam(":uniqueId", $uniqueId);
                     $stmt->bindParam(":readerId", $readerId);
                     $stmt->bindParam(":branchId", $branchId);
                     $stmt->bindParam(":prev_cubic_consumed", $prev_cubic_consumed);

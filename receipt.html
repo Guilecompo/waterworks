@@ -23,190 +23,189 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="./print1.css">
     </head>
-
+    <style>
+        .img-circle {
+            width: 75px; /* Adjust as per your need */
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover; /* Ensures the image fits the circle */
+        }
+    </style>
     <body>
-        <div class=" wrapper ms-0 p-0 m-0">
-            <div class="container mt-0 ">
-                <div class="row ">
-                    <div class="title ms-5 ps-5 mt-4">
-                        <h5 class="w-100">City Waterworks<br> El Salvador City</h5>
+        <div class="wrapper ms-0 p-0 m-0">
+            <div class="container mt-0">
+                <div class="row">
+                    <!-- Title Section -->
+                    <div class="title text-center mb-3 mt-4 d-flex align-items-center justify-content-center">
+                        <!-- Left Image -->
+                        <div class="left-image">
+                            <img src="logo2.png" alt="Left Image" class="img-circle">
+                        </div>
+                        
+                        <!-- Center Text -->
+                        <div class="mx-3">
+                            <h5 class="w-100">City Waterworks<br>El Salvador City</h5>
+                        </div>
+                        
+                        <!-- Right Image -->
+                        <div class="right-image">
+                            <img src="logo.png" alt="Right Image" class="img-circle">
+                        </div>
                     </div>
-                    <div class="col-sm-12 mt-3 mx-0 my-0 ms-0 ps-0 me-5 pe-5">
-                        <div class="row justify-content-between m-0 p-0 ">
-                            <div class="col-auto">
-                                <div class="col-sm-12">
-                                    <p class="par">FOR THE MONTH : </p>
-                                </div>
+
+                    <hr>
+                    <!-- Billing Statement Header -->
+                    <div class="col-sm-12">
+                        <h6 class="text-center py-1 text-decoration-underline">Billing Statement</h6>
+                    </div>
+
+                    <hr>
+                    <!-- Billing Details -->
+                    <div class="col-sm-12 mt-3">
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>FOR THE MONTH:</p>
                             </div>
-                            <div class="col-auto">
-                                <div class="col-sm-12 text-end">
-                                    <p class="par">VALUE HERE</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-between m-0 p-0">
-                            <div class="col-auto">
-                                <div class="col-sm-12">
-                                    <p class="par">DATE: </p>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="col-sm-12 text-end">
-                                    <p class="par">VALUE HERE</p>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].formatted_reading_date2}</p>
                             </div>
                         </div>
-                        <div class="row justify-content-between m-0 p-0">
-                            <div class="col-auto">
-                                <div class="col-sm-12">
-                                    <p class="press">Period cover : </p>
-                                </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>DATE:</p>
                             </div>
-                            <div class="col-auto">
-                                <div class="col-sm-12 text-end">
-                                    <p class="par">VALUE HERE</p>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].reading_date}</p>
                             </div>
                         </div>
-                            <div class="cont col-sm-12">
-                                <h6 class="pars text-center py-1">VALUE</h6>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>Period cover:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].period_cover}</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                        </div>
+
+                        <hr>
+                        <!-- Consumer Name -->
+                        <div class="text-center py-1">
+                            <h5>${records[0].con_lastname}, ${records[0].con_firstname}</h5>
+                        </div>
+
+                        <hr>
+        
+                        <!-- Meter Readings -->
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>PRESENT READING:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">Cubic meter: </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].present_meter}</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">WATER BILL : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>PREVIOUS READING:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">ARREARS : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].previous_meter}</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">TOTAL BILL : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                        </div>
+        
+                        <!-- Billing Calculation -->
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>Cubic meter:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="pres">Amount after due : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].cubic_consumed}</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">DUE DATE : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>WATER BILL:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="presss">Disconnection date : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="pres">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].bill_amount}</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">METER READER : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>ARREARS:</p>
                             </div>
-                            <div class="row justify-content-between m-0 p-0">
-                                <div class="col-auto">
-                                    <div class="col-sm-12">
-                                        <p class="par">DATE DELIVERED : </p>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="col-sm-12 text-end">
-                                        <p class="par">VALUE HERE</p>
-                                    </div>
-                                </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].arrears}</p>
                             </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>TOTAL BILL:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].total_bill}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>Amount due:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].amount_due}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>DUE DATE:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].formatted_reading_date1}</p>
+                            </div>
+                        </div>
+        
+                        <!-- Meter Reader Information -->
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>METER READER:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].emp_lastname}, ${records[0].emp_firstname}</p>
+                            </div>
+                        </div>
+        
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>DELIVERED:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].reading_date}</p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col-5">
+                                <p>RECEIPT NO:</p>
+                            </div>
+                            <div class="col-7 text-start" style="padding-left: 1px;">
+                                <p>${records[0].reading_date}</p>
+                            </div>
+                        </div>
+                        <hr>
+        
+                        <!-- Print Button -->
                         <div class="row mt-1">
                             <div class="col-sm-12">
-                            <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
+                                <button type="button" class="btn btn-primary w-100" onclick="printModalContent()">Print</button>
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
