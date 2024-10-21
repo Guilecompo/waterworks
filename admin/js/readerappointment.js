@@ -95,127 +95,41 @@ const displayAssigned = () => {
     </div>
     <div class="container-fluid mt-3">
         <form class="row g-2 mt-4">
-                <div class="col-md-12">
-                <label class="form-label" for="numZones">Number of Zones to Assign</label>
-                <input type="number" class="form-control" id="numZones" min="1" value="1" onchange="generateSelectBoxes()" required>
-            </div>
             <div class="col-md-6">
                 <label class="form-label" for="barangay">Barangay</label><br>
                 <select id="barangay" onchange="getZones()" class="form-select">
-                <option value="">Select Barangay</option>
+                    <option value="">Select Barangay</option>
                 </select>
             </div>
-                <div class="col-md-12">
-                <label class="form-label">Zone Assign</label><br>
-                <div  id="selectBoxesContainer" ></div>
+            <div class="col-md-6">
+                <label class="form-label" for="employee">Meter Reader</label><br>
+                <select id="employee" class="form-select" style="display: none;">
+                    <option value="">Select Meter Reader</option>
+                </select>
             </div>
-      
-            <div style="margin-top: 20px; ">
-                <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="submit_assigned(event)">Submit</button>
+            <div class="col-md-12">
+                <label class="form-label" for="numZones">Number of Zones to Assign</label>
+                <input type="number" class="form-control" id="numZones" min="1" value="1" onchange="generateSelectBoxes()" required>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Zone Assign</label><br>
+                <div id="selectBoxesContainer"></div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="submit_assigned(event)">Submit</button>
             </div>
         </form>
-    </div>                        
+    </div>
     `;
     document.getElementById("modalContents").innerHTML = html;
 
-    // Show the modal
     const myModal = new bootstrap.Modal(document.getElementById('myModals'));
     myModal.show();
-    
+
     getBarangay();
     generateSelectBoxes();
 };
-function generateSelectBoxes() {
-    var numZones = document.getElementById("numZones").value;
-    var selectBoxesContainer = document.getElementById("selectBoxesContainer");
-    selectBoxesContainer.innerHTML = "";
-  
-    var row;
-  
-    for (let i = 0; i < numZones; i++) {
-      if (i % 2 === 0) {
-        row = document.createElement("div");
-        row.className = "row";
-        selectBoxesContainer.appendChild(row);
-      }
-  
-      var colDiv = document.createElement("div");
-      colDiv.className = "col-md-6";
-      colDiv.innerHTML = `
-            <div id="zoneDiv${i}">
-                <select id="zone${i}" class="form-select">
-                    <option value="">Select Zone</option>
-                </select>
-            </div>
-            <br>
-        `;
-  
-      row.appendChild(colDiv);
-    }
-  
-    getZones();
-  }
-  
-  const getZones = () => {
-    const selectedBarangayId = document.getElementById("barangay").value;
-  
-    // Check if numZones is a valid number
-    var numZones = document.getElementById("numZones").value;
-    if (isNaN(numZones) || numZones <= 0) {
-      alert("Please enter a valid number of zones.");
-      return;
-    }
-  
-    const zoneUrl = "http://152.42.243.189/waterworks/gets/get_zones.php";
-  
-    const formData = new FormData();
-    formData.append("barangayId", selectedBarangayId);
-  
-    axios({
-      url: zoneUrl,
-      method: "post",
-      data: formData,
-    })
-      .then((response) => {
-        console.log("Response data:", response.data);
-  
-        for (let i = 0; i < numZones; i++) {
-          const zoneSelect = document.getElementById("zone" + i);
-  
-          if (!zoneSelect) {
-            console.warn(`Element with id 'zone${i}' not found.`);
-            continue;
-          }
-  
-          zoneSelect.innerHTML = '<option value="">Select Zone</option>';
-  
-          for (let j = 0; j < response.data.length; j++) {
-            const zone = response.data[j];
-  
-            if (
-              !zone ||
-              typeof zone !== "object" ||
-              !("zone_id" in zone) ||
-              !("zone_name" in zone)
-            ) {
-              console.error(
-                `Invalid zone data at index ${j}. Expected an object with 'zone_id' and 'zone_name'.`
-              );
-              continue;
-            }
-  
-            const option = document.createElement("option");
-            option.value = zone.zone_id;
-            option.textContent = zone.zone_name;
-            zoneSelect.appendChild(option);
-          }
-        }
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED while fetching zones! ${error.message}`);
-      });
-  };
-  const submit_assigned = (event, user_id, branchId) => {
+const submit_assigned = (event, user_id, branchId) => {
     console.log("USER ID: ", user_id);
     event.preventDefault();
     const municipalityId = document.getElementById("municipality").value;
@@ -287,62 +201,195 @@ function generateSelectBoxes() {
         alert(`ERROR OCCURRED! ${error.message}`);
       });
   };
-  const getMunicipality = () => {
-    const municipalitySelect = document.getElementById("municipality");
-    var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
-  
+  function generateSelectBoxes() {
+    const numZones = document.getElementById("numZones").value;
+    const selectBoxesContainer = document.getElementById("selectBoxesContainer");
+    selectBoxesContainer.innerHTML = "";
+    
+    let row;
+    for (let i = 0; i < numZones; i++) {
+        if (i % 2 === 0) {
+            row = document.createElement("div");
+            row.className = "row";
+            selectBoxesContainer.appendChild(row);
+        }
+
+        const colDiv = document.createElement("div");
+        colDiv.className = "col-md-6";
+        colDiv.innerHTML = `
+            <div id="zoneDiv${i}">
+                <select id="zone${i}" class="form-select">
+                    <option value="">Select Zone</option>
+                </select>
+            </div>
+            <br>
+        `;
+        row.appendChild(colDiv);
+    }
+    
+    getZones();
+}
+
+const getZones = () => {
+    const selectedBarangayId = document.getElementById("barangay").value;
+    if (!selectedBarangayId) return; // Ensure barangay is selected
+
+    const numZones = document.getElementById("numZones").value;
+    const zoneUrl = "http://152.42.243.189/waterworks/gets/get_zones.php";
+
+    const formData = new FormData();
+    formData.append("barangayId", selectedBarangayId);
+
     axios({
-      url: myUrl,
-      method: "post",
+        url: zoneUrl,
+        method: "post",
+        data: formData,
     })
-      .then((response) => {
-        var municipalities = response.data;
-  
-        var options = ``;
-        municipalities.forEach((municipality) => {
-          options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
+    .then((response) => {
+        console.log("Zones:", response.data);
+        for (let i = 0; i < numZones; i++) {
+            const zoneSelect = document.getElementById("zone" + i);
+
+            // Check if zoneSelect already has a value
+            if (!zoneSelect || zoneSelect.value) continue;
+
+            zoneSelect.innerHTML = '<option value="">Select Zone</option>';
+
+            response.data.forEach((zone) => {
+                const option = document.createElement("option");
+                option.value = zone.zone_id;
+                option.textContent = zone.zone_name;
+                zoneSelect.appendChild(option);
+            });
+        }
+    })
+    .catch((error) => {
+        alert(`ERROR OCCURRED while fetching zones! ${error.message}`);
+    });
+};
+
+const getBarangay = () => {
+    const barangaySelect = document.getElementById("barangay");
+    const barangayUrl = "http://152.42.243.189/waterworks/admin/get_barangay.php";
+
+    axios.post(barangayUrl)
+        .then((response) => {
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+            response.data.forEach(barangay => {
+                const option = document.createElement("option");
+                option.value = barangay.barangay_id;
+                option.textContent = barangay.barangay_name;
+                barangaySelect.appendChild(option);
+            });
+
+            // Show Meter Reader after barangay is selected
+            barangaySelect.addEventListener('change', () => {
+                const employeeSelect = document.getElementById("employee");
+                if (barangaySelect.value) {
+                    employeeSelect.style.display = "block";
+                    getReaders();
+                } else {
+                    employeeSelect.style.display = "none";
+                }
+            });
+        })
+        .catch((error) => {
+            alert(`ERROR OCCURRED! ${error}`);
         });
-        municipalitySelect.innerHTML = options;
-  
-        getBarangay();
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED! ${error}`);
-      });
+};
+
+const getReaders = () => {
+    const barangayId = document.getElementById("barangay").value;
+    if (!barangayId) return; // Ensure barangay is selected
+
+    const employeeSelect = document.getElementById("employee");
+    const readersUrl = "http://152.42.243.189/waterworks/admin/get_readers.php";
+    const formData = new FormData();
+    formData.append("barangayId", barangayId);
+
+    axios.post(readersUrl, formData)
+        .then((response) => {
+            employeeSelect.innerHTML = '<option value="">Select Meter Reader</option>';
+            response.data.forEach(employee => {
+                const option = document.createElement("option");
+                option.value = employee.user_id;
+                option.textContent = `${employee.firstname} ${employee.lastname}`;
+                employeeSelect.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+        });
+};
+  //-----------------------------------------------------------------------------
+  // Modal Functions
+
+  const success_modals = () => {
+    const modal = document.getElementById("myModals");
+    const modalContent = document.getElementById("modalContents");
+    var html = `
+        <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
   };
   
-  const getBarangay = () => {
-    const barangayName = sessionStorage.getItem("branchId");
+  const failed_modals = () => {
+    const modal = document.getElementById("myModals");
+    const modalContent = document.getElementById("modalContents");
+    var html = `
+    <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+  };
   
-    // Fetch barangays based on the selected municipality
-    // Replace this URL with your actual API endpoint
-    const barangayUrl = `http://152.42.243.189/waterworks/head/get_barangay.php`;
-    const formData = new FormData();
+  const error_modals = () => {
+    const modal = document.getElementById("myModals");
+    const modalContent = document.getElementById("modalContents");
+    var html = `
+        <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+  };
   
-    // Use selectedMunicipalityId directly
-    formData.append("barangayId", barangayName);
+  const success_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    var html = `
+        <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+  };
   
-    axios({
-      url: barangayUrl,
-      method: "post",
-      data: formData,
-    })
-      .then((response) => {
-        const barangaySelect = document.getElementById("barangay");
-        const barangays = response.data;
+  const failed_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    var html = `
+    <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+  };
   
-        // Clear existing options
-        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+  const error_modal = () => {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.getElementById("modalContent");
+    var html = `
+        <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
+    `;
+    modalContent.innerHTML = html;
+    modal.style.display = "block";
+  };
   
-        // Populate options for barangays
-        barangays.forEach((barangay) => {
-          const option = document.createElement("option");
-          option.value = barangay.barangay_id;
-          option.textContent = barangay.barangay_name;
-          barangaySelect.appendChild(option);
-        });
-      })
-      .catch((error) => {
-        alert(`ERROR OCCURRED while fetching barangays! ${error}`);
-      });
+  const closeModal = () => {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+  
+    const head = document.getElementById("head");
+    const paginationNumbers = document.getElementById("paginationNumbers");
+    const searchInput = document.getElementById("searchInput");
+    head.style.display = "block";
   };
