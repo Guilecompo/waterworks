@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INNER JOIN address_zone b ON a.locationId = b.zone_id
         INNER JOIN address_barangay c ON b.barangayId = c.barangay_id
         WHERE a.branch_name = :selectedBranch
-
         ");
 
         $stmt->bindParam(":selectedBranch", $selectedBranch);

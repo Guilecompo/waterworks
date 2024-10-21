@@ -10,6 +10,11 @@ const onLoad = () => {
     }
    
   };
+  const refreshFilters = () => {
+    // Logic to refresh or reload filter data
+    displayBranch();
+    getFilterBranch();
+  };
   const getFilterBranch = () => {
     const branchSelect = document.getElementById("branch");
     var myUrl = "http://152.42.243.189/waterworks/admin/get_branch.php";
@@ -31,7 +36,7 @@ const onLoad = () => {
         branchSelect.addEventListener("change", () => {
           const selectedBranch = branchSelect.value;
           if (selectedBranch !== "employee") {
-            displayConsumerBranch(selectedBranch);
+            displayBranchByBranch(selectedBranch);
           } else {
             displayBranch();
           }
@@ -44,7 +49,6 @@ const onLoad = () => {
   };
   const displayBranchByBranch = (selectedBranch) => {
     var url = "http://152.42.243.189/waterworks/admin/branchlistByBranch.php";
-    
     const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));
     formData.append("selectedBranch", selectedBranch);
@@ -297,6 +301,7 @@ const onLoad = () => {
             success_modals();
             console.log("success update");
             displayBranch();
+            getFilterBranch();
             //window.location.href = "./addconsumer.html";
         } else if (response.data.status === 0) {
             console.log(response.data);
@@ -494,16 +499,17 @@ const onLoad = () => {
           .then((response) => {
             console.log(response);
             if (response.data.status === 1) {
-              success_modal();
+              success_modals();
               console.log("success save");
               displayBranch();
+              getFilterBranch();
               //window.location.href = "./addconsumer.html";
             } else if (response.data.status === 0) {
               // alert("Username or phone number already exists!");
-              failed_modal();
+              failed_modals();
             } else {
               // alert("Unknown error occurred.");
-              error_modal();
+              error_modals();
               console.log(response);
             }
           })
