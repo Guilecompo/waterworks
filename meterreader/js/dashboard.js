@@ -455,7 +455,7 @@ const bill_receipt = (user_id) => {
                     <div class="title text-center mb-3 mt-4 d-flex align-items-center justify-content-center">
                         <!-- Left Image -->
                         <div class="left-image">
-                            <img src="http://152.42.243.189/waterworks/logo2.png" alt="Left Image" class="img-circle" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                            <img src="http://152.42.243.189/waterworks/logo2.png" alt="Left Image" class="img-circle" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                         </div>
                         
                         <!-- Center Text -->
@@ -465,7 +465,7 @@ const bill_receipt = (user_id) => {
                         
                         <!-- Right Image -->
                         <div class="right-image">
-                            <img src="http://152.42.243.189/waterworks/logo.png" alt="Right Image" class="img-circle" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                            <img src="http://152.42.243.189/waterworks/logo.png" alt="Right Image" class="img-circle" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                         </div>
                     </div>
 
