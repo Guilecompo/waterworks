@@ -5,10 +5,20 @@
     box-sizing: border-box;
   }
   .img-circle {
-    width: 30px; /* Adjust as per your need */
+    width: 30px; /* Default size for larger screens */
     height: 30px;
     border-radius: 50%;
     object-fit: cover; /* Ensures the image fits the circle */
+  }
+  
+  /* Media query for mobile devices */
+  @media (max-width: 768px) { /* Adjust the max-width as needed */
+    .img-circle {
+      width: 20px; /* Size for mobile */
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
   }
 
   h5,

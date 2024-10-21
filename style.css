@@ -6,11 +6,22 @@
   box-sizing: border-box;
 }
 .img-circle {
-  width: 50px; /* Adjust as per your need */
+  width: 50px; /* Default size for larger screens */
   height: 50px;
   border-radius: 50%;
   object-fit: cover; /* Ensures the image fits the circle */
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+  .img-circle {
+    width: 30px; /* Size for mobile */
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
 .custom-alert {
   position: fixed;
   top: 20px;
