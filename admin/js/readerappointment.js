@@ -97,13 +97,13 @@ const displayAssigned = () => {
         <form class="row g-2 mt-4">
             <div class="col-md-6">
                 <label class="form-label" for="barangay">Barangay</label><br>
-                <select id="barangay" onchange="getZones()" class="form-select">
+                <select id="barangay" onchange="getReaders(); getZones();" class="form-select">
                     <option value="">Select Barangay</option>
                 </select>
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="employee">Meter Reader</label><br>
-                <select id="employee" class="form-select" style="display: none;">
+                <select id="employee" class="form-select" >
                     <option value="">Select Meter Reader</option>
                 </select>
             </div>
@@ -201,22 +201,23 @@ const submit_assigned = (event, user_id, branchId) => {
         alert(`ERROR OCCURRED! ${error.message}`);
       });
   };
-  function generateSelectBoxes() {
-    const numZones = document.getElementById("numZones").value;
-    const selectBoxesContainer = document.getElementById("selectBoxesContainer");
+function generateSelectBoxes() {
+    var numZones = document.getElementById("numZones").value;
+    var selectBoxesContainer = document.getElementById("selectBoxesContainer");
     selectBoxesContainer.innerHTML = "";
-    
-    let row;
+  
+    var row;
+  
     for (let i = 0; i < numZones; i++) {
-        if (i % 2 === 0) {
-            row = document.createElement("div");
-            row.className = "row";
-            selectBoxesContainer.appendChild(row);
-        }
-
-        const colDiv = document.createElement("div");
-        colDiv.className = "col-md-6";
-        colDiv.innerHTML = `
+      if (i % 2 === 0) {
+        row = document.createElement("div");
+        row.className = "row";
+        selectBoxesContainer.appendChild(row);
+      }
+  
+      var colDiv = document.createElement("div");
+      colDiv.className = "col-md-6";
+      colDiv.innerHTML = `
             <div id="zoneDiv${i}">
                 <select id="zone${i}" class="form-select">
                     <option value="">Select Zone</option>
@@ -224,103 +225,178 @@ const submit_assigned = (event, user_id, branchId) => {
             </div>
             <br>
         `;
-        row.appendChild(colDiv);
+  
+      row.appendChild(colDiv);
     }
-    
+  
     getZones();
-}
-
-const getZones = () => {
+  }
+  
+  const getZones = () => {
     const selectedBarangayId = document.getElementById("barangay").value;
-    if (!selectedBarangayId) return; // Ensure barangay is selected
-
-    const numZones = document.getElementById("numZones").value;
+  
+    // Check if numZones is a valid number
+    var numZones = document.getElementById("numZones").value;
+    if (isNaN(numZones) || numZones <= 0) {
+      alert("Please enter a valid number of zones.");
+      return;
+    }
+  
     const zoneUrl = "http://152.42.243.189/waterworks/gets/get_zones.php";
-
+  
     const formData = new FormData();
     formData.append("barangayId", selectedBarangayId);
-
+  
     axios({
-        url: zoneUrl,
-        method: "post",
-        data: formData,
+      url: zoneUrl,
+      method: "post",
+      data: formData,
     })
-    .then((response) => {
-        console.log("Zones:", response.data);
+      .then((response) => {
+        console.log("Response data:", response.data);
+  
         for (let i = 0; i < numZones; i++) {
-            const zoneSelect = document.getElementById("zone" + i);
-
-            // Check if zoneSelect already has a value
-            if (!zoneSelect || zoneSelect.value) continue;
-
-            zoneSelect.innerHTML = '<option value="">Select Zone</option>';
-
-            response.data.forEach((zone) => {
-                const option = document.createElement("option");
-                option.value = zone.zone_id;
-                option.textContent = zone.zone_name;
-                zoneSelect.appendChild(option);
-            });
+          const zoneSelect = document.getElementById("zone" + i);
+  
+          if (!zoneSelect) {
+            console.warn(`Element with id 'zone${i}' not found.`);
+            continue;
+          }
+  
+          zoneSelect.innerHTML = '<option value="">Select Zone</option>';
+  
+          for (let j = 0; j < response.data.length; j++) {
+            const zone = response.data[j];
+  
+            if (
+              !zone ||
+              typeof zone !== "object" ||
+              !("zone_id" in zone) ||
+              !("zone_name" in zone)
+            ) {
+              console.error(
+                `Invalid zone data at index ${j}. Expected an object with 'zone_id' and 'zone_name'.`
+              );
+              continue;
+            }
+  
+            const option = document.createElement("option");
+            option.value = zone.zone_id;
+            option.textContent = zone.zone_name;
+            zoneSelect.appendChild(option);
+          }
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         alert(`ERROR OCCURRED while fetching zones! ${error.message}`);
-    });
-};
-
-const getBarangay = () => {
-    const barangaySelect = document.getElementById("barangay");
-    const barangayUrl = "http://152.42.243.189/waterworks/admin/get_barangay.php";
-
-    axios.post(barangayUrl)
-        .then((response) => {
-            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-            response.data.forEach(barangay => {
-                const option = document.createElement("option");
-                option.value = barangay.barangay_id;
-                option.textContent = barangay.barangay_name;
-                barangaySelect.appendChild(option);
-            });
-
-            // Show Meter Reader after barangay is selected
-            barangaySelect.addEventListener('change', () => {
-                const employeeSelect = document.getElementById("employee");
-                if (barangaySelect.value) {
-                    employeeSelect.style.display = "block";
-                    getReaders();
-                } else {
-                    employeeSelect.style.display = "none";
-                }
-            });
-        })
-        .catch((error) => {
-            alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
+  
+  const getMunicipality = () => {
+    const municipalitySelect = document.getElementById("municipality");
+    var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
+  
+    axios({
+      url: myUrl,
+      method: "post",
+    })
+      .then((response) => {
+        var municipalities = response.data;
+  
+        var options = ``;
+        municipalities.forEach((municipality) => {
+          options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
         });
-};
+        municipalitySelect.innerHTML = options;
+  
+        getBarangay();
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
+  
+  const getBarangay = () => {
+    // const barangayName = sessionStorage.getItem("branchId");
+  
+    // Fetch barangays based on the selected municipality
+    // Replace this URL with your actual API endpoint
+    const barangayUrl = `http://152.42.243.189/waterworks/admin/get_barangay.php`;
+    // const formData = new FormData();
+  
+    // Use selectedMunicipalityId directly
+    // formData.append("barangayId", barangayName);
+  
+    axios({
+      url: barangayUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        const barangaySelect = document.getElementById("barangay");
+        const barangays = response.data;
+  
+        // Clear existing options
+        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+  
+        // Populate options for barangays
+        barangays.forEach((barangay) => {
+          const option = document.createElement("option");
+          option.value = barangay.barangay_id;
+          option.textContent = barangay.barangay_name;
+          barangaySelect.appendChild(option);
+        });
+      })
+      .catch((error) => {
+        alert(`ERROR OCCURRED while fetching barangays! ${error}`);
+      });
+  };
+//   ------------------------------------------------------------------------------
 
 const getReaders = () => {
-    const barangayId = document.getElementById("barangay").value;
-    if (!barangayId) return; // Ensure barangay is selected
-
+    const barangaySelect = document.getElementById("barangay");
     const employeeSelect = document.getElementById("employee");
-    const readersUrl = "http://152.42.243.189/waterworks/admin/get_readers.php";
+  
+    // Ensure employee select dropdown is displayed
+    employeeSelect.style.display = 'block';
+  
+    // Fetch the selected barangay value
+    const selectedBarangayId = barangaySelect.value;
+  
+    // Proceed only if a barangay is selected
+    if (!selectedBarangayId) {
+      console.log("No barangay selected.");
+      return;
+    }
+  
+    const myUrl = "http://152.42.243.189/waterworks/admin/get_readers.php";
     const formData = new FormData();
-    formData.append("barangayId", barangayId);
-
-    axios.post(readersUrl, formData)
-        .then((response) => {
-            employeeSelect.innerHTML = '<option value="">Select Meter Reader</option>';
-            response.data.forEach(employee => {
-                const option = document.createElement("option");
-                option.value = employee.user_id;
-                option.textContent = `${employee.firstname} ${employee.lastname}`;
-                employeeSelect.appendChild(option);
-            });
-        })
-        .catch((error) => {
-            console.log(`ERROR OCCURRED! ${error}`);
+    formData.append("barangayId", selectedBarangayId); // Append selected value, not the element
+  
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData
+    })
+      .then((response) => {
+        var employees = response.data;
+  
+        // Clear existing options
+        employeeSelect.innerHTML = '<option value="">Select Meter Reader</option>';
+  
+        // Populate employee options
+        employees.forEach((employee) => {
+          const option = document.createElement("option");
+          option.value = employee.user_id;
+          option.textContent = `${employee.firstname} ${employee.lastname}`;
+          employeeSelect.appendChild(option);
         });
-};
+      })
+      .catch((error) => {
+        console.log(`ERROR OCCURRED! ${error}`);
+      });
+  };
+  
   //-----------------------------------------------------------------------------
   // Modal Functions
 

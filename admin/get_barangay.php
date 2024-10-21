@@ -3,11 +3,11 @@
   include 'connection.php';
 
   $municipalityId = 1;
-  $barangayId = $_POST['barangayId'];
-  $sql = "SELECT * FROM address_barangay WHERE municipalityId = :municipalityId AND barangay_id = :barangayId ORDER BY barangay_name";
+//   $barangayId = $_POST['barangayId'];
+  $sql = "SELECT * FROM address_barangay WHERE municipalityId = :municipalityId ORDER BY barangay_name";
   $stmt = $conn->prepare($sql);
   $stmt->bindParam(":municipalityId", $municipalityId);
-  $stmt->bindParam(":barangayId", $barangayId);
+//   $stmt->bindParam(":barangayId", $barangayId);
   
   $stmt->execute();
   
