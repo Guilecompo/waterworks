@@ -135,7 +135,7 @@ const view = (user_id) => {
                                                 <p style="font-size: medium;">Previous Reading :  ${employee[0].total_cubic_consumed}</p>
                                             </div>
                                             <div class="col-sm-12">
-                                                <label for="cubic_consumed">Present Reading</label>
+                                                <label style="font-size: medium;" for="cubic_consumed">Present Reading</label>
                                                 <input type="number" class="form-control " id="cubic_consumed" style="height: 30px;" placeholder="Present Reading" >
                                             </div>
                                         </div>
