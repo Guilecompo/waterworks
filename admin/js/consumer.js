@@ -440,9 +440,6 @@ const edit = (user_id) => {
 
           var html = `
               <div class=" row  mt-1">
-                <div class="col-md-1 mt-3">
-                  <button class="clear" onclick="displayConsumer()">Back</button>
-                </div>
                 <div class="col-md-11 mt-3">
                   <h4 style="text-align: center;">Edit Consumer</h4>
                 </div>
