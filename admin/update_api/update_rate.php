@@ -24,8 +24,8 @@ try {
     // Check if property_name already exists
     $checkDuplicateQuery = "SELECT COUNT(*) AS count FROM property_rate WHERE property_Id = :propertyId AND rate_id != :rate_id";
     $checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
-    $checkDuplicateStmt->bindParam(":propertyId", $propertyId, PDO::PARAM_INT);
-    $checkDuplicateStmt->bindParam(":rate_id", $rate_id, PDO::PARAM_INT);
+    $checkDuplicateStmt->bindParam(":propertyId",$_POST['propertyId'], PDO::PARAM_INT);
+    $checkDuplicateStmt->bindParam(":rate_id", $_POST['rate_id'], PDO::PARAM_INT);
     $checkDuplicateStmt->execute();
     $result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
 

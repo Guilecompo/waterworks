@@ -289,6 +289,7 @@ const displayRate = () => {
 }
 const submit_edit_rate = (event, rate_id) => {
     event.preventDefault();
+    console.log('RATE ID: ',rate_id)
     const propertyId = document.getElementById("property").value;
     const minimum_rate = document.getElementById("edit_minimum_rate").value;
     const second_rate = document.getElementById("edit_second_rate").value;
@@ -315,6 +316,8 @@ const submit_edit_rate = (event, rate_id) => {
     formData.append("third_rate", third_rate);
     formData.append("last_rate", last_rate);
     formData.append("employee_Id", sessionStorage.getItem("accountId"));
+
+    console.log(rate_id, propertyId, minimum_rate, second_rate, third_rate, last_rate, sessionStorage.getItem("accountId"))
   
     axios({
       url: myUrl,
