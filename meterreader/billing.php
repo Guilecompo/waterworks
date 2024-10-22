@@ -164,8 +164,13 @@ try {
             $stmt->execute();
             $past_total_bills = $stmt->fetchColumn();
             $past_total_bill = $past_total_bills !== false ? $past_total_bills : 0;
+
+            // NOTE: ADD DISCOUNT
+            $discounted = $bill_amount * $discountValue;
+            $newTotalBillDiscount = $bill_amount - $discounted;
+
             $arrears = $past_total_bill;
-            $new_total = $bill_amount + $past_total_bill;
+            $newTotalBill = $newTotalBillDiscount + $past_total_bill;
 
             // Update user_consumer
             $statusId = 1;
@@ -183,9 +188,7 @@ try {
             $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
             $stmtUpdate->execute();
 
-            // NOTE: ADD DISCOUNT
-            $discounted = $bill_amount * $discountValue;
-            $newTotalBill = $bill_amount - $discounted;
+            
             // NOTE: Insert new billing record
             $updatedStatusId = 2;
             $paid_unpaid = 2;
