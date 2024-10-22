@@ -416,10 +416,7 @@ const closeModal = () => {
   const close_butt = document.getElementById("close_butt");
   close_butt.style.display = "flex";
   head.style.display = "block";
-  paginationNumbers.style.display = "block";
   searchInput.style.display = "block";
-  prevBtn.style.display = "block";
-  nextBtn.style.display = "block";
 };
 
 const bill_receipt = (user_id) => {
