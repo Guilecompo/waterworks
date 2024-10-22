@@ -205,9 +205,9 @@ try {
 
             $stmt->bindParam(":discounted_amount", $discounted);
 
-            $stmt->bindParam(":bill_amount", $newTotalBill);
+            $stmt->bindParam(":bill_amount", $bill_amount);
             $stmt->bindParam(":arrears", $arrears);
-            $stmt->bindParam(":total_bill", $new_total);
+            $stmt->bindParam(":total_bill", $newTotalBill);
             $stmt->bindParam(":updatedStatusId", $updatedStatusId);
             $stmt->bindParam(":paid_unpaid", $paid_unpaid);
             $stmt->execute();
@@ -310,10 +310,10 @@ try {
                 if ($stmtUpdates->execute()) {
 
                     // NOTE: ADD DISCOUNT
-                    $discountedAmount = $bill_amount * $discountValue;
-                    $newTotalBillAmount = $bill_amount - $discountedAmount;
+                    $discountedAmount = $new_total_bill * $discountValue;
+                    $newTotalBillAmount = $new_total_bill - $discountedAmount;
 
-                    $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+                    $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter,discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(":consumerId", $consumerId);
                     $stmt->bindParam(":uniqueId", $uniqueId);
@@ -328,9 +328,9 @@ try {
 
                     $stmt->bindParam(":discounted_amount", $discountedAmount);
 
-                    $stmt->bindParam(":bill_amount", $newTotalBillAmount);
+                    $stmt->bindParam(":bill_amount", $bill_amount);
                     $stmt->bindParam(":arrears", $arrears);
-                    $stmt->bindParam(":total_bill", $new_total_bill);
+                    $stmt->bindParam(":total_bill", $newTotalBillAmount);
                     $stmt->bindParam(":updatedStatusId", $updatedStatusId);
                     $stmt->bindParam(":paid_unpaid", $paid_unpaid);
 
