@@ -80,10 +80,21 @@ try {
         // No billing records found, create the first uniqueId
         $uniqueId = "CWB-{$readerId}-{$year}{$month}-001";
     }
+
+    $sqlDiscount = "SELECT b.discount_percent FROM user_consumer a INNER JOIN consumer_type b ON a.consumertypeId = b.consumertype_id WHERE a.user_id = :consumerId";
+    $stmtDiscount = $conn->prepare($sqlDiscount);
+    $stmtDiscount->bindParam(':consumerId', $consumerId);
+    $stmtDiscount->execute();
+    $discount = $stmtDiscount->fetch(PDO::FETCH_ASSOC);
+    $discountPercent = $discount['discount_percent'];
+    $discountValue = $discountPercent / 100;
+
+
     $sqlSelect = "SELECT * FROM billing WHERE consumerId = :consumerId ";
     $stmtSelect = $conn->prepare($sqlSelect);
     $stmtSelect->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
     $stmtSelect->execute();
+    
 
     $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
 
@@ -171,10 +182,14 @@ try {
             $stmtUpdate->bindParam(':statusId', $statusId, PDO::PARAM_INT);
             $stmtUpdate->bindParam(':consumerId', $consumerId, PDO::PARAM_INT);
             $stmtUpdate->execute();
-            // Insert new billing record
+
+            // NOTE: ADD DISCOUNT
+            $discounted = $bill_amount * $discountValue;
+            $newTotalBill = $bill_amount - $discounted;
+            // NOTE: Insert new billing record
             $updatedStatusId = 2;
             $paid_unpaid = 2;
-            $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+            $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":consumerId", $consumerId);
             $stmt->bindParam(":uniqueId", $uniqueId);
@@ -187,7 +202,10 @@ try {
             $stmt->bindParam(":period_cover", $period_cover);
             $stmt->bindParam(":previous_meter", $previous_meter);
             $stmt->bindParam(":present_meter", $cubic_consumed);
-            $stmt->bindParam(":bill_amount", $bill_amount);
+
+            $stmt->bindParam(":discounted_amount", $discounted);
+
+            $stmt->bindParam(":bill_amount", $newTotalBill);
             $stmt->bindParam(":arrears", $arrears);
             $stmt->bindParam(":total_bill", $new_total);
             $stmt->bindParam(":updatedStatusId", $updatedStatusId);
@@ -290,7 +308,12 @@ try {
                 $stmtUpdates->bindParam(':cubic_consumed', $cubic_consumed, PDO::PARAM_INT);
                 
                 if ($stmtUpdates->execute()) {
-                    $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+
+                    // NOTE: ADD DISCOUNT
+                    $discountedAmount = $bill_amount * $discountValue;
+                    $newTotalBillAmount = $bill_amount - $discountedAmount;
+
+                    $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :cubic_consumed, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(":consumerId", $consumerId);
                     $stmt->bindParam(":uniqueId", $uniqueId);
@@ -302,7 +325,10 @@ try {
                     $stmt->bindParam(":due_date", $due_date);
                     $stmt->bindParam(":period_cover", $period_cover);
                     $stmt->bindParam(":previous_meter", $previous_meter);
-                    $stmt->bindParam(":bill_amount", $bill_amount);
+
+                    $stmt->bindParam(":discounted_amount", $discountedAmount);
+
+                    $stmt->bindParam(":bill_amount", $newTotalBillAmount);
                     $stmt->bindParam(":arrears", $arrears);
                     $stmt->bindParam(":total_bill", $new_total_bill);
                     $stmt->bindParam(":updatedStatusId", $updatedStatusId);
