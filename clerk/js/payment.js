@@ -174,12 +174,12 @@ const showFilteredConsumers = (filteredConsumers) => {
                   <td>${consumer.branch_name}</td>
                   <td>
                     <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
-                    <button class="clear" onclick="discount(${consumer.user_id}, '${consumer.firstname}', '${consumer.lastname}', ${consumer.connected_number})">Discount</button>
                   </td>
                 </tr>
             `;
         });
         html += `</tbody></table>`;
+        // <button class="clear" onclick="discount(${consumer.user_id}, '${consumer.firstname}', '${consumer.lastname}', ${consumer.connected_number})">Discount</button>
         document.getElementById("mainDiv").innerHTML = html;
     };
     
@@ -349,9 +349,13 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <label for="amount">Amount to Pay</label>
                                                 <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" >
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="amount">OR #</label>
+                                                <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter OR #" >
                                             </div>
                                         </div>
                                         <div class="row mt-4">
