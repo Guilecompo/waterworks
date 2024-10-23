@@ -12,6 +12,7 @@ error_log(print_r($_POST, true)); // Log the received POST data
 $consumerId = $_POST['consumerId'];
 $emp_Id = $_POST['emp_Id'];
 $amount = $_POST['amount'];
+$or_number = $_POST['or_num'];
 $pay_date = date('Y-m-d ');
 
 $branchId = $_POST['branchId'];
@@ -97,7 +98,7 @@ try {
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
-                $stmtInsert->bindParam(':or_num', $or_num);
+                $stmtInsert->bindParam(':or_num', $or_number);
                 $stmtInsert->bindParam(':pay_amount', $amount);
                 $stmtInsert->bindParam(':pay_change', $pay_change);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);
@@ -150,7 +151,7 @@ try {
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
-                $stmtInsert->bindParam(':or_num', $or_num);
+                $stmtInsert->bindParam(':or_num', $or_number);
                 $stmtInsert->bindParam(':pay_amount', $amount);
                 $stmtInsert->bindParam(':pay_change', $pay_change);
                 $stmtInsert->bindParam(':pay_balance', $updated_bill);

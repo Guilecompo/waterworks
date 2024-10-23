@@ -351,11 +351,11 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         <div class="row mt-0">
                                             <div class="col-sm-6">
                                                 <label for="amount">Amount to Pay</label>
-                                                <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" >
+                                                <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" required>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="amount">OR #</label>
-                                                <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter OR #" >
+                                                <input type="text" class="form-control " id="or_num" style="height: 40px;" placeholder="Enter OR #" required>
                                             </div>
                                         </div>
                                         <div class="row mt-4">
@@ -411,8 +411,9 @@ const showFilteredConsumers = (filteredConsumers) => {
         };
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
+            const or_num = document.getElementById("or_num").value;
         
-            if (amount === '' ) {
+            if (amount === '' || or_num === '') {
                 alert('Fill in all fields');
                 return;
             } else {
@@ -420,6 +421,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                 const formData = new FormData();
                 formData.append("consumerId", user_id);
                 formData.append("amount", amount);
+                formData.append("or_num", or_num);
                 formData.append("emp_Id", sessionStorage.getItem("accountId"));
                 formData.append("branchId", sessionStorage.getItem("branchId"));
         
