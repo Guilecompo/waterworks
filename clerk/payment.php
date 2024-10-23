@@ -20,6 +20,36 @@ $branchId = $_POST['branchId'];
 try {
     $conn->beginTransaction();
 
+    $year = date("y");  // Last 2 digits of the year
+    $month = date("m"); // Current month
+
+    // Query to get the last billing_uniqueId
+    $sql = "SELECT payment_uniqueId FROM payment WHERE payment_uniqueId LIKE :uniqueIdPattern ORDER BY payment_uniqueId DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+
+    // Bind the parameter with the LIKE clause
+    $uniqueIdPattern = "CWP-{$emp_Id}-{$year}{$month}-%";
+    $stmt->bindParam(':uniqueIdPattern', $uniqueIdPattern);
+    $stmt->execute();
+
+    // Check if any results were returned
+    if ($stmt->rowCount() > 0) {
+        // Get the last billing_uniqueId
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $lastUniqueId = $row['payment_uniqueId'];
+
+        // Extract the last three characters, convert to int and increment
+        $lastIdNumber = (int)substr($lastUniqueId, strrpos($lastUniqueId, '-') + 1);
+        $newIdNumber = $lastIdNumber + 1;
+
+        // Convert back to string with leading zeros
+        $newIdNumberString = str_pad($newIdNumber, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
+        $uniqueId = "CWP-{$emp_Id}-{$year}{$month}-{$newIdNumberString}";
+    } else {
+        // No billing records found, create the first uniqueId
+        $uniqueId = "CWP-{$emp_Id}-{$year}{$month}-001";
+    }
+
     $sql = "SELECT arrears FROM billing WHERE consumerId = :consumerId AND billing_statusId = 2 ORDER BY billing_id DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":consumerId", $consumerId);
@@ -91,11 +121,12 @@ try {
                 $pay_change = $amount - $total_bill;
                 
                 // Insert the data into the 'changing_meter' table
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
-              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
+                $sqlInsert = "INSERT INTO payment(payment_uniqueId, pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
+              VALUES (:uniqueId, :pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
 
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
+                $stmtInsert->bindParam(':uniqueId', $uniqueId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
                 $stmtInsert->bindParam(':or_num', $or_number);
@@ -144,11 +175,12 @@ try {
                 // Insert the data into the 'changing_meter' table
                 $pay_change = 0.00;
                
-                $sqlInsert = "INSERT INTO payment(pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
-              VALUES (:pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
+                $sqlInsert = "INSERT INTO payment(payment_uniqueId, pay_consumerId, pay_employeeId, billingId, or_num, pay_amount, pay_change, pay_balance, pay_date, branchId) 
+              VALUES (:uniqueId, :pay_consumerId, :pay_employeeId, :pay_billingId, :or_num, :pay_amount, :pay_change, :pay_balance, :pay_date, :pay_branchId)";
                 $stmtInsert = $conn->prepare($sqlInsert);
 
                 $stmtInsert->bindParam(':pay_consumerId', $consumerId);
+                $stmtInsert->bindParam(':uniqueId', $uniqueId);
                 $stmtInsert->bindParam(':pay_employeeId', $emp_Id);
                 $stmtInsert->bindParam(':pay_billingId', $row['billing_id']);
                 $stmtInsert->bindParam(':or_num', $or_number);
@@ -181,8 +213,9 @@ try {
                             $StatusId = 2;
                             $updatedStatusId = 2;
     
-                            $sql = "INSERT INTO billing (consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
+                            $sql = "INSERT INTO billing (billing_uniqueId, consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:billing_uniqueId, :consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
                             $stmt = $conn->prepare($sql);
+                            $stmt->bindParam(":billing_uniqueId", $rows['billing_uniqueId']);
                             $stmt->bindParam(":consumerId", $rows['consumerId']);
                             $stmt->bindParam(":readerId",  $rows['readerId']);
                             $stmt->bindParam(":branchId", $rows['branchId']);
