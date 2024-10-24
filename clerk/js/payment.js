@@ -719,18 +719,12 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                         <p>
                                                         <strong>Amount Paid: </strong>
                                                         </p>
-                                                        <p>
-                                                            <strong>Change: </strong>
-                                                        </p>
                                                     </td>
                                                     <td class="col-md-3 border-0"></td>
                                                     <td class="col-md-3 border-0"></td>
                                                     <td class="col-md-3 text-center border-0">
                                                         <p>
                                                         <strong>${records[0].pay_amount}</strong>
-                                                        </p>
-                                                        <p>
-                                                            <strong>${records[0].pay_change}</strong>
                                                         </p>
                                                     </td>
                                                 </tr>
