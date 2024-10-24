@@ -161,7 +161,7 @@
                                                         <strong>Amount Paid: </strong>
                                                         </p>
                                                         <p>
-                                                            <strong>Change: </strong>
+                                                           
                                                         </p>
                                                     </td>
                                                     <td class="col-md-2 border-0"></td>
@@ -171,7 +171,7 @@
                                                            <strong>${records[0].pay_amount}</strong>
                                                         </p>
                                                         <p>
-                                                            <strong>${records[0].pay_change}</strong>
+                                                           
                                                         </p>
                                                     </td>
                                                 </tr>
