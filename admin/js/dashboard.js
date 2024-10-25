@@ -339,7 +339,7 @@ const refreshCards = (activityList) => {
               <h5 class="card-title">${activity.firstname} ${activity.lastname}</h5>
               <h6 class="card-subtitle mb-2 text-muted">${activity.formatted_date}</h6>
               <h6 class="card-subtitle mb-2 text-muted">${activity.activity_type}</h6>
-              <p class="card-text"><strong>In:</strong> ${activity.table_name}</p>
+              <p class="card-text"><strong>In:</strong> ${activity.table_name}</p>git
             </div>
           </div>
         </div>
