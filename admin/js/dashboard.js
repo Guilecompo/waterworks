@@ -224,7 +224,7 @@ const displayActivity = () => {
       console.log(activities);
   
       if (!Array.isArray(activities) || activities.length === 0) {
-        errorTable();
+        emptyCards();
       } else {
         showActivityPage(currentPage);
       }
@@ -263,7 +263,7 @@ const showActivityPage = (page, activitiesToDisplay = activities) => {
   var start = (page - 1) * 10;
   var end = start + 10;
   var displayedActivities = activitiesToDisplay.slice(start, end);
-  refreshTable(displayedActivities);
+  refreshCards(displayedActivities);
   showPaginationNumbers(page, Math.ceil(activitiesToDisplay.length / 10));
 };
 
@@ -305,53 +305,52 @@ const goToPage = (pageNumber) => {
 };
 
 
-const errorTable = () => {
+const emptyCards = () => {
   const mainDiv = document.getElementById("mainDivs");
   if (mainDiv) {
-    var html = `
-        <table class="table" >
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">In</th>
-                </tr>
-            </thead>
-        </table>`;
+    const html = `
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading">No Data</h5>
+            <p>No data available to display at the moment.</p>
+          </div>
+        </div>
+      </div>
+    `;
     mainDiv.innerHTML = html;
   } else {
     console.error("Element with id 'mainDivs' not found.");
   }
 };
 
-const refreshTable = (activityList) => {
+
+
+const refreshCards = (activityList) => {
   const mainDiv = document.getElementById("mainDivs");
   if (mainDiv) {
-    var html = `
-        <table class="table mb-0 mt-0">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">In</th>
-                </tr>
-            </thead>
-            <tbody>
-        `;
+    let html = `<div class="container">`; // Use a container for proper spacing
+
     activityList.forEach((activity) => {
       html += `
-            <tr>
-                <td>${activity.firstname}  ${activity.lastname}</td>
-                <td>${activity.activity_type}</td>
-                <td>${activity.table_name}</td>
-            </tr>
-            `;
+        <div class="mb-4">
+          <div class="card shadow border-light">
+            <div class="card-body">
+              <h5 class="card-title">${activity.firstname} ${activity.lastname}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">${activity.formatted_date}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">${activity.activity_type}</h6>
+              <p class="card-text"><strong>In:</strong> ${activity.table_name}</p>
+            </div>
+          </div>
+        </div>
+      `;
     });
 
-    html += `</tbody></table>`;
+    html += `</div>`; // Close the container
 
     mainDiv.innerHTML = html;
   } else {
     console.error("Element with id 'mainDivs' not found.");
   }
 };
+
