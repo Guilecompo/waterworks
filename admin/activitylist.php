@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentDateTime = date("Y-m-d");
         
         // Prepare and execute the SQL query with the current date and time
-        $stmt = $conn->prepare("SELECT a.*, b.*, formatted_date
+        $stmt = $conn->prepare("SELECT a.*, b.*, DATE_FORMAT(a.date_added, '%d %b %Y') AS formatted_date
                                 FROM activity_log a
                                 INNER JOIN user_employee b ON a.employee_Id = b.user_id
                                 WHERE a.date_added = :currentDateTime
