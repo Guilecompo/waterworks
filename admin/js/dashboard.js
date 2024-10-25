@@ -325,7 +325,6 @@ const emptyCards = () => {
 };
 
 
-
 const refreshCards = (activityList) => {
   const mainDiv = document.getElementById("mainDivs");
   if (mainDiv) {
@@ -336,10 +335,11 @@ const refreshCards = (activityList) => {
         <div class="mb-4">
           <div class="card shadow border-light">
             <div class="card-body">
-              <h5 class="card-title">${activity.firstname} ${activity.lastname}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">${activity.formatted_date}</h6>
-              <h6 class="card-subtitle mb-2 text-muted">${activity.activity_type}</h6>
-              <p class="card-text"><strong>In:</strong> ${activity.table_name}</p>git
+              <p class="card-text">
+                ${activity.formatted_date}
+                <strong>${activity.firstname} ${activity.lastname}</strong> 
+                 Sucessfully ${activity.activity_type} the ${activity.table_name}
+              </p>
             </div>
           </div>
         </div>
@@ -353,4 +353,3 @@ const refreshCards = (activityList) => {
     console.error("Element with id 'mainDivs' not found.");
   }
 };
-
