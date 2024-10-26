@@ -41,13 +41,13 @@ const showPreviousPage = () => {
 
 const displayConsumer = () => {
     const head = document.getElementById("head");
-    const paginationNumbers = document.getElementById("paginationNumbers");
+    // const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("filterZone");
-    const searchInput = document.getElementById("searchInput");
+    // const searchInput = document.getElementById("searchInput");
     head.style.display = "block";
-    paginationNumbers.style.display = "block";
+    // paginationNumbers.style.display = "block";
     branchSelect.style.display = "block";
-    searchInput.style.display = "block";
+    // searchInput.style.display = "block";
 
     var url = "http://152.42.243.189/waterworks/clerk/get_consumers.php";
     const formData = new FormData();
@@ -65,90 +65,23 @@ const displayConsumer = () => {
         if (!Array.isArray(consumers) || consumers.length === 0) {
             errorTable();
         } else {
-            sortConsumersByName();
-            showConsumerPage(currentPage);
+          refreshTables(consumers);
         }
     }).catch(error => {
         alert("ERROR! - " + error);
     });
 };
 
-const sortConsumersByName = () => {
-    consumers.sort((a, b) => {
-        const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-        const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-        return nameA.localeCompare(nameB);
-    });
-};
-
-const filterConsumer = () => {
-    const searchInput = document.getElementById("searchInput").value.toLowerCase();
-    const filteredConsumers = consumers.filter((consumer) => {
-        const fullName = (consumer.firstname + ' ' + consumer.lastname + ' ' + consumer.meter_no).toLowerCase();
-        return fullName.includes(searchInput);
-    });
-    showFilteredConsumers(filteredConsumers);
-};
-
-const showFilteredConsumers = (filteredConsumers) => {
-    currentPage = 1;
-    showConsumerPage(currentPage, filteredConsumers);
-};
-
-const showConsumerPage = (page, consumersToDisplay = consumers) => {
-    var start = (page - 1) * 10;
-    var end = start + 10;
-    var displayedConsumers = consumersToDisplay.slice(start, end);
-    refreshTables(displayedConsumers);
-    showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
-};
-const showPaginationNumbersReader = (currentPage, totalPages) => {
-  const paginationNumbersDiv = document.getElementById("paginationNumbers");
-  let paginationNumbersHTML = "";
-
-  const pagesToShow = 5; // Number of pages to display
-
-  // Calculate start and end page numbers to display
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-
-  // Adjust start and end page numbers if they are at the edges
-  if (endPage - startPage + 1 < pagesToShow) {
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-
-  // Generate page numbers
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
-    } else {
-      paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
-    }
-  }
-
-  // Next button
-  paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-
-  paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-};
-
-const goToPageConsumer = (pageNumber) => {
-  showConsumerPage(pageNumber);
-};
-
 const errorTable = () => {
     var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-                <th scope="col">Full Name</th>
-                <th scope="col">Phone No</th>
-                <th scope="col">Meter No</th>
-                <th scope="col">Branch</th>
-                <th scope="col">Action</th>
+                <th class="text-center">Full Name</th>
+                <th class="text-center">Phone No</th>
+                <th class="text-center">Meter No</th>
+                <th class="text-center">Branch</th>
+                <th class="text-center">Action</th>
             </tr>
           </thead>
           </table>`;
@@ -156,26 +89,26 @@ const errorTable = () => {
     document.getElementById("mainDiv").innerHTML = html;
 };
 
-const refreshTables = (consumerList) => {
+const refreshTables = (consumers) => {
     var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Meter No</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
+              <th class="text-center">Full Name</th>
+              <th class="text-center">Meter No</th>
+              <th class="text-center">Branch</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
         `;
-    consumerList.forEach(consumer => {
+        consumers.forEach(consumer => {
         html += `
             <tr>
-              <td>${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
-              <td>${consumer.meter_no}</td>
-              <td>${consumer.branch_name}</td>
-              <td>
+              <td class="text-center">${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""  }</td>
+              <td class="text-center">${consumer.meter_no}</td>
+              <td class="text-center">${consumer.branch_name}</td>
+              <td class="text-center">
               <button class="clear" onclick="view_consumer(${consumer.user_id})">View</button>
               </td>
             </tr>
@@ -183,6 +116,9 @@ const refreshTables = (consumerList) => {
     });
     html += `</tbody></table>`;
     document.getElementById("mainDiv").innerHTML = html;
+    $('#example').DataTable({
+      "ordering": false // Disable sorting for all columns
+    });
 };
 
 const view_consumer = (user_id) => {
@@ -219,25 +155,25 @@ const view_consumer = (user_id) => {
                         <h5 class="font-weight-bold mt-2"></h5>
                         <p </p>
                       </div>
-                      <table class="tab table ">
+                      <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th scope="col">Reading Date</th>
-                            <th scope="col">Cubic Consumed</th>
-                            <th scope="col">Bill Amount</th>
-                            <th scope="col">Arrears</th>
-                            <th scope="col">Total Bill</th>
-                            <th scope="col">Reader Name</th>
+                            <th class="text-center">Reading Date</th>
+                            <th class="text-center">Cubic Consumed</th>
+                            <th class="text-center">Bill Amount</th>
+                            <th class="text-center">Arrears</th>
+                            <th class="text-center">Total Bill</th>
+                            <th class="text-center">Reader Name</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>NO RECORDS</td>
-                            <td>NO RECORDS</td>
-                            <td>NO RECORDS</td>
-                            <td>NO RECORDS</td>
-                            <td>NO RECORDS</td>
-                            <td>NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center">NO RECORDS</td>
                           </tr>
                         </tbody>
                       </table><br/><br/>`;
@@ -252,15 +188,15 @@ const view_consumer = (user_id) => {
                             <h5 class="font-weight-bold mt-2">${currentPageRecords[0].con_firstname} ${currentPageRecords[0].con_middlename} ${currentPageRecords[0].con_lastname} </h5>
                             <p >${currentPageRecords[0].meter_no}</p>
                           </div>
-                          <table class="tab table" style="font-size: small;">
+                          <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                               <tr>
-                                <th scope="col">Reading Date</th>
-                                <th scope="col">Cubic Consumed</th>
-                                <th scope="col">Bill Amount</th>
-                                <th scope="col">Arrears</th>
-                                <th scope="col">Total Bill</th>
-                                <th scope="col">Reader Name</th>
+                                <th class="text-center">Reading Date</th>
+                                <th class="text-center">Cubic Consumed</th>
+                                <th class="text-center">Bill Amount</th>
+                                <th class="text-center">Arrears</th>
+                                <th class="text-center">Total Bill</th>
+                                <th class="text-center">Reader Name</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -269,12 +205,12 @@ const view_consumer = (user_id) => {
                       currentPageRecords.forEach((record) => {
                           html += `
                               <tr>
-                                <td>${record.reading_date}</td>
-                                <td>${record.cubic_consumed}</td>
-                                <td>${record.bill_amount}</td>
-                                <td>${record.arrears}</td>
-                                <td>${record.total_bill}</td>
-                                <td>${record.emp_firstname} ${record.emp_lastname}</td>
+                                <td class="text-center">${record.reading_date}</td>
+                                <td class="text-center">${record.cubic_consumed}</td>
+                                <td class="text-center">${record.bill_amount}</td>
+                                <td class="text-center">${record.arrears}</td>
+                                <td class="text-center">${record.total_bill}</td>
+                                <td class="text-center">${record.emp_firstname} ${record.emp_lastname}</td>
                               </tr>
                           `;
                       });
@@ -284,31 +220,7 @@ const view_consumer = (user_id) => {
               };
               
 
-                const renderPagination = () => {
-                  let paginationHtml = `
-                      <div class="pagination d-flex justify-content-center mt-2" id="paginationNumbers">
-                          <button class="prev-next-btn" onclick="prevPage(${user_id})">Prev</button>
-                  `;
-              
-                  for (let i = 1; i <= totalPages; i++) {
-                      if (i === currentPage) {
-                          paginationHtml += `<span class="pag page-btn active" onclick="goToPage(${i}, ${user_id})">${i}</span>`;
-                      } else {
-                          paginationHtml += `<span class="pag page-btn" onclick="goToPage(${i}, ${user_id})">${i}</span>`;
-                      }
-                  }
-              
-                  paginationHtml += `
-                      <button class="prev-next-btn" onclick="nextPage(${user_id})">Next</button>
-                      </div>
-                  `;
-                  
-                  html += paginationHtml;
-              };
-              
-
                 renderPage();
-                renderPagination();
             }
         } catch (error) {
             // Handle any errors here
@@ -322,25 +234,25 @@ const view_consumer = (user_id) => {
         </div>
       `;
             html += `
-        <table class="tab table ">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-              <th scope="col">Reading Date</th>
-              <th scope="col">Cubic Consumed</th>
-              <th scope="col">Bill Amount</th>
-              <th scope="col">Arrears</th>
-              <th scope="col">Total Bill</th>
-              <th scope="col">Reader Name</th>
+              <th class="text-center">Reading Date</th>
+              <th class="text-center">Cubic Consumed</th>
+              <th class="text-center">Bill Amount</th>
+              <th class="text-center">Arrears</th>
+              <th class="text-center">Total Bill</th>
+              <th class="text-center">Reader Name</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>NO RECORDS</td>
-              <td>NO RECORDS</td>
-              <td>NO RECORDS</td>
-              <td>NO RECORDS</td>
-              <td>NO RECORDS</td>
-              <td>NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
+              <td class="text-center">NO RECORDS</td>
             </tr>
           </tbody>
         </table><br/><br/>
@@ -349,6 +261,9 @@ const view_consumer = (user_id) => {
 
         modalContent.innerHTML = html;
         modal.style.display = "block";
+        $('#example').DataTable({
+          "ordering": false // Disable sorting for all columns
+        });
     }).catch((error) => {
         alert(`ERROR OCCURRED! ${error}`);
     });
@@ -389,13 +304,13 @@ const goToPage = (page, user_id) => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
   const head = document.getElementById("head");
-  const paginationNumbers = document.getElementById("paginationNumbers");
+  // const paginationNumbers = document.getElementById("paginationNumbers");
   const branchSelect = document.getElementById("branch");
-  const searchInput = document.getElementById("searchInput");
+  // const searchInput = document.getElementById("searchInput");
   head.style.display = "none";
   paginationNumbers.style.display = "none";
-  branchSelect.style.display = "none";
-  searchInput.style.display = "none";
+  // branchSelect.style.display = "none";
+  // searchInput.style.display = "none";
 
   var myUrl = "http://152.42.243.189/waterworks/head/getconsumer.php";
   const formData = new FormData();
@@ -815,7 +730,7 @@ const submit_edit_consumer = (event, user_id) => {
         showPaginationNumbersByZone(page, Math.ceil(consumersToDisplay.length / 10));
       };
       const showPaginationNumbersByZone = (currentPage, totalPages) => {
-        const paginationNumbersDiv = document.getElementById("paginationNumbers");
+        // const paginationNumbersDiv = document.getElementById("paginationNumbers");
         let paginationNumbersHTML = "";
       
         const pagesToShow = 5; // Number of pages to display
@@ -852,13 +767,13 @@ const submit_edit_consumer = (event, user_id) => {
       };
       const refreshTablesByZone = (employeeList) => {
           var html = `
-          <table class="table">
+          <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
               <tr>
-                <th scope="col">Full Name</th>
-                <th scope="col">Meter No</th>
-                <th scope="col">Branch</th>
-                <th scope="col">Action</th>
+                <th class="text-center">Full Name</th>
+                <th class="text-center">Meter No</th>
+                <th class="text-center">Branch</th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
           <tbody>
@@ -866,10 +781,10 @@ const submit_edit_consumer = (event, user_id) => {
           employeeList.forEach(consumer => {
               html += `
               <tr>
-                <td>${consumer.firstname} ${consumer.lastname}</td>
-                <td>${consumer.meter_no}</td>
-                <td>${consumer.branch_name}</td>
-                <td>
+                <td class="text-center">${consumer.firstname} ${consumer.lastname}</td>
+                <td class="text-center">${consumer.meter_no}</td>
+                <td class="text-center">${consumer.branch_name}</td>
+                <td class="text-center">
                   <button class="clear" onclick="view_consumer(${consumer.user_id})">View</button>
                 </td>
               </tr>
@@ -919,12 +834,12 @@ const submit_edit_consumer = (event, user_id) => {
         modal.style.display = "none";
       
         const head = document.getElementById("head");
-        const paginationNumbers = document.getElementById("paginationNumbers");
+        // const paginationNumbers = document.getElementById("paginationNumbers");
         const branchSelect = document.getElementById("filterZone");
-        const searchInput = document.getElementById("searchInput");
+        // const searchInput = document.getElementById("searchInput");
         head.style.display = "block";
-        paginationNumbers.style.display = "block";
+        // paginationNumbers.style.display = "block";
         branchSelect.style.display = "block";
-        searchInput.style.display = "block";
+        // searchInput.style.display = "block";
       
       };

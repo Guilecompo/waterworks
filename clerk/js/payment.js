@@ -42,13 +42,13 @@ const showPreviousPage = () => {
   
   const displayConsumer = () => {
     const head = document.getElementById("head");
-    const paginationNumbers = document.getElementById("paginationNumbers");
+    // const paginationNumbers = document.getElementById("paginationNumbers");
     const branchSelect = document.getElementById("filterZone");
-    const searchInput = document.getElementById("searchInput");
+    // const searchInput = document.getElementById("searchInput");
     head.style.display = "block";
-    paginationNumbers.style.display = "block";
+    // paginationNumbers.style.display = "block";
     branchSelect.style.display = "block";
-    searchInput.style.display = "block";
+    // searchInput.style.display = "block";
 
       var url = "http://152.42.243.189/waterworks/clerk/get_consumers.php";
       const formData = new FormData();
@@ -64,115 +64,48 @@ const showPreviousPage = () => {
           if (!Array.isArray(consumers) || consumers.length === 0) {
             errorTable();
           } else {
-            sortConsumersByName();
-            showConsumerPage(currentPage);
+            refreshTables(consumers);
           }
       }).catch(error => {
           alert("ERROR! - " + error);
       });
   };
-  
-  const sortConsumersByName = () => {
-      consumers.sort((a, b) => {
-          const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-          const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-          return nameA.localeCompare(nameB);
-      });
-  };
-  const filterConsumer = () => {
-    const searchInput = document.getElementById("searchInput").value.toLowerCase();
-    const filteredConsumers = consumers.filter((consumer) => {
-        const fullName = (consumer.firstname + ' ' + consumer.lastname + ' ' + consumer.meter_no).toLowerCase();
-        return fullName.includes(searchInput);
-    });
-    showFilteredConsumers(filteredConsumers);
-};
-
-const showFilteredConsumers = (filteredConsumers) => {
-    currentPage = 1;
-    showConsumerPage(currentPage, filteredConsumers);
-};
-  
-  const showConsumerPage = (page, consumersToDisplay = consumers) => {
-      var start = (page - 1) * 10;
-      var end = start + 10;
-      var displayedConsumers = consumersToDisplay.slice(start, end);
-      refreshTables(displayedConsumers);
-      showPaginationNumbersReader(page, Math.ceil(consumersToDisplay.length / 10));
-  };
-  const showPaginationNumbersReader = (currentPage, totalPages) => {
-    const paginationNumbersDiv = document.getElementById("paginationNumbers");
-    let paginationNumbersHTML = "";
-  
-    const pagesToShow = 5; // Number of pages to display
-  
-    // Calculate start and end page numbers to display
-    let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-  
-    // Adjust start and end page numbers if they are at the edges
-    if (endPage - startPage + 1 < pagesToShow) {
-      startPage = Math.max(1, endPage - pagesToShow + 1);
-    }
-  
-    // Previous button
-    paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-  
-    // Generate page numbers
-    for (let i = startPage; i <= endPage; i++) {
-      if (i === currentPage) {
-        paginationNumbersHTML += `<span class="active" onclick="goToPageConsumer(${i})">${i}</span>`;
-      } else {
-        paginationNumbersHTML += `<span onclick="goToPageConsumer(${i})">${i}</span>`;
-      }
-    }
-  
-    // Next button
-    paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-  
-    paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-  };
-  
-  const goToPageConsumer = (pageNumber) => {
-    showConsumerPage(pageNumber);
-  };
-
     const errorTable = () =>{
         var html = `
-        <table class="table">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
-                <th scope="col">Full Name</th>
-                <th scope="col">Phone No</th>
-                <th scope="col">Meter No</th>
-                <th scope="col">Branch</th>
-                <th scope="col">Action</th>
+                <th class="text-center">Full Name</th>
+                <th class="text-center">Phone No</th>
+                <th class="text-center">Meter No</th>
+                <th class="text-center">Branch</th>
+                <th class="text-center">Action</th>
             </tr>
           </thead>
           </table>`;
     
           document.getElementById("mainDiv").innerHTML = html;
       }
-      const refreshTables = (consumerList) => {
+      const refreshTables = (consumers) => {
         var html = `
-            <table class="table">
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
               <thead>
                 <tr>
-                  <th scope="col">Full Name</th>
-                  <th scope="col">Meter No</th>
-                  <th scope="col">Branch</th>
-                  <th scope="col">Action</th>
+                  <th class="text-center">Full Name</th>
+                  <th class="text-center">Meter No</th>
+                  <th class="text-center">Branch</th>
+                  <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
             `;
-        consumerList.forEach(consumer => {
+            consumers.forEach(consumer => {
             html += `
                 <tr>
-                  <td>${consumer.firstname} ${consumer.lastname} ${consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""}</td>
-                  <td>${consumer.meter_no}</td>
-                  <td>${consumer.branch_name}</td>
-                  <td>
+                  <td class="text-center">${consumer.firstname} ${consumer.lastname} ${consumer.connected_number !== 0 ? "#" + consumer.connected_number : ""}</td>
+                  <td class="text-center">${consumer.meter_no}</td>
+                  <td class="text-center">${consumer.branch_name}</td>
+                  <td class="text-center">
                     <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
                   </td>
                 </tr>
@@ -181,6 +114,9 @@ const showFilteredConsumers = (filteredConsumers) => {
         html += `</tbody></table>`;
         // <button class="clear" onclick="discount(${consumer.user_id}, '${consumer.firstname}', '${consumer.lastname}', ${consumer.connected_number})">Discount</button>
         document.getElementById("mainDiv").innerHTML = html;
+        $('#example').DataTable({
+          "ordering": false // Disable sorting for all columns
+        });
     };
     
     const discount = (user_id, firstname, lastname, connected_number) => {
@@ -568,13 +504,13 @@ const showFilteredConsumers = (filteredConsumers) => {
           };
           const refreshTablesByZone = (employeeList) => {
               var html = `
-              <table class="table">
+              <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                   <tr>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Meter No</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Action</th>
+                    <th class="text-center">Full Name</th>
+                    <th class="text-center">Meter No</th>
+                    <th class="text-center">Branch</th>
+                    <th class="text-center">Action</th>
                   </tr>
                 </thead>
               <tbody>
@@ -582,10 +518,10 @@ const showFilteredConsumers = (filteredConsumers) => {
               employeeList.forEach(consumer => {
                   html += `
                   <tr>
-                    <td>${consumer.firstname} ${consumer.lastname}</td>
-                    <td>${consumer.meter_no}</td>
-                    <td>${consumer.branch_name}</td>
-                    <td>
+                    <td class="text-center">${consumer.firstname} ${consumer.lastname}</td>
+                    <td class="text-center">${consumer.meter_no}</td>
+                    <td class="text-center">${consumer.branch_name}</td>
+                    <td class="text-center">
                         <button class="clear" onclick="payment(${consumer.user_id})">Pay</button>
                         <button class="clear" onclick="discount(${consumer.user_id}, '${consumer.firstname}', '${consumer.lastname}', ${consumer.connected_number})">Discount</button>
                     </td>
@@ -594,6 +530,9 @@ const showFilteredConsumers = (filteredConsumers) => {
               });
               html += `</tbody></table>`;
               document.getElementById("mainDiv").innerHTML = html;
+              $('#example').DataTable({
+                "ordering": false // Disable sorting for all columns
+              });
           };
 
       const success_update_modal = () => {
@@ -640,15 +579,15 @@ const showFilteredConsumers = (filteredConsumers) => {
         modal.style.display = "none";
       
         const head = document.getElementById("head");
-        const paginationNumbers = document.getElementById("paginationNumbers");
+        // const paginationNumbers = document.getElementById("paginationNumbers");
         const branchSelect = document.getElementById("filterZone");
-        const searchInput = document.getElementById("searchInput");
+        // const searchInput = document.getElementById("searchInput");
         const close_butt = document.getElementById("close_butt");
         close_butt.style.display = "flex";
         head.style.display = "block";
-        paginationNumbers.style.display = "block";
+        // paginationNumbers.style.display = "block";
         branchSelect.style.display = "block";
-        searchInput.style.display = "block";
+        // searchInput.style.display = "block";
       
       };
 
@@ -712,7 +651,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                         
                                         </span>
                                         
-                                        <table class="tab1 table table-hover table-fixed ">
+                                        <table class="tab1 table table-hover table-fix">
                                             <tbody>
                                                 <tr>
                                                     <td class="col-md-3 text-start border-0">
@@ -736,7 +675,7 @@ const showFilteredConsumers = (filteredConsumers) => {
                                                 </tr>
                                             </tbody>
                                         </table>                                                       
-                                        <table class=" table p-3 border">
+                                        <table class="table p-3 border">
                                           <thead>
                                               <tr>
                                                   <th class="text-center border-0">Date</th>

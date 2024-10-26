@@ -209,15 +209,15 @@ try {
                         $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
     
                         if ($rows) {
-    
                             $StatusId = 2;
                             $updatedStatusId = 2;
-    
+                        
                             $sql = "INSERT INTO billing (billing_uniqueId, consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:billing_uniqueId, :consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
+                            
                             $stmt = $conn->prepare($sql);
                             $stmt->bindParam(":billing_uniqueId", $rows['billing_uniqueId']);
                             $stmt->bindParam(":consumerId", $rows['consumerId']);
-                            $stmt->bindParam(":readerId",  $rows['readerId']);
+                            $stmt->bindParam(":readerId", $rows['readerId']);
                             $stmt->bindParam(":branchId", $rows['branchId']);
                             $stmt->bindParam(":prev_cubic_consumed", $rows['prev_cubic_consumed']);
                             $stmt->bindParam(":cubic_consumed", $rows['cubic_consumed']);
@@ -231,9 +231,25 @@ try {
                             $stmt->bindParam(":total_bill", $updated_bill);
                             $stmt->bindParam(":updatedStatusId", $StatusId);
                             $stmt->bindParam(":billing_update_statusId", $updatedStatusId);
-    
-                            $stmt->execute();
-                        }
+                        
+                            if ($stmt->execute()) {
+                                // Only insert into the activity log if the billing was successful
+                                $activity_type = "Add";
+                                $table_name = "Payment";
+                                $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+                                
+                                $stmt1 = $conn->prepare($sql1);
+                                $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+                                $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+                                $stmt1->bindParam(":date_added", $date_added);
+                                $stmt1->bindParam(":employee_Id", $emp_Id, PDO::PARAM_INT);
+                                $stmt1->execute();
+                        
+                                $returnValue = "Successfully Billed";
+                            } else {
+                                $returnValue = "Failed to Bill";
+                            }
+                        }                        
                     }else {
                         echo "Error updating data: " . $stmtUpdate->errorInfo()[2];
                     }
