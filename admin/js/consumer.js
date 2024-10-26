@@ -1550,10 +1550,10 @@ const bill_receipt = (billing_id) => {
                               </div>
                               <div class="col-sm-12 mt-3">
                                       <div class="row ">
-                                          <div class="col-md-6 ">
+                                          <div class="col-md-3 ">
                                           </div>
-                                          <div class="col-md-6  text-md-end">
-                                              <h6 class="text-muted mt-0">${records[0].billing_uniqueId}</h6>
+                                          <div class="col-md-9  text-md-end">
+                                              <h6 class="mt-0" style="padding-right: 15px; color: #f44336;">${records[0].billing_uniqueId}</h6>
                                           </div>
                                       </div>
                                   </div>
@@ -1600,7 +1600,7 @@ const paymentHis = (user_id) => {
           // Add a single "Connected Meter" heading
           html = `
                 <div class="text-center ">
-                  <h4 class="mb-3" style="text-align:center;">Bill History</h4>
+                  <h4 class="mb-3" style="text-align:center;">Payment History</h4>
                   <hr class="badge-primary mt-3 mb-4">
                 </div>
                 <div class="mt-1 text-center">
@@ -1630,7 +1630,7 @@ const paymentHis = (user_id) => {
                                 <td>${record.pay_date}</td>
                                 <td>${record.pay_amount}</td>
                                 <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                                <td><button class="butts" onclick="payment_receipt(${record.pay_id})">View</button></td>
+                                <td><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="payment_receipt(${record.pay_id})">View</button></td>
                             </tr>
                         `;
           });
@@ -1746,6 +1746,15 @@ const payment_receipt = (pay_id) => {
                                     </tbody>
                                 </table>
                               </div>
+                              <div class="col-sm-12 mt-3">
+                                      <div class="row ">
+                                          <div class="col-md-3 ">
+                                          </div>
+                                          <div class="col-md-9  text-md-end">
+                                              <h6 class="mt-0" style="padding-right: 15px; color: #f44336;">${records[0].payment_uniqueId}</h6>
+                                          </div>
+                                      </div>
+                                  </div>
                       </div>
                   </div>
               </div>
