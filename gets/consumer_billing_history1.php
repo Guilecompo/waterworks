@@ -28,7 +28,6 @@ try {
             a.previous_meter,
             a.present_meter,
             a.arrears,
-            a.penalty,
             a.bill_amount,
             a.total_bill
         FROM billing a
