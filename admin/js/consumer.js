@@ -1398,13 +1398,13 @@ const billingHis = (user_id) => {
               `;
 
           html += `
-                  <table class=" table ">
+                  <table id="example" class="table table-striped table-bordered" style="width:100%">
                       <thead>
                         <tr>
-                          <th scope="col">Reading Date</th>
-                          <th scope="col">Total Bill</th>
-                          <th scope="col">Reader Name</th>
-                          <th scope="col">Action</th>
+                          <th class="text-center">Reading Date</th>
+                          <th class="text-center">Total Bill</th>
+                          <th class="text-center">Reader Name</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1413,10 +1413,10 @@ const billingHis = (user_id) => {
           records.forEach((record) => {
             html += `
                     <tr>
-                      <td>${record.reading_date}</td>
-                      <td>${record.total_bill}</td>
-                      <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                      <td><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="bill_receipt(${record.billing_id})">View</button></td>
+                      <td class="text-center">${record.reading_date}</td>
+                      <td class="text-center">${record.total_bill}</td>
+                      <td class="text-center">${record.emp_firstname} ${record.emp_lastname}</td>
+                      <td class="text-center"><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="bill_receipt(${record.billing_id})">View</button></td>
                     </tr>
                   `;
           });
@@ -1430,6 +1430,9 @@ const billingHis = (user_id) => {
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
+      $('#example').DataTable({
+        "ordering": false // Disable sorting for all columns
+      });
     })
     .catch((error) => {
       console.log(`ERROR OCCURRED! ${error}`);
@@ -1612,13 +1615,13 @@ const paymentHis = (user_id) => {
               `;
 
           html += `
-                    <table class=" table">
+                    <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                            <th scope="col">Payment Date</th>
-                            <th scope="col">Payment Amount</th>
-                            <th scope="col">Clerk Name</th>
-                            <th scope="col">Action</th>
+                            <th class="text-center">Payment Date</th>
+                            <th class="text-center">Payment Amount</th>
+                            <th class="text-center">Clerk Name</th>
+                            <th class="text-center">Action</th>
                             </tr>
                         </thead>
                     <tbody>
@@ -1627,10 +1630,10 @@ const paymentHis = (user_id) => {
           records.forEach((record) => {
             html += `
                             <tr>
-                                <td>${record.pay_date}</td>
-                                <td>${record.pay_amount}</td>
-                                <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                                <td><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="payment_receipt(${record.pay_id})">View</button></td>
+                                <td class="text-center">${record.pay_date}</td>
+                                <td class="text-center">${record.pay_amount}</td>
+                                <td class="text-center">${record.emp_firstname} ${record.emp_lastname}</td>
+                                <td class="text-center"><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="payment_receipt(${record.pay_id})">View</button></td>
                             </tr>
                         `;
           });
@@ -1644,6 +1647,9 @@ const paymentHis = (user_id) => {
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
+      $('#example').DataTable({
+        "ordering": false // Disable sorting for all columns
+      });
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
@@ -2043,7 +2049,7 @@ const more = (user_id) => {
           html = `<h4 class="mb-3" style="text-align:center;">Connected Meter</h4>`;
 
           html += `
-                  <table class=" table ">
+                  <table id="example" class="table table-striped table-bordered" style="width:100%">
                       <thead>
                           <tr>
                               <th scope="col">Full Name</th>
@@ -2062,7 +2068,7 @@ const more = (user_id) => {
                           <td>${record.phone_no}</td>
                           <td>${record.meter_no}</td>
                           <td>
-                              <button class="butts" onclick="connected_edit(${record.user_id})">Edit</button>
+                              <button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="connected_edit(${record.user_id})">Edit</button>
                           </td>
                       </tr>
                   `;
@@ -2076,7 +2082,7 @@ const more = (user_id) => {
         html = `<h4 class="mb-3" style="text-align:center;">No Other Connected Meter</h4>`;
 
         html += `
-                  <table class=" table ">
+                  <table id="example" class="table table-striped table-bordered" style="width:100%">
                       <thead>
                           <tr>
                               <th scope="col">Full Name</th>
@@ -2093,7 +2099,6 @@ const more = (user_id) => {
                           <td>NO RECORD</td>
                           <td>NO RECORD</td>
                           <td>
-                              <button class="butts" >Edit</button>
                           </td>
                       </tr>
               `;
@@ -2102,6 +2107,9 @@ const more = (user_id) => {
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
+      $('#example').DataTable({
+        "ordering": false // Disable sorting for all columns
+      });
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);

@@ -54,38 +54,102 @@ const displayAssigned = () => {
   };
   const consumerRefreshTables = (employees) => {
     var html = `
-          <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
-              <tr>
-                <th class="text-center">Full Name</th>
-                <th class="text-center">Area</th>
-                <th class="text-center">Branch</th>
-                <th class="text-center">Action</th>
-              </tr>
+                <tr>
+                    <th class="text-center">Full Name</th>
+                    <th class="text-center">Area</th>
+                    <th class="text-center">Branch</th>
+                    <th class="text-center">Action</th>
+                </tr>
             </thead>
             <tbody>
-          `;
-          employees.forEach((employee) => {
-      html += `
-              <tr>
+    `;
+    employees.forEach((employee) => {
+        html += `
+            <tr>
                 <td class="text-center">${employee.firstname} ${employee.lastname}</td>
                 <td class="text-center">${employee.zone_name}</td>
                 <td class="text-center">${employee.branch_name}</td>
                 <td class="text-center">
-                    <button style="background-color: #b91c1c; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="remove_assigned(${employee.user_id})">Remove</button>
+                    <button style="background-color: #b91c1c; border: none; padding: 5px; border-radius: 12%; color:white;" class="clear" onclick="remove_confirmation(${employee.assign_id}, '${employee.firstname}', '${employee.lastname}', '${employee.zone_name}', '${employee.branch_name}')">Remove</button>
                 </td>
-              </tr>
-              `;
+            </tr>
+        `;
     });
     html += `</tbody></table>`;
     document.getElementById("mainDiv").innerHTML = html;
     $('#example').DataTable({
-      "ordering": false // Disable sorting for all columns
+        "ordering": false // Disable sorting for all columns
     });
-  };
+};
 
-  const remove_assigned = (user_id) => {
-    console.log('You remove :', user_id);
+const remove_confirmation = (assign_id, firstname, lastname, zone_name, branch_name) => {
+    const modal = document.getElementById("myModals");
+    const modalContent = document.getElementById("modalContents");
+    const modalTitle = modal.querySelector(".modal-title");
+
+    // Set the modal title
+    modalTitle.textContent = `Remove Assignment Confirmation`;
+
+    var html = `
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="row z-depth-3">
+                    <div class="col-md-12 rounded-right">
+                        <div class="car-block text-center">
+                            <h5 class="modal-title" style="text-align:center;">Are you sure you want to remove assigned from ${firstname} ${lastname} in ${zone_name} ${branch_name}?</h5>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-sm-5">
+                                <button type="button" class="btn btn-primary w-100" onclick="remove_assigned(${assign_id})">Yes</button>
+                            </div>
+                            <div class="col-sm-2 my-1"></div>
+                            <div class="col-sm-5">
+                                <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="closeModal()">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modalContent.innerHTML = html;
+    modal.style.display = "block"; // Display the modal
+
+    // Use Bootstrap's modal method to show the modal
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+};
+  const remove_assigned = (assign_id) => {
+    var url = "http://152.42.243.189/waterworks/gets/update_assigned.php";
+    const formData = new FormData();
+    formData.append("employee_Id", sessionStorage.getItem("accountId"));
+    formData.append("assign_id", assign_id);
+    axios({
+      url: url,
+      method: "post",
+      data: formData,
+    })
+    .then((response) => {
+      console.log(response);
+      console.log("Responses : ", response);
+      if (response.data.status === 1) {
+        success_modals();
+        //window.location.href = "./addconsumer.html";
+      } else if (response.data.status === 0) {
+        // alert("Username or phone number already exists!");
+        console.log(response.data.message || "An error occurred.");
+        failed_modals();
+      } else {
+        console.log("Unexpected response:", response.data);
+        error_modals();
+      }
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
   }
 
   const add_assign = () => {
