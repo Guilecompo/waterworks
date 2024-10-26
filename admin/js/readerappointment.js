@@ -98,11 +98,11 @@ const remove_confirmation = (assign_id, firstname, lastname, zone_name, branch_n
                 <div class="row z-depth-3">
                     <div class="col-md-12 rounded-right">
                         <div class="car-block text-center">
-                            <h5 class="modal-title" style="text-align:center;">Are you sure you want to remove assigned from ${firstname} ${lastname} in ${zone_name} ${branch_name}?</h5>
+                            <h5 class="modal-title" style="text-align:center;">Are you sure you want to remove assigned from <span style= "color: green;">${firstname} ${lastname}</span> in <span style= "color: green;">${zone_name} ${branch_name}</span>?</h5>
                         </div>
                         <div class="row mt-4">
                             <div class="col-sm-5">
-                                <button type="button" class="btn btn-primary w-100" onclick="remove_assigned(${assign_id})">Yes</button>
+                                <button type="button" class="btn btn-danger w-100" onclick="remove_assigned(${assign_id})">Yes</button>
                             </div>
                             <div class="col-sm-2 my-1"></div>
                             <div class="col-sm-5">
@@ -137,6 +137,7 @@ const remove_confirmation = (assign_id, firstname, lastname, zone_name, branch_n
       console.log("Responses : ", response);
       if (response.data.status === 1) {
         success_modals();
+        displayAssigned();
         //window.location.href = "./addconsumer.html";
       } else if (response.data.status === 0) {
         // alert("Username or phone number already exists!");
