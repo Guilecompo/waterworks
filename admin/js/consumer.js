@@ -1439,10 +1439,10 @@ const bill_receipt = (billing_id) => {
   const modal = document.getElementById("myModal");
   const modalContent = document.getElementById("modalContent");
 
-  const myUrl = "http://152.42.243.189/waterworks/gets/consumer_billing_history1.php";
+  var myUrl = "http://152.42.243.189/waterworks/gets/consumer_billing_history1.php";
   const formData = new FormData();
   formData.append("billing_id", billing_id);
-  console.log("billing_id:", billing_id);
+  console.log("billing_id  : ", billing_id);
 
   axios({
     url: myUrl,
@@ -1452,103 +1452,118 @@ const bill_receipt = (billing_id) => {
     .then((response) => {
       try {
         console.log(response.data);
-        let html;
-
         if (response.data.length === 0) {
-          html = `<h2>No Records</h2>`;
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
         } else {
-          const records = response.data;
+          var records = response.data;
 
           html = `
                 <div class="wrapper">
                   <div class="container mt-0 ">
                       <div class="row ">
-                          <div class="text-center ">
-                              <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
-                          </div>
-                          <div class="col-sm-12 mt-3">
                               <div class="row ">
-                                  <div class="col-md-6 ">
-                                      <p style="text-decoration: underline; font-size: small">NAME</p>
-                                      <h6 class="text-muted mt-0">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</h6>
+                                  <div class="text-center ">
+                                      <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
                                   </div>
-                                  <div class="col-md-6 text-md-end">
-                                      <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
-                                      <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
+                                  <div class="col-sm-12 mt-3">
+                                      <div class="row ">
+                                          <div class="col-md-6 ">
+                                              <p style="text-decoration: underline; font-size: small">NAME</p>
+                                              <h6 class="text-muted mt-0">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</h6>
+                                          </div>
+                                  
+                                          <div class="col-md-6  text-md-end">
+                                              <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
+                                              <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
+                                          </div>
+                                      </div>
+                                  
+                                      <div class="mt-1">
+                                          <p style="text-decoration: underline; font-size: small">ADDRESS</p>
+                                          <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                      </div>
                                   </div>
+                                  
                               </div>
-                              <div class="mt-1">
-                                  <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                  <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                              <div class="row">
+                                  
+                                  </span>
+                                  <table class="tab table table-bordered table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="text-center">Previous</th>
+                                              <th class="text-center">Present</th>
+                                              <th class="text-center">Consumed</th>
+                                              <th class="text-center">Amount</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-3 text-center">${records[0].previous_meter}</td>
+                                              <td class="col-md-3 text-center">${records[0].present_meter}</td>
+                                              <td class="col-md-3 text-center">${records[0].cubic_consumed}</td>
+                                              <td class="col-md-3 text-center">${records[0].bill_amount}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                                  <table class="tabb1 table table-hover table-fixed">
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-5 text-start border-0 ">
+                                                  <p>
+                                                      <strong style="font-size: small">ARREARS </strong>
+                                                  </p>
+                                                  <p>
+                                                      <strong style="font-size: small">AMOUNT UNTIL DUE DATE </strong>
+                                                  </p>
+                                              </td>
+                                              <td class="col-md-1 border-0"></td>
+                                              <td class="col-md-3 border-0"></td>
+                                              <td class="col-md-3 text-center border-0">
+                                                  <p>
+                                                      <strong>${records[0].arrears}</strong>
+                                                  </p>
+                                                  <p>
+                                                      <strong>${records[0].total_bill}</strong>
+                                                  </p>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>                                                     
+                                  <table class="tabb2 table table-bordered table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="text-center">Reading Date</th>
+                                              <th class="text-center">Due Date</th>
+                                              <th class="text-center">FOR THE MONTH OF</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-4 text-center">${records[0].reading_date}</td>
+                                              <td class="col-md-4 text-center">${records[0].due_date}</td>
+                                              <td class="col-md-4 text-center">${records[0].formatted_reading_date2}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
                               </div>
-                          </div>
-                      </div>
-                      <div class="row">
-                          <table class="tab table table-bordered table-hover">
-                              <thead>
-                                  <tr>
-                                      <th class="text-center">Previous</th>
-                                      <th class="text-center">Present</th>
-                                      <th class="text-center">Consumed</th>
-                                      <th class="text-center">Amount</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td class="col-md-3 text-center">${records[0].previous_meter}</td>
-                                      <td class="col-md-3 text-center">${records[0].present_meter}</td>
-                                      <td class="col-md-3 text-center">${records[0].cubic_consumed}</td>
-                                      <td class="col-md-3 text-center">${records[0].bill_amount}</td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                          <table class="tabb1 table table-hover table-fixed">
-                              <tbody>
-                                  <tr>
-                                      <td class="col-md-5 text-start border-0">
-                                          <p><strong style="font-size: small">ARREARS</strong></p>
-                                          <p><strong style="font-size: small">AMOUNT UNTIL DUE DATE</strong></p>
-                                      </td>
-                                      <td class="col-md-1 border-0"></td>
-                                      <td class="col-md-3 border-0"></td>
-                                      <td class="col-md-3 text-center border-0">
-                                          <p><strong>${records[0].arrears}</strong></p>
-                                          <p><strong>${records[0].total_bill}</strong></p>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                          <table class="tabb2 table table-bordered table-hover">
-                              <thead>
-                                  <tr>
-                                      <th class="text-center">Reading Date</th>
-                                      <th class="text-center">Due Date</th>
-                                      <th class="text-center">FOR THE MONTH OF</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td class="col-md-4 text-center">${records[0].reading_date}</td>
-                                      <td class="col-md-4 text-center">${records[0].due_date}</td>
-                                      <td class="col-md-4 text-center">${records[0].formatted_reading_date2}</td>
-                                  </tr>
-                              </tbody>
-                          </table>
                       </div>
                   </div>
               </div>
               `;
         }
       } catch (error) {
-        html = `<h4 class="text-center">${error.message}</h4>`;
+        // Handle any errors here
+        html = `<h4 class="text-center ">${error}</h4>`;
       }
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
     })
     .catch((error) => {
-      console.error('Axios error:', error.response ? error.response.data : error);
-      alert(`ERROR OCCURRED! ${error.message}`);
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log('the error: ', error);
     });
 };
 
