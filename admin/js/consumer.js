@@ -1416,7 +1416,7 @@ const billingHis = (user_id) => {
                       <td>${record.reading_date}</td>
                       <td>${record.total_bill}</td>
                       <td>${record.emp_firstname} ${record.emp_lastname}</td>
-                      <td><button class="butts" onclick="bill_receipt(${record.billing_id})">View</button></td>
+                      <td><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="bill_receipt(${record.billing_id})">View</button></td>
                     </tr>
                   `;
           });
@@ -1562,6 +1562,7 @@ const bill_receipt = (billing_id) => {
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
+      console.log('the error: ', error);
     });
 };
 

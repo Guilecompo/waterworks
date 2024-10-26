@@ -212,7 +212,7 @@ const displayActivity = () => {
   var url = "http://152.42.243.189/waterworks/admin/activitylist.php";
   
   const formData = new FormData();
-    formData.append("accountId", sessionStorage.getItem("accountId"));
+  formData.append("accountId", sessionStorage.getItem("accountId"));
   
   axios({
     url: url,
@@ -232,11 +232,12 @@ const displayActivity = () => {
     .catch((error) => {
       alert("ERRORSA! - " + error);
     });  
-  };
+};
+
 const showNextPage = () => {
   const nextPage = currentPage + 1;
-  const start = (nextPage - 1) * 10;
-  const end = start + 10;
+  const start = (nextPage - 1) * 5; // Change 10 to 5
+  const end = start + 5; // Change 10 to 5
   const activitiesOnNextPage = activities.slice(start, end);
 
   if (activitiesOnNextPage.length > 0) {
@@ -244,9 +245,6 @@ const showNextPage = () => {
     showActivityPage(currentPage);
   } else {
     alert("Next page is empty or has no content.");
-    // Optionally, you can choose to disable the button here
-    // For example, if you have a button element with id "nextButton":
-    // document.getElementById("nextButton").disabled = true;
   }
 };
 
@@ -260,11 +258,11 @@ const showPreviousPage = () => {
 };
 
 const showActivityPage = (page, activitiesToDisplay = activities) => {
-  var start = (page - 1) * 10;
-  var end = start + 10;
+  var start = (page - 1) * 5; // Change 10 to 5
+  var end = start + 5; // Change 10 to 5
   var displayedActivities = activitiesToDisplay.slice(start, end);
   refreshCards(displayedActivities);
-  showPaginationNumbers(page, Math.ceil(activitiesToDisplay.length / 10));
+  showPaginationNumbers(page, Math.ceil(activitiesToDisplay.length / 5)); // Change 10 to 5
 };
 
 const showPaginationNumbers = (currentPage, totalPages) => {
@@ -273,19 +271,15 @@ const showPaginationNumbers = (currentPage, totalPages) => {
 
   const pagesToShow = 5; // Number of pages to display
 
-  // Calculate start and end page numbers to display
   let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
   let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
 
-  // Adjust start and end page numbers if they are at the edges
   if (endPage - startPage + 1 < pagesToShow) {
     startPage = Math.max(1, endPage - pagesToShow + 1);
   }
 
-  // Previous button
-  paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
+  paginationNumbersHTML += `<button onclick="showPreviousPage()">Previous</button>`;
 
-  // Generate page numbers
   for (let i = startPage; i <= endPage; i++) {
     if (i === currentPage) {
       paginationNumbersHTML += `<span class="active" onclick="goToPage(${i})">${i}</span>`;
@@ -294,7 +288,6 @@ const showPaginationNumbers = (currentPage, totalPages) => {
     }
   }
 
-  // Next button
   paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
 
   paginationNumbersDiv.innerHTML = paginationNumbersHTML;
@@ -303,7 +296,6 @@ const showPaginationNumbers = (currentPage, totalPages) => {
 const goToPage = (pageNumber) => {
   showActivityPage(pageNumber);
 };
-
 
 const emptyCards = () => {
   const mainDiv = document.getElementById("mainDivs");
@@ -324,21 +316,20 @@ const emptyCards = () => {
   }
 };
 
-
 const refreshCards = (activityList) => {
   const mainDiv = document.getElementById("mainDivs");
   if (mainDiv) {
-    let html = `<div class="container">`; // Use a container for proper spacing
+    let html = `<div class="container">`;
 
     activityList.forEach((activity) => {
       html += `
-        <div class="mb-4">
+        <div class="">
           <div class="card shadow border-light">
-            <div class="card-body">
+            <div class="card-body" >
               <p class="card-text">
                 ${activity.formatted_date}
                 <strong>${activity.firstname} ${activity.lastname}</strong> 
-                 Sucessfully ${activity.activity_type} the ${activity.table_name}
+                Successfully ${activity.activity_type} the ${activity.table_name}
               </p>
             </div>
           </div>
@@ -346,8 +337,7 @@ const refreshCards = (activityList) => {
       `;
     });
 
-    html += `</div>`; // Close the container
-
+    html += `</div>`;
     mainDiv.innerHTML = html;
   } else {
     console.error("Element with id 'mainDivs' not found.");

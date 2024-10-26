@@ -31,7 +31,7 @@ $stmt = $conn->prepare("SELECT
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    WHERE a.billing_id = :billing_id ORDER BY billing_id DESC LIMIT 1");
+    WHERE a.billing_id = :billing_id");
 
 $stmt->bindParam(":billing_id", $billing_id);
 $stmt->execute();

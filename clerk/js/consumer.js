@@ -109,7 +109,7 @@ const refreshTables = (consumers) => {
               <td class="text-center">${consumer.meter_no}</td>
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
-              <button class="clear" onclick="view_consumer(${consumer.user_id})">View</button>
+              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="view_consumer(${consumer.user_id})">View</button>
               </td>
             </tr>
             `;
