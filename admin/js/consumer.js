@@ -506,6 +506,12 @@ const edit = (user_id) => {
                           </select>
                       </div> 
                       <div class="col-md-4 mt-3">
+                          <label class="form-label">Consumer Type</label>
+                          <select id="consumer" class="form-select">
+                            <option value="${consumer[0].consumertype_id }" selected>${consumer[0].consumertype}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
                           <label class="form-label">Meter Number</label>
                           <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
                       </div>  
@@ -529,6 +535,7 @@ const edit = (user_id) => {
           getSuffix();
           getBranch();
           getProperty();
+          getConsumerType();
           getMunicipality();
         }
       } catch (error) {
@@ -548,6 +555,7 @@ const submit_edit_consumer = (event, user_id) => {
   const phone = document.getElementById("phone").value;
   const email_add = document.getElementById("email_add").value;
   const propertyId = document.getElementById("property").value;
+  const consumertypeId = document.getElementById("consumer").value;
 
   const municipalityId = document.getElementById("municipality").value;
   const barangayId = document.getElementById("barangay").value;
@@ -564,6 +572,7 @@ const submit_edit_consumer = (event, user_id) => {
     phone === "" ||
     email_add === "" ||
     propertyId === "" ||
+    consumertypeId === "" ||
     municipalityId === "" ||
     barangayId === "" ||
     zoneId === "" ||
@@ -584,12 +593,14 @@ const submit_edit_consumer = (event, user_id) => {
   formData.append("phone", phone);
   formData.append("email_add", email_add);
   formData.append("propertyId", propertyId);
+  formData.append("consumertypeId", consumertypeId);
   formData.append("municipalityId", municipalityId);
   formData.append("barangayId", barangayId);
   formData.append("zoneId", zoneId);
   formData.append("branchId", branchId);
   formData.append("meter_no", meter_no);
   formData.append("house_no", house_no);
+  formData.append("employee_Id", sessionStorage.getItem("accountId"));
   console.log(
     user_id,
     firstname,
@@ -603,7 +614,8 @@ const submit_edit_consumer = (event, user_id) => {
     house_no,
     meter_no,
     branchId,
-    propertyId
+    propertyId,
+    consumertypeId
   );
 
   axios({

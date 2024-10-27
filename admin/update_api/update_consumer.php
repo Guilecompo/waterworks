@@ -17,13 +17,17 @@ try {
     $phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
     $addressId = htmlspecialchars($_POST['zoneId'], ENT_QUOTES, 'UTF-8');
     $propertyId = htmlspecialchars($_POST['propertyId'], ENT_QUOTES, 'UTF-8');
+    $consumertypeId = htmlspecialchars($_POST['consumertypeId'], ENT_QUOTES, 'UTF-8');
     $email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
     $house_no = htmlspecialchars($_POST['house_no'], ENT_QUOTES, 'UTF-8');
     $meter_no = htmlspecialchars($_POST['meter_no'], ENT_QUOTES, 'UTF-8');
     $branchId = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
     $user_id = htmlspecialchars($_POST['userid'], ENT_QUOTES, 'UTF-8');
+    $employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
 
-    // Check if branch_name already exists
+    $date_added = date("Y-m-d");
+
+    // Update consumer information
     $sql = "UPDATE user_consumer SET
         firstname = :firstname, 
         middlename = :middlename,
@@ -34,6 +38,7 @@ try {
         email = :email_add,
         house_no = :house_no,
         meter_no = :meter_no,
+        consumertypeId = :consumertypeId,
         branchId = :branchId
         WHERE user_id = :user_id";
 
@@ -49,17 +54,32 @@ try {
     $stmt->bindParam(":addressId", $addressId, PDO::PARAM_INT);
     $stmt->bindParam(":meter_no", $meter_no, PDO::PARAM_STR);
     $stmt->bindParam(":house_no", $house_no, PDO::PARAM_INT);
+    $stmt->bindParam(":consumertypeId", $consumertypeId, PDO::PARAM_INT);
     $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
     $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
     $stmt->execute();
 
     $affectedRows = $stmt->rowCount();
-    if ($affectedRows === 0) {
-        echo json_encode(array("status" => 0, "message" => "No records updated. User ID not found."));
-        exit();
-    }
 
-    echo json_encode(array("status" => 1, "message" => "Consumer Successfully Updated!"));
+    // Check if the update was successful
+    if ($affectedRows > 0) {
+        // Log the activity
+        $activity_type = "Edit";
+        $table_name = "Consumer";
+        $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+        $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+        $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+        $stmt1->bindParam(":date_added", $date_added);
+        $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+        $stmt1->execute();
+
+        echo json_encode(array("status" => 1, "message" => "Consumer Successfully Updated!"));
+    } else {
+        echo json_encode(array("status" => 0, "message" => "No records updated. User ID not found."));
+    }
 } catch (PDOException $e) {
     error_log("Error Code: " . $e->getCode() . ", Message: " . $e->getMessage());
     echo json_encode(array("status" => 0, "message" => "Connection failed: " . $e->getMessage()));
