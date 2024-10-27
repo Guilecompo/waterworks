@@ -4,6 +4,7 @@ let isEditMode = false;
 
 const onLoad = () => {
   var accountId = sessionStorage.getItem("accountId");
+  console.log('MY barngay ID: ',sessionStorage.getItem("barangayIds"));
   if (!accountId || accountId === "0") {
       window.location.href = "/waterworks/";
   } else {
@@ -948,7 +949,7 @@ const submit_edit_consumer = (event, user_id) => {
         
         const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
         const formData = new FormData();
-        
+        formData.append("branchId", sessionStorage.getItem("branchId"));
         // Use selectedMunicipalityId directly
         formData.append("municipalityId", selectedMunicipalityId);
         

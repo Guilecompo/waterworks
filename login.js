@@ -77,6 +77,7 @@ const login = async () => {
             window.location.href = "./head/html/dashboard.html";
             break;
           case "Clerk":
+            sessionStorage.setItem("barangayIds", userDetails.barangayIds);
             window.location.href = "./clerk/html/dashboard.html";
             break;
           case "Meter Reader":
