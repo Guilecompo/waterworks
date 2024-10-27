@@ -1,0 +1,97 @@
+<?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+
+// 1. Establish connection to the database
+include 'connection.php';
+
+$status = '1';
+$branch = htmlspecialchars($_POST['branchId'], ENT_QUOTES, 'UTF-8');
+
+// 2. Check for duplicate username and phone number
+$meter_no = htmlspecialchars($_POST['meter_no'], ENT_QUOTES, 'UTF-8');
+$phone_no = htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8');
+$email_add = htmlspecialchars($_POST['email_add'], ENT_QUOTES, 'UTF-8');
+
+$date_added = date("Y-m-d");
+$employee_Id = htmlspecialchars($_POST['employee_Id'], ENT_QUOTES, 'UTF-8');
+$login_statusId = 2;
+$connected_parentId = 0;
+$connected_number = 0;
+$billing_status = 2;
+$code = "";
+$total_cubic_consumed = 0;
+
+
+// Query to check for duplicate username or phone number
+$checkDuplicateQuery = "SELECT COUNT(*) AS count FROM user_consumer WHERE meter_no = :meter_no OR phone_no = :phone_no OR email = :email_add";
+$checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
+$checkDuplicateStmt->bindParam(":meter_no", $meter_no, PDO::PARAM_STR);
+$checkDuplicateStmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
+$checkDuplicateStmt->bindParam(":email_add", $email_add, PDO::PARAM_STR);
+$checkDuplicateStmt->execute();
+$result = $checkDuplicateStmt->fetch(PDO::FETCH_ASSOC);
+
+if ($result['count'] > 0) {
+    // Username or phone number already exists, don't insert the data
+    echo json_encode(['status' => 0, 'message' => 'Duplicate username or phone number or email']);
+} else {
+    $password = md5('waterworks');
+    $position = '5';
+    // 3. Define SQL statement for insertion
+    $sql = "INSERT INTO user_consumer (firstname, middlename, lastname, suffixId, connected_parentId, connected_number, phone_no, addressId, propertyId, email, code, house_no, meter_no, password, total_cubic_consumed, positionId, consumertypeId, branchId, statusId, login_statusId, date_added, employee_Id, billing_status) ";
+    $sql .= "VALUES (:firstname, :middlename, :lastname, :suffixId, :connected_parentId, :connected_number, :phone_no, :addressId, :propertyId, :email_add, :code, :house_no, :meter_no, :password, :total_cubic_consumed, :positionId, :consumertypeId, :branchId, :statusId, :login_statusId, :date_added, :employee_Id, :billing_status)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(":firstname", htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":middlename", htmlspecialchars($_POST['middlename'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":lastname", htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_STR);
+    $stmt->bindParam(":suffixId", htmlspecialchars($_POST['suffixId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":connected_parentId", $connected_parentId, PDO::PARAM_INT);
+    $stmt->bindParam(":connected_number", $connected_number, PDO::PARAM_INT);
+
+    $stmt->bindParam(":phone_no", $phone_no, PDO::PARAM_STR);
+    $stmt->bindParam(":email_add", $email_add, PDO::PARAM_STR);
+    $stmt->bindParam(":code", $code, PDO::PARAM_STR);
+    $stmt->bindParam(":propertyId", htmlspecialchars($_POST['propertyId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":addressId", htmlspecialchars($_POST['zoneId'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+
+    $stmt->bindParam(":house_no", htmlspecialchars($_POST['house_no'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":meter_no", $meter_no, PDO::PARAM_STR);
+    $stmt->bindParam(":password", $password, PDO::PARAM_STR);
+
+    $stmt->bindParam(":total_cubic_consumed", $total_cubic_consumed, PDO::PARAM_INT);
+    $stmt->bindParam(":positionId", $position, PDO::PARAM_INT);
+    $stmt->bindParam(":consumertypeId", htmlspecialchars($_POST['consumer'], ENT_QUOTES, 'UTF-8'), PDO::PARAM_INT);
+    $stmt->bindParam(":branchId", $branch, PDO::PARAM_INT);
+
+    $stmt->bindParam(":statusId", $status, PDO::PARAM_INT);
+    $stmt->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
+    $stmt->bindParam(":date_added", $date_added);
+    $stmt->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+    $stmt->bindParam(":billing_status", $billing_status, PDO::PARAM_INT);
+
+    // Execute the prepared statement
+    $returnValue = 0;
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+        $returnValue = 1;
+        $activity_type = "Add";
+        $table_name = "Consumer";
+        $sql1 = "INSERT INTO activity_log (activity_type, table_name, date_added, employee_Id) ";
+        $sql1 .= "VALUES (:activity_type, :table_name, :date_added, :employee_Id)";
+
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bindParam(":activity_type", $activity_type, PDO::PARAM_STR);
+        $stmt1->bindParam(":table_name", $table_name, PDO::PARAM_STR);
+        $stmt1->bindParam(":date_added", $date_added);
+        $stmt1->bindParam(":employee_Id", $employee_Id, PDO::PARAM_INT);
+        $stmt1->execute();
+
+        echo json_encode(array("status" => $returnValue, "message" => "Consumer Successfully Added & Added to Activity Log!"));
+    }else {
+        echo json_encode(array("status" => 0, "message" => "Failed to add Consumer"));
+    }
+}
+?>

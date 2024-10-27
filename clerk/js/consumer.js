@@ -832,6 +832,116 @@ const submit_edit_consumer = (event, user_id) => {
               getProperty();
               getMunicipalitys();
       }
+      const submit_consumer = (event) => {
+        event.preventDefault();
+          const firstname = document.getElementById("firstname").value;
+          const middlename = document.getElementById("middlename").value;
+          const lastname = document.getElementById("lastname").value;
+          const suffixId = document.getElementById("suffix").value;
+      
+          const phone = document.getElementById("phone").value;
+          const email_add = document.getElementById("email_add").value;
+          const propertyId = document.getElementById("property").value;
+          const municipalityId = document.getElementById("municipality").value;
+          const barangayId = document.getElementById("barangay").value;
+          const zoneId = document.getElementById("zoneId").value;
+          const branchId = document.getElementById("branch").value;
+      
+          const consumer = document.getElementById("consumer").value;
+          const meter_no = document.getElementById("meter_no").value;
+          const house_no = document.getElementById("house_no").value;
+          console.log(
+            firstname,
+            middlename,
+            lastname,
+            suffixId,
+            phone,
+            email_add,
+            propertyId,
+            municipalityId,
+            barangayId,
+            zoneId,
+            branchId,
+            consumer,
+            meter_no,
+            house_no
+          );
+          const inputs = [
+            { id: "firstname", element: document.getElementById("firstname") },
+            { id: "middlename", element: document.getElementById("middlename") },
+            { id: "lastname", element: document.getElementById("lastname") },
+            { id: "suffix", element: document.getElementById("suffix") },
+            { id: "phone", element: document.getElementById("phone") },
+            { id: "email_add", element: document.getElementById("email_add") },
+            { id: "property", element: document.getElementById("property") },
+            { id: "municipality", element: document.getElementById("municipality") },
+            { id: "barangay", element: document.getElementById("barangay") },
+            { id: "zone", element: document.getElementById("zoneId") },
+            { id: "branch", element: document.getElementById("branch") },
+            { id: "consumer", element: document.getElementById("consumer") },
+            { id: "meter_no", element: document.getElementById("meter_no") }
+        ];
+      
+        console.log(inputs); // Log the inputs array
+      
+        // Check validity of each input
+        inputs.forEach(input => {
+            if (!input.element.validity.valid) {
+                input.element.classList.add('invalid');
+            } else {
+                input.element.classList.remove('invalid'); // Remove 'invalid' class if input is valid
+            }
+        });
+      
+        // If any input is invalid, prevent form submission
+        if (document.querySelector('.invalid')) {
+            alert('Fill in all fields correctly');
+            return;
+        }
+      
+        const myUrl = "http://152.42.243.189/waterworks/clerk/add_consumer.php";
+        const formData = new FormData();
+        formData.append("firstname", firstname);
+        formData.append("middlename", middlename);
+        formData.append("lastname", lastname);
+        formData.append("suffixId", suffixId);
+        formData.append("phone", phone);
+        formData.append("email_add", email_add);
+        formData.append("propertyId", propertyId);
+        formData.append("municipalityId", municipalityId);
+        formData.append("barangayId", barangayId);
+        formData.append("zoneId", zoneId);
+        formData.append("branchId", branchId);
+        formData.append("consumer", consumer);
+        formData.append("meter_no", meter_no);
+        formData.append("house_no", house_no);
+        formData.append("employee_Id", sessionStorage.getItem("accountId"));
+        
+          axios({
+            url: myUrl,
+            method: "post",
+            data: formData,
+          })
+            .then((response) => {
+              console.log(response);
+              if (response.data.status === 1) {
+                success_modals();
+                displayConsumer();
+                // window.location.href = "./addconsumer.html";
+              } else if (response.data.status === 0) {
+                // alert("Username or phone number already exists!");
+                failed_modals();
+              } else {
+                // alert("Unknown error occurred.");
+                error_modals();
+                console.log(response);
+              }
+            })
+            .catch((error) => {
+              console.log(`ERROR OCCURRED! ${error}`);
+              console.log(error);
+            });
+        };
       const getSuffix = () => {
         const propertySelect = document.getElementById("suffix");
         var myUrl = "http://152.42.243.189/waterworks/gets/get_suffix.php";
@@ -947,9 +1057,9 @@ const submit_edit_consumer = (event, user_id) => {
         const getBarangays = () => {
         const selectedMunicipalityId = document.getElementById("municipality").value;
         
-        const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
+        const barangayUrl = `http://152.42.243.189/waterworks/clerk/get_barangay.php`;
         const formData = new FormData();
-        formData.append("branchId", sessionStorage.getItem("branchId"));
+        formData.append("barangayId", sessionStorage.getItem("barangayIds"));
         // Use selectedMunicipalityId directly
         formData.append("municipalityId", selectedMunicipalityId);
         
@@ -1062,4 +1172,34 @@ const submit_edit_consumer = (event, user_id) => {
         branchSelect.style.display = "block";
         // searchInput.style.display = "block";
       
+      };
+
+      const success_modals = () => {
+        const modal = document.getElementById("myModals");
+        const modalContent = document.getElementById("modalContents");
+        var html = `
+            <h5 class="modal-title" style="color: limegreen; text-align:center;">Success!</h5>
+        `;
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
+      };
+      
+      const failed_modals = () => {
+        const modal = document.getElementById("myModals");
+        const modalContent = document.getElementById("modalContents");
+        var html = `
+        <h5 class="modal-title" style="color: red; text-align:center;">Failed!</h5>
+        `;
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
+      };
+      
+      const error_modals = () => {
+        const modal = document.getElementById("myModals");
+        const modalContent = document.getElementById("modalContents");
+        var html = `
+            <h5 class="modal-title" style="color: red; text-align:center;">An unknown error occurred!</h5>
+        `;
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
       };
