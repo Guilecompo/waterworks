@@ -308,7 +308,7 @@ const edit = (user_id) => {
   const branchSelect = document.getElementById("branch");
   // const searchInput = document.getElementById("searchInput");
   head.style.display = "none";
-  paginationNumbers.style.display = "none";
+  // paginationNumbers.style.display = "none";
   // branchSelect.style.display = "none";
   // searchInput.style.display = "none";
 
@@ -706,66 +706,12 @@ const submit_edit_consumer = (event, user_id) => {
         }).then(response => {
           console.log(response.data);
           consumers = response.data;
-          sortConsumersByNameByZone();
-          showConsumerPageByZone(currentPage);
+          refreshTablesByZone(consumers);
         }).catch(error => {
           alert("ERROR! - " + error);
         });
       };
-      
-      
-      const sortConsumersByNameByZone = () => {
-        consumers.sort((a, b) => {
-            const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-            const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-            return nameA.localeCompare(nameB);
-        });
-      };
-      
-      const showConsumerPageByZone = (page, consumersToDisplay = consumers) => {
-        var start = (page - 1) * 10;
-        var end = start + 10;
-        var displayedConsumers = consumersToDisplay.slice(start, end);
-        refreshTablesByZone(displayedConsumers);
-        showPaginationNumbersByZone(page, Math.ceil(consumersToDisplay.length / 10));
-      };
-      const showPaginationNumbersByZone = (currentPage, totalPages) => {
-        // const paginationNumbersDiv = document.getElementById("paginationNumbers");
-        let paginationNumbersHTML = "";
-      
-        const pagesToShow = 5; // Number of pages to display
-      
-        // Calculate start and end page numbers to display
-        let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-        let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-      
-        // Adjust start and end page numbers if they are at the edges
-        if (endPage - startPage + 1 < pagesToShow) {
-          startPage = Math.max(1, endPage - pagesToShow + 1);
-        }
-      
-        // Previous button
-        paginationNumbersHTML += `<button  onclick="showPreviousPage()">Previous</button>`;
-      
-        // Generate page numbers
-        for (let i = startPage; i <= endPage; i++) {
-          if (i === currentPage) {
-            paginationNumbersHTML += `<span class="active" onclick="goToPageConsumerByZone(${i})">${i}</span>`;
-          } else {
-            paginationNumbersHTML += `<span onclick="goToPageConsumerByZone(${i})">${i}</span>`;
-          }
-        }
-      
-        // Next button
-        paginationNumbersHTML += `<button onclick="showNextPage()">Next</button>`;
-      
-        paginationNumbersDiv.innerHTML = paginationNumbersHTML;
-      };
-      
-      const goToPageConsumerByZone = (pageNumber) => {
-        showConsumerPageByZone(pageNumber);
-      };
-      const refreshTablesByZone = (employeeList) => {
+      const refreshTablesByZone = (consumers) => {
           var html = `
           <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
@@ -778,7 +724,7 @@ const submit_edit_consumer = (event, user_id) => {
             </thead>
           <tbody>
           `;
-          employeeList.forEach(consumer => {
+          consumers.forEach(consumer => {
               html += `
               <tr>
                 <td class="text-center">${consumer.firstname} ${consumer.lastname}</td>
@@ -792,11 +738,284 @@ const submit_edit_consumer = (event, user_id) => {
           });
           html += `</tbody></table>`;
           document.getElementById("mainDiv").innerHTML = html;
+          $('#example').DataTable({
+            "ordering": false // Disable sorting for all columns
+          });
       };
-
-
-
-
+      const add_consumer = () => {
+        var html = `
+              <div class="mb-1 mt-3">
+                  <h4 style="text-align: center;">Add Consumer</h4>
+              </div>
+              <div class="container-fluid mt-3">
+                  <form class="row g-3">
+                      <label class="form-label mb-0 underline-label">Personal Information</label>
+                      <div class="col-md-4">
+                          <label class="form-label">First Name</label>
+                           <input type="text" class="form-control" id="firstname" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Middle Name</label>
+                          <input type="text" class="form-control" id="middlename" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Last Name</label>
+                          <input type="text" class="form-control" id="lastname" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Suffix</label>
+                          <select id="suffix" class="form-select"></select>
+                        </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Phone</label>
+                          <input type="text" class="form-control" id="phone" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Email</label>
+                          <input type="email" class="form-control" id="email_add" required>
+                      </div>
+      
+                      <label class="form-label mb-0 underline-label">Address</label>
+                      <div class="col-md-4 ">
+                          <label class="form-label">Municipality</label>
+                          <select id="municipality" class="form-select" onchange="getBarangays()" ></select>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Barangay</label>
+                          <select id="barangay" class="form-select" onchange="getZones()" required>
+                              <option value="">Select Barangay</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Zone</label>
+                          <select id="zoneId" class="form-select" required>
+                              <option value="">Select Zone</option>
+                          </select>
+                      </div>
+                      <label class="form-label mb-0 underline-label mt-4">Register Account</label>
+                      <div class="col-md-4 ">
+                          <label class="form-label">Branch</label>
+                          <select id="branch" class="form-select"></select>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Property Type</label>
+                          <select id="property" class="form-select"></select>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Consumer Type</label>
+                          <select id="consumer" class="form-select"></select>
+                      </div>
+                      <div class="col-md-4">
+                          <label class="form-label">Meter Number</label>
+                          <input type="text" class="form-control" id="meter_no" required>
+                      </div>   
+                      <div class="col-md-4">
+                          <label class="form-label">House Number</label>
+                          <input type="number" class="form-control" id="house_no">
+                      </div>
+                      <div class="col-12 mt-5">
+                          <button type="submit" class="btn btn-primary w-100" onclick="submit_consumer(event)">Submit form</button>
+                      </div>
+                  </form>
+              </div>
+                                
+              `;
+              document.getElementById("modalContents").innerHTML = html;
+      
+              // Show the modal
+              const myModal = new bootstrap.Modal(document.getElementById('myModals'));
+              myModal.show();
+              getSuffix();
+              getBranchs();
+              getConsumerType();
+              getProperty();
+              getMunicipalitys();
+      }
+      const getSuffix = () => {
+        const propertySelect = document.getElementById("suffix");
+        var myUrl = "http://152.42.243.189/waterworks/gets/get_suffix.php";
+      
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.suffix_id}">${property.suffix_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+          });
+      };
+      const getBranchs = () => {
+        // const barangayId = document.getElementById("barangay").value;
+        const propertySelect = document.getElementById("branch");
+        var myUrl = "http://152.42.243.189/waterworks/clerk/get_branch.php";
+        const formData = new FormData();
+        formData.append("branchId", sessionStorage.getItem("branchId"));
+        axios({
+          url: myUrl,
+          method: "post",
+          data: formData
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.branch_id}">${property.branch_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+          });
+      };
+      const getConsumerType = () => {
+        const propertySelect = document.getElementById("consumer");
+        var myUrl = "http://152.42.243.189/waterworks/gets/get_consumertype.php";
+      
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.consumertype_id }">${property.consumertype}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+          });
+      };
+      const getProperty = () => {
+        const propertySelect = document.getElementById("property");
+        var myUrl = "http://152.42.243.189/waterworks/gets/get_property.php";
+      
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var properties = response.data;
+      
+            var options = ``;
+            properties.forEach((property) => {
+              options += `<option value="${property.property_id}">${property.property_name}</option>`;
+            });
+            propertySelect.innerHTML = options;
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+          });
+      };
+      const getMunicipalitys = () => {
+        const municipalitySelect = document.getElementById("municipality");
+        var myUrl = "http://152.42.243.189/waterworks/gets/get_municipality.php";
+        
+        axios({
+          url: myUrl,
+          method: "post",
+        })
+          .then((response) => {
+            var municipalities = response.data;
+            console.log("success municipality");
+        
+            var options = ``;
+            municipalities.forEach((municipality) => {
+              options += `<option value="${municipality.municipality_id}">${municipality.municipality_name}</option>`;
+            });
+            municipalitySelect.innerHTML = options;
+        
+             getBarangays();
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED! ${error}`);
+          });
+        };
+        
+        const getBarangays = () => {
+        const selectedMunicipalityId = document.getElementById("municipality").value;
+        
+        const barangayUrl = `http://152.42.243.189/waterworks/gets/get_barangay.php`;
+        const formData = new FormData();
+        
+        // Use selectedMunicipalityId directly
+        formData.append("municipalityId", selectedMunicipalityId);
+        
+        axios({
+          url: barangayUrl,
+          method: "post",
+          data: formData
+        })
+          .then((response) => {
+            const barangaySelect = document.getElementById("barangay");
+            const barangays = response.data;
+            console.log("success barangay");
+            // Clear existing options
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+        
+            // Populate options for barangays
+            barangays.forEach((barangay) => {
+              const option = document.createElement("option");
+              option.value = barangay.barangay_id;
+              option.textContent = barangay.barangay_name;
+              barangaySelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.log(`ERROR OCCURRED while fetching barangays! ${error}`);
+          });
+        };
+        const getZones = () => {
+          const selectedBarangayId = document.getElementById("barangay").value;
+        
+          const zoneUrl = `http://152.42.243.189/waterworks/gets/get_zone.php`;
+          const formData = new FormData();
+        
+          // Use selectedMunicipalityId directly
+          formData.append("barangayId", selectedBarangayId);
+          axios({
+            url: zoneUrl,
+            method: "post",
+            data: formData
+          })
+            .then((response) => {
+              const zoneSelect = document.getElementById("zoneId");
+              const zones = response.data;
+        
+              // Clear existing options
+              zoneSelect.innerHTML = '<option value="">Select Zone</option>';
+        
+              // Sort zones numerically
+              zones.sort((a, b) => {
+                // Extract numeric part from the zone name and compare
+                const aNumber = parseInt(a.zone_name.match(/\d+/)[0]);
+                const bNumber = parseInt(b.zone_name.match(/\d+/)[0]);
+                return aNumber - bNumber;
+              });
+        
+              // Populate options for zones
+              zones.forEach((zone) => {
+                const option = document.createElement("option");
+                option.value = zone.zone_id;
+                option.textContent = zone.zone_name;
+                zoneSelect.appendChild(option);
+              });
+            })
+            .catch((error) => {
+              console.log(`ERROR OCCURRED while fetching zones! ${error}`)
+            });
+        };
 
       const success_update_modal = () => {
         const modal = document.getElementById("myModal");

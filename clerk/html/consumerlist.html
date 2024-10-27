@@ -127,12 +127,34 @@
                           </div>
                         </div>
                       </div>
+                      <!-- NOTE: MODAL FOR ADD AND EDIT -->
+                        <div class="modal" tabindex="-1" id="myModals">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title"></h5>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                    onclick="closeModal()"></button>
+                                </div>
+                                <div class="modal-body" id="modalContents"></div>
+                            </div>
+                            </div>
+                        </div>
                     <div class="container-fluid">
                         <div class="mt-1" id="head">
                             <h4 style="text-align: center;">Clerk Consumer List</h4>
                         </div>
                         <div class="container-fluid mt-2">
                             <div class="row">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" onclick="add_consumer()">
+                                        <i class="fas fa-user-plus"></i> Add Consumer
+                                    </button>
+                                  </div>
                                 <div class="col-12 w-25 col-md-6 d-flex me-auto">
                                     <select id="filterZone" class="form-select" aria-label="Default select example" style="min-width: fit-content;">
                                         <option value="">Select Zone</option>
