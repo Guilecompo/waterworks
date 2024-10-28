@@ -112,7 +112,7 @@ const refreshTables = (consumers) => {
               <td class="text-center">
               <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit_consumer(${consumer.user_id})">Edit</button>
               <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="information(${consumer.user_id})">View</button>
-              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="billingHis(${consumer.user_id})">Billing His.</button>
+              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="billingHis(${consumer.user_id})">Bill History</button>
               </td>
             </tr>
             `;
@@ -367,17 +367,20 @@ const billingHis = (user_id) => {
           });
 
           html += `</tbody></table><br/><br/>`;
+          modalContent.innerHTML = html;
+          modal.style.display = "block";
+          $('#example').DataTable({
+            "ordering": false // Disable sorting for all columns
+          });
         }
       } catch (error) {
         // Handle any errors here
         html = `<h4 class="text-center ">Don't Have Billing History</h4>`;
+        modalContent.innerHTML = html;
+        modal.style.display = "block";
       }
 
-      modalContent.innerHTML = html;
-      modal.style.display = "block";
-      $('#example').DataTable({
-        "ordering": false // Disable sorting for all columns
-      });
+      
     })
     .catch((error) => {
       console.log(`ERROR OCCURRED! ${error}`);
