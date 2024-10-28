@@ -68,7 +68,7 @@ const getall = () => {
   
 };
 const displayActivity = () => {
-  var url = "http://152.42.243.189/waterworks/head/activitylist.php";
+  var url = "http://152.42.243.189/waterworks/clerk/activitylist.php";
   
   const formData = new FormData();
     formData.append("accountId", sessionStorage.getItem("accountId"));

@@ -10,16 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Get the current date and time in the desired format
         $currentDateTime = date("Y-m-d");
+        $accountId = htmlspecialchars($_POST['accountId'], ENT_QUOTES, 'UTF-8');
         
         // Prepare and execute the SQL query with the current date and time
         $stmt = $conn->prepare("SELECT a.*, b.*
                                 FROM activity_log a
                                 INNER JOIN user_employee b ON a.employee_Id = b.user_id
                                 INNER JOIN position c ON b.positionId = c.position_id
-                                WHERE a.date_added = :currentDateTime AND c.position_name NOT IN ('Admin') AND c.position_name NOT IN ('Head') AND c.position_name NOT IN ('Clerk')
+                                WHERE a.date_added = :currentDateTime AND b.user_id = :accountId
                                 ORDER BY a.activity_id");
 
         $stmt->bindParam(':currentDateTime', $currentDateTime);
+        $stmt->bindParam(':accountId', $accountId);
         $stmt->execute();
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
