@@ -110,7 +110,9 @@ const refreshTables = (consumers) => {
               <td class="text-center">${consumer.meter_no}</td>
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
+              <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
               <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="view_consumer(${consumer.user_id})">View</button>
+              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="view_consumer(${consumer.user_id})">Billing His.</button>
               </td>
             </tr>
             `;
@@ -121,6 +123,7 @@ const refreshTables = (consumers) => {
       "ordering": false // Disable sorting for all columns
     });
 };
+
 
 const view_consumer = (user_id) => {
     const modal = document.getElementById("myModal");
@@ -169,12 +172,12 @@ const view_consumer = (user_id) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td class="text-center">NO RECORDS</td>
-                            <td class="text-center">NO RECORDS</td>
-                            <td class="text-center">NO RECORDS</td>
-                            <td class="text-center">NO RECORDS</td>
-                            <td class="text-center">NO RECORDS</td>
-                            <td class="text-center">NO RECORDS</td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
                           </tr>
                         </tbody>
                       </table><br/><br/>`;
@@ -248,12 +251,12 @@ const view_consumer = (user_id) => {
           </thead>
           <tbody>
             <tr>
-              <td class="text-center">NO RECORDS</td>
-              <td class="text-center">NO RECORDS</td>
-              <td class="text-center">NO RECORDS</td>
-              <td class="text-center">NO RECORDS</td>
-              <td class="text-center">NO RECORDS</td>
-              <td class="text-center">NO RECORDS</td>
+              <td class="text-center"> </td>
+              <td class="text-center"> </td>
+              <td class="text-center"> </td>
+              <td class="text-center"> </td>
+              <td class="text-center"> </td>
+              <td class="text-center"> </td>
             </tr>
           </tbody>
         </table><br/><br/>
@@ -288,6 +291,7 @@ const nextPage = () => {
   }
 };
 
+
 const prevPage = () => {
   if (currentPage > 1) {
       currentPage--;
@@ -305,122 +309,135 @@ const goToPage = (page, user_id) => {
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
 const edit = (user_id) => {
   const head = document.getElementById("head");
-  // const paginationNumbers = document.getElementById("paginationNumbers");
-  const branchSelect = document.getElementById("branch");
-  // const searchInput = document.getElementById("searchInput");
   head.style.display = "none";
-  // paginationNumbers.style.display = "none";
-  // branchSelect.style.display = "none";
-  // searchInput.style.display = "none";
 
-  var myUrl = "http://152.42.243.189/waterworks/head/getconsumer.php";
+  var myUrl = "http://152.42.243.189/waterworks/clerk/getconsumer.php";
   const formData = new FormData();
   formData.append("user_id", user_id);
 
   axios({
-      url: myUrl,
-      method: "post",
-      data: formData,
-  }).then((response) => {
-    console.log(response.data);
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
       try {
-          if (response.data.length === 0) {
-              // Display a message indicating there are no billing transactions yet.
-              var html = `<h2>No Records</h2>`;
-          } else {
-              var consumer = response.data;
-              console.log("Consumer : ",consumer[0].user_id);
-              
-                var html = `
-                  <div class=" row  mt-1">
-                    <div class="col-md-1 mt-3">
-                      <button class="clear" onclick="displayConsumer()">Back</button>
-                    </div>
-                    <div class="col-md-11 mt-3">
-                      <h4 style="text-align: center;">Edit Consumer</h4>
-                    </div>
-                  </div>
-                  <div class="container-fluid mt-3">
-                      <form class="row g-3">
-                          <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">First Name</label>
-                              <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Middle Name</label>
-                              <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Last Name</label>
-                              <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Phone</label>
-                              <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" required>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Email</label>
-                              <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" required>
-                          </div>
-                          <label class="form-label mt-3 mb-0 underline-label">Address</label>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Municipality</label>
-                              <select id="municipality" class="form-select" onchange="getBarangay()">
-                                <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Barangay</label>
-                              <select id="barangay" class="form-select" onchange="getZone()">
-                              <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-4 mt-3">
-                              <label class="form-label">Zone</label>
-                              <select id="zoneId" class="form-select" >
-                                <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
-                              </select>
-                          </div>
-                          <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
-                          <div class="col-md-3 mt-3">
-                              <label class="form-label">Branch</label>
-                              <select id="edit_branch" class="form-select">
-                                <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
-                              </select>
-                          </div>
-                          <div class="col-md-3 mt-3">
-                              <label class="form-label">Property Type</label>
-                              <select id="properties" class="form-select">
-                                <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
-                              </select>
-                          </div> 
-                          <div class="col-md-6 mt-3">
-                              <label class="form-label">Meter Number</label>
-                              <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
-                          </div>                    
-                          <div class="col-12 mt-4">
-                              <button type="submit" class="btn btn-primary" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
-                          </div>
-                      </form>
-                  </div>
-                                    
-                  `;
-        
-              document.getElementById("mainDiv").innerHTML = html;
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var consumer = response.data;
+          console.log("Consumer : ", consumer[0].user_id);
 
-              getBranches();
-              getProperties();
-              getMunicipality();
-          }
+          var html = `
+              <div class=" row  mt-1">
+                <div class="col-md-11 mt-3">
+                  <h4 style="text-align: center;">Edit Consumer</h4>
+                </div>
+              </div>
+              <div class="container-fluid mt-3">
+                  <form class="row g-3">
+                      <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">First Name</label>
+                          <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Middle Name</label>
+                          <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Last Name</label>
+                          <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" required>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="form-label">Suffix</label>
+                        <select id="suffix" class="form-select">
+                            <option value="${consumer[0].suffix_id}" selected>${consumer[0].suffix_name}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Phone</label>
+                          <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Email</label>
+                          <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" required>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label">Address</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Municipality</label>
+                          <select id="municipality" class="form-select" onchange="getBarangay()">
+                            <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Barangay</label>
+                          <select id="barangay" class="form-select" onchange="getZone()">
+                          <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Zone</label>
+                          <select id="zoneId" class="form-select" >
+                            <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
+                          </select>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Branch</label>
+                          <select id="edit_branch" class="form-select">
+                            <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Property Type</label>
+                          <select id="property" class="form-select">
+                            <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
+                          </select>
+                      </div> 
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Consumer Type</label>
+                          <select id="consumer" class="form-select">
+                            <option value="${consumer[0].consumertype_id }" selected>${consumer[0].consumertype}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Meter Number</label>
+                          <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
+                      </div>  
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">House Number</label>
+                          <input type="number" class="form-control" id="house_no" value="${consumer[0].house_no}">
+                      </div>                     
+                      <div class="col-12 mt-4">
+                          <button type="submit" class="btn btn-primary w-100" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
+                      </div>
+                  </form>
+              </div>
+                                
+              `;
+
+              document.getElementById("modalContents").innerHTML = html;
+
+              // Trigger the modal
+              var myModal = new bootstrap.Modal(document.getElementById('myModals'), {});
+              myModal.show();
+          getSuffix();
+          getBranch();
+          getProperty();
+          getConsumerType();
+          getMunicipality();
+        }
       } catch (error) {
-        var html = `<h2>NO RECORD</h2>`;
+        document.getElementById("modalContents").innerHTML = `<h2>No Record</h2>`;
       }
-
-    }).catch((error) => {
-      alert(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
-  });
-}
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
+    });
+};
 const submit_edit_consumer = (event, user_id) => {
       event.preventDefault();
         const firstname = document.getElementById("firstname").value;
@@ -1127,6 +1144,7 @@ const submit_edit_consumer = (event, user_id) => {
               console.log(`ERROR OCCURRED while fetching zones! ${error}`)
             });
         };
+        
 
       const success_update_modal = () => {
         const modal = document.getElementById("myModal");

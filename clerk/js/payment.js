@@ -107,6 +107,7 @@ const showPreviousPage = () => {
                   <td class="text-center">${consumer.branch_name}</td>
                   <td class="text-center">
                     <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="payment(${consumer.user_id})">Pay</button>
+                    <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 5%; color:white;" onclick="view_consumer(${consumer.user_id})">Pay History</button>
                   </td>
                 </tr>
             `;
@@ -118,6 +119,153 @@ const showPreviousPage = () => {
           "ordering": false // Disable sorting for all columns
         });
     };
+    const view_consumer = (user_id) => {
+      const modal = document.getElementById("myModal");
+      const modalContent = document.getElementById("modalContent");
+      let html = ""; // Define html variable here
+  
+      var myUrl = "http://152.42.243.189/waterworks/clerk/consumer_billing_history.php";
+      const formData = new FormData();
+      formData.append("accId", user_id);
+      console.log("Consumer ID : ", user_id);
+  
+      axios({
+          url: myUrl,
+          method: "post",
+          data: formData,
+      }).then((response) => {
+        
+          try {
+              if (response.data.length === 0) {
+                  // Display a message indicating there are no billing transactions yet.
+                  html = `<h2>No Records</h2>`;
+              } else {
+                  const records = response.data;
+                  const itemsPerPage = 5;
+                  const totalPages = Math.ceil(records.length / itemsPerPage);
+  
+                  const renderPage = () => {
+                    if (!Array.isArray(records) || records.length === 0) {
+                        // Handle case where records is not an array or is empty
+                        html = `<h2 class="text-center">No Records</h2>`;
+                        html += `<div class="car-block text-center ">
+                          <i class="fas fa-user fa-3x mt-1"></i>
+                          <h5 class="font-weight-bold mt-2"></h5>
+                          <p </p>
+                        </div>
+                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                          <thead>
+                            <tr>
+                              <th class="text-center">Reading Date</th>
+                              <th class="text-center">Cubic Consumed</th>
+                              <th class="text-center">Bill Amount</th>
+                              <th class="text-center">Arrears</th>
+                              <th class="text-center">Total Bill</th>
+                              <th class="text-center">Reader Name</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="text-center"> </td>
+                              <td class="text-center"> </td>
+                              <td class="text-center"> </td>
+                              <td class="text-center"> </td>
+                              <td class="text-center"> </td>
+                              <td class="text-center"> </td>
+                            </tr>
+                          </tbody>
+                        </table><br/><br/>`;
+                    } else {
+                        const startIndex = (currentPage - 1) * itemsPerPage;
+                        const endIndex = Math.min(startIndex + itemsPerPage, records.length);
+                        const currentPageRecords = records.slice(startIndex, endIndex);
+                
+                        html = `
+                            <div class="car-block text-center ">
+                              <i class="fas fa-user fa-3x mt-1"></i>
+                              <h5 class="font-weight-bold mt-2">${currentPageRecords[0].con_firstname} ${currentPageRecords[0].con_middlename} ${currentPageRecords[0].con_lastname} </h5>
+                              <p >${currentPageRecords[0].meter_no}</p>
+                            </div>
+                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                              <thead>
+                                <tr>
+                                  <th class="text-center">Reading Date</th>
+                                  <th class="text-center">Cubic Consumed</th>
+                                  <th class="text-center">Bill Amount</th>
+                                  <th class="text-center">Arrears</th>
+                                  <th class="text-center">Total Bill</th>
+                                  <th class="text-center">Reader Name</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                        `;
+                
+                        currentPageRecords.forEach((record) => {
+                            html += `
+                                <tr>
+                                  <td class="text-center">${record.reading_date}</td>
+                                  <td class="text-center">${record.cubic_consumed}</td>
+                                  <td class="text-center">${record.bill_amount}</td>
+                                  <td class="text-center">${record.arrears}</td>
+                                  <td class="text-center">${record.total_bill}</td>
+                                  <td class="text-center">${record.emp_firstname} ${record.emp_lastname}</td>
+                                </tr>
+                            `;
+                        });
+                
+                        html += `</tbody></table><br/><br/>`;
+                    }
+                };
+                
+  
+                  renderPage();
+              }
+          } catch (error) {
+              // Handle any errors here
+              console.log(error);
+              html = `<h2 class="text-center">No Billing History Yet</h2>`;
+              html += `
+          <div class="car-block text-center ">
+            <i class="fas fa-user fa-3x mt-1"></i>
+            <h5 class="font-weight-bold mt-2"></h5>
+            <p </p>
+          </div>
+        `;
+              html += `
+          <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+              <tr>
+                <th class="text-center">Reading Date</th>
+                <th class="text-center">Cubic Consumed</th>
+                <th class="text-center">Bill Amount</th>
+                <th class="text-center">Arrears</th>
+                <th class="text-center">Total Bill</th>
+                <th class="text-center">Reader Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"> </td>
+                <td class="text-center"> </td>
+                <td class="text-center"> </td>
+                <td class="text-center"> </td>
+                <td class="text-center"> </td>
+                <td class="text-center"> </td>
+              </tr>
+            </tbody>
+          </table><br/><br/>
+        `;
+          }
+  
+          modalContent.innerHTML = html;
+          modal.style.display = "block";
+          $('#example').DataTable({
+            "ordering": false // Disable sorting for all columns
+          });
+      }).catch((error) => {
+          alert(`ERROR OCCURRED! ${error}`);
+      });
+  };
     
     const discount = (user_id, firstname, lastname, connected_number) => {
         const modal = document.getElementById("myModal");

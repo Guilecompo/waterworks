@@ -10,12 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("SELECT 
                 a.user_id,a.meter_no,
                 a.firstname, a.middlename,
-                a.lastname,a.email,
+                a.lastname,a.email,a.house_no,
                 a.phone_no, c.property_name,d.zone_id,
                 d.zone_name, e.barangay_name,
                 f.municipality_name, a.meter_no,
                 a.password, g.position_name,
-                h.branch_name, i.user_status
+                h.branch_name, i.user_status, j.*
             FROM
                 user_consumer a
             INNER JOIN property c ON a.propertyId = c.property_id
@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             INNER JOIN position g ON a.positionId = g.position_id
             INNER JOIN branch h ON a.branchId = h.branch_id 
             INNER JOIN user_status i ON a.statusId = i.status_id
+            INNER JOIN consumer_type j ON a.consumertypeId = j.consumertype_id 
             WHERE a.user_id = :user_id
           ");
             $stmt->bindParam(":user_id", $user_id);
