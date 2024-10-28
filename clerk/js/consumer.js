@@ -110,9 +110,9 @@ const refreshTables = (consumers) => {
               <td class="text-center">${consumer.meter_no}</td>
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
-              <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
-              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="view_consumer(${consumer.user_id})">View</button>
-              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="view_consumer(${consumer.user_id})">Billing His.</button>
+              <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit_consumer(${consumer.user_id})">Edit</button>
+              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="information(${consumer.user_id})">View</button>
+              <button class="clear" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="billingHis(${consumer.user_id})">Billing His.</button>
               </td>
             </tr>
             `;
@@ -306,8 +306,334 @@ const goToPage = (page, user_id) => {
     view_consumer(user_id);
 };
 
+// ---------------------------------------------FOR VIEW BILLING HISTORY-------------------------------------
+const billingHis = (user_id) => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+
+  var myUrl = "http://152.42.243.189/waterworks/gets/consumer_billing_history.php";
+  const formData = new FormData();
+  formData.append("accId", user_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      try {
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h6>No Records</h6>`;
+        } else {
+          var records = response.data;
+
+          // Add a single "Connected Meter" heading
+          html = `
+                <div class="text-center ">
+                  <h4 class="mb-3" style="text-align:center;">Bill History</h4>
+                  <hr class="badge-primary mt-3 mb-4">
+                </div>
+                <div class="mt-1 text-center">
+                  <i class="fas fa-user fa-3x mt-0"></i>
+                  <h5 class="font-weight-bold mt-2">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname} </h5>
+                  <p class="text-muted" >${records[0].zone_name}, ${records[0].barangay_name}, ${records[0].municipality_name}</p>
+                  <p class="text-muted" >${records[0].meter_no}</p>
+                </div>
+              `;
+
+          html += `
+                  <table id="example" class="table table-striped table-bordered" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th class="text-center">Reading Date</th>
+                          <th class="text-center">Total Bill</th>
+                          <th class="text-center">Reader Name</th>
+                          <th class="text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+              `;
+
+          records.forEach((record) => {
+            html += `
+                    <tr>
+                      <td class="text-center">${record.reading_date}</td>
+                      <td class="text-center">${record.total_bill}</td>
+                      <td class="text-center">${record.emp_firstname} ${record.emp_lastname}</td>
+                      <td class="text-center"><button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="bill_receipt(${record.billing_id})">View</button></td>
+                    </tr>
+                  `;
+          });
+
+          html += `</tbody></table><br/><br/>`;
+        }
+      } catch (error) {
+        // Handle any errors here
+        html = `<h4 class="text-center ">Don't Have Billing History</h4>`;
+      }
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+      $('#example').DataTable({
+        "ordering": false // Disable sorting for all columns
+      });
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURRED! ${error}`);
+    });
+};
+const bill_receipt = (billing_id) => {
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+
+  var myUrl = "http://152.42.243.189/waterworks/gets/consumer_billing_history1.php";
+  const formData = new FormData();
+  formData.append("billing_id", billing_id);
+  console.log("billing_id  : ", billing_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      try {
+        console.log(response.data);
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var records = response.data;
+
+          html = `
+                <div class="wrapper">
+                  <div class="container mt-0 ">
+                      <div class="row ">
+                              <div class="row ">
+                                  <div class="text-center ">
+                                      <h5 class="pe-4">EL SALVADOR WATERWORKS</h5>
+                                  </div>
+                                  <div class="col-sm-12 mt-3">
+                                      <div class="row ">
+                                          <div class="col-md-6 ">
+                                              <p style="text-decoration: underline; font-size: small">NAME</p>
+                                              <h6 class="text-muted mt-0">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname}</h6>
+                                          </div>
+                                  
+                                          <div class="col-md-6  text-md-end">
+                                              <p style="text-decoration: underline; font-size: small">ACCOUNT NUMBER</p>
+                                              <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
+                                          </div>
+                                      </div>
+                                  
+                                      <div class="mt-1">
+                                          <p style="text-decoration: underline; font-size: small">ADDRESS</p>
+                                          <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                      </div>
+                                  </div>
+                                  
+                              </div>
+                              <div class="row">
+                                  
+                                  </span>
+                                  <table class="tab table table-bordered table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="text-center">Previous</th>
+                                              <th class="text-center">Present</th>
+                                              <th class="text-center">Consumed</th>
+                                              <th class="text-center">Amount</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-3 text-center">${records[0].previous_meter}</td>
+                                              <td class="col-md-3 text-center">${records[0].present_meter}</td>
+                                              <td class="col-md-3 text-center">${records[0].cubic_consumed}</td>
+                                              <td class="col-md-3 text-center">${records[0].bill_amount}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                                  <table class="tabb1 table table-hover table-fixed">
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-5 text-start border-0 ">
+                                                  <p>
+                                                      <strong style="font-size: small">ARREARS </strong>
+                                                  </p>
+                                                  <p>
+                                                      <strong style="font-size: small">AMOUNT UNTIL DUE DATE </strong>
+                                                  </p>
+                                              </td>
+                                              <td class="col-md-1 border-0"></td>
+                                              <td class="col-md-3 border-0"></td>
+                                              <td class="col-md-3 text-center border-0">
+                                                  <p>
+                                                      <strong>${records[0].arrears}</strong>
+                                                  </p>
+                                                  <p>
+                                                      <strong>${records[0].total_bill}</strong>
+                                                  </p>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>                                                     
+                                  <table class="tabb2 table table-bordered table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="text-center">Reading Date</th>
+                                              <th class="text-center">Due Date</th>
+                                              <th class="text-center">FOR THE MONTH OF</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                              <td class="col-md-4 text-center">${records[0].reading_date}</td>
+                                              <td class="col-md-4 text-center">${records[0].due_date}</td>
+                                              <td class="col-md-4 text-center">${records[0].formatted_reading_date2}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <div class="col-sm-12 mt-3">
+                                      <div class="row ">
+                                          <div class="col-md-3 ">
+                                          </div>
+                                          <div class="col-md-9  text-md-end">
+                                              <h6 class="mt-0" style="padding-right: 15px; color: #f44336;">${records[0].billing_uniqueId}</h6>
+                                          </div>
+                                      </div>
+                                  </div>
+                      </div>
+                  </div>
+              </div>
+              `;
+        }
+      } catch (error) {
+        // Handle any errors here
+        html = `<h4 class="text-center ">${error}</h4>`;
+      }
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+      console.log('the error: ', error);
+    });
+};
+// ---------------------------------------------FOR VIEW INFO------------------------------------------------
+const information = (user_id) => {
+  console.log("USER ID :", user_id);
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
+
+  var myUrl = "http://152.42.243.189/waterworks/gets/get_consumer.php";
+  const formData = new FormData();
+  formData.append("accId", user_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+
+      try {
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var employee = response.data;
+          const close_butt = document.getElementById("close_butt");
+          close_butt.style.display = "none";
+
+          var html = `
+                  <div class="mt-1 text-center">
+                      <i class="fas fa-user fa-5x mt-0"></i>
+                  </div>
+                  <hr class="badge-primary mt-3 mb-2">
+                  <div class="container-fluid mt-3">
+                      <form class="row g-3">
+                          <label class="form-label mb-0 " style="font-size: large;">Personal Information</label>
+                          <hr class="badge-primary mt-2">
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">First Name</label>
+                              <h6 class="text-muted" >${employee[0].firstname}</h6>
+                          </div>
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Middle Name</label>
+                              <h6 class="text-muted" >${employee[0].middlename}</h6>
+                          </div>
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Last Name</label>
+                              <h6 class="text-muted" >${employee[0].lastname}</h6>
+                          </div>
+                          <div class="col-md-4 mt-3">
+                              <label class="form-label">Phone</label>
+                              <h6 class="text-muted" >${employee[0].phone_no}</h6>
+                          </div>
+                          <div class="col-md-8 mt-3">
+                              <label class="form-label">Email</label>
+                              <h6 class="text-muted" >${employee[0].email}</h6>
+                          </div>
+                          <hr class="badge-primary mt-2 mb-2">
+                          <label class="form-label mt-0 mb-0 " style="font-size: large;">Address</label>
+                          <hr class="badge-primary mt-2">
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Zone</label>
+                              <h6 class="text-muted" >${employee[0].zone_name}</h6>
+                          </div>
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Barangay</label>
+                              <h6 class="text-muted" >${employee[0].barangay_name}</h6>
+                          </div>
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Municipality</label>
+                              <h6 class="text-muted" >${employee[0].municipality_name}</h6>
+                          </div>
+                          <hr class="badge-primary mt-2 mb-2">
+                          <label class="form-label mb-0 mt-0 " style="font-size: large;">Registered Account</label>
+                          <hr class="badge-primary mt-2">
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Branch</label>
+                              <h6 class="text-muted" >${employee[0].branch_name}</h6>
+                          </div>
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Property Type</label>
+                              <h6 class="text-muted" >${employee[0].property_name}</h6>
+                          </div> 
+                          <div class="col-md-4 mt-1">
+                              <label class="form-label">Meter Number</label>
+                              <h6 class="text-muted" >${employee[0].meter_no}</h6>
+                          </div>
+                          <div class="row mt-4">
+                            <div class="col-sm-12">
+                              <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                            </div>
+                          </div>
+                      </form>
+                  </div>
+                                    
+                  `;
+        }
+      } catch (error) {
+        // Handle any errors here
+        var html = `<h2>NO RECORD</h2>`;
+        console.log(error);
+      }
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURRED! ${error}`);
+    });
+};
 // ---------------------------------------------FOR EDIT-----------------------------------------------------
-const edit = (user_id) => {
+const edit_consumer = (user_id) => {
   const head = document.getElementById("head");
   head.style.display = "none";
 
@@ -425,10 +751,10 @@ const edit = (user_id) => {
               var myModal = new bootstrap.Modal(document.getElementById('myModals'), {});
               myModal.show();
           getSuffix();
-          getBranch();
+          getBranchs();
           getProperty();
           getConsumerType();
-          getMunicipality();
+          getMunicipalitys();
         }
       } catch (error) {
         document.getElementById("modalContents").innerHTML = `<h2>No Record</h2>`;
@@ -959,6 +1285,7 @@ const submit_edit_consumer = (event, user_id) => {
               console.log(error);
             });
         };
+        
       const getSuffix = () => {
         const propertySelect = document.getElementById("suffix");
         var myUrl = "http://152.42.243.189/waterworks/gets/get_suffix.php";

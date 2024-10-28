@@ -1199,8 +1199,7 @@ const information = (user_id) => {
                               <label class="form-label">Phone</label>
                               <h6 class="text-muted" >${employee[0].phone_no}</h6>
                           </div>
-                          <div class="col-md-4 mt-3"></div>
-                          <div class="col-md-4 mt-3">
+                          <div class="col-md-8 mt-3">
                               <label class="form-label">Email</label>
                               <h6 class="text-muted" >${employee[0].email}</h6>
                           </div>
