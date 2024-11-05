@@ -218,6 +218,9 @@ function saveAsCSV() {
   // Create an array to hold the CSV content
   var csv = [];
   
+  // Initialize a variable for total amount
+  var totalAmount = 0;
+
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
@@ -229,20 +232,26 @@ function saveAsCSV() {
     cells.forEach(function(cell, colIndex) {
       var text = cell.textContent.trim();
 
-      // Check if the column is the 'AMOUNT' column (usually 4th column, index 3)
+      // For the AMOUNT column (typically 4th column, index 3), calculate the total
       if (colIndex === 3) {
-        // Ensure the 'AMOUNT' column is always two decimal places
-        text = parseFloat(text.replace(/,/g, '')).toFixed(2);
+        var amount = parseFloat(text.replace(/,/g, '')); // Convert amount to number
+        if (!isNaN(amount)) {
+          totalAmount += amount;  // Add the amount to the total
+        }
+        text = amount.toFixed(2); // Format the amount to two decimal places
       }
 
-      // Check if this is the last row (the 'Total' row)
+      // Handle the last row (Total row)
       if (rowIndex === rows.length - 1) {
-        // For the 'Total' row, add empty values for ZONE and OR #
         if (colIndex === 1 || colIndex === 2) {
-          text = ""; // Empty values for ZONE and OR #
+          text = ""; // Empty ZONE and OR # columns for the Total row
         }
         if (colIndex === 0) {
-          text = "Total:"; // Ensure the first column is 'Total:'
+          text = "Total:"; // Set the first column of the Total row to "Total:"
+        }
+        // Set the last column to the calculated total amount
+        if (colIndex === 3) {
+          text = totalAmount.toFixed(2); // Format the total amount
         }
       }
 
