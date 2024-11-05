@@ -216,58 +216,44 @@ function saveAsCSV() {
   }
 
   // Create an array to hold the CSV content
-  var csvContent = [];
-
-  // Get the table rows (skip the header row and include the data rows)
+  var csv = [];
+  
+  // Get the table rows
   var rows = table.querySelectorAll("tr");
-
-  // Helper function to pad content to a fixed width
-  function padToWidth(text, width) {
-    // If text length is less than the width, pad with spaces; otherwise, truncate
-    return text.length < width ? text + ' '.repeat(width - text.length) : text.substring(0, width);
-  }
 
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
-    var rowData = [];
+    var cellData = [];
 
     cells.forEach(function(cell) {
+      // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-
-      // Wrap the text in quotes and pad to 30 characters
-      rowData.push(`"${padToWidth(text, 30)}"`);
+      cellData.push('"' + text + '"'); // Wrap with double quotes
     });
 
-    // Add the row to the CSV content if it's not empty
-    if (rowData.length > 0) {
-      csvContent.push(rowData.join(",")); // Join cells with commas
+    // Join the cells by commas and add to the CSV array
+    if (cellData.length > 0) {
+      csv.push(cellData.join(","));
     }
   });
 
-  // Calculate the total amount (sum the values in the last column)
-  var totalAmount = 0;
-  for (var i = 1; i < csvContent.length - 1; i++) { // Exclude the header and footer rows
-    var cells = csvContent[i].split(",");
-    var amount = parseFloat(cells[3].replace(/"/g, '').replace(",", "")); // Remove quotes and commas from the amount
-    if (!isNaN(amount)) {
-      totalAmount += amount;
-    }
-  }
+  // Join all rows by newlines
+  var csvContent = csv.join("\n");
 
-  // Add the "Total" row at the end in the correct format
-  var totalRow = `"Total:","",${padToWidth("", 30)},"${padToWidth(totalAmount.toFixed(2), 30)}"`;
-  csvContent.push(totalRow);
-
-  // Create a Blob object to save the CSV file
-  var csvFile = new Blob([csvContent.join("\n")], { type: 'text/csv;charset=utf-8;' });
-
-  // Create a link element to trigger the download
-  var link = document.createElement("a");
-  link.href = URL.createObjectURL(csvFile);
-  link.download = "report.csv"; // Name the downloaded CSV file
-  link.click();
+  // Create a Blob for the CSV content
+  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  var url = URL.createObjectURL(blob);
+  
+  // Create an anchor element to trigger the download
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "report.csv";  // Set the file name
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);  // Clean up the object URL
 }
 
 
