@@ -582,15 +582,15 @@ const add_employee = () => {
             <form class="row g-3" id="employeeForm">
                 <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">First Name</label>
+                    <label class="form-label">First Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="firstname" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Middle Name</label>
+                    <label class="form-label">Middle Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="middlename" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Last Name</label>
+                    <label class="form-label">Last Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="lastname" required>
                 </div>
                 <div class="col-md-6 mt-2">
@@ -601,40 +601,40 @@ const add_employee = () => {
                     </select>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Phone</label>
+                    <label class="form-label">Phone <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="phone" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Email</label>
+                    <label class="form-label">Email <span style="color: red;">*</span></label>
                     <input type="email" class="form-control" id="email_add" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Username</label>
+                    <label class="form-label">Username <span style="color: red;">*</span></label>
                     <input type="username" class="form-control" id="username" required>
                 </div>
                 <label class="form-label mt-3 mb-0 underline-label">Address</label>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Province</label>
+                    <label class="form-label">Province <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="provinceName" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Municipality</label>
+                    <label class="form-label">Municipality <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="municipalityName" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Barangay</label>
+                    <label class="form-label">Barangay <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="barangayName" required>
                 </div>
                 <label class="form-label mb-0 underline-label mt-3">Workspace</label>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Branch</label>
+                    <label class="form-label">Branch <span style="color: red;">*</span></label>
                     <select id="branch" class="form-select">
                         <option value="" disabled selected>Select Branch</option>
                         <!-- You can add branch options here -->
                     </select>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <label class="form-label">Position</label>
+                    <label class="form-label">Position <span style="color: red;">*</span></label>
                     <select id="position" class="form-select">
                         <option value="" disabled selected>Select Position</option>
                         <!-- You can add position options here -->
