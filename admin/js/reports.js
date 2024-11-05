@@ -207,7 +207,7 @@ function printTable() {
   printWindow.location.reload(); // Reload the page after printing
 }
 // Function to save content of mainDiv as Excel
-function saveAsExcel() {
+function saveAsCSV() {
   // Get the table element
   var table = document.getElementById("example");
   if (!table) {
