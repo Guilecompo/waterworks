@@ -218,7 +218,7 @@ function saveAsCSV() {
   // Create an array to hold the CSV content
   var csvContent = [];
 
-  // Get the table rows
+  // Get the table rows (skip the header row and include the data rows)
   var rows = table.querySelectorAll("tr");
 
   // Loop through each row and extract the data
@@ -229,10 +229,12 @@ function saveAsCSV() {
     cells.forEach(function(cell) {
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-      rowData.push(`"${text}"`); // Add data to the row array, wrap in quotes for proper CSV format
+
+      // Wrap the text in quotes to ensure the correct CSV format
+      rowData.push(`"${text}"`);
     });
 
-    // Add the row to the CSV content
+    // Add the row to the CSV content if it's not empty
     if (rowData.length > 0) {
       csvContent.push(rowData.join(",")); // Join cells with commas
     }
@@ -240,16 +242,16 @@ function saveAsCSV() {
 
   // Calculate the total amount (sum the values in the last column)
   var totalAmount = 0;
-  for (var i = 1; i < csvContent.length - 1; i++) {
+  for (var i = 1; i < csvContent.length - 1; i++) { // Exclude the header and footer rows
     var cells = csvContent[i].split(",");
-    var amount = parseFloat(cells[3].replace(/"/g, '').replace(",", "")); // Removing quotes and commas
+    var amount = parseFloat(cells[3].replace(/"/g, '').replace(",", "")); // Remove quotes and commas from the amount
     if (!isNaN(amount)) {
       totalAmount += amount;
     }
   }
 
-  // Add the "Total" row at the end
-  var totalRow = `"Total:",,"${totalAmount.toFixed(2)}"`;
+  // Add the "Total" row at the end in the correct format
+  var totalRow = `"Total:","","","${totalAmount.toFixed(2)}"`; // Ensure the total is formatted with two decimal places
   csvContent.push(totalRow);
 
   // Create a Blob object to save the CSV file
