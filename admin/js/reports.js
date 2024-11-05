@@ -215,45 +215,60 @@ function saveAsExcel() {
     return;
   }
 
-  // Create an array to hold the CSV content
-  var csv = [];
-  
+  // Create an array to hold the data
+  var data = [];
+
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
-    var cellData = [];
+    var rowData = [];
 
     cells.forEach(function(cell) {
-      // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-      cellData.push('"' + text + '"'); // Wrap with double quotes
+      rowData.push(text); // Add data to the row array
     });
 
-    // Join the cells by commas and add to the CSV array
-    if (cellData.length > 0) {
-      csv.push(cellData.join(","));
+    // Add the row to the data array
+    if (rowData.length > 0) {
+      data.push(rowData);
     }
   });
 
-  // Join all rows by newlines
-  var csvContent = csv.join("\n");
+  // Calculate the total amount (sum the values in the last column)
+  var totalAmount = 0;
+  for (var i = 1; i < data.length - 1; i++) {
+    var amount = parseFloat(data[i][3].replace(",", "")); // Removing any commas in the amount
+    if (!isNaN(amount)) {
+      totalAmount += amount;
+    }
+  }
 
-  // Create a Blob for the CSV content
-  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  var url = URL.createObjectURL(blob);
-  
-  // Create an anchor element to trigger the download
-  var a = document.createElement("a");
-  a.href = url;
-  a.download = "report.csv";  // Set the file name
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);  // Clean up the object URL
+  // Add the "Total" row at the end
+  data.push(["Total:", "", "", totalAmount.toFixed(2)]);
+
+  // Create a new workbook
+  var wb = XLSX.utils.book_new();
+
+  // Create a worksheet from the data array
+  var ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Set column widths to 30
+  ws["!cols"] = [
+    { wch: 30 }, // Column 1 width
+    { wch: 30 }, // Column 2 width
+    { wch: 30 }, // Column 3 width
+    { wch: 30 }, // Column 4 width
+  ];
+
+  // Add the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Report");
+
+  // Generate the Excel file and prompt the user to download
+  XLSX.writeFile(wb, "report.xlsx");
 }
 
 
