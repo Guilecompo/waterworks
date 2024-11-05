@@ -208,40 +208,52 @@ function printTable() {
 }
 // Function to save content of mainDiv as Excel
 function saveAsExcel() {
-  // Get the table from the DOM
-  var table = document.getElementById("mainDiv").querySelector("table");
+  // Get the table element
+  var table = document.getElementById("example");
   if (!table) {
     alert("No table found to export.");
     return;
   }
 
-  // Convert the table to CSV format
+  // Create an array to hold the CSV content
   var csv = [];
+  
+  // Get the table rows
   var rows = table.querySelectorAll("tr");
 
-  rows.forEach(function(row) {
+  // Loop through each row and extract the data
+  rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
+
     cells.forEach(function(cell) {
-      // Escape double quotes in cell data and wrap with quotes
-      var text = cell.textContent.trim().replace(/"/g, '""');
-      cellData.push('"' + text + '"');
+      // Get text content and escape special characters (like quotes)
+      var text = cell.textContent.trim();
+      text = text.replace(/"/g, '""'); // Escape quotes
+      cellData.push('"' + text + '"'); // Wrap with double quotes
     });
-    csv.push(cellData.join(","));
+
+    // Join the cells by commas and add to the CSV array
+    if (cellData.length > 0) {
+      csv.push(cellData.join(","));
+    }
   });
 
+  // Join all rows by newlines
   var csvContent = csv.join("\n");
 
-  // Create Blob for CSV download
+  // Create a Blob for the CSV content
   var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   var url = URL.createObjectURL(blob);
+  
+  // Create an anchor element to trigger the download
   var a = document.createElement("a");
   a.href = url;
-  a.download = "report.csv"; // Change this to .xlsx for Excel
+  a.download = "report.csv";  // Set the file name
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url);  // Clean up the object URL
 }
 
 
