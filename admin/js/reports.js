@@ -268,7 +268,7 @@ function saveAsExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "Report");
 
   // Generate the Excel file and prompt the user to download
-  XLSX.writeFile(wb, "report.xlsx");
+  XLSX.writeFile(wb, "report.csv");
 }
 
 
