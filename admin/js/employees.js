@@ -395,15 +395,15 @@ const edit_clerk = (user_id) => {
               <form class="row g-3">
                 <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">First Name</label>
+                  <label class="form-label">First Name <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="firstname" value="${employee[0].firstname}" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Middle Name</label>
+                  <label class="form-label">Middle Name <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="middlename" value="${employee[0].middlename}" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Last Name</label>
+                  <label class="form-label">Last Name <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="lastname" value="${employee[0].lastname}" required>
                 </div>
                 <div class="col-md-6 mt-2">
@@ -413,39 +413,39 @@ const edit_clerk = (user_id) => {
                   </select>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Phone</label>
+                  <label class="form-label">Phone <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="phone" value="${employee[0].phone_no}" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Email</label>
+                  <label class="form-label">Email <span style="color: red;">*</span></label>
                   <input type="email" class="form-control" id="email_add" value="${employee[0].email}" required >
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Username</label>
+                  <label class="form-label">Username <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="username" value="${employee[0].username}" required >
                 </div>
                 <label class="form-label mt-3 mb-0 underline-label">Address</label>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Province</label>
+                  <label class="form-label">Province <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="provinceName" value="${employee[0].provinceName}" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Municipality</label>
+                  <label class="form-label">Municipality <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="municipalityName" value="${employee[0].municipalityName}" required>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Barangay</label>
+                  <label class="form-label">Barangay <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="barangayName" value="${employee[0].barangayName}" required>
                 </div>
                 <label class="form-label mb-0 underline-label mt-3">Workspace</label>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Branch</label>
+                  <label class="form-label">Branch <span style="color: red;">*</span></label>
                   <select id="branch" class="form-select">
                     <option value="${employee[0].branch_id}" selected>${employee[0].branch_name}</option>
                   </select>
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label class="form-label">Position</label>
+                  <label class="form-label">Position <span style="color: red;">*</span></label>
                   <select id="position" class="form-select">
                     <option value="${employee[0].position_id}" selected>${employee[0].position_name}</option>
                   </select>
