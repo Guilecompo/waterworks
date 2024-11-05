@@ -221,47 +221,16 @@ function saveAsCSV() {
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
-  // Calculate the total amount from the rows (excluding the last row)
-  let totalAmount = 0;
-  rows.forEach(function(row, rowIndex) {
-    // Skip the header row and the last "Total" row
-    if (rowIndex > 0 && rowIndex < rows.length - 1) {
-      var cells = row.querySelectorAll("td");
-      if (cells.length > 0) {
-        // Sum the amount from the fourth column (index 3)
-        totalAmount += parseFloat(cells[3].textContent.trim()) || 0;
-      }
-    }
-  });
-
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
 
-    cells.forEach(function(cell, cellIndex) {
+    cells.forEach(function(cell) {
       // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-
-      // If this is the last row (Total row), we need to handle it differently
-      if (rowIndex === rows.length - 1) {
-        if (cellIndex === 0) {
-          // In the first column of the "Total" row, set the text to "Total"
-          text = "Total";
-          cellData.push('"' + text + '"');
-        } else if (cellIndex === 3) {
-          // In the fourth column of the "Total" row, set the value to the total amount
-          text = totalAmount.toFixed(2); // Set the total value, formatted to 2 decimal places
-          cellData.push('"' + text + '"');
-        } else {
-          // For other columns in the "Total" row, leave them empty
-          cellData.push('""');
-        }
-      } else {
-        // For other rows, just push the values normally
-        cellData.push('"' + text + '"');
-      }
+      cellData.push('"' + text + '"'); // Wrap with double quotes
     });
 
     // Join the cells by commas and add to the CSV array
@@ -286,7 +255,6 @@ function saveAsCSV() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);  // Clean up the object URL
 }
-
 
 
 function filterByDate() {
