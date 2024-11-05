@@ -221,6 +221,12 @@ function saveAsCSV() {
   // Get the table rows (skip the header row and include the data rows)
   var rows = table.querySelectorAll("tr");
 
+  // Helper function to pad content to a fixed width
+  function padToWidth(text, width) {
+    // If text length is less than the width, pad with spaces; otherwise, truncate
+    return text.length < width ? text + ' '.repeat(width - text.length) : text.substring(0, width);
+  }
+
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
@@ -230,8 +236,8 @@ function saveAsCSV() {
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
 
-      // Wrap the text in quotes to ensure the correct CSV format
-      rowData.push(`"${text}"`);
+      // Wrap the text in quotes and pad to 30 characters
+      rowData.push(`"${padToWidth(text, 30)}"`);
     });
 
     // Add the row to the CSV content if it's not empty
@@ -251,7 +257,7 @@ function saveAsCSV() {
   }
 
   // Add the "Total" row at the end in the correct format
-  var totalRow = `"Total:","","","${totalAmount.toFixed(2)}"`; // Ensure the total is formatted with two decimal places
+  var totalRow = `"Total:","",${padToWidth("", 30)},"${padToWidth(totalAmount.toFixed(2), 30)}"`;
   csvContent.push(totalRow);
 
   // Create a Blob object to save the CSV file
