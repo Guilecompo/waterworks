@@ -124,15 +124,15 @@ const add_consumer = () => {
             <form class="row g-3">
                 <label class="form-label mb-0 underline-label">Personal Information</label>
                 <div class="col-md-4">
-                    <label class="form-label">First Name</label>
+                    <label class="form-label">First Name <span style="color: red;">*</span></label>
                      <input type="text" class="form-control" id="firstname" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Middle Name</label>
+                    <label class="form-label">Middle Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="middlename" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Last Name</label>
+                    <label class="form-label">Last Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="lastname" required>
                 </div>
                 <div class="col-md-4">
@@ -140,46 +140,46 @@ const add_consumer = () => {
                     <select id="suffix" class="form-select"></select>
                   </div>
                 <div class="col-md-4">
-                    <label class="form-label">Phone</label>
+                    <label class="form-label">Phone <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="phone" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Email</label>
+                    <label class="form-label">Email <span style="color: red;">*</span></label>
                     <input type="email" class="form-control" id="email_add" required>
                 </div>
 
                 <label class="form-label mb-0 underline-label">Address</label>
                 <div class="col-md-4 ">
-                    <label class="form-label">Municipality</label>
+                    <label class="form-label">Municipality <span style="color: red;">*</span></label>
                     <select id="municipality" class="form-select" onchange="getBarangays()" ></select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Barangay</label>
+                    <label class="form-label">Barangay <span style="color: red;">*</span></label>
                     <select id="barangay" class="form-select" onchange="getZones()" required>
                         <option value="">Select Barangay</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Zone</label>
+                    <label class="form-label">Zone <span style="color: red;">*</span></label>
                     <select id="zoneId" class="form-select" required>
                         <option value="">Select Zone</option>
                     </select>
                 </div>
                 <label class="form-label mb-0 underline-label mt-4">Register Account</label>
                 <div class="col-md-4 ">
-                    <label class="form-label">Branch</label>
+                    <label class="form-label">Branch <span style="color: red;">*</span></label>
                     <select id="branch" class="form-select"></select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Property Type</label>
+                    <label class="form-label">Property Type <span style="color: red;">*</span></label>
                     <select id="property" class="form-select"></select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Consumer Type</label>
+                    <label class="form-label">Consumer Type <span style="color: red;">*</span></label>
                     <select id="consumer" class="form-select"></select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Meter Number</label>
+                    <label class="form-label">Meter Number <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="meter_no" required>
                 </div>   
                 <div class="col-md-4">
@@ -448,15 +448,15 @@ const edit = (user_id) => {
                   <form class="row g-3">
                       <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">First Name</label>
+                          <label class="form-label">First Name <span style="color: red;">*</span></label>
                           <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" required>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Middle Name</label>
+                          <label class="form-label">Middle Name <span style="color: red;">*</span></label>
                           <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" required>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Last Name</label>
+                          <label class="form-label">Last Name <span style="color: red;">*</span></label>
                           <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" required>
                       </div>
                       <div class="col-md-4">
@@ -466,53 +466,53 @@ const edit = (user_id) => {
                         </select>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Phone</label>
+                          <label class="form-label">Phone <span style="color: red;">*</span></label>
                           <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" required>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Email</label>
+                          <label class="form-label">Email <span style="color: red;">*</span></label>
                           <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" required>
                       </div>
                       <label class="form-label mt-3 mb-0 underline-label">Address</label>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Municipality</label>
+                          <label class="form-label">Municipality <span style="color: red;">*</span></label>
                           <select id="municipality" class="form-select" onchange="getBarangay()">
                             <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
                           </select>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Barangay</label>
+                          <label class="form-label">Barangay <span style="color: red;">*</span></label>
                           <select id="barangay" class="form-select" onchange="getZone()">
                           <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
                           </select>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Zone</label>
+                          <label class="form-label">Zone <span style="color: red;">*</span></label>
                           <select id="zoneId" class="form-select" >
                             <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
                           </select>
                       </div>
                       <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Branch</label>
+                          <label class="form-label">Branch <span style="color: red;">*</span></label>
                           <select id="edit_branch" class="form-select">
                             <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
                           </select>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Property Type</label>
+                          <label class="form-label">Property Type <span style="color: red;">*</span></label>
                           <select id="property" class="form-select">
                             <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
                           </select>
                       </div> 
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Consumer Type</label>
+                          <label class="form-label">Consumer Type <span style="color: red;">*</span></label>
                           <select id="consumer" class="form-select">
                             <option value="${consumer[0].consumertype_id }" selected>${consumer[0].consumertype}</option>
                           </select>
                       </div>
                       <div class="col-md-4 mt-3">
-                          <label class="form-label">Meter Number</label>
+                          <label class="form-label">Meter Number <span style="color: red;">*</span></label>
                           <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
                       </div>  
                       <div class="col-md-4 mt-3">
