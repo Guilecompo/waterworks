@@ -231,15 +231,21 @@ function saveAsCSV() {
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
 
-      // Check if the current row is the "Total" row
-      if (rowIndex === rows.length - 1 && cellIndex === 0) {
-        // Update the first column to "Total" and get the value from the 4th column
-        var totalValue = rows[rows.length - 1].querySelectorAll("td")[3].textContent.trim();
-        text = "Total";  // Set the first column to "Total"
-        cellData.push('"' + text + '"'); // Wrap with double quotes
-      } else {
-        cellData.push('"' + text + '"'); // For other rows, just wrap the text in quotes
+      // If this is the last row (Total row), we need to handle it differently
+      if (rowIndex === rows.length - 1) {
+        if (cellIndex === 0) {
+          // In the first column of the "Total" row, set the text to "Total"
+          text = "Total";
+        } else if (cellIndex === 3) {
+          // In the fourth column of the "Total" row, set the value to the total amount
+          // Get the value from the last row, 4th column (index 3)
+          var totalValue = rows[rows.length - 1].querySelectorAll("td")[3].textContent.trim();
+          text = totalValue; // Set the value in the last column
+        }
       }
+      
+      // Add the text to the CSV array wrapped in quotes
+      cellData.push('"' + text + '"');
     });
 
     // Join the cells by commas and add to the CSV array
