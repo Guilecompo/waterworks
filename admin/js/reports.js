@@ -217,25 +217,44 @@ function saveAsCSV() {
 
   // Create an array to hold the CSV content
   var csv = [];
-  
+
   // Get the table rows
   var rows = table.querySelectorAll("tr");
+
+  // Initialize totalAmount to 0
+  let totalAmount = 0;
 
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
 
-    cells.forEach(function(cell) {
+    cells.forEach(function(cell, cellIndex) {
       // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-      cellData.push('"' + text + '"'); // Wrap with double quotes
+
+      // If it's the footer row (the last row), handle the total specifically
+      if (rowIndex === rows.length - 1 && cellIndex === 3) {
+        // For the total row, set the value to the totalAmount (calculated above)
+        text = totalAmount.toFixed(2);
+      }
+
+      // Add the cell data wrapped in quotes
+      cellData.push('"' + text + '"');
     });
 
     // Join the cells by commas and add to the CSV array
     if (cellData.length > 0) {
       csv.push(cellData.join(","));
+    }
+
+    // For non-footer rows, sum the amounts (assuming the 4th column has the amount)
+    if (rowIndex < rows.length - 1) {
+      var amountCell = cells[3];
+      if (amountCell) {
+        totalAmount += parseFloat(amountCell.textContent.trim()) || 0;
+      }
     }
   });
 
@@ -245,7 +264,7 @@ function saveAsCSV() {
   // Create a Blob for the CSV content
   var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   var url = URL.createObjectURL(blob);
-  
+
   // Create an anchor element to trigger the download
   var a = document.createElement("a");
   a.href = url;
@@ -255,6 +274,7 @@ function saveAsCSV() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);  // Clean up the object URL
 }
+
 
 
 function filterByDate() {
