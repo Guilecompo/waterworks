@@ -221,10 +221,11 @@ function saveAsCSV() {
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
-  // Calculate the total amount from the rows
+  // Calculate the total amount from the rows (excluding the last row)
   let totalAmount = 0;
   rows.forEach(function(row, rowIndex) {
-    if (rowIndex !== rows.length - 1) {  // Skip the last row (Total row)
+    // Skip the header row and the last "Total" row
+    if (rowIndex > 0 && rowIndex < rows.length - 1) {
       var cells = row.querySelectorAll("td");
       if (cells.length > 0) {
         // Sum the amount from the fourth column (index 3)
