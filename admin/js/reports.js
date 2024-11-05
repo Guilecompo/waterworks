@@ -226,11 +226,20 @@ function saveAsCSV() {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
 
-    cells.forEach(function(cell) {
+    cells.forEach(function(cell, cellIndex) {
       // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-      cellData.push('"' + text + '"'); // Wrap with double quotes
+
+      // Check if the current row is the "Total" row
+      if (rowIndex === rows.length - 1 && cellIndex === 0) {
+        // Update the first column to "Total" and get the value from the 4th column
+        var totalValue = rows[rows.length - 1].querySelectorAll("td")[3].textContent.trim();
+        text = "Total";  // Set the first column to "Total"
+        cellData.push('"' + text + '"'); // Wrap with double quotes
+      } else {
+        cellData.push('"' + text + '"'); // For other rows, just wrap the text in quotes
+      }
     });
 
     // Join the cells by commas and add to the CSV array
