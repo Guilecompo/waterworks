@@ -221,6 +221,18 @@ function saveAsCSV() {
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
+  // Calculate the total amount from the rows
+  let totalAmount = 0;
+  rows.forEach(function(row, rowIndex) {
+    if (rowIndex !== rows.length - 1) {  // Skip the last row (Total row)
+      var cells = row.querySelectorAll("td");
+      if (cells.length > 0) {
+        // Sum the amount from the fourth column (index 3)
+        totalAmount += parseFloat(cells[3].textContent.trim()) || 0;
+      }
+    }
+  });
+
   // Loop through each row and extract the data
   rows.forEach(function(row, rowIndex) {
     var cells = row.querySelectorAll("th, td");
@@ -239,9 +251,7 @@ function saveAsCSV() {
           cellData.push('"' + text + '"');
         } else if (cellIndex === 3) {
           // In the fourth column of the "Total" row, set the value to the total amount
-          // Get the total amount from the last row, 4th column (index 3)
-          var totalValue = rows[rows.length - 2].querySelectorAll("td")[3].textContent.trim();
-          text = totalValue; // Set the value in the last column
+          text = totalAmount.toFixed(2); // Set the total value, formatted to 2 decimal places
           cellData.push('"' + text + '"');
         } else {
           // For other columns in the "Total" row, leave them empty
