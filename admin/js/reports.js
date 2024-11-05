@@ -218,9 +218,6 @@ function saveAsCSV() {
   // Create an array to hold the CSV content
   var csv = [];
   
-  // Initialize a variable for the total amount
-  var totalAmount = 0;
-
   // Get the table rows
   var rows = table.querySelectorAll("tr");
 
@@ -229,35 +226,11 @@ function saveAsCSV() {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
 
-    cells.forEach(function(cell, colIndex) {
+    cells.forEach(function(cell) {
+      // Get text content and escape special characters (like quotes)
       var text = cell.textContent.trim();
-
-      // For the AMOUNT column (typically 4th column, index 3), calculate the total
-      if (colIndex === 3) {
-        var amount = parseFloat(text.replace(/,/g, '')); // Convert amount to number
-        if (!isNaN(amount)) {
-          totalAmount += amount;  // Add the amount to the total
-        }
-        text = amount.toFixed(2); // Format the amount to two decimal places
-      }
-
-      // Handle the last row (Total row)
-      if (rowIndex === rows.length - 1) {
-        if (colIndex === 1 || colIndex === 2) {
-          text = ""; // Empty ZONE and OR # columns for the Total row
-        }
-        if (colIndex === 0) {
-          text = "Total:"; // Set the first column of the Total row to "Total:"
-        }
-        // Set the last column to the calculated total amount
-        if (colIndex === 3) {
-          text = totalAmount.toFixed(2); // Format the total amount
-        }
-      }
-
-      // Escape quotes and wrap with double quotes
-      text = text.replace(/"/g, '""');
-      cellData.push('"' + text + '"'); // Wrap each cell's value in double quotes
+      text = text.replace(/"/g, '""'); // Escape quotes
+      cellData.push('"' + text + '"'); // Wrap with double quotes
     });
 
     // Join the cells by commas and add to the CSV array
