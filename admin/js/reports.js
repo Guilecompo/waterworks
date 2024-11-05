@@ -218,7 +218,7 @@ function saveAsCSV() {
   // Create an array to hold the CSV content
   var csv = [];
   
-  // Initialize a variable for total amount
+  // Initialize a variable for the total amount
   var totalAmount = 0;
 
   // Get the table rows
