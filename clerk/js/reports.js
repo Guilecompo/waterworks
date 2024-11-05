@@ -247,7 +247,7 @@ function saveAsExcel() {
   var url = URL.createObjectURL(blob);
   var a = document.createElement("a");
   a.href = url;
-  a.download = "report.csv";
+  a.download = "report.xlsx";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
