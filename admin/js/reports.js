@@ -207,7 +207,7 @@ function printTable() {
   printWindow.location.reload(); // Reload the page after printing
 }
 // Function to save content of mainDiv as Excel
-function saveAsExcel() {
+function saveAsCSV() {
   // Get the table element
   var table = document.getElementById("example");
   if (!table) {
@@ -215,8 +215,8 @@ function saveAsExcel() {
     return;
   }
 
-  // Create an array to hold the data
-  var data = [];
+  // Create an array to hold the CSV content
+  var csvContent = [];
 
   // Get the table rows
   var rows = table.querySelectorAll("tr");
@@ -229,46 +229,37 @@ function saveAsExcel() {
     cells.forEach(function(cell) {
       var text = cell.textContent.trim();
       text = text.replace(/"/g, '""'); // Escape quotes
-      rowData.push(text); // Add data to the row array
+      rowData.push(`"${text}"`); // Add data to the row array, wrap in quotes for proper CSV format
     });
 
-    // Add the row to the data array
+    // Add the row to the CSV content
     if (rowData.length > 0) {
-      data.push(rowData);
+      csvContent.push(rowData.join(",")); // Join cells with commas
     }
   });
 
   // Calculate the total amount (sum the values in the last column)
   var totalAmount = 0;
-  for (var i = 1; i < data.length - 1; i++) {
-    var amount = parseFloat(data[i][3].replace(",", "")); // Removing any commas in the amount
+  for (var i = 1; i < csvContent.length - 1; i++) {
+    var cells = csvContent[i].split(",");
+    var amount = parseFloat(cells[3].replace(/"/g, '').replace(",", "")); // Removing quotes and commas
     if (!isNaN(amount)) {
       totalAmount += amount;
     }
   }
 
   // Add the "Total" row at the end
-  data.push(["Total:", "", "", totalAmount.toFixed(2)]);
+  var totalRow = `"Total:",,"${totalAmount.toFixed(2)}"`;
+  csvContent.push(totalRow);
 
-  // Create a new workbook
-  var wb = XLSX.utils.book_new();
+  // Create a Blob object to save the CSV file
+  var csvFile = new Blob([csvContent.join("\n")], { type: 'text/csv;charset=utf-8;' });
 
-  // Create a worksheet from the data array
-  var ws = XLSX.utils.aoa_to_sheet(data);
-
-  // Set column widths to 30
-  ws["!cols"] = [
-    { wch: 30 }, // Column 1 width
-    { wch: 30 }, // Column 2 width
-    { wch: 30 }, // Column 3 width
-    { wch: 30 }, // Column 4 width
-  ];
-
-  // Add the worksheet to the workbook
-  XLSX.utils.book_append_sheet(wb, ws, "Report");
-
-  // Generate the Excel file and prompt the user to download
-  XLSX.writeFile(wb, "report.csv");
+  // Create a link element to trigger the download
+  var link = document.createElement("a");
+  link.href = URL.createObjectURL(csvFile);
+  link.download = "report.csv"; // Name the downloaded CSV file
+  link.click();
 }
 
 
