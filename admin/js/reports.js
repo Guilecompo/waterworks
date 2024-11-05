@@ -226,11 +226,29 @@ function saveAsCSV() {
     var cells = row.querySelectorAll("th, td");
     var cellData = [];
 
-    cells.forEach(function(cell) {
-      // Get text content and escape special characters (like quotes)
+    cells.forEach(function(cell, colIndex) {
       var text = cell.textContent.trim();
-      text = text.replace(/"/g, '""'); // Escape quotes
-      cellData.push('"' + text + '"'); // Wrap with double quotes
+
+      // Check if the column is the 'AMOUNT' column (usually 4th column, index 3)
+      if (colIndex === 3) {
+        // Ensure the 'AMOUNT' column is always two decimal places
+        text = parseFloat(text.replace(/,/g, '')).toFixed(2);
+      }
+
+      // Check if this is the last row (the 'Total' row)
+      if (rowIndex === rows.length - 1) {
+        // For the 'Total' row, add empty values for ZONE and OR #
+        if (colIndex === 1 || colIndex === 2) {
+          text = ""; // Empty values for ZONE and OR #
+        }
+        if (colIndex === 0) {
+          text = "Total:"; // Ensure the first column is 'Total:'
+        }
+      }
+
+      // Escape quotes and wrap with double quotes
+      text = text.replace(/"/g, '""');
+      cellData.push('"' + text + '"'); // Wrap each cell's value in double quotes
     });
 
     // Join the cells by commas and add to the CSV array
