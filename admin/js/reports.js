@@ -208,21 +208,42 @@ function printTable() {
 }
 // Function to save content of mainDiv as Excel
 function saveAsExcel() {
-  // Code to convert HTML table to Excel format
+  // Get the table from the DOM
   var table = document.getElementById("mainDiv").querySelector("table");
-  var html = table.outerHTML;
-  var blob = new Blob([html], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+  if (!table) {
+    alert("No table found to export.");
+    return;
+  }
+
+  // Convert the table to CSV format
+  var csv = [];
+  var rows = table.querySelectorAll("tr");
+
+  rows.forEach(function(row) {
+    var cells = row.querySelectorAll("th, td");
+    var cellData = [];
+    cells.forEach(function(cell) {
+      // Escape double quotes in cell data and wrap with quotes
+      var text = cell.textContent.trim().replace(/"/g, '""');
+      cellData.push('"' + text + '"');
+    });
+    csv.push(cellData.join(","));
   });
+
+  var csvContent = csv.join("\n");
+
+  // Create Blob for CSV download
+  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   var url = URL.createObjectURL(blob);
   var a = document.createElement("a");
   a.href = url;
-  a.download = "report.csv";
+  a.download = "report.csv"; // Change this to .xlsx for Excel
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
 
 
 function filterByDate() {
