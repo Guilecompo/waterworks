@@ -236,16 +236,21 @@ function saveAsCSV() {
         if (cellIndex === 0) {
           // In the first column of the "Total" row, set the text to "Total"
           text = "Total";
+          cellData.push('"' + text + '"');
         } else if (cellIndex === 3) {
           // In the fourth column of the "Total" row, set the value to the total amount
-          // Get the value from the last row, 4th column (index 3)
-          var totalValue = rows[rows.length - 1].querySelectorAll("td")[3].textContent.trim();
+          // Get the total amount from the last row, 4th column (index 3)
+          var totalValue = rows[rows.length - 2].querySelectorAll("td")[3].textContent.trim();
           text = totalValue; // Set the value in the last column
+          cellData.push('"' + text + '"');
+        } else {
+          // For other columns in the "Total" row, leave them empty
+          cellData.push('""');
         }
+      } else {
+        // For other rows, just push the values normally
+        cellData.push('"' + text + '"');
       }
-      
-      // Add the text to the CSV array wrapped in quotes
-      cellData.push('"' + text + '"');
     });
 
     // Join the cells by commas and add to the CSV array
