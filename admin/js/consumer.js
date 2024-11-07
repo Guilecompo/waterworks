@@ -83,7 +83,10 @@ const consumerRefreshTables = (consumers) => {
     html += `
             <tr>
               <td class="text-center">${consumer.meter_no}</td>
-              <td class="text-center">${consumer.firstname} ${consumer.lastname} #${consumer.connected_number} </td>
+              <td class="text-center">
+                ${consumer.firstname} ${consumer.lastname}
+                <span>${consumer.connected_number !== 0 ? `#${consumer.connected_number}` : ''}</span>
+              </td>
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
                 <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
