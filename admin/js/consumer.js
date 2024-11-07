@@ -87,23 +87,23 @@ const consumerRefreshTables = (consumers) => {
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
                 <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
-                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span >View</span>
-                  </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" onclick="information(${consumer.user_id})">Information</a></li>
-                        <li><a class="dropdown-item" onclick="newBill(${consumer.user_id})">New Bill</a></li>
-                        <li><a class="dropdown-item" onclick="billingHis(${consumer.user_id})">Billing History</a></li>
-                        <li><a class="dropdown-item" onclick="paymentHis(${consumer.user_id})">Payment History</a></li>
-                    </ul>
-                  <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span >More</span>
-                  </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
-                        <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
-                        <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
-                        <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
-                    </ul>
+                <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span >View</span>
+                </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" onclick="information(${consumer.user_id})">Information</a></li>
+                      <li><a class="dropdown-item" onclick="newBill(${consumer.user_id})">New Bill</a></li>
+                      <li><a class="dropdown-item" onclick="billingHis(${consumer.user_id})">Billing History</a></li>
+                      <li><a class="dropdown-item" onclick="paymentHis(${consumer.user_id})">Payment History</a></li>
+                  </ul>
+              <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                <span >More</span>
+              </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                    <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
+                    <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
+                    <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
+                </ul>
               </td>
             </tr>
             `;
@@ -641,6 +641,136 @@ const submit_edit_consumer = (event, user_id) => {
     })
     .catch((error) => {
       console.log(`ERROR OCCURRED! ${error}`);
+    });
+};
+
+const edit_connected = (user_id) => {
+  const head = document.getElementById("head");
+  head.style.display = "none";
+
+  var myUrl = "http://152.42.243.189/waterworks/admin/getconsumer.php";
+  const formData = new FormData();
+  formData.append("user_id", user_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      console.log(response.data);
+      try {
+        if (response.data.length === 0) {
+          // Display a message indicating there are no billing transactions yet.
+          var html = `<h2>No Records</h2>`;
+        } else {
+          var consumer = response.data;
+          console.log("Consumer : ", consumer[0].user_id);
+
+          var html = `
+              <div class=" row  mt-1">
+                <div class="col-md-11 mt-3">
+                  <h4 style="text-align: center;">Edit Consumer</h4>
+                </div>
+              </div>
+              <div class="container-fluid mt-3">
+                  <form class="row g-3">
+                      <label class="form-label mt-2 mb-0 underline-label">Personal Information</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">First Name <span style="color: red;">*</span></label>
+                          <input type="text" class="form-control" id="firstname" value="${consumer[0].firstname}" readonly required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Middle Name <span style="color: red;">*</span></label>
+                          <input type="text" class="form-control" id="middlename" value="${consumer[0].middlename}" readonly required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Last Name <span style="color: red;">*</span></label>
+                          <input type="text" class="form-control" id="lastname" value="${consumer[0].lastname}" readonly required>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="form-label">Suffix</label>
+                        <input type="text" class="form-control" id="suffix" value="${consumer[0].suffix_name}" readonly required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Phone <span style="color: red;">*</span></label>
+                          <input type="text" class="form-control" id="phone" value="${consumer[0].phone_no}" readonly required>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Email <span style="color: red;">*</span></label>
+                          <input type="email" class="form-control" id="email_add" value="${consumer[0].email}" readonly required>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label">Address</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Municipality <span style="color: red;">*</span></label>
+                          <select id="municipality" class="form-select" onchange="getBarangay()">
+                            <option value="${consumer[0].municipality_id}" selected>${consumer[0].municipality_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Barangay <span style="color: red;">*</span></label>
+                          <select id="barangay" class="form-select" onchange="getZone()">
+                          <option value="${consumer[0].barangay_id}" selected>${consumer[0].barangay_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Zone <span style="color: red;">*</span></label>
+                          <select id="zoneId" class="form-select" >
+                            <option value="${consumer[0].zone_id}" selected>${consumer[0].zone_name}</option>
+                          </select>
+                      </div>
+                      <label class="form-label mt-3 mb-0 underline-label mt-4">Register Account</label>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Branch <span style="color: red;">*</span></label>
+                          <select id="edit_branch" class="form-select">
+                            <option value="${consumer[0].branch_id}" selected>${consumer[0].branch_name}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Property Type <span style="color: red;">*</span></label>
+                          <select id="property" class="form-select">
+                            <option value="${consumer[0].property_id}" selected>${consumer[0].property_name}</option>
+                          </select>
+                      </div> 
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Consumer Type <span style="color: red;">*</span></label>
+                          <select id="consumer" class="form-select">
+                            <option value="${consumer[0].consumertype_id }" selected>${consumer[0].consumertype}</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">Meter Number <span style="color: red;">*</span></label>
+                          <input type="text" class="form-control" id="meter_no" value="${consumer[0].meter_no}" required>
+                      </div>  
+                      <div class="col-md-4 mt-3">
+                          <label class="form-label">House Number</label>
+                          <input type="number" class="form-control" id="house_no" value="${consumer[0].house_no}">
+                      </div>                     
+                      <div class="col-12 mt-4">
+                          <button type="submit" class="btn btn-primary w-100" onclick="submit_edit_consumer(event, ${consumer[0].user_id})">Submit form</button>
+                      </div>
+                  </form>
+              </div>
+                                
+              `;
+
+              document.getElementById("modalContents").innerHTML = html;
+
+              // Trigger the modal
+              var myModal = new bootstrap.Modal(document.getElementById('myModals'), {});
+              myModal.show();
+          getSuffix();
+          getBranch();
+          getProperty();
+          getConsumerType();
+          getMunicipality();
+        }
+      } catch (error) {
+        document.getElementById("modalContents").innerHTML = `<h2>No Record</h2>`;
+      }
+    })
+    .catch((error) => {
+      console.log(`ERROR OCCURREDSSSSSSSSSSS! ${error}`);
     });
 };
 const updateBillStatus = () => {
@@ -2079,7 +2209,16 @@ const more = (user_id) => {
                           <td>${record.phone_no}</td>
                           <td>${record.meter_no}</td>
                           <td>
-                              <button class="butts" style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" onclick="connected_edit(${record.user_id})">Edit</button>
+                            <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;" class="dropdown dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span >More</span>
+                            </button>
+                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                  <li><a class="dropdown-item" onclick="edit_connected(${record.user_id})">Edit</a></li>
+                                  <li><a class="dropdown-item" onclick="information(${record.user_id})">Information</a></li>
+                                  <li><a class="dropdown-item" onclick="newBill(${record.user_id})">New Bill</a></li>
+                                  <li><a class="dropdown-item" onclick="billingHis(${record.user_id})">Billing History</a></li>
+                                  <li><a class="dropdown-item" onclick="paymentHis(${record.user_id})">Payment History</a></li>
+                              </ul>
                           </td>
                       </tr>
                   `;
