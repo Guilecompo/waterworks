@@ -83,10 +83,7 @@ const consumerRefreshTables = (consumers) => {
     html += `
             <tr>
               <td class="text-center">${consumer.meter_no}</td>
-              <td class="text-center">
-                ${consumer.firstname} ${consumer.lastname}
-                <span>${consumer.connected_number !== 0 ? `#${consumer.connected_number}` : ''}</span>
-              </td>
+              <td class="text-center">${consumer.firstname} ${consumer.lastname} </td>
               <td class="text-center">${consumer.branch_name}</td>
               <td class="text-center">
                 <button style="background-color: #0275d8; border: none; padding: 5px; border-radius: 12%; color:white;"  onclick="edit(${consumer.user_id})">Edit</button>
@@ -105,6 +102,7 @@ const consumerRefreshTables = (consumers) => {
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
                         <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
                         <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
+                        <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
                     </ul>
               </td>
             </tr>
@@ -404,6 +402,7 @@ const branchRefreshTables = (consumers) => {
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
                         <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
                         <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
+                        <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
                     </ul>
               </td>
             </tr>
