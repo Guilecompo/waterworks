@@ -12,6 +12,13 @@ error_log(print_r($_POST, true)); // Log the received POST data
 $consumerId = $_POST['consumerId'];
 $new_meter = $_POST['new_meters'];
 
+$propertyId = $_POST['propertyId'];
+$municipalityId = $_POST['municipalityId'];
+$barangayId = $_POST['barangayId'];
+$zoneId = $_POST['zoneId'];
+$branchId = $_POST['branchId'];
+$consumer = $_POST['consumer'];
+
 $date_added = date("Y-m-d");
 $employee_Id = $_POST['employee_Id'];
 $login_statusId = 2;
@@ -60,16 +67,18 @@ try {
                 $stmtInsert->bindParam(':connected_parentId', $consumerId);
                 $stmtInsert->bindParam(':connected_number', $connected_number);
                 $stmtInsert->bindParam(':phone_no', $row['phone_no']);
-                $stmtInsert->bindParam(':addressId', $row['addressId']);
-                $stmtInsert->bindParam(':propertyId', $row['propertyId']);
                 $stmtInsert->bindParam(':email_add', $row['email']);
                 $stmtInsert->bindParam(':house_no', $row['house_no']);
-                $stmtInsert->bindParam(':meter_no', $new_meter);
                 $stmtInsert->bindParam(':password', $password);
                 $stmtInsert->bindParam(':total_cubic_consumed', $total_cubic_consumed);
                 $stmtInsert->bindParam(':positionId', $row['positionId']);
-                $stmtInsert->bindParam(':consumertypeId', $row['consumertypeId']);
-                $stmtInsert->bindParam(':branchId', $row['branchId']);
+
+                $stmtInsert->bindParam(':meter_no', $new_meter);
+                $stmtInsert->bindParam(':addressId', $zoneId);
+                $stmtInsert->bindParam(':propertyId', $propertyId);
+                $stmtInsert->bindParam(':consumertypeId', $consumer);
+                $stmtInsert->bindParam(':branchId', $branchId);
+
                 $stmtInsert->bindParam(':statusId', $new_statusId);
                 $stmtInsert->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
                 $stmtInsert->bindParam(":date_added", $date_added);
@@ -123,16 +132,18 @@ try {
                 $stmtInsert->bindParam(':connected_parentId', $consumerId);
                 $stmtInsert->bindParam(':connected_number', $connected_number);
                 $stmtInsert->bindParam(':phone_no', $row['phone_no']);
-                $stmtInsert->bindParam(':addressId', $row['addressId']);
-                $stmtInsert->bindParam(':propertyId', $row['propertyId']);
                 $stmtInsert->bindParam(':email_add', $row['email']);
                 $stmtInsert->bindParam(':house_no', $row['house_no']);
-                $stmtInsert->bindParam(':meter_no', $new_meter);
                 $stmtInsert->bindParam(':password', $password);
                 $stmtInsert->bindParam(':total_cubic_consumed', $total_cubic_consumed);
                 $stmtInsert->bindParam(':positionId', $row['positionId']);
-                $stmtInsert->bindParam(':consumertypeId', $row['consumertypeId']);
-                $stmtInsert->bindParam(':branchId', $row['branchId']);
+
+                $stmtInsert->bindParam(':meter_no', $new_meter);
+                $stmtInsert->bindParam(':addressId', $zoneId);
+                $stmtInsert->bindParam(':propertyId', $propertyId);
+                $stmtInsert->bindParam(':consumertypeId', $consumer);
+                $stmtInsert->bindParam(':branchId', $branchId);
+
                 $stmtInsert->bindParam(':statusId', $new_statusId);
                 $stmtInsert->bindParam(":login_statusId", $login_statusId, PDO::PARAM_INT);
                 $stmtInsert->bindParam(":date_added", $date_added);

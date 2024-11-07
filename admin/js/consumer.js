@@ -2075,24 +2075,47 @@ const add = (user_id) => {
                                                 <h5 class="font-weight-bold mt-2">${employee[0].firstname} ${employee[0].middlename} ${employee[0].lastname} </h5>
                                                 <p class="text-muted" >${employee[0].meter_no}</p>
                                             </div>
-                                            <hr class="badge-primary mt-0">
-                                            <div class="row">
-                                                <div class="col-sm-8">
-                                                    <p style="text-decoration: underline; font-size: small;">Address</p>
-                                                    <h6 class="text-muted">${employee[0].zone_name}, ${employee[0].barangay_name}, ${employee[0].municipality_name}</h6>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <p style="text-decoration: underline; font-size: small;">Phone Number</p>
-                                                    <h6 class="text-muted" >${employee[0].phone_no}</h6>
-                                                </div>
-                                            </div>
                                             <hr class="badge-primary mt-1">
                                             <h4 class="mt-0 text-center" >Add Conntected Meter</h4>
                                             <hr class="badge-primary mt-0">
+
+                                            <form class="row g-3">
+                                              <label class="form-label mb-0 underline-label">Address</label>
+                                              <div class="col-md-4 ">
+                                                  <label class="form-label">Municipality <span style="color: red;">*</span></label>
+                                                  <select id="municipality" class="form-select" onchange="getBarangays()" ></select>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Barangay <span style="color: red;">*</span></label>
+                                                  <select id="barangay" class="form-select" onchange="getZones()" required>
+                                                      <option value="">Select Barangay</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Zone <span style="color: red;">*</span></label>
+                                                  <select id="zoneId" class="form-select" required>
+                                                      <option value="">Select Zone</option>
+                                                  </select>
+                                              </div>
+                                              <label class="form-label mb-0 underline-label mt-4">Register Account</label>
+                                              <div class="col-md-4 ">
+                                                  <label class="form-label">Branch <span style="color: red;">*</span></label>
+                                                  <select id="branch" class="form-select"></select>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Property Type <span style="color: red;">*</span></label>
+                                                  <select id="property" class="form-select"></select>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Consumer Type <span style="color: red;">*</span></label>
+                                                  <select id="consumer" class="form-select"></select>
+                                              </div>
+                                            </form>
+                                            
                                             <div class="row mt-0">
                                                 <div class="col-sm-12 mt-2">
-                                                    <label for="new_meter_no">Add New Conntected Meter</label>
-                                                    <input type="text" class="form-control " id="new_meter_no" style="height: 30px;" placeholder="Enter New Meter Number" >
+                                                    <label for="new_meter_no">Meter Number<span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control " id="new_meter_no" style="height: 40px;" placeholder="Enter Meter Number" >
                                                 </div>
                                             </div>
                                             <div class="row mt-4">
@@ -2109,6 +2132,7 @@ const add = (user_id) => {
                                 </div>
                         </div>
                     `;
+            
         }
       } catch (error) {
         // Handle any errors here
@@ -2117,6 +2141,10 @@ const add = (user_id) => {
 
       modalContent.innerHTML = html;
       modal.style.display = "block";
+      getBranchs();
+      getConsumerType();
+      getProperty();
+      getMunicipalitys();
     })
     .catch((error) => {
       alert(`ERROR OCCURRED! ${error}`);
@@ -2124,7 +2152,20 @@ const add = (user_id) => {
 };
 const submit_add = (user_id) => {
   const new_meters = document.getElementById("new_meter_no").value;
-  if (new_meters === "") {
+  const propertyId = document.getElementById("property").value;
+  const municipalityId = document.getElementById("municipality").value;
+  const barangayId = document.getElementById("barangay").value;
+  const zoneId = document.getElementById("zoneId").value;
+  const branchId = document.getElementById("branch").value;
+  const consumer = document.getElementById("consumer").value;
+  if (new_meters === "" ||
+     propertyId === "" ||
+     municipalityId === "" ||
+     barangayId === "" ||
+     zoneId === "" ||
+     branchId === "" ||
+     consumer === ""
+    ) {
     alert("Fill in all fields");
     return;
   } else {
@@ -2133,6 +2174,13 @@ const submit_add = (user_id) => {
     formData.append("consumerId", user_id);
     formData.append("new_meters", new_meters);
     formData.append("employee_Id", sessionStorage.getItem("accountId"));
+
+    formData.append("propertyId", propertyId);
+    formData.append("municipalityId", municipalityId);
+    formData.append("barangayId", barangayId);
+    formData.append("zoneId", zoneId);
+    formData.append("branchId", branchId);
+    formData.append("consumer", consumer);
 
     axios({
       url: myUrl,
