@@ -102,7 +102,6 @@ const consumerRefreshTables = (consumers) => {
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
                         <li><a class="dropdown-item" onclick="change(${consumer.user_id})">Change Meter</a></li>
                         <li><a class="dropdown-item" onclick="add(${consumer.user_id})">Add Connected</a></li>
-                        <li><a class="dropdown-item" onclick="more(${consumer.user_id})">View Connected</a></li>
                     </ul>
               </td>
             </tr>
