@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Get inputs
         $branchId = $_POST['branchId']; // Make sure this is sent in the request
-        // Assuming readerId is available in session or as a parameter:
         $readerId = $_SESSION['readerId']; // Or use a POST variable for this if necessary
 
         // Fetch the zones assigned to the reader
@@ -56,7 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             AND YEAR(reading_date) = YEAR(CURDATE())");
         $stmt->bindParam(":readerId", $readerId, PDO::PARAM_INT);
         $stmt->execute();
-        $totalCubic = $stmt->fetch(PDO::FETCH_ASSOC)['totalCubic'];
+        $totalCubicResult = $stmt->fetch(PDO::FETCH_ASSOC);
+        $totalCubic = $totalCubicResult['totalCubic'] ? $totalCubicResult['totalCubic'] : 0;
 
         // Prepare response
         $response = [

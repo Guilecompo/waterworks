@@ -36,30 +36,32 @@ const getall = () => {
   const Url = `http://152.42.243.189/waterworks/meterreader/total.php`; // Update the URL if needed.
   
   const formData = new FormData();
-  formData.append("branchId", sessionStorage.getItem("branchId")); // Ensure branchId is available in sessionStorage
+  formData.append("branchId", sessionStorage.getItem("branchId"));
+  formData.append("readerId", sessionStorage.getItem("accountId"));
 
   axios.post(Url, formData)
-    .then(response => {
-      console.log('Response data:', response.data); // Log the response for debugging
-      const data = response.data;
+  .then(response => {
+    console.log('Response data:', response.data); // Log the raw response data
+    const data = response.data;
 
-      // Check for the existence of expected properties and handle missing or null values.
-      if (data && data.total_consumers !== undefined && data.reading_left !== undefined && data.total_consumed !== undefined) {
-        const totalCubicValue = data.total_consumed !== null ? data.total_consumed : 0;
-        const readingLeftValue = data.reading_left !== null ? data.reading_left : 0;
-        const totalconsumerValue = data.total_consumers !== null ? data.total_consumers : 0;
+    // Check if the data has the expected structure
+    if (data && data.total_consumers !== undefined && data.reading_left !== undefined && data.total_consumed !== undefined) {
+      const totalCubicValue = data.total_consumed !== null ? data.total_consumed : 0;
+      const readingLeftValue = data.reading_left !== null ? data.reading_left : 0;
+      const totalconsumerValue = data.total_consumers !== null ? data.total_consumers : 0;
 
-        // Update the DOM with the retrieved data
-        totalCubic.innerText = totalCubicValue;
-        readingLeft.innerText = readingLeftValue;
-        totalconsumer.innerText = totalconsumerValue;
-      } else {
-        console.error('Invalid data format or missing properties in the response.');
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
+      // Update the DOM with the retrieved data
+      totalCubic.innerText = totalCubicValue;
+      readingLeft.innerText = readingLeftValue;
+      totalconsumer.innerText = totalconsumerValue;
+    } else {
+      console.error('Invalid data format or missing properties in the response:', data);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
 }
 
 
