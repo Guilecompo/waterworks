@@ -566,6 +566,9 @@ const bill_receipt = (user_id) => {
                         <div class="text-center py-1">
                             <h5>${records[0].con_lastname}, ${records[0].con_firstname}</h5>
                         </div>
+                        <div class="text-center py-1">
+                            <p>${records[0].consumertype}</p>
+                        </div>
 
                         <hr>
         
