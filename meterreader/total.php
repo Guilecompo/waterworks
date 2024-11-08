@@ -1,4 +1,3 @@
-<?php
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
@@ -7,8 +6,13 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Get inputs
-        $readerId = $_SESSION['readerId']; // Or use a POST variable for this if necessary
+        // Get readerId from POST data
+        $readerId = isset($_POST['readerId']) ? $_POST['readerId'] : null;
+
+        if (!$readerId) {
+            echo json_encode(["error" => "No readerId provided"]);
+            exit;
+        }
 
         // Fetch the zones assigned to the reader
         $stmt = $conn->prepare("SELECT a.zone_Id FROM assign a WHERE a.emp_Id = :readerId");
@@ -68,4 +72,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405); // Method Not Allowed
     echo json_encode(["error" => "Method not allowed"]);
 }
-?>

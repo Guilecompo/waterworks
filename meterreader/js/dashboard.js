@@ -37,8 +37,7 @@ const getall = () => {
   const Url = `http://152.42.243.189/waterworks/meterreader/total.php`; // Update the URL if needed.
   
   const formData = new FormData();
-  formData.append("branchId", sessionStorage.getItem("branchId"));
-  formData.append("readerId", sessionStorage.getItem("accountId")); 
+  formData.append("readerId", sessionStorage.getItem("accountId")); // Ensure 'accountId' is correct
 
   axios.post(Url, formData)
   .then(response => {
