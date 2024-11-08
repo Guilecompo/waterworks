@@ -55,13 +55,15 @@ try {
             a.present_meter,
             a.arrears,
             a.bill_amount,
-            a.total_bill
+            a.total_bill,
+            g.consumertype
         FROM billing a
         INNER JOIN user_employee b ON a.readerId = b.user_id
         INNER JOIN user_consumer c ON a.consumerId = c.user_id
         INNER JOIN address_zone d ON c.addressId = d.zone_id
         INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
         INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
+        INNER JOIN consumer_type g ON c.consumertypeId = g.consumertype_id
         WHERE a.consumerId = :accId AND a.billing_statusId = 2 ORDER BY billing_id DESC");
 
     // Bind parameters
