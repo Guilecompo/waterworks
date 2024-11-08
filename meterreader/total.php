@@ -56,12 +56,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $readingLeft = $result['total_consumers'];
 
-        // Query to calculate total cubic consumed this month
+        // Get the current month and year
+        $currentMonth = date('m'); // Current month (e.g., "10" for October)
+        $currentYear = date('Y');  // Current year (e.g., "2024")
+
+        // Query to calculate total cubic consumed this month, filtering by current month and year
         $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS totalCubic
             FROM billing
-            WHERE readerId = :readerId");
+            WHERE readerId = :readerId
+            AND MONTH(reading_date) = :currentMonth
+            AND YEAR(reading_date) = :currentYear");
+            
         $stmt->bindParam(":readerId", $readerId, PDO::PARAM_INT);
+        $stmt->bindParam(":currentMonth", $currentMonth, PDO::PARAM_INT);
+        $stmt->bindParam(":currentYear", $currentYear, PDO::PARAM_INT);
         $stmt->execute();
+
         $totalCubicResult = $stmt->fetch(PDO::FETCH_ASSOC);
         $totalCubic = $totalCubicResult['totalCubic'] ? $totalCubicResult['totalCubic'] : 0;
 
