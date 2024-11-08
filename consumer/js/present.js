@@ -200,6 +200,9 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                                         <strong style="font-size: small">ARREARS </strong>
                                                     </p>
                                                     <p>
+                                                        <strong style="font-size: small">TOTAL BILL </strong>
+                                                    </p>
+                                                    <p>
                                                         <strong style="font-size: small">AMOUNT UNTIL DUE DATE </strong>
                                                     </p>
                                                 </td>
@@ -214,6 +217,9 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                                     </p>
                                                     <p>
                                                         <strong>${records[0].arrears}</strong>
+                                                    </p>
+                                                    <p>
+                                                        <strong>${records[0].total_bill}</strong>
                                                     </p>
                                                     <p>
                                                         <strong>${records[0].total_bill}</strong>
