@@ -51,8 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS totalCubic
             FROM billing
             WHERE readerId = :readerId
-            AND MONTH(reading_date) = MONTH(CURDATE())
-            AND YEAR(reading_date) = YEAR(CURDATE())");
         $stmt->bindParam(":readerId", $readerId, PDO::PARAM_INT);
         $stmt->execute();
         $totalCubicResult = $stmt->fetch(PDO::FETCH_ASSOC);

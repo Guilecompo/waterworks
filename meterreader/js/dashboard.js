@@ -27,6 +27,7 @@ const getall = () => {
   const totalCubic = document.getElementById('totalCubic');
   const readingLeft = document.getElementById('readingLeft');
   const totalconsumer = document.getElementById('totalconsumer');
+  console.log("readerId is:", sessionStorage.getItem("accountId"))
 
   if (!totalCubic || !readingLeft || !totalconsumer) {
     console.error('One or more required elements not found in the DOM.');
@@ -37,7 +38,7 @@ const getall = () => {
   
   const formData = new FormData();
   formData.append("branchId", sessionStorage.getItem("branchId"));
-  formData.append("readerId", sessionStorage.getItem("accountId"));
+  formData.append("readerId", sessionStorage.getItem("accountId")); 
 
   axios.post(Url, formData)
   .then(response => {
