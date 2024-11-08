@@ -29,8 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Query to count total consumers in those zones
         $stmt = $conn->prepare("SELECT COUNT(*) as total_consumers
             FROM user_consumer a
-            WHERE a.branchId = :branchId
-            AND a.addressId IN (" . implode(',', $zones) . ")");
+            WHERE a.addressId IN (" . implode(',', $zones) . ")");
         $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Query to count consumers with billing status not 1 (reading left)
         $stmt = $conn->prepare("SELECT COUNT(*) as total_consumers
             FROM user_consumer a
-            WHERE a.branchId = :branchId
-            AND a.billing_status != 1
+            WHERE a.billing_status != 1
             AND a.addressId IN (" . implode(',', $zones) . ")");
         $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
         $stmt->execute();
