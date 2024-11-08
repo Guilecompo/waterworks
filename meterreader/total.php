@@ -8,7 +8,6 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Get inputs
-        $branchId = $_POST['branchId']; // Make sure this is sent in the request
         $readerId = $_SESSION['readerId']; // Or use a POST variable for this if necessary
 
         // Fetch the zones assigned to the reader
@@ -30,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("SELECT COUNT(*) as total_consumers
             FROM user_consumer a
             WHERE a.addressId IN (" . implode(',', $zones) . ")");
-        $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $totalConsumers = $result['total_consumers'];
@@ -40,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             FROM user_consumer a
             WHERE a.billing_status != 1
             AND a.addressId IN (" . implode(',', $zones) . ")");
-        $stmt->bindParam(":branchId", $branchId, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $readingLeft = $result['total_consumers'];
