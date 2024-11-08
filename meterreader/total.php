@@ -1,7 +1,17 @@
+<?php
+// CORS headers
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost");  // Allow requests from localhost (adjust as needed)
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");  // Allow POST, GET, OPTIONS methods
+header("Access-Control-Allow-Headers: Content-Type");  // Allow Content-Type header
 
-include 'connection.php';
+// If the request is an OPTIONS request (preflight request), respond with status 200 and exit
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+include 'connection.php';  // Ensure this path is correct
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -72,3 +82,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405); // Method Not Allowed
     echo json_encode(["error" => "Method not allowed"]);
 }
+?>
