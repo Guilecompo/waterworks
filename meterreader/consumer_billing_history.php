@@ -37,8 +37,9 @@ try {
     $formatted_reading_date1 = getBusinessDays($startDate, $endDate, $intervalDays);
     $penalty = 0.1;
 
+    // SQL Query to retrieve billing information
     $stmt = $conn->prepare("SELECT
-            a.billing_id, a.period_cover,a.billing_uniqueId,
+            a.billing_id, a.period_cover, a.billing_uniqueId, a.discount_amount,
             b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
             c.user_id, c.meter_no,
             c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
@@ -61,28 +62,37 @@ try {
         INNER JOIN address_zone d ON c.addressId = d.zone_id
         INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
         INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-        WHERE a.consumerId = :accId AND a.billing_statusId = 2 ORDER BY billing_id DESC ");
+        WHERE a.consumerId = :accId AND a.billing_statusId = 2 ORDER BY billing_id DESC");
 
+    // Bind parameters
     $stmt->bindParam(":accId", $accId, PDO::PARAM_INT);
     $stmt->bindParam(":formatted_reading_date1", $formatted_reading_date1);
     $stmt->execute();
 
+    // Fetch the results
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (count($results) > 0) {
-        // Calculate amount_due for each row and format as decimal
+        // Process the results
         foreach ($results as &$row) {
+            // Calculate the discounted amount
+            $row['discounted_amount'] = number_format($row['bill_amount'] - $row['discount_amount'], 2);
+
+            // Calculate amount_due (with penalty and arrears)
             $row['amount_due'] = number_format($row['bill_amount'] + ($row['bill_amount'] * $penalty) + $row['arrears'], 2);
+
+            // Format other fields for display
             $row['arrears'] = number_format($row['arrears'], 2);
             $row['bill_amount'] = number_format($row['bill_amount'], 2);
             $row['total_bill'] = number_format($row['total_bill'], 2);
         }
+
         unset($row); // Unset the reference variable to prevent unwanted modifications
 
-        // Consumer data found
+        // Return the data as JSON
         echo json_encode($results);
     } else {
-        // Consumer not found
+        // No data found for the given consumer ID
         echo json_encode(["error" => "Reader data not found or is invalid"]);
     }
 } catch (PDOException $e) {
@@ -90,5 +100,4 @@ try {
     echo json_encode(["error" => "Database error: " . $e->getMessage()]);
     exit(); // Terminate script execution after encountering an error
 }
-
 ?>

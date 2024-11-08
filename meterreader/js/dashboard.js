@@ -325,6 +325,7 @@ const submit = (user_id, propertyId) => {
           console.log(response.data);
           displayConsumer();
           bill_receipt(user_id);
+          getall();
         }
       })
       .catch((error) => {
@@ -599,10 +600,10 @@ const bill_receipt = (user_id) => {
         
                         <div class="row justify-content-between">
                             <div class="col-5">
-                                <p>WATER BILL:</p>
+                                <p>BILL AMOUNT:</p>
                             </div>
                             <div class="col-7 text-start" style="padding-left: 1px;">
-                                <p>${records[0].bill_amount}</p>
+                                <p>${records[0].discounted_amount}</p>
                             </div>
                         </div>
         
