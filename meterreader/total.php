@@ -8,8 +8,9 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Get inputs
-        $branchId = $_POST['branchId'];
-        $readerId = $_POST['readerId'];
+        $branchId = $_POST['branchId']; // Make sure this is sent in the request
+        // Assuming readerId is available in session or as a parameter:
+        $readerId = $_SESSION['readerId']; // Or use a POST variable for this if necessary
 
         // Fetch the zones assigned to the reader
         $stmt = $conn->prepare("SELECT a.zone_Id FROM assign a WHERE a.emp_Id = :readerId");
