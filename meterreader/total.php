@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Query to calculate total cubic consumed this month
         $stmt = $conn->prepare("SELECT SUM(cubic_consumed) AS totalCubic
             FROM billing
-            WHERE readerId = :readerId
+            WHERE readerId = :readerId");
         $stmt->bindParam(":readerId", $readerId, PDO::PARAM_INT);
         $stmt->execute();
         $totalCubicResult = $stmt->fetch(PDO::FETCH_ASSOC);
