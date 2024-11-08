@@ -100,11 +100,74 @@
               </div>
             </div>
           </div>
-          <div class="container-fluid">
-            <div class="mt-4" id="head">
-              <h4 style="text-align: center">Meter Reader View</h4>
+          <div class="">
+              <div class="mt-4" id="head">
+                <div class="container">
+                    <div class="row no-gutters">
+                        <!-- 1st Card -->
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 p-1">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <!-- Icon -->
+                                    <div class="mb-3">
+                                        <i class="fas fa-droplet fa-2x"></i> <!-- Smaller Icon (fa-2x) -->
+                                    </div>
+                                    <!-- Number -->
+                                    <div class="mb-3">
+                                        <h2 id="totalCubic">0</h2> <!-- Example Number -->
+                                    </div>
+                                    <!-- Text -->
+                                    <div>
+                                        <p class="card-text" style="font-size: smaller;">Total Cubic</p> <!-- Example Text -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- 2nd Card -->
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 p-1">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <!-- Icon -->
+                                    <div class="mb-3">
+                                        <i class="fas fa-droplet-slash fa-2x"></i> <!-- Smaller Icon (fa-2x) -->
+                                    </div>
+                                    <!-- Number -->
+                                    <div class="mb-3">
+                                        <h2 id="readingLeft">0</h2> <!-- Example Number -->
+                                    </div>
+                                    <!-- Text -->
+                                    <div>
+                                        <p class="card-text" style="font-size: smaller;">Reading Left</p> <!-- Example Text -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- 3rd Card -->
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 p-1">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <!-- Icon -->
+                                    <div class="mb-3">
+                                        <i class="fas fa-users fa-2x"></i> <!-- Smaller Icon (fa-2x) -->
+                                    </div>
+                                    <!-- Number -->
+                                    <div class="mb-3">
+                                        <h2 id="totalconsumer">0</h2> <!-- Example Number -->
+                                    </div>
+                                    <!-- Text -->
+                                    <div>
+                                        <p class="card-text" style="font-size: smaller;">Total Consumer</p> <!-- Example Text -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="container-fluid mt-2">
+          </div>          
+            <div class="">
               <div class="row">
                 <div class="col-12 w-25 col-md-6 d-flex me-auto">
                   <select
@@ -129,7 +192,7 @@
                 </div>
               </div>
             </div>
-            <div class="mains mt-3" id="mainDiv"></div>
+            <div class=" mt-3" id="mainDiv"></div>
           </div>
         </main>
         <!-- <footer>

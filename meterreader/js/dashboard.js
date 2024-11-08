@@ -10,6 +10,7 @@ const onLoad = () => {
     sessionStorage.getItem("fullname");
     displayConsumer();
     getFilterZones();
+    getall();
 
     const modal = document.getElementById("myModal");
     const modalContent = document.querySelector(".modal-content");
@@ -21,6 +22,46 @@ const onLoad = () => {
   }
   
 };
+
+const getall = () => {
+  const totalCubic = document.getElementById('totalCubic');
+  const readingLeft = document.getElementById('readingLeft');
+  const totalconsumer = document.getElementById('totalconsumer');
+
+  if (!totalCubic || !readingLeft || !totalconsumer) {
+    console.error('One or more required elements not found in the DOM.');
+    return;
+  }
+
+  const Url = `http://152.42.243.189/waterworks/meterreader/total.php`; // Update the URL if needed.
+  
+  const formData = new FormData();
+  formData.append("branchId", sessionStorage.getItem("branchId")); // Ensure branchId is available in sessionStorage
+
+  axios.post(Url, formData)
+    .then(response => {
+      console.log('Response data:', response.data); // Log the response for debugging
+      const data = response.data;
+
+      // Check for the existence of expected properties and handle missing or null values.
+      if (data && data.total_consumers !== undefined && data.reading_left !== undefined && data.total_consumed !== undefined) {
+        const totalCubicValue = data.total_consumed !== null ? data.total_consumed : 0;
+        const readingLeftValue = data.reading_left !== null ? data.reading_left : 0;
+        const totalconsumerValue = data.total_consumers !== null ? data.total_consumers : 0;
+
+        // Update the DOM with the retrieved data
+        totalCubic.innerText = totalCubicValue;
+        readingLeft.innerText = readingLeftValue;
+        totalconsumer.innerText = totalconsumerValue;
+      } else {
+        console.error('Invalid data format or missing properties in the response.');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
 
 const displayConsumer = () => {
   const close_butt = document.getElementById("close_butt");
@@ -61,8 +102,8 @@ const refreshTables = (consumers) => {
       `;
   consumers.forEach((consumer) => {
     html += `
-        <div class="col-12 col-md-6 mb-2"> 
-          <div class="card p-2" style="max-width: 325px; margin: auto; background-color: #167c88; color:white;"> <!-- Reduced padding -->
+        <div class="col-12 mb-2"> 
+          <div class="card" style="margin: auto; background-color: #167c88; color:white;">
             <div class="card-body d-flex justify-content-between align-items-center" style="padding: 0.5rem;">
               <div>
                 <h6 class="card-text mb-1"> 
@@ -176,11 +217,6 @@ const showPaginationNumbers = (currentPage, totalPages) => {
   paginationNumbersDiv.innerHTML = paginationNumbersHTML;
 };
 
-const goToPage = (page) => {
-  currentPage = page;
-  showConsumerPage(currentPage);
-};
-
 const filterConsumers = () => {
   try {
     const searchInput = document
@@ -202,17 +238,51 @@ const filterConsumers = () => {
       ).toLowerCase();
       return fullName.includes(searchInput);
     });
-    showFilteredConsumers(filteredConsumers);
+
+    showFilteredConsumers(filteredConsumers); // Display the filtered consumers
   } catch (error) {
-    // console.error("Error filtering consumers:", error);
-    errorTables();
+    console.error("Error filtering consumers:", error);
+    errorTables(); // Handle any errors that occur during filtering
   }
 };
 
 const showFilteredConsumers = (filteredConsumers) => {
-  currentPage = 1;
-  showConsumerPage(currentPage, filteredConsumers);
+  // If no consumers match the search input
+  if (filteredConsumers.length === 0) {
+    document.getElementById("mainDiv").innerHTML = `<p>No consumers found matching your search.</p>`;
+    return;
+  }
+
+  // Generate the HTML for displaying filtered consumers
+  let html = `
+    <div class="row">
+  `;
+  filteredConsumers.forEach((consumer) => {
+    html += `
+      <div class="col-12 mb-2"> 
+        <div class="card" style="margin: auto; background-color: #167c88; color:white;">
+          <div class="card-body d-flex justify-content-between align-items-center" style="padding: 0.5rem;">
+            <div>
+              <h6 class="card-text mb-1"> 
+                ${consumer.firstname} ${consumer.lastname}
+              </h6>
+              <p class="card-text mb-0">
+                Meter No: ${consumer.meter_no}
+              </p>
+            </div>
+            <button class="btn btn-md btn-primary" onclick="view(${consumer.user_id})">Bill</button> 
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  
+  // Update the UI with the filtered consumer list
+  document.getElementById("mainDiv").innerHTML = html;
 };
+
+
 
 const submit = (user_id, propertyId) => {
   const cubic_consumed = document.getElementById("cubic_consumed").value;
@@ -303,7 +373,7 @@ const getFilterZones = () => {
   });
 };
 
-const displayConsumerByZone = () => {
+const displayConsumerByZone = (selectedZone) => {
   const url =
     "http://152.42.243.189/waterworks/meterreader/get_consumers_filter.php";
 
@@ -320,7 +390,7 @@ const displayConsumerByZone = () => {
       console.log(response.data);
       consumers = response.data;
       //   sortConsumersByNameByZone();
-      showConsumerPageByZone(currentPage);
+      refreshTablesByZone(consumers);
     })
     .catch((error) => {
       errorTables();
@@ -328,47 +398,33 @@ const displayConsumerByZone = () => {
     });
 };
 
-//   const sortConsumersByNameByZone = () => {
-//     consumers.sort((a, b) => {
-//         const nameA = (a.firstname + ' ' + a.lastname).toUpperCase();
-//         const nameB = (b.firstname + ' ' + b.lastname).toUpperCase();
-//         return nameA.localeCompare(nameB);
-//     });
-//   };
-
-const showConsumerPageByZone = (page, consumersToDisplay = consumers) => {
-  var start = (page - 1) * 10;
-  var end = start + 10;
-  var displayedConsumers = consumersToDisplay.slice(start, end);
-  refreshTablesByZone(displayedConsumers);
-  showPaginationNumbers(page, Math.ceil(consumersToDisplay.length / 10));
-};
-const refreshTablesByZone = (employeeList) => {
+const refreshTablesByZone = (consumers) => {
   var html = `
-    <table class="billtab table mb-0 mt-0">
-    <thead>
-        <tr>
-        <th>Full Name</th>
-        <th>Meter No</th>
-        <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    `;
-  employeeList.forEach((employee) => {
+    <div class="row">
+  `;
+  consumers.forEach((consumer) => {
     html += `
-        <tr>
-            <td>${employee.firstname} ${employee.lastname}</td>
-            <td>${employee.meter_no}</td>
-            <td>
-            <button class="butts" onclick="view(${employee.user_id})">Bill</button>
-            </td>
-        </tr>
-        `;
+        <div class="col-12 mb-2"> 
+          <div class="card" style="margin: auto; background-color: #167c88; color:white;">
+            <div class="card-body d-flex justify-content-between align-items-center" style="padding: 0.5rem;">
+              <div>
+                <h6 class="card-text mb-1"> 
+                  ${consumer.firstname} ${consumer.lastname}
+                </h6>
+                <p class="card-text mb-0">
+                  Meter No: ${consumer.meter_no}
+                </p>
+              </div>
+              <button class="btn btn-md btn-primary" onclick="view(${consumer.user_id})">Bill</button> 
+            </div>
+          </div>
+        </div>
+    `;
   });
-  html += `</tbody></table>`;
+  html += `</div>`;
   document.getElementById("mainDiv").innerHTML = html;
 };
+
 
 const success_update_modal = () => {
   const close_butt = document.getElementById("close_butt");
