@@ -148,7 +148,16 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                                 <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
                                             </div>
                                         </div>
-                                    
+                                        <div class="row ">
+                                            <div class="col-md-6 ">
+                                                <p style="text-decoration: underline; font-size: small">ADDRESS</p>
+                                                <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                            </div>
+                                            <div class="col-md-6 text-md-end">
+                                                <p style="text-decoration: underline; font-size: small">Type</p>
+                                                <h6 class="text-muted mt-0">${records[0].consumertype}</h6>
+                                            </div>
+                                        </div>
                                         <div class="mt-1">
                                             <p style="text-decoration: underline; font-size: small">ADDRESS</p>
                                             <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
@@ -182,6 +191,12 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                             <tr>
                                                 <td class="col-md-5 text-start border-0 ">
                                                     <p>
+                                                        <strong style="font-size: small">DISCOUNT AMOUNT </strong>
+                                                    </p>
+                                                    <p>
+                                                        <strong style="font-size: small">DISCOUNTED AMOUNT </strong>
+                                                    </p>
+                                                    <p>
                                                         <strong style="font-size: small">ARREARS </strong>
                                                     </p>
                                                     <p>
@@ -191,6 +206,12 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                                 <td class="col-md-1 border-0"></td>
                                                 <td class="col-md-3 border-0"></td>
                                                 <td class="col-md-3 text-center border-0">
+                                                    <p>
+                                                        <strong>- ${records[0].discount_amount}</strong>
+                                                    </p>
+                                                    <p>
+                                                        <strong>${records[0].discounted_amount}</strong>
+                                                    </p>
                                                     <p>
                                                         <strong>${records[0].arrears}</strong>
                                                     </p>
