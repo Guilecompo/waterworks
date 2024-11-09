@@ -207,7 +207,7 @@ const submit_broken = (user_id) => {
     alert("Please fill in the fields correctly");
     return;
   } else {
-    const myUrl = "http://152.42.243.189/waterworks/meterreader/billing.php";
+    const myUrl = "http://152.42.243.189/waterworks/meterreader/broken_billing.php";
     const formData = new FormData();
     formData.append("consumerId", user_id);
     formData.append("branchId", sessionStorage.getItem("branchId"));
