@@ -7,7 +7,7 @@ include 'connection.php';
 
     $pay_id = $_POST['pay_id'];
     $stmt = $conn->prepare("SELECT
-        a.pay_id, a.payment_uniqueId, a.or_num,
+        a.pay_id, a.payment_uniqueId, a.or_num, a.or_date,
         b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
