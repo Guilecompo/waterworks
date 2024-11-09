@@ -203,28 +203,28 @@ try {
         // NOTE: Insert new billing record
         $updatedStatusId = 2;
         $paid_unpaid = 2;
-        $sql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(":consumerId", $consumerId);
-        $stmt->bindParam(":uniqueId", $uniqueId);
-        $stmt->bindParam(":readerId", $readerId);
-        $stmt->bindParam(":branchId", $branchId);
-        $stmt->bindParam(":prev_cubic_consumed", $past_cubic_consumed);
-        $stmt->bindParam(":cubic_consumed", $current_bill_amount);
-        $stmt->bindParam(":reading_date", $reading_date);
-        $stmt->bindParam(":due_date", $due_date);
-        $stmt->bindParam(":period_cover", $period_cover);
-        $stmt->bindParam(":previous_meter", $previous_meter);
-        $stmt->bindParam(":present_meter", $cubic_consumed);
+        $billingSql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+        $billingStmt = $conn->prepare($billingSql);
+        $billingStmt->bindParam(":consumerId", $consumerId);
+        $billingStmt->bindParam(":uniqueId", $uniqueId);
+        $billingStmt->bindParam(":readerId", $readerId);
+        $billingStmt->bindParam(":branchId", $branchId);
+        $billingStmt->bindParam(":prev_cubic_consumed", $past_cubic_consumed);
+        $billingStmt->bindParam(":cubic_consumed", $current_bill_amount);
+        $billingStmt->bindParam(":reading_date", $reading_date);
+        $billingStmt->bindParam(":due_date", $due_date);
+        $billingStmt->bindParam(":period_cover", $period_cover);
+        $billingStmt->bindParam(":previous_meter", $previous_meter);
+        $billingStmt->bindParam(":present_meter", $cubic_consumed);
 
-        $stmt->bindParam(":discounted_amount", $discounted);
+        $billingStmt->bindParam(":discounted_amount", $discounted);
 
-        $stmt->bindParam(":bill_amount", $newTotalBillDiscount);
-        $stmt->bindParam(":arrears", $arrears);
-        $stmt->bindParam(":total_bill", $newTotalBill);
-        $stmt->bindParam(":updatedStatusId", $updatedStatusId);
-        $stmt->bindParam(":paid_unpaid", $paid_unpaid);
-        $stmt->execute();
+        $billingStmt->bindParam(":bill_amount", $newTotalBillDiscount);
+        $billingStmt->bindParam(":arrears", $arrears);
+        $billingStmt->bindParam(":total_bill", $newTotalBill);
+        $billingStmt->bindParam(":updatedStatusId", $updatedStatusId);
+        $billingStmt->bindParam(":paid_unpaid", $paid_unpaid);
+        $billingStmt->execute();
 
         // Log activity
         $activity_type = "Add";
