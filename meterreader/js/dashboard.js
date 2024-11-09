@@ -177,7 +177,7 @@ const broken = (user_id) =>{
                                         </div>
                                         <div class="row mt-4">
                                             <div class="col-sm-5">
-                                              <button type="button" class="btn btn-primary w-100" onclick="submit_broken(${employee[0].user_id})">Submit</button>
+                                              <button type="button" class="btn btn-primary w-100" onclick="submit_broken(${employee[0].user_id},${employee[0].propertyId})">Submit</button>
                                             </div>
                                             <div class="col-sm-2 my-1"></div>
                                             <div class="col-sm-5">
@@ -197,19 +197,11 @@ const broken = (user_id) =>{
       alert(`ERROR OCCURRED! ${error}`);
     });
 }
-const submit_broken = (user_id) => {
-  const cubic_consumed = document.getElementById("cubic_consumed").value;
-
-  if (cubic_consumed === "") {
-    alert("Fill in all fields");
-    return;
-  } else if (cubic_consumed <= 0) {
-    alert("Please fill in the fields correctly");
-    return;
-  } else {
-    const myUrl = "http://152.42.243.189/waterworks/meterreader/broken_billing.php";
+const submit_broken = (user_id, propertyId) => {
+  const myUrl = "http://152.42.243.189/waterworks/meterreader/broken_billing.php";
     const formData = new FormData();
     formData.append("consumerId", user_id);
+    formData.append("propertyId", propertyId);
     formData.append("branchId", sessionStorage.getItem("branchId"));
     formData.append("readerId", sessionStorage.getItem("accountId"));
 
@@ -236,7 +228,6 @@ const submit_broken = (user_id) => {
       .catch((error) => {
         error_modal();
       });
-  }
 };
 
 const view = (user_id) => {
