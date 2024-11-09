@@ -107,7 +107,7 @@ const refreshTables = (consumers) => {
         <div class="col-12 mb-2"> 
           <div class="card" style="margin: auto; background-color: #167c88; color:white;">
             <div class="card-body d-flex justify-content-between align-items-center" style="padding: 0.5rem;">
-              <div>
+              <div class="col-6">
                 <h6 class="card-text mb-1"> 
                   ${consumer.firstname} ${consumer.lastname} ${ consumer.connected_number !== 0 ? "#" + consumer.connected_number : "" }
                 </h6>
@@ -115,7 +115,17 @@ const refreshTables = (consumers) => {
                   Meter No: ${consumer.meter_no}
                 </p>
               </div>
-              <button class="btn btn-md btn-primary" onclick="view(${consumer.user_id})">Bill</button> 
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-5">
+                    <button class="btn btn-md btn-danger" onclick="view(${consumer.user_id})">Broken</button> 
+                  </div>
+                  <div class="col-2"></div>
+                  <div class="col-5">
+                    <button class="btn btn-md btn-primary" onclick="view(${consumer.user_id})">Bill</button> 
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
