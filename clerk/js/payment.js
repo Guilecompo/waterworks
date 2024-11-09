@@ -433,13 +433,17 @@ const showPreviousPage = () => {
                                         <h4 class="mt-0 text-center" >Payment</h4>
                                         <hr class="badge-primary mt-0">
                                         <div class="row mt-0">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-12">
                                                 <label for="amount">Amount to Pay</label>
                                                 <input type="numer" class="form-control " id="amount" style="height: 40px;" placeholder="Enter Amount To Pay" required>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="amount">OR #</label>
                                                 <input type="text" class="form-control " id="or_num" style="height: 40px;" placeholder="Enter OR #" required>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="date">Date</label>
+                                                <input type="date" class="form-control" id="or_date" style="height: 40px;" required>
                                             </div>
                                         </div>
                                         <div class="row mt-4">
@@ -496,6 +500,7 @@ const showPreviousPage = () => {
         const submit_payment = (user_id) => {
             const amount = document.getElementById("amount").value;
             const or_num = document.getElementById("or_num").value;
+            const or_date = document.getElementById("or_date").value;
         
             if (amount === '' || or_num === '') {
                 alert('Fill in all fields');
@@ -506,6 +511,7 @@ const showPreviousPage = () => {
                 formData.append("consumerId", user_id);
                 formData.append("amount", amount);
                 formData.append("or_num", or_num);
+                formData.append("or_date", or_date);
                 formData.append("emp_Id", sessionStorage.getItem("accountId"));
                 formData.append("branchId", sessionStorage.getItem("branchId"));
         
@@ -843,11 +849,11 @@ const showPreviousPage = () => {
                                         <div class="col-sm-12 mt-3 p-3">
                                             <div class="row ">
                                                 <div class="col-md-6 ">
-                                                    <h6 class="text-muted mt-0">${records[0].or_num}</h6>
+                                                    <h6 class="text-muted mt-0" style="color: #f44336;">${records[0].or_num}</h6>
                                                 </div>
                                         
                                                 <div class="col-md-6  text-md-end">
-                                                    <h6 class="text-muted mt-0">${records[0].payment_uniqueId}</h6>
+                                                    <h6 class="text-muted mt-0" style="color: #f44336;">${records[0].payment_uniqueId}</h6>
                                                 </div>
                                             </div>
                                         </div>
