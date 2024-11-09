@@ -838,7 +838,19 @@ const showPreviousPage = () => {
                                                   <td class="col-md-4 text-center border-0">${records[0].emp_firstname} ${records[0].emp_lastname}</td>
                                               </tr>
                                           </tbody>
-                                      </table>
+                                        </table>
+
+                                        <div class="col-sm-12 mt-3 p-3">
+                                            <div class="row ">
+                                                <div class="col-md-6 ">
+                                                    <h6 class="text-muted mt-0">${records[0].or_num}</h6>
+                                                </div>
+                                        
+                                                <div class="col-md-6  text-md-end">
+                                                    <h6 class="text-muted mt-0">${records[0].payment_uniqueId}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row mt-1">
                                         <div class="col-sm-12">
