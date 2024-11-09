@@ -177,7 +177,7 @@ try {
         // $statusStmt->execute();
 
         // Insert into billing table
-        $billingSql = "INSERT INTO billing (consumerId, billing_uniqueId, billing_date, period_cover, billing_statusId, branchId, employeeId, total_bill, cubic_consumed, arrears, due_date) 
+        $billingSql = "INSERT INTO billing (consumerId, billing_uniqueId, reading_date, period_cover, billing_statusId, branchId, employeeId, total_bill, cubic_consumed, arrears, due_date) 
                     VALUES (:consumerId, :billingUniqueId, :billingDate, :periodCover, :billingStatusId, :branchId, :employeeId, :totalBill, :cubicConsumed, :arrears, :dueDate)";
         
         $stmtBilling = $conn->prepare($billingSql);
