@@ -100,7 +100,15 @@ try {
     $sumStmt->execute();
     $total_cubic = $sumStmt->fetchColumn();
 
-    $cubic_consumed = $total_cubic / 3;
+    $total_cubic = $total_cubic / 3;
+
+    $getSql = "SELECT present_meter FROM billing WHERE consumerId = 1 ORDER BY billing_id DESC LIMIT 1";
+    $getStmt = $conn->prepare($getSql);
+    $getStmt->bindParam(":consumerId", $consumerId);
+    $getStmt->execute();
+    $get_present_meter = $getStmt->fetchColumn();
+
+    $cubic_consumed = $get_present_meter + $total_cubic;
 
     // NOTE: billing here
     $sqlcheck = "SELECT * FROM billing WHERE consumerId = :consumerId AND present_meter >= :cubic_consumed ORDER BY billing_id DESC LIMIT 1";
