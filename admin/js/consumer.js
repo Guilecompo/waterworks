@@ -1895,10 +1895,10 @@ const payment_receipt = (pay_id) => {
                               </div>
                               <div class="col-sm-12 mt-3">
                                       <div class="row ">
-                                          <div class="col-md-3 ">
+                                          <div class="col-md-7 ">
                                             <h6 class="mt-0" style="padding-right: 15px; color: #f44336;">${records[0].or_num} - ${records[0].or_date}</h6>
                                           </div>
-                                          <div class="col-md-9  text-md-end">
+                                          <div class="col-md-5  text-md-end">
                                               <h6 class="mt-0" style="padding-right: 15px; color: #f44336;">${records[0].payment_uniqueId}</h6>
                                           </div>
                                       </div>
