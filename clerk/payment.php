@@ -105,18 +105,6 @@ try {
             $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
     
             if ($row) {
-
-                $sqlSelect = "SELECT * FROM payment ORDER BY pay_id DESC LIMIT 1 ";
-                $stmtSelect = $conn->prepare($sqlSelect);
-                $stmtSelect->execute();
-        
-                $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-                if($rows){
-                    $or_num = $rows['or_num'] + 1;
-                    
-                }else{
-                    $or_num =  1;
-                }
                 $total_bill = $row['total_bill'];
                 $pay_change = $amount - $total_bill;
                 
@@ -180,16 +168,6 @@ try {
             $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
     
             if ($row) {
-                $sqlSelect = "SELECT * FROM payment ORDER BY pay_id DESC LIMIT 1 ";
-                $stmtSelect = $conn->prepare($sqlSelect);
-                $stmtSelect->execute();
-        
-                $rows = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-                if($rows){
-                    $or_num = $rows['or_num'] + 1;
-                }else{
-                    $or_num =  1;
-                }
                 // Insert the data into the 'changing_meter' table
                 $pay_change = 0.00;
                
@@ -231,7 +209,7 @@ try {
                             $StatusId = 2;
                             $updatedStatusId = 2;
     
-                            $sql = "INSERT INTO billing (billing_uniqueId, consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:billing_uniqueId, :consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
+                            $sql = "INSERT INTO billing (billing_uniqueId, consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:billing_uniqueId, :consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discount_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :billing_update_statusId)";
                             $stmt = $conn->prepare($sql);
                             $stmt->bindParam(":billing_uniqueId", $rows['billing_uniqueId']);
                             $stmt->bindParam(":consumerId", $rows['consumerId']);
@@ -244,6 +222,7 @@ try {
                             $stmt->bindParam(":period_cover", $rows['period_cover']);
                             $stmt->bindParam(":previous_meter", $rows['previous_meter']);
                             $stmt->bindParam(":present_meter", $rows['present_meter']);
+                            $stmt->bindParam(":discount_amount", $rows['discount_amount']);
                             $stmt->bindParam(":bill_amount", $rows['bill_amount']);
                             $stmt->bindParam(":arrears", $new_arrears);
                             $stmt->bindParam(":total_bill", $updated_bill);

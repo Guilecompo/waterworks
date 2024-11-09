@@ -149,18 +149,14 @@ const bill_receipt  = (billing_id, update_status_id) => {
                                             </div>
                                         </div>
                                         <div class="row ">
-                                            <div class="col-md-6 ">
+                                            <div class="col-md-8 ">
                                                 <p style="text-decoration: underline; font-size: small">ADDRESS</p>
                                                 <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
                                             </div>
-                                            <div class="col-md-6 text-md-end">
-                                                <p style="text-decoration: underline; font-size: small">Type</p>
+                                            <div class="col-md-4 text-md-end">
+                                                <p style="text-decoration: underline; font-size: small">CONSUMER TYPE</p>
                                                 <h6 class="text-muted mt-0">${records[0].consumertype}</h6>
                                             </div>
-                                        </div>
-                                        <div class="mt-1">
-                                            <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                            <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
                                         </div>
                                     </div>
                                     

@@ -125,6 +125,7 @@ const view_consumer  = () => {
                 var html = `<h2>No Records</h2>`;
             } else {
                 var records = response.data;
+                console.log("status name:",records[0].update_status_name);
   
                 html = `
                   <div class="wrapper">
@@ -146,10 +147,15 @@ const view_consumer  = () => {
                                                 <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
                                             </div>
                                         </div>
-                                    
-                                        <div class="mt-1">
-                                            <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                            <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                        <div class="row ">
+                                            <div class="col-md-8 ">
+                                                <p style="text-decoration: underline; font-size: small">ADDRESS</p>
+                                                <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                            </div>
+                                            <div class="col-md-4 text-md-end">
+                                                <p style="text-decoration: underline; font-size: small">CONSUMER TYPE</p>
+                                                <h6 class="text-muted mt-0">${records[0].consumertype}</h6>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -180,6 +186,12 @@ const view_consumer  = () => {
                                             <tr>
                                                 <td class="col-md-5 text-start border-0 ">
                                                     <p>
+                                                        <strong style="font-size: small">DISCOUNT AMOUNT </strong>
+                                                    </p>
+                                                    <p>
+                                                        <strong style="font-size: small">DISCOUNTED AMOUNT </strong>
+                                                    </p>
+                                                    <p>
                                                         <strong style="font-size: small">ARREARS </strong>
                                                     </p>
                                                     <p>
@@ -190,10 +202,16 @@ const view_consumer  = () => {
                                                 <td class="col-md-3 border-0"></td>
                                                 <td class="col-md-3 text-center border-0">
                                                     <p>
+                                                        <strong>- ${records[0].discount_amount}</strong>
+                                                    </p>
+                                                    <p>
+                                                        <strong>${records[0].discounted_amount}</strong>
+                                                    </p>
+                                                    <p>
                                                         <strong>${records[0].arrears}</strong>
                                                     </p>
                                                     <p>
-                                                        <strong>${records[0].total_bill}</strong>
+                                                        <strong style="color:cornflowerblue;">${records[0].total_bill}</strong>
                                                     </p>
                                                     <p>
                                                         <strong>${records[0].update_status_name}</strong>
