@@ -203,7 +203,7 @@ try {
         // NOTE: Insert new billing record
         $updatedStatusId = 2;
         $paid_unpaid = 2;
-        $billingSql = "INSERT INTO billing (consumerId, billing_uniqueId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:consumerId, :uniqueId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
+        $billingSql = "INSERT INTO billing (billing_uniqueId, consumerId, readerId, branchId, prev_cubic_consumed, cubic_consumed, reading_date, due_date, period_cover, previous_meter, present_meter, discount_amount, bill_amount, arrears, total_bill, billing_statusId, billing_update_statusId) VALUES (:uniqueId, :consumerId, :readerId, :branchId, :prev_cubic_consumed, :cubic_consumed, :reading_date, :due_date, :period_cover, :previous_meter, :present_meter, :discounted_amount, :bill_amount, :arrears, :total_bill, :updatedStatusId, :paid_unpaid)";
         $billingStmt = $conn->prepare($billingSql);
         $billingStmt->bindParam(":consumerId", $consumerId);
         $billingStmt->bindParam(":uniqueId", $uniqueId);
