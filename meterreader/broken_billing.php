@@ -81,6 +81,7 @@ try {
         $uniqueId = "CWB-{$readerId}-{$year}{$month}-{$newIdNumberString}";
     } else {
         // No billing records found, create the first uniqueId with 001
+        // asd
         $uniqueId = "CWB-{$readerId}-{$year}{$month}-001";
     }
 
