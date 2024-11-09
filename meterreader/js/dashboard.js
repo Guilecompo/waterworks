@@ -118,7 +118,7 @@ const refreshTables = (consumers) => {
               <div class="col-6">
                 <div class="row">
                   <div class="col-5">
-                    <button class="btn btn-md btn-danger" onclick="view(${consumer.user_id})">Broken</button> 
+                    <button class="btn btn-md btn-danger" onclick="broken(${consumer.user_id})">Broken</button> 
                   </div>
                   <div class="col-2"></div>
                   <div class="col-5">
@@ -135,7 +135,109 @@ const refreshTables = (consumers) => {
   document.getElementById("mainDiv").innerHTML = html;
 };
 
+const broken = (user_id) =>{
+  const modal = document.getElementById("myModal");
+  const modalContent = document.getElementById("modalContent");
 
+  var myUrl = "http://152.42.243.189/waterworks/meterreader/get_consumer.php";
+  const formData = new FormData();
+  formData.append("accId", user_id);
+
+  axios({
+    url: myUrl,
+    method: "post",
+    data: formData,
+  })
+    .then((response) => {
+      var employee = response.data;
+      console.log("PropertyId :", employee[0].propertyId);
+
+      const close_butt = document.getElementById("close_butt");
+      if (close_butt) {
+        close_butt.style.display = "none";
+      }
+
+      var html = `
+                  <div class="container-fluid" >
+                            <div class="col-md-12">
+                                <div class="row z-depth-3 ">
+                                    <div class="col-md-12 rounded-right">
+                                        <div class="car-block text-center">
+                                            <i class="fas fa-user fa-3x mt-1"></i>
+                                            <h5 class="font-weight-bold mt-2">${employee[0].firstname} ${employee[0].lastname} ${ employee[0].connected_number !== 0 ? "#" + employee[0].connected_number : ""  }</h5>
+                                            <p >${employee[0].meter_no}</p>
+                                        </div>
+                                        <hr class="badge-primary mt-0">
+                                        <div class="">
+                                            <div class="col-sm-8">
+                                                <p>Are you sure that <span style="color: cornflowerblue;">${employee[0].firstname} ${employee[0].lastname} ${ employee[0].connected_number !== 0 ? "#" + employee[0].connected_number : ""  } (${employee[0].meter_no})</span> has a broken meter? </p>
+                                                <br></br>
+                                                <h6 class="text-center">Submit if YES!</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-sm-5">
+                                              <button type="button" class="btn btn-primary w-100" onclick="submit_broken(${employee[0].user_id})">Submit</button>
+                                            </div>
+                                            <div class="col-sm-2 my-1"></div>
+                                            <div class="col-sm-5">
+                                              <button type="button" class="btn btn-primary w-100 " data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                  `;
+
+      modalContent.innerHTML = html;
+      modal.style.display = "block";
+    })
+    .catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+    });
+}
+const submit_broken = (user_id) => {
+  const cubic_consumed = document.getElementById("cubic_consumed").value;
+
+  if (cubic_consumed === "") {
+    alert("Fill in all fields");
+    return;
+  } else if (cubic_consumed <= 0) {
+    alert("Please fill in the fields correctly");
+    return;
+  } else {
+    const myUrl = "http://152.42.243.189/waterworks/meterreader/billing.php";
+    const formData = new FormData();
+    formData.append("consumerId", user_id);
+    formData.append("branchId", sessionStorage.getItem("branchId"));
+    formData.append("readerId", sessionStorage.getItem("accountId"));
+
+    axios({
+      url: myUrl,
+      method: "post",
+      data: formData,
+    })
+      .then((response) => {
+        if (
+          response.data.errorCode !== undefined &&
+          response.data.errorCode !== 0
+        ) {
+          console.log(response.data);
+          // Trigger failed_update_modal() based on the error code
+          failed_update_modal(response.data.errorCode);
+        } else {
+          console.log(response.data);
+          displayConsumer();
+          bill_receipt(user_id);
+          getall();
+        }
+      })
+      .catch((error) => {
+        error_modal();
+      });
+  }
+};
 
 const view = (user_id) => {
   const modal = document.getElementById("myModal");

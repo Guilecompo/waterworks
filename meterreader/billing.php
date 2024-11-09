@@ -69,15 +69,19 @@ try {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $lastUniqueId = $row['billing_uniqueId'];
 
-        // Extract the last three characters, convert to int and increment
+        // Extract the last number after the last hyphen
         $lastIdNumber = (int)substr($lastUniqueId, strrpos($lastUniqueId, '-') + 1);
+
+        // Increment the last number
         $newIdNumber = $lastIdNumber + 1;
 
-        // Convert back to string with leading zeros
-        $newIdNumberString = str_pad($newIdNumber, 3, '0', STR_PAD_LEFT); // Ensures 3 digits with leading zeros
+        // Convert the new number back to a string with leading zeros (ensuring it's 3 digits long)
+        $newIdNumberString = str_pad($newIdNumber, 3, '0', STR_PAD_LEFT);
+
+        // Construct the new uniqueId
         $uniqueId = "CWB-{$readerId}-{$year}{$month}-{$newIdNumberString}";
     } else {
-        // No billing records found, create the first uniqueId
+        // No billing records found, create the first uniqueId with 001
         $uniqueId = "CWB-{$readerId}-{$year}{$month}-001";
     }
 
@@ -208,7 +212,7 @@ try {
 
             $stmt->bindParam(":discounted_amount", $discounted);
 
-            $stmt->bindParam(":bill_amount", $bill_amount);
+            $stmt->bindParam(":bill_amount", $newTotalBillDiscount);
             $stmt->bindParam(":arrears", $arrears);
             $stmt->bindParam(":total_bill", $newTotalBill);
             $stmt->bindParam(":updatedStatusId", $updatedStatusId);
@@ -331,7 +335,7 @@ try {
 
                     $stmt->bindParam(":discounted_amount", $discountedAmount);
 
-                    $stmt->bindParam(":bill_amount", $bill_amount);
+                    $stmt->bindParam(":bill_amount", $newTotalBillAmount);
                     $stmt->bindParam(":arrears", $arrears);
                     $stmt->bindParam(":total_bill", $newTotalBillAmount);
                     $stmt->bindParam(":updatedStatusId", $updatedStatusId);
