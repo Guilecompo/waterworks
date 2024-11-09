@@ -170,11 +170,11 @@ try {
         $newTotalBill = $newTotalBillDiscount + $past_total_bill;
 
         // Update user_consumer
-        $statusSql = "UPDATE user_consumer SET last_billed = :lastBilled WHERE user_id = :consumerId";
-        $statusStmt = $conn->prepare($statusSql);
-        $statusStmt->bindParam(":consumerId", $consumerId);
-        $statusStmt->bindParam(":lastBilled", $period_cover);
-        $statusStmt->execute();
+        // $statusSql = "UPDATE user_consumer SET last_billed = :lastBilled WHERE user_id = :consumerId";
+        // $statusStmt = $conn->prepare($statusSql);
+        // $statusStmt->bindParam(":consumerId", $consumerId);
+        // $statusStmt->bindParam(":lastBilled", $period_cover);
+        // $statusStmt->execute();
 
         // Insert into billing table
         $billingSql = "INSERT INTO billing (consumerId, billing_uniqueId, billing_date, period_cover, billing_statusId, branchId, employeeId, total_bill, cubic_consumed, arrears, due_date) 
