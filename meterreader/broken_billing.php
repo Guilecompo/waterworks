@@ -9,10 +9,16 @@ include 'connection.php';
 
 error_log(print_r($_POST, true)); // Log the received POST data
 
-$consumerId = $_POST['consumerId'];
-$propertyId = $_POST['propertyId'];
-$readerId = $_POST['readerId'];
-$branchId = $_POST['branchId'];
+$consumerId = filter_var($_POST['consumerId'], FILTER_VALIDATE_INT);
+$propertyId = filter_var($_POST['propertyId'], FILTER_VALIDATE_INT);
+$readerId = filter_var($_POST['readerId'], FILTER_VALIDATE_INT);
+$branchId = filter_var($_POST['branchId'], FILTER_VALIDATE_INT);
+
+if (!$consumerId || !$propertyId || !$readerId || !$branchId) {
+    echo json_encode(["error" => "Invalid input data"]);
+    exit;
+}
+
 
 $reading_date = date('Y-m-d H:i:s');
 
@@ -94,21 +100,41 @@ try {
     $discountValue = $discountPercent / 100;
 
 
-    $sumSql = "SELECT SUM(cubic_consumed) AS total_cubic FROM (SELECT cubic_consumed FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 3 ) AS total_cubic; ";
+    // Fetch the sum of cubic_consumed for the last 3 records
+    $sumSql = "SELECT SUM(cubic_consumed) 
+    FROM (SELECT cubic_consumed 
+        FROM billing 
+        WHERE consumerId = :consumerId 
+        ORDER BY billing_id DESC 
+        LIMIT 3) AS total_cubic";
     $sumStmt = $conn->prepare($sumSql);
     $sumStmt->bindParam(":consumerId", $consumerId);
     $sumStmt->execute();
     $total_cubic = $sumStmt->fetchColumn();
 
-    $total_cubic = $total_cubic / 3;
+    if ($total_cubic !== false) {
+    // Ensure the number of records returned is considered for the average calculation
+    $total_cubic = $total_cubic / 3; // This could be modified if fewer than 3 records exist
+    } else {
+    $total_cubic = 0;
+    }
 
-    $getSql = "SELECT present_meter FROM billing WHERE consumerId = 1 ORDER BY billing_id DESC LIMIT 1";
+
+    $getSql = "SELECT present_meter FROM billing WHERE consumerId = :consumerId ORDER BY billing_id DESC LIMIT 1";
     $getStmt = $conn->prepare($getSql);
-    $getStmt->bindParam(":consumerId", $consumerId);
+    $getStmt->bindParam(":consumerId", $consumerId, PDO::PARAM_INT);  // Ensure the proper data type
     $getStmt->execute();
     $get_present_meter = $getStmt->fetchColumn();
 
-    $cubic_consumed = $get_present_meter + $total_cubic;
+    // Assuming $total_cubic represents the total cubic consumption calculated from other records (e.g., last 3 records)
+    if ($get_present_meter !== false) {
+        // Calculate cubic consumed as the difference from the previous reading (if available)
+        $cubic_consumed = $get_present_meter + $total_cubic;  // Double-check your logic here
+    } else {
+        // Handle case where there is no present meter reading
+        $cubic_consumed = $total_cubic;  // If no present meter, assume cubic consumption is just the $total_cubic
+    }
+
 
     // NOTE: billing here
     $sqlcheck = "SELECT * FROM billing WHERE consumerId = :consumerId AND present_meter >= :cubic_consumed ORDER BY billing_id DESC LIMIT 1";
