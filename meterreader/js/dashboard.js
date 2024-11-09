@@ -205,6 +205,11 @@ const submit_broken = (user_id, propertyId) => {
     formData.append("branchId", sessionStorage.getItem("branchId"));
     formData.append("readerId", sessionStorage.getItem("accountId"));
 
+    console.log('consumer id :', user_id);
+    console.log('property id :', propertyId);
+    console.log('branch id :', sessionStorage.getItem("branchId"));
+    console.log('reader id :', sessionStorage.getItem("accountId"));
+
     axios({
       url: myUrl,
       method: "post",
@@ -218,11 +223,13 @@ const submit_broken = (user_id, propertyId) => {
           console.log(response.data);
           // Trigger failed_update_modal() based on the error code
           failed_update_modal(response.data.errorCode);
+          console.log("fail to submit broken meter");
         } else {
           console.log(response.data);
           displayConsumer();
           bill_receipt(user_id);
           getall();
+          console.log("success to submit broken meter");
         }
       })
       .catch((error) => {
