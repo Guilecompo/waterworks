@@ -1421,6 +1421,7 @@ const newBill = (user_id) => {
                                       <h5 class="font-weight-bold mt-2">${records[0].con_firstname} ${records[0].con_middlename} ${records[0].con_lastname} </h5>
                                       <p class="text-muted" >${records[0].zone_name}, ${records[0].barangay_name}, ${records[0].municipality_name}</p>
                                       <p class="text-muted" >${records[0].meter_no}</p>
+                                      <p class="text-muted" >${records[0].consumertype}</p>
                                   </div>
                                 </div>
                                 <div class="row">
@@ -1449,6 +1450,9 @@ const newBill = (user_id) => {
                                             <tr>
                                                 <td class="col-md-5 text-start border-0 ">
                                                     <p>
+                                                        <strong style="font-size: small">DISCOUNT </strong>
+                                                    </p>
+                                                    <p>
                                                         <strong style="font-size: small">ARREARS </strong>
                                                     </p>
                                                     <p>
@@ -1458,6 +1462,9 @@ const newBill = (user_id) => {
                                                 <td class="col-md-1 border-0"></td>
                                                 <td class="col-md-3 border-0"></td>
                                                 <td class="col-md-3 text-center border-0">
+                                                    <p>
+                                                        <strong>${records[0].discount_amount}</strong>
+                                                    </p>
                                                     <p>
                                                         <strong>${records[0].arrears}</strong>
                                                     </p>

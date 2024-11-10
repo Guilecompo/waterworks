@@ -8,7 +8,7 @@ include 'connection.php';
 $accId = $_POST['accId'];
 
 $stmt = $conn->prepare("SELECT
-        a.billing_id,
+        a.billing_id,h.consumertype,a.discount_amount,
         b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
@@ -30,6 +30,7 @@ $stmt = $conn->prepare("SELECT
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
+    INNER JOIN consumer_type h ON c.consumertypeId = h.consumertype_id
     WHERE a.consumerId = :accId AND a.billing_statusId = 2 ORDER BY billing_id DESC LIMIT 1");
 
 $stmt->bindParam(":accId", $accId);
