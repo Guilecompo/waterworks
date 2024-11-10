@@ -8,7 +8,7 @@ include 'connection.php';
 $billing_id = $_POST['billing_id'];
 
 $stmt = $conn->prepare("SELECT
-        a.billing_id,
+        a.billing_id,h.consumertype,
         b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
@@ -24,8 +24,7 @@ $stmt = $conn->prepare("SELECT
         a.arrears,
         a.billing_uniqueId,
         a.bill_amount,
-        a.total_bill,
-        h.consumertype
+        a.total_bill
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id

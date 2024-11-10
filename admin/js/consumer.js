@@ -1627,7 +1627,7 @@ const bill_receipt = (billing_id) => {
                                             <p style="text-decoration: underline; font-size: small">ADDRESS</p>
                                             <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 text-md-end">
                                           <p style="text-decoration: underline; font-size: small">CONSUMER TYPE</p>
                                           <h6 class="text-muted mt-0">${records[0].consumertype}</h6>
                                         </div>
