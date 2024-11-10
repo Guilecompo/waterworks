@@ -25,14 +25,14 @@ $stmt = $conn->prepare("SELECT
         a.billing_uniqueId,
         a.bill_amount,
         a.total_bill,
-        g.consumertype
+        h.consumertype
     FROM billing a
     INNER JOIN user_employee b ON a.readerId = b.user_id
     INNER JOIN user_consumer c ON a.consumerId = c.user_id
     INNER JOIN address_zone d ON c.addressId = d.zone_id
     INNER JOIN address_barangay e ON d.barangayId = e.barangay_id
     INNER JOIN address_municipality f ON e.municipalityId = f.municipality_id
-    INNER JOIN consumer_type g ON c.consumertypeId = g.consumertype_id
+    INNER JOIN consumer_type h ON c.consumertypeId = h.consumertype_id
     WHERE a.billing_id = :billing_id ORDER BY billing_id DESC LIMIT 1");
 
 $stmt->bindParam(":billing_id", $billing_id);

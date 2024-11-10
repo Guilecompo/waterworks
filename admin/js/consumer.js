@@ -1623,7 +1623,7 @@ const bill_receipt = (billing_id) => {
                                           </div>
                                       </div>
                                       <div class="row ">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <p style="text-decoration: underline; font-size: small">ADDRESS</p>
                                             <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
                                         </div>
