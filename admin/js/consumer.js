@@ -1629,7 +1629,7 @@ const bill_receipt = (billing_id) => {
                                         </div>
                                         <div class="col-md-6">
                                           <p style="text-decoration: underline; font-size: small">Consumer Type</p>
-                                          <h6 class="text-muted mt-0">${records[0].consumer_type}</h6>
+                                          <h6 class="text-muted mt-0">${records[0].consumertype}</h6>
                                         </div>
                                       </div>
                                   </div>
