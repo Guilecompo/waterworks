@@ -1622,10 +1622,15 @@ const bill_receipt = (billing_id) => {
                                               <h6 class="text-muted mt-0">${records[0].meter_no}</h6>
                                           </div>
                                       </div>
-                                  
-                                      <div class="mt-1">
-                                          <p style="text-decoration: underline; font-size: small">ADDRESS</p>
-                                          <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                      <div class="row ">
+                                        <div class="col-md-8">
+                                            <p style="text-decoration: underline; font-size: small">ADDRESS</p>
+                                            <h6 class="text-muted mt-0">${records[0].zone_name} ${records[0].barangay_name} ${records[0].municipality_name}</h6>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <p style="text-decoration: underline; font-size: small">Consumer Type</p>
+                                          <h6 class="text-muted mt-0">${records[0].consumer_type}</h6>
+                                        </div>
                                       </div>
                                   </div>
                                   
