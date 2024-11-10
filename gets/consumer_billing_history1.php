@@ -8,7 +8,7 @@ include 'connection.php';
 $billing_id = $_POST['billing_id'];
 
 $stmt = $conn->prepare("SELECT
-        a.billing_id,h.consumertype,
+        a.billing_id,h.consumertype,a.discount_amount,
         b.firstname AS emp_firstname, b.middlename AS emp_middlename, b.lastname AS emp_lastname,
         c.user_id, c.meter_no,
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,

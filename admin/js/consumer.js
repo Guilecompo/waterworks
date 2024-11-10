@@ -1661,6 +1661,9 @@ const bill_receipt = (billing_id) => {
                                           <tr>
                                               <td class="col-md-5 text-start border-0 ">
                                                   <p>
+                                                      <strong style="font-size: small">DISCOUNT </strong>
+                                                  </p>
+                                                  <p>
                                                       <strong style="font-size: small">ARREARS </strong>
                                                   </p>
                                                   <p>
@@ -1670,6 +1673,9 @@ const bill_receipt = (billing_id) => {
                                               <td class="col-md-1 border-0"></td>
                                               <td class="col-md-3 border-0"></td>
                                               <td class="col-md-3 text-center border-0">
+                                                  <p>
+                                                      <strong>${records[0].discount_amount}</strong>
+                                                  </p>
                                                   <p>
                                                       <strong>${records[0].arrears}</strong>
                                                   </p>
