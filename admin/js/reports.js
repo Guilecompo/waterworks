@@ -36,7 +36,9 @@ const filterByPaymentStatus = () => {
     displayPaymentPaidReports();  // Display paid reports
   } else if (paymentStatus === "not_paid") {
     displayPaymentNotPaidReports();  // Display not paid reports
-  } else {
+  } else if (paymentStatus === "volume") {
+    displayVolumeReports();  // Display not paid reports
+  }else {
     document.getElementById("mainDiv").innerHTML = `<h2>Please select a payment status</h2>`;
   }
 };
@@ -137,7 +139,6 @@ const printTable = () => {
   var tableContent = document.getElementById("example").outerHTML;
 
   // Construct the print document HTML structure
-  printWindow.document.write('<html><head><title>Print Report</title>');
   printWindow.document.write('<style>');
   printWindow.document.write('body { font-family: Arial, sans-serif; }');
   printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
@@ -147,8 +148,8 @@ const printTable = () => {
   printWindow.document.write('</style></head><body>');
   
   // Add the title above the table
-  var title = `TOTAL COLLECTION FOR THE MONTH OF ${new Date().toLocaleString('default', { month: 'long' }).toUpperCase()} ${new Date().getFullYear()}`;
-  printWindow.document.write(`<h3 style="text-align: center;">${title}</h3>`);
+  // var title = `TOTAL COLLECTION FOR THE MONTH OF ${new Date().toLocaleString('default', { month: 'long' }).toUpperCase()} ${new Date().getFullYear()}`;
+  // printWindow.document.write(`<h3 style="text-align: center;">${title}</h3>`);
 
   // Add the table HTML content
   printWindow.document.write(tableContent);
@@ -248,7 +249,6 @@ const exportToExcel = (records, totalAmount, title) => {
 
 
 const displayPaymentNotPaidReports = () => {
-  // document.getElementById("dateInput").value = "";
   var url = "http://152.42.243.189/waterworks/admin/notpaid.php";
 
   axios({
@@ -258,18 +258,31 @@ const displayPaymentNotPaidReports = () => {
       try {
           var records = response.data;
           console.log(records);
+
+          // Get the current month and year
+          const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+          const currentYear = new Date().getFullYear();
+          const title = `WATER VOLUME CONSUMED FOR THE MONTH OF ${currentMonth.toUpperCase()} ${currentYear}`;
+
+          // Construct the HTML with the new title above the table and buttons
           var html = `
-              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                  <thead>
-                      <tr>
-                          <th class="text-center">NAME</th>
-                          <th class="text-center">METER</th>
-                          <th class="text-center">ADDRESS</th>
-                          <th class="text-center">AMOUNT</th>
-                      </tr>
-                  </thead>
-                  <tbody>
+            <button id="exportExcelBtn" class="btn btn-primary mt-3">Export to Excel</button>
+            <button id="printBtn" class="btn btn-secondary mt-3 ml-2">Print</button>
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                      <th class="text-center" colspan="4">${title}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">NAME</th>
+                        <th class="text-center">METER</th>
+                        <th class="text-center">ADDRESS</th>
+                        <th class="text-center">AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
           `;
+
           let totalAmount = 0;
           records.forEach((record) => {
               html += `
@@ -282,6 +295,7 @@ const displayPaymentNotPaidReports = () => {
               `;
               totalAmount += parseFloat(record.total_bill);
           });
+
           html += `
                   </tbody>
                   <tfoot>
@@ -292,10 +306,231 @@ const displayPaymentNotPaidReports = () => {
                   </tfoot>
               </table>
           `;
+          
+          // Display the table
           document.getElementById("mainDiv").innerHTML = html;
+          
+          // Initialize DataTable (optional, if you need sorting or other features)
           $('#example').DataTable({
               "ordering": false // Disable sorting for all columns
           });
+
+          // Add event listener to the export button
+          document.getElementById("exportExcelBtn").addEventListener("click", function() {
+              exportNotPaidToExcel(records, totalAmount, title);
+          });
+
+          // Add event listener to the print button
+          document.getElementById("printBtn").addEventListener("click", function() {
+              printNotPaidReport(records, title);
+          });
+
+      } catch (error) {
+          var html = `<h2>No Records</h2>`;
+          document.getElementById("mainDiv").innerHTML = html;
+          console.log(error);
+      }
+  }).catch((error) => {
+      alert(`ERROR OCCURRED! ${error}`);
+  });
+};
+// Print functionality
+const printNotPaidReport = (records, title) => {
+  // Create a temporary print window
+  var printWindow = window.open('', '', 'height=600,width=800');
+
+  // Get the table HTML content
+  var tableContent = document.getElementById("example").outerHTML;
+
+  // Construct the print document HTML structure
+  printWindow.document.write('<style>');
+  printWindow.document.write('body { font-family: Arial, sans-serif; }');
+  printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
+  printWindow.document.write('th, td { padding: 8px; border: 1px solid #ddd; text-align: center; }');
+  printWindow.document.write('th { background-color: #f2f2f2; font-weight: bold; }');
+  printWindow.document.write('tfoot td { font-weight: bold; }');
+  printWindow.document.write('</style></head><body>');
+  
+  // Add the title above the table
+  // printWindow.document.write(`<h3 style="text-align: center;">${title}</h3>`);
+
+  // Add the table HTML content
+  printWindow.document.write(tableContent);
+  printWindow.document.write('</body></html>');
+
+  // Wait for the content to load and then print
+  printWindow.document.close(); // Close the document to trigger printing
+  printWindow.print(); // Open the print dialog
+};
+// Export to Excel functionality
+const exportNotPaidToExcel = (records, totalAmount, title) => {
+  // Create a new workbook
+  var wb = XLSX.utils.book_new();
+
+  // Prepare the table data for Excel (similar to the one displayed)
+  var rows = [
+      [title, '', '', '', '', '', '', '']  // Title row
+  ];
+
+  // Add the header row
+  rows.push(['NAME', 'METER', 'ADDRESS', 'AMOUNT']);
+
+  // Add the record data
+  records.forEach((record) => {
+      rows.push([
+          `${record.lastname}, ${record.firstname}`,
+          record.meter_no,
+          `${record.zone_name}, ${record.barangay_name}`,
+          record.total_bill
+      ]);
+  });
+
+  // Add the total row (the last row)
+  rows.push([
+      'Total:', '', '', totalAmount.toFixed(2)
+  ]);
+
+  // Create the worksheet from the rows
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+
+  // Set column widths
+  ws['!cols'] = [
+      { wch: 25 }, { wch: 15 }, { wch: 30 }, { wch: 15 }
+  ];
+
+  // Apply text alignment, bold, and borders
+  for (var R = 0; R < rows.length; R++) {
+      for (var C = 0; C < rows[0].length; C++) {
+          var cell = ws[XLSX.utils.encode_cell({r: R, c: C})];
+
+          if (cell) {
+              // Default alignment and borders for all cells
+              cell.s = {
+                  alignment: { horizontal: 'center', vertical: 'center' },
+                  border: {
+                      top: { style: 'thin' },
+                      left: { style: 'thin' },
+                      bottom: { style: 'thin' },
+                      right: { style: 'thin' }
+                  }
+              };
+
+              // If the cell is in the first row (title row), merge and make it bold and larger font size
+              if (R === 0) {
+                  // Merge the cells for the title (from column 0 to column 7)
+                  ws['!merges'] = [{ s: {r: 0, c: 0}, e: {r: 0, c: 7} }];
+                  // Apply bold and font size 16 for the title
+                  cell.s.font = { 
+                      bold: true,  // Make text bold
+                      sz: 16       // Font size 16 for the title
+                  };
+                  // Ensure the title is centered both horizontally and vertically
+                  cell.s.alignment = { horizontal: 'center', vertical: 'center' };  
+              }
+
+              // If the cell is in the header row (column titles), make it bold
+              if (R === 1) {
+                  cell.s.font = { bold: true };
+              }
+          }
+      }
+  }
+
+  // Add the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Not Paid Report");
+
+  // Generate the Excel file and prompt the download
+  XLSX.writeFile(wb, "not_paid_report.xlsx");
+};
+
+
+const displayVolumeReports = () => {
+  var url = "http://152.42.243.189/waterworks/admin/volume.php";
+
+  axios({
+      url: url,
+      method: "post",
+  }).then((response) => {
+      try {
+          var records = response.data;
+          console.log(records);
+
+          // Get the current month and year
+          const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+          const currentYear = new Date().getFullYear();
+          const title = `TOTAL NOT PAID FOR THE MONTH OF ${currentMonth.toUpperCase()} ${currentYear}`;
+
+          // Construct the HTML with the new title above the table and buttons
+          var html = `
+            <button id="exportExcelBtn" class="btn btn-primary mt-3">Export to Excel</button>
+            <button id="printBtn" class="btn btn-secondary mt-3 ml-2">Print</button>
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                      <th class="text-center" colspan="4">${title}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">BILLING ID</th>
+                        <th class="text-center">BILLING DATE&TIME</th>
+                        <th class="text-center">NAME</th>
+                        <th class="text-center">METER</th>
+                        <th class="text-center">ADDRESS</th>
+                        <th class="text-center">PREVIOUS</th>
+                        <th class="text-center">PRESENT</th>
+                        <th class="text-center">CONSUMED</th>
+                        <th class="text-center">REMARKS</th>
+                    </tr>
+                </thead>
+                <tbody>
+          `;
+
+          let totalAmount = 0;
+          records.forEach((record) => {
+              html += `
+                  <tr>
+                      <td class="text-center">${record.meter_no}</td>
+                      <td class="text-center">${record.meter_no}</td>
+                      <td class="text-center">${record.lastname}, ${record.firstname}</td>
+                      <td class="text-center">${record.meter_no}</td>
+                      <td class="text-center">${record.zone_name}, ${record.barangay_name}</td>
+                      <td class="text-center">${record.previous_meter}</td>
+                      <td class="text-center">${record.present_meter}</td>
+                      <td class="text-center">${record.cubic_consumed}</td>
+                      <td class="text-center"></td>
+                  </tr>
+              `;
+              totalConsumed += parseFloat(record.cubic_consumed);
+          });
+
+          html += `
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                          <td class="text-center"><strong>${totalConsumed}</strong></td>
+                      </tr>
+                  </tfoot>
+              </table>
+          `;
+          
+          // Display the table
+          document.getElementById("mainDiv").innerHTML = html;
+          
+          // Initialize DataTable (optional, if you need sorting or other features)
+          $('#example').DataTable({
+              "ordering": false // Disable sorting for all columns
+          });
+
+          // Add event listener to the export button
+          document.getElementById("exportExcelBtn").addEventListener("click", function() {
+              exportNotPaidToExcel(records, totalAmount, title);
+          });
+
+          // Add event listener to the print button
+          document.getElementById("printBtn").addEventListener("click", function() {
+              printNotPaidReport(records, title);
+          });
+
       } catch (error) {
           var html = `<h2>No Records</h2>`;
           document.getElementById("mainDiv").innerHTML = html;
