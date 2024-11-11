@@ -215,74 +215,22 @@ function printTable() {
   printWindow.location.reload(); // Reload the page after printing
 }
 // Function to save content of mainDiv as Excel
-function saveAsCSV() {
-  // Get the table element
-  var table = document.getElementById("example");
-  if (!table) {
-    alert("No table found to export.");
-    return;
-  }
-
-  // Create an array to hold the CSV content
-  var csv = [];
-
-  // Get the table rows
-  var rows = table.querySelectorAll("tr");
-
-  // Initialize totalAmount to 0
-  let totalAmount = 0;
-
-  // Loop through each row and extract the data
-  rows.forEach(function(row, rowIndex) {
-    var cells = row.querySelectorAll("th, td");
-    var cellData = [];
-
-    cells.forEach(function(cell, cellIndex) {
-      // Get text content and escape special characters (like quotes)
-      var text = cell.textContent.trim();
-      text = text.replace(/"/g, '""'); // Escape quotes
-
-      // If it's the footer row (the last row), handle the total specifically
-      if (rowIndex === rows.length - 1 && cellIndex === 3) {
-        // For the total row, set the value to the totalAmount (calculated above)
-        text = totalAmount.toFixed(2);
-      }
-
-      // Add the cell data wrapped in quotes
-      cellData.push('"' + text + '"');
-    });
-
-    // Join the cells by commas and add to the CSV array
-    if (cellData.length > 0) {
-      csv.push(cellData.join(","));
-    }
-
-    // For non-footer rows, sum the amounts (assuming the 4th column has the amount)
-    if (rowIndex < rows.length - 1) {
-      var amountCell = cells[3];
-      if (amountCell) {
-        totalAmount += parseFloat(amountCell.textContent.trim()) || 0;
-      }
-    }
+function saveAsExcel() {
+  // Code to convert HTML table to Excel format
+  var table = document.getElementById("mainDiv").querySelector("table");
+  var html = table.outerHTML;
+  var blob = new Blob([html], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
   });
-
-  // Join all rows by newlines
-  var csvContent = csv.join("\n");
-
-  // Create a Blob for the CSV content
-  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   var url = URL.createObjectURL(blob);
-
-  // Create an anchor element to trigger the download
   var a = document.createElement("a");
   a.href = url;
-  a.download = "report.csv";  // Set the file name
+  a.download = "report.xlsx";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);  // Clean up the object URL
+  URL.revokeObjectURL(url);
 }
-
 
 
 function filterByDate() {
