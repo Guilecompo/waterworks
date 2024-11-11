@@ -262,7 +262,7 @@ const displayPaymentNotPaidReports = () => {
           // Get the current month and year
           const currentMonth = new Date().toLocaleString('default', { month: 'long' });
           const currentYear = new Date().getFullYear();
-          const title = `WATER VOLUME CONSUMED FOR THE MONTH OF ${currentMonth.toUpperCase()} ${currentYear}`;
+          const title = `TOTAL NOT PAID FOR THE MONTH OF ${currentMonth.toUpperCase()} ${currentYear}`;
 
           // Construct the HTML with the new title above the table and buttons
           var html = `
@@ -496,7 +496,7 @@ const displayVolumeReports = () => {
                       <td class="text-center">${record.previous_meter}</td>
                       <td class="text-center">${record.present_meter}</td>
                       <td class="text-center">${record.cubic_consumed}</td>
-                      <td class="text-center">${record.total_bill > 0 ? 'Paid' : 'Unpaid'}</td>
+                      <td class="text-center"></td>
                   </tr>
               `;
               totalConsumed += parseFloat(record.cubic_consumed);
@@ -545,7 +545,8 @@ const displayVolumeReports = () => {
 const exportVolumeToExcel = (records, totalConsumed, title) => {
   var wb = XLSX.utils.book_new();
   var rows = [
-      [title, '', '', '', '', '', '', '', '']
+      // Add the title row, merged across all columns (9 columns in this case)
+      [{ v: title, t: 's', s: { alignment: { horizontal: 'center' }, font: { bold: true, size: 14 } } }],
   ];
 
   // Add the header row
@@ -561,8 +562,7 @@ const exportVolumeToExcel = (records, totalConsumed, title) => {
           `${record.zone_name}, ${record.barangay_name}`,
           record.previous_meter,
           record.present_meter,
-          record.cubic_consumed,
-          record.total_bill > 0 ? 'Paid' : 'Unpaid'
+          record.cubic_consumed
       ]);
   });
 
@@ -572,16 +572,23 @@ const exportVolumeToExcel = (records, totalConsumed, title) => {
   ]);
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  
+
   // Set column widths
   ws['!cols'] = [
       { wch: 15 }, { wch: 30 }, { wch: 25 }, { wch: 15 }, { wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }
   ];
 
+  // Merge the title across all columns (from column 0 to 8, which are the total 9 columns in the table)
+  ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } }
+  ];
+
   XLSX.utils.book_append_sheet(wb, ws, "Volume Report");
 
+  // Write the Excel file
   XLSX.writeFile(wb, "volume_report.xlsx");
 };
+
 
 const printVolumeReport = (records, title) => {
   var printWindow = window.open('', '', 'height=600,width=800');
