@@ -56,10 +56,14 @@ const displayPaymentPaidReports = () => {
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                   <thead>
                       <tr>
-                          <th class="text-center">NAME</th>
-                          <th class="text-center">ZONE</th>
-                          <th class="text-center">OR #</th>
-                          <th class="text-center">AMOUNT</th>
+                        <th class="text-center">PAYMENT ID</th>
+                        <th class="text-center">PAYMENT DATE&TIME</th>
+                        <th class="text-center">NAME</th>
+                        <th class="text-center">METER</th>
+                        <th class="text-center">ADDRESS</th>
+                        <th class="text-center">OR #</th>
+                        <th class="text-center">OR DATE</th>
+                        <th class="text-center">AMOUNT</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -68,9 +72,13 @@ const displayPaymentPaidReports = () => {
           records.forEach((record) => {
               html += `
                   <tr>
+                      <td class="text-center">${record.payment_uniqueId}</td>
+                      <td class="text-center">${record.pay_date}</td>
                       <td class="text-center">${record.con_lastname}, ${record.con_firstname}</td>
-                      <td class="text-center">${record.zone_name}</td>
+                      <td class="text-center">${record.meter_no}</td>
+                      <td class="text-center">${record.zone_name}, ${record.barangay_name}</td>
                       <td class="text-center">${record.or_num}</td>
+                      <td class="text-center">${record.or_date}</td>
                       <td class="text-center">${record.pay_amount}</td>
                   </tr>
               `;
@@ -80,7 +88,7 @@ const displayPaymentPaidReports = () => {
                   </tbody>
                   <tfoot>
                       <tr>
-                          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                          <td colspan="7" class="text-right"><strong>Total:</strong></td>
                           <td class="text-center"><strong>${totalAmount.toFixed(2)}</strong></td>
                       </tr>
                   </tfoot>

@@ -14,7 +14,7 @@ $emp_Id = $_POST['emp_Id'];
 $amount = $_POST['amount'];
 $or_number = $_POST['or_num'];
 $or_date = $_POST['or_date'];
-$pay_date = date('Y-m-d ');
+$pay_date = date('Y-m-d H:i:s');
 
 $branchId = $_POST['branchId'];
 
