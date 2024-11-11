@@ -9,7 +9,6 @@ try {
         billing.billing_id,
         billing.total_bill,
         billing.billing_uniqueId,
-        billing.reading_date,
         DATE_FORMAT(billing.reading_date,, '%M %d, %Y %h:%i %p') AS reading_date,
         billing.previous_meter,
         billing.present_meter,
@@ -26,7 +25,7 @@ try {
         INNER JOIN branch ON user_consumer.branchId = branch.branch_id 
         INNER JOIN address_zone ON branch.locationId = address_zone.zone_id 
         INNER JOIN address_barangay ON address_zone.barangayId = address_barangay.barangay_id
-        WHERE billing_statusId = 2
+        WHERE MONTH(billing.reading_date) = MONTH(CURRENT_DATE()) AND YEAR(billing.reading_date) = YEAR(CURRENT_DATE())
     ");
     $stmt->execute();
     
