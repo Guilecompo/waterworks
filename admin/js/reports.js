@@ -240,7 +240,7 @@ function saveAsExcel() {
   
   // Set each column width to 20.00 (20 characters wide)
   for (var i = 0; i < rows[0].length; i++) {
-    ws['!cols'].push({ wch: 25 });
+    ws['!cols'].push({ wch: 23 });
   }
   
   // Apply styles (center text, add borders)
