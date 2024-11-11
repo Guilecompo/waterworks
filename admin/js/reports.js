@@ -216,9 +216,10 @@ function printTable() {
 }
 // Function to save content of mainDiv as Excel
 function saveAsExcel() {
+  // Get the table element
   var table = document.getElementById("mainDiv").querySelector("table");
   
-  // Convert the table to an array of arrays (rows and cells)
+  // Convert the table to a 2D array (rows and columns)
   var rows = [];
   for (var i = 0; i < table.rows.length; i++) {
     var row = [];
@@ -228,47 +229,44 @@ function saveAsExcel() {
     rows.push(row);
   }
 
-  // Create a workbook from the rows array
+  // Create a new workbook
   var wb = XLSX.utils.book_new();
+  
+  // Add the table rows to a new worksheet
   var ws = XLSX.utils.aoa_to_sheet(rows);
 
-  // Set default column width to 20 for every column
-  var colWidth = [];
-  for (var i = 0; i < ws['!cols'].length; i++) {
-    colWidth.push({ wch: 20 }); // Set each column width to 20
+  // Initialize column widths array to ensure that it has the necessary structure
+  ws['!cols'] = [];
+  
+  // Set each column width to 20.00 (20 characters wide)
+  for (var i = 0; i < rows[0].length; i++) {
+    ws['!cols'].push({ wch: 25 });
   }
-  ws['!cols'] = colWidth;
-
-  // Set cell borders and center-align text
-  for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-    for (var colIndex = 0; colIndex < rows[rowIndex].length; colIndex++) {
-      var cellAddress = { r: rowIndex, c: colIndex }; // {r: row index, c: column index}
-      var cell = ws[XLSX.utils.encode_cell(cellAddress)];
-
-      // Add border to each cell
-      if (!cell.s) cell.s = {}; // Initialize style object if not already present
-      cell.s.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      };
-
-      // Set text alignment to center
-      cell.s.alignment = {
-        horizontal: 'center',
-        vertical: 'center'
-      };
+  
+  // Apply styles (center text, add borders)
+  for (var R = 0; R < rows.length; R++) {
+    for (var C = 0; C < rows[0].length; C++) {
+      var cell = ws[XLSX.utils.encode_cell({r: R, c: C})];
+      if (cell) {
+        cell.s = {
+          alignment: { horizontal: 'center', vertical: 'center' },
+          border: {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          }
+        };
+      }
     }
   }
-
+  
   // Add the worksheet to the workbook
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-  // Create the Excel file and prompt for download
+  
+  // Create an Excel file and prompt the download
   XLSX.writeFile(wb, "report.xlsx");
 }
-
 
 
 function filterByDate() {

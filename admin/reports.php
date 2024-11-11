@@ -12,7 +12,7 @@ include 'connection.php';
         c.firstname AS con_firstname, c.middlename AS con_middlename, c.lastname AS con_lastname,
         d.zone_name, e.barangay_name,
         f.municipality_name,
-        DATE_FORMAT(a.pay_date, '%M %d, %Y %h:%i:%s %p') AS pay_date,
+        DATE_FORMAT(a.pay_date, '%M %d, %Y %h:%i %p') AS pay_date,
         a.pay_amount, a.branchId, a.pay_balance
         
     FROM payment a
