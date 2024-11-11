@@ -8,15 +8,18 @@ try {
     $stmt = $conn->prepare("SELECT
         billing.billing_id,
         billing.total_bill,
+        user_consumer.meter_no,
         user_consumer.firstname, 
         user_consumer.middlename, 
         user_consumer.lastname, 
         branch.branch_name, 
-        address_zone.zone_name
+        address_zone.zone_name,
+        address_barangay.barangay_name
         FROM `billing` billing 
         INNER JOIN user_consumer ON billing.consumerId = user_consumer.user_id 
         INNER JOIN branch ON user_consumer.branchId = branch.branch_id 
         INNER JOIN address_zone ON branch.locationId = address_zone.zone_id 
+        INNER JOIN address_barangay ON address_zone.barangayId = address_barangay.barangay_id
         WHERE billing_statusId = 2
     ");
     $stmt->execute();
