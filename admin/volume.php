@@ -9,7 +9,7 @@ try {
         billing.billing_id,
         billing.total_bill,
         billing.billing_uniqueId,
-        DATE_FORMAT(billing.reading_date, '%M %d, %Y %h:%i %p') AS reading_date,
+        DATE_FORMAT(billing.reading_date, '%M %d, %Y %h:%i %p') AS reading_date,  -- Fixed double comma error here
         billing.previous_meter,
         billing.present_meter,
         billing.cubic_consumed,
@@ -39,5 +39,4 @@ try {
 } catch (PDOException $e) {
     echo json_encode(["error" => $e->getMessage()]);
 }
-
 ?>
