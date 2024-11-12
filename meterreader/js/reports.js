@@ -41,7 +41,7 @@ const displayVolumeReports = () => {
                     <button id="printBtn" class="btn btn-secondary btn-sm mt-3 ml-2">Print</button>
                 </div>
                 <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px;">
-                    <table id=" " class="table table-striped table-bordered" style="width:100%; margin-bottom: 0; white-space: nowrap;">
+                    <table id="example" class="table table-striped table-bordered" style="width:100%; margin-bottom: 0; white-space: nowrap;">
                         <thead>
                             <tr>
                                 <th class="text-center" colspan="9">${title}</th>
