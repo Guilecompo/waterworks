@@ -36,28 +36,31 @@ const displayVolumeReports = () => {
   
             // Construct the HTML with the new title above the table and buttons
             var html = `
-                <button id="exportExcelBtn" class="btn btn-primary mt-3">Export to Excel</button>
-                <button id="printBtn" class="btn btn-secondary mt-3 ml-2">Print</button>
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="text-center" colspan="9">${title}</th>
-                        </tr>
-                        <tr>
-                            <th class="text-center">BILLING ID</th>
-                            <th class="text-center">BILLING DATE&TIME</th>
-                            <th class="text-center">NAME</th>
-                            <th class="text-center">METER</th>
-                            <th class="text-center">ADDRESS</th>
-                            <th class="text-center">PREVIOUS</th>
-                            <th class="text-center">PRESENT</th>
-                            <th class="text-center">CONSUMED</th>
-                            <th class="text-center">REMARKS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="d-flex justify-content-evenly">
+                    <button id="exportExcelBtn" class="btn btn-primary btn-sm mt-3">Export to Excel</button>
+                    <button id="printBtn" class="btn btn-secondary btn-sm mt-3 ml-2">Print</button>
+                </div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px;">
+                    <table id=" " class="table table-striped table-bordered" style="width:100%; margin-bottom: 0; white-space: nowrap;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" colspan="9">${title}</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">BILLING ID</th>
+                                <th class="text-center">BILLING DATE&TIME</th>
+                                <th class="text-center">NAME</th>
+                                <th class="text-center">METER</th>
+                                <th class="text-center">ADDRESS</th>
+                                <th class="text-center">PREVIOUS</th>
+                                <th class="text-center">PRESENT</th>
+                                <th class="text-center">CONSUMED</th>
+                                <th class="text-center">REMARKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
-  
+
             let totalConsumed = 0;
             records.forEach((record) => {
                 html += `
@@ -86,8 +89,9 @@ const displayVolumeReports = () => {
                         </tr>
                     </tfoot>
                 </table>
+            </div>
             `;
-            
+
             // Display the table
             document.getElementById("mainDiv").innerHTML = html;
             
@@ -114,7 +118,8 @@ const displayVolumeReports = () => {
     }).catch((error) => {
         alert(`ERROR OCCURRED! ${error}`);
     });
-  };
+};
+
 
   const exportVolumeToExcel = (records, totalConsumed, title) => {
     var wb = XLSX.utils.book_new();
